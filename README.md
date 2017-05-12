@@ -1,6 +1,3 @@
- <link href="http://www.orgboat.com/guide/css/normalize.css" rel="stylesheet" type="text/css">
-  <link href="http://www.orgboat.com/guide/css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="http://www.orgboat.com/guide/css/orgboat-guide-english.webflow.css" rel="stylesheet" type="text/css">
   
  <h1 class="heading" id="WhatIsOrgBoat">What is Orgboat</h1>
             <div class="post-content">It is a&nbsp;<span><span class="subrayar2">smart and simple</span></span>&nbsp;management software designed to reach productivity levels you have only dreamed of. <span class="subrayar3">OrgBoat</span> establishes a framework, analyzes and unifies each person's job into a&nbsp;<span class="subrayar">powerful, unified force.<br><br></span>Its function is to separate and coordinate information to make sure you followup with people, keeps and filters a record of&nbsp;<span class="subrayar">future actions</span>&nbsp;and also logs past behavior for evaluation purposes.</div>
