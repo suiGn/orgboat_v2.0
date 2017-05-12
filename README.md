@@ -1,5 +1,16 @@
 <b>What is Orgboat</b>
-
+<ul class="articles-all-list w-list-unstyled">
+                 <li class="list-articles"><a href="http://www.orgboat.com/guide/orgboat-guide.html">What is OrgBoat?</a>
+                 </li>
+                 <li class="list-articles"><a href="http://www.orgboat.com/guide/orgboat-guide.html#OurSolution">Our Solution</a>
+                 </li>
+                 <li class="list-articles"><a href="http://www.orgboat.com/guide/orgboat-guide.html#WhyOrgboat">Why OrgBoat?</a>
+                 </li>
+                 <li class="list-articles"><a href="http://www.orgboat.com/guide/orgboat-guide.html#TheBigIdea">The Big Idea</a>
+                 </li>
+                 <li class="list-articles"><a href="http://www.orgboat.com/guide/orgboat-guide.html#OurVision">Our Vision</a>
+                 </li>
+               </ul>
 It is a smart and simple management software designed to reach productivity levels you have only dreamed of. OrgBoat establishes a framework, analyzes and unifies each person's job into a powerful, unified force.
 
 Its function is to separate and coordinate information to make sure you followup with people, keeps and filters a record of future actions and also logs past behavior for evaluation purposes.
