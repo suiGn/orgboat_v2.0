@@ -16,7 +16,5 @@
               <br>
               <br>Organization determines how fast you can produce.
               
-            </div>
-          </div>
-   
+       
      
