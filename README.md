@@ -1,6 +1,4 @@
-Currently OFF Production.
-
-<img class="lighthouse" data-ix="fade-in-bottom-scroll-in" src="https://uploads-ssl.webflow.com/577edf7397ba26ad3cc0ae5d/577edf7397ba26ad3cc0ae9b_measure-productivity.png" width="309" style="transition: opacity 0.2s ease 0s, opacity 1000ms, transform 200ms; opacity: 1; transform: translateX(0px) translateY(0px) translateZ(0px) scaleX(1) scaleY(1);" align="center">
+<img class="lighthouse" data-ix="fade-in-bottom-scroll-in" src="https://uploads-ssl.webflow.com/577edf7397ba26ad3cc0ae5d/577edf7397ba26ad3cc0ae9b_measure-productivity.png" width="100%" style="transition: opacity 0.2s ease 0s, opacity 1000ms, transform 200ms; opacity: 1; transform: translateX(0px) translateY(0px) translateZ(0px) scaleX(1) scaleY(1);" align="center">
  <h1 class="heading" id="WhatIsOrgBoat">What is Orgboat</h1>
             <div class="post-content">It is a&nbsp;<span><span class="subrayar2">smart and simple</span></span>&nbsp;management software designed to reach high productivity levels. <span class="subrayar3">OrgBoat</span> establishes a framework, analyzes and unifies each person's job into a&nbsp;<span class="subrayar">powerful, unified force.<br><br></span>Its function is to separate and coordinate information to make sure you followup with people, keeps and filters a record of&nbsp;<span class="subrayar">future actions</span>&nbsp;and also logs past behavior for evaluation purposes.</div>
           </div>
