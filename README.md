@@ -12,10 +12,10 @@
             <h1 class="heading" id="WhyOrgBoat">Why OrgBoat</h1>
             <div class="post-content">We are living in the beginning of a new era. An era in which speed can determine if your organization prospers or smashes into the ground. This economy is vicious and you need to be ready.<span class="subrayar">&nbsp;Control is evolving in to the digital age</span>&nbsp;and work is done in less time than ever imagined, thanks to technology.
               <br>
-              <br>We are living the era of&nbsp;<span class="subrayar2">information at our fingertips</span>, and this means power. Systems are here to make things work more efficiently and we have created a system that handles the principles of organization.
+              <br>We are living an era of&nbsp;<span class="subrayar2">information at our fingertips</span>, and this means power. Systems are here to make things work more efficiently and we have created a system that handles the principles of organization.
               <br>
-              <br>Organization is the discipline that determines how fast you can produce. It also lets you unattach yourself from the office when you want to. Orgboat is a tool that makes getting things done less of a hassle and more simple.
-              <br><span class="subrayar3"><br xmlns="http://www.w3.org/1999/xhtml">WE SOLVE THE PROBLEM OF EMPLOYEE INEFFICIENCY AND THE CALCULATION OF PRODUCTION USING HARD-FACTS THAT CAN BE EASILY MEASURED AND COMPARED.</span>
+              <br>Organization determines how fast you can produce.
+              
             </div>
           </div>
    
