@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "name": "orgboat",
+  "version": "3.3.3",
+  "description": "workspace",
   "engines": {
     "node": "12.x"
   },
@@ -12,7 +12,11 @@
   },
   "dependencies": {
     "ejs": "^2.5.6",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "express-validator": "^6.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-uuid": "^1.4.8",
+    "pg": "^8.2.1"
   },
   "devDependencies": {
     "request": "^2.81.0",
@@ -20,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/suign/orgboat"
   },
   "keywords": [
     "node",
