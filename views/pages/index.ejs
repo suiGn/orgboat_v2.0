@@ -1,66 +1,51 @@
 <!DOCTYPE html>
-<html>
+<!--  Last Published: Thu May 21 2020 00:00:16 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="5ebcb701afcad5b57602ca4f" data-wf-site="59084483abf1f4378f35067c">
 <head>
-  <% include ../partials/header.ejs %>
+  <meta charset="utf-8">
+  <title>index</title>
+   <% include ../partials/w_header.ejs %>
 </head>
-
-<body>
-
-  <% include ../partials/nav.ejs %>
-
-<div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/lang-logo.png">
-    </a>
-    <h1>Getting Started on Heroku with Node.js</h1>
-    <p>This is a sample Node application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-nodejs"><span class="glyphicon glyphicon-flash"></span> Getting Started on Heroku with Node.js</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/node-js-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
-  </div>
-</div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="alert-link">Getting Started on Heroku with Node.js</a> tutorial.
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
-      <ul>
-        <li>This app was deployed to Heroku, either using Git or by using <a href="https://github.com/heroku/node-js-getting-started">Heroku Button</a> on the repository.</li>
-
-        <li>When Heroku received the source code, it fetched all the dependencies in the <a href="https://github.com/heroku/node-js-getting-started/blob/master/package.json">package.json</a>, creating a deployable slug.</li>
-        <li>The platform then spins up a dyno, a lightweight container that provides an isolated environment in which the slug can be mounted and executed.</li>
-        <li>You can scale your app, manage it, and deploy over <a href="https://addons.heroku.com/">150 add-on services</a>, from the Dashboard or CLI.</li>
-      </ul>
+<body class="bodylogin">
+ 
+  <% include ../partials/w_nav_lgOut.ejs %>
+  
+  <div class="hero-section centered">
+	  
+    <div class="w-container">
+      <div class="w-form">
+        <form id="email-form-3" name="email-form-3" data-name="Email Form 3" class="form-10">
+          <h1 class="fingertipsslogan login-head-form">LOG IN</h1>
+          <div class="underline login-blue-line"></div>
+		  <input type="text" id="email-2" name="email-2" data-name="Email 2" placeholder="E-mail" maxlength="256" class="start-form w-input">
+		  <input type="text" id="pwd-2" name="pwd-2" data-name="Pwd 2" placeholder="Password" maxlength="256" class="start-form w-input">
+		  <input type="submit" value="Log In" data-wait="Please wait..." class="button-5 w-button">
+          <div class="login-form-footer">Sign Up | Forgot Account Info | Terms</div>
+        </form>
+        <div class="w-form-done">
+          <div>Thank you! Your submission has been received!</div>
+        </div>
+        <div class="w-form-fail">
+          <div>Oops! Something went wrong while submitting the form</div>
+        </div>
+      </div>
     </div>
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-link"></span> Next Steps</h3>
-      <ul>
-        <li>If you are following the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started</a> guide, then please head back to the tutorial and follow the next steps!</li>
-        <li>If you deployed this app by deploying the Heroku Button, then in a command line shell, run:</li>
-        <ul>
-          <li><code>git clone https://github.com/heroku/node-js-getting-started.git</code> - this will create a local copy of the source code for the app</li>
-          <li><code>cd node-js-getting-started</code> - change directory into the local source code repository</li>
-          <li><code>heroku git:remote -a &lt;your-app-name></code> - associate the Heroku app with the repository</li>
-          <li>You'll now be set up to run the app locally, or <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#push-local-changes">deploy changes</a> to Heroku</li>
-        </ul>
-      </ul>
-      <h3><span class="glyphicon glyphicon-link"></span> Helpful Links</h3>
-      <ul>
-        <li><a href="https://www.heroku.com/home">Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/">Heroku Dev Center</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started on Heroku with Node.js</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/deploying-nodejs">Deploying Node Apps on Heroku</a></li>
-      </ul>
-    </div>
-  </div> <!-- row -->
-   <div class="alert alert-info text-center" role="alert">
-    Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
   </div>
-</div>
-
-
+  
+  <div class="div-block-25">
+    <div class="footer-text-2"> by Neurons Art &amp; Technology</div>
+  </div>
+  
+  <div class="lighthouse-background">
+    <div class="lighthouse-dark-2">
+      <h1 class="fingertipsslogan-2 boost">Your business at your fingertips.</h1>
+	  <img src="w/imgs/tour_measure1.png" alt="" class="image-64">
+      <div class="lightdiv">
+		  <img src="https://daks2k3a4ib2z.cloudfront.net/577edf7397ba26ad3cc0ae5d/583ea80c40b743510c5730a0_mesure_2.png" data-ix="lightsonauto" alt="" class="light-ray-2">
+	  </div>
+		  <a href="#" class="button-6 w-button">START NOW!</a>
+	  </div>
+  </div>
+ <% include ../partials/w_footer.ejs %>
 </body>
 </html>

@@ -21,7 +21,9 @@ const config = require('./configs/config');
 //theVault.connect();
 var uuid = require('node-uuid');
 const jwt = require('jsonwebtoken');
-exports.home = function(req, res){res.render('pages/index')};
+exports.home = function(req, res){res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe" })};
+exports.subscribe = function(req, res){res.render('pages/subscribe', { opt1: "Log In", opt2: "/" })};
+exports.workspace = function(req, res){res.render('pages/workspace')};
 exports.login = function(req, res){
 	theVault.query('SELECT Usrname, Password FROM Usrs WHERE Usrname = $1 && Password = $2', [req.body.usrname, req.body.pwd], (err, res) => {
 	if(res.rowCount >= 1){

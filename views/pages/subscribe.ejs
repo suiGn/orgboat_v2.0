@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Thu May 21 2020 00:00:16 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="5ebcb8a4ac495468e7cdb7e9" data-wf-site="59084483abf1f4378f35067c">
+<head>
+  <meta charset="utf-8">
+  <title>Subscribe</title>
+     <% include ../partials/w_header.ejs %>
+</head>
+<body class="body-8">
+  <% include ../partials/w_nav_lgOut.ejs %>
+  <div class="sign-up-div-2">
+    <h1 class="fingertipsslogan-2 login-head-form reg">SIGN UP</h1>
+    <div class="w-form">
+      <form id="email-form-3" name="email-form-3" data-name="Email Form 3" class="form-register-2">
+        <div class="name-lastname-rows w-row">
+          <div class="w-col w-col-6">
+	<input type="text" id="name" name="name" data-name="Name" placeholder="Name" maxlength="256" class="start-form-2 name-input-text w-input">
+		  </div>
+		  
+        <div class="w-col w-col-6">
+			<input type="text" id="lstname" name="lstname" data-name="Lstname" maxlength="256" placeholder="Last Name" class="start-form-2 name-input-text w-input">
+		</div>
+        </div>
+		<input type="text" id="email" name="email" data-name="Email" placeholder="E-mail" maxlength="256" class="start-form-2 w-input">
+		<input type="text" id="pwd-2" name="pwd-2" data-name="Pwd 2" placeholder="Password" maxlength="256" class="start-form-2 w-input">
+		<input type="text" id="pwd-3" name="pwd-3" data-name="Pwd 3" placeholder="Re-type Password" maxlength="256" class="start-form-2 w-input">
+        <div class="login-form-footer-2">
+			By registering you are agreeing to our terms and conditions.
+		</div>
+		<input type="submit" value="Register" data-wait="Please wait..." class="button w-button">
+	</form>
+      <div class="w-form-done">
+        <div>Thank you! Your submission has been received!</div>
+      </div>
+      <div class="w-form-fail">
+        <div>Oops! Something went wrong while submitting the form</div>
+      </div>
+    </div>
+	<img src="w/imgs/nat_logo.png" width="55" alt="" class="img-neurons">
+    <div class="login-form-footer-2 foot2">
+		<a href="http://www.natsynapses.com" class="login-form-footer-2 footer2">By Neurons Art &amp; Technology</a>
+	</div>
+  </div>
+ 
+  <% include ../partials/w_footer.ejs %>
+</body>
+</html>
