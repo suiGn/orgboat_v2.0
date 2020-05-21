@@ -1,0 +1,195 @@
+        <div class="chat">
+            <div class="chat-header">
+                <div class="chat-header-user">
+                    <figure class="avatar">
+                        <img src="http://via.placeholder.com/128X128" class="rounded-circle" alt="image">
+                    </figure>
+                    <div>
+                        <h5>Byrom Guittet</h5>
+                        <small class="text-success">
+                            <i>writing...</i>
+                        </small>
+                    </div>
+                </div>
+                <div class="chat-header-action">
+                    <ul class="list-inline">
+                        <li class="list-inline-item d-xl-none d-inline">
+                            <a href="#" class="btn btn-outline-light mobile-navigation-button">
+                                <i data-feather="menu"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item" data-toggle="tooltip" title="Voice call">
+                            <a href="#" class="btn btn-outline-light text-success" data-toggle="modal"
+                               data-target="#call">
+                                <i data-feather="phone"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item" data-toggle="tooltip" title="Video call">
+                            <a href="#" class="btn btn-outline-light text-warning" data-toggle="modal"
+                               data-target="#videoCall">
+                                <i data-feather="video"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="btn btn-outline-light" data-toggle="dropdown">
+                                <i data-feather="more-horizontal"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="#" data-navigation-target="contact-information"
+                                   class="dropdown-item">Profile</a>
+                                <a href="#" class="dropdown-item">Add to archive</a>
+                                <a href="#" class="dropdown-item">Delete</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item text-danger">Block</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+			
+			
+			
+            <div class="chat-body"> 
+                <!-- .no-message 
+                <div class="no-message-container">
+                    <div class="row mb-5">
+                        <div class="col-md-4 offset-4">
+                            <img src="./sl/dist/media/svg/undraw_empty_xct9.svg" class="img-fluid" alt="image">
+                        </div>
+                    </div>
+                    <p class="lead">Select a chat to read messages</p>
+                </div>
+                -->
+                <div class="messages">
+					
+					
+                    <div class="message-item outgoing-message">
+                        <div class="message-content">
+                            Hello how are you?
+                        </div>
+                        <div class="message-avatar">
+                            <div>
+                                <div class="time">01:20 PM <i class="ti-double-check text-info"></i></div>
+                            </div>
+                        </div>
+                    </div>
+					
+					
+                    <div class="message-item">
+                        <div class="message-content">
+                            I'm fine, how are you 😃
+                        </div>
+                        <div class="message-avatar">
+                            <div>
+                                <div class="time">01:35 PM</div>
+                            </div>
+                        </div>
+                    </div>
+					
+					
+					
+                    <div class="message-item">
+                        <div class="message-content message-file">
+                            <div class="file-icon">
+                                <i class="fa fa-file-pdf-o"></i>
+                            </div>
+                            <div>
+                                <div>important_documents.pdf <i class="text-muted small">(50KB)</i></div>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item mb-0"><a href="#">Download</a></li>
+                                    <li class="list-inline-item mb-0"><a href="#">View</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="message-avatar">
+                            <div>
+                                <div class="time">11:59 PM</div>
+                            </div>
+                        </div>
+                    </div>
+					
+					
+                    <div class="message-item messages-divider sticky-top" data-label="Today"></div>
+					
+									
+					
+                    <div class="message-item outgoing-message">
+                        <div class="message-content">
+                            😃 😃 ❤ ❤
+                        </div>
+                        <div class="message-avatar">
+                            <div>
+                                <div class="time">09:23 AM <i class="ti-double-check text-info"></i></div>
+                            </div>
+                        </div>
+                    </div>
+					
+					
+                  <div class="message-item">
+                      <figure>
+                          <img src="http://via.placeholder.com/1200X900" class="w-25 img-fluid rounded" alt="image">
+                      </figure>
+                      <div class="message-avatar">
+                          <div>
+                              <div class="time">10:43 AM</div>
+                          </div>
+                      </div>
+                  </div>
+					
+					
+                    <div class="message-item outgoing-message">
+                        <div class="message-content">
+                            You are good ❤❤
+                        </div>
+                        <div class="message-avatar">
+                            <div>
+                                <div class="time">10:50 AM <i class="ti-double-check text-info"></i></div>
+                            </div>
+                        </div>
+                    </div>
+					
+					
+                    <div class="message-item messages-divider" data-label="1 message unread"></div>
+					
+					
+                    <div class="message-item">
+                        <div class="message-content">
+                            I sent you all the files. Good luck with 😃
+                        </div>
+                        <div class="message-avatar">
+                            <div>
+                                <div class="time">11:05 AM</div>
+                            </div>
+                        </div>
+                    </div>
+					
+				
+					
+					
+                </div>
+            </div>
+			
+			
+            <div class="chat-footer">
+                <form>
+                    <div>
+                        <button class="btn btn-light mr-3" data-toggle="tooltip" title="Emoji" type="button">
+                            <i data-feather="smile"></i>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Write a message.">
+                    <div class="form-buttons">
+                        <button class="btn btn-light" data-toggle="tooltip" title="Add files" type="button">
+                            <i data-feather="paperclip"></i>
+                        </button>
+                        <button class="btn btn-light d-sm-none d-block" data-toggle="tooltip"
+                                title="Send a voice record" type="button">
+                            <i data-feather="mic"></i>
+                        </button>
+                        <button class="btn btn-primary" type="submit">
+                            <i data-feather="send"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
