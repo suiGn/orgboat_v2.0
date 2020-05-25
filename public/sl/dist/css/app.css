@@ -3961,6 +3961,8 @@ body.form-membership .form-wrapper hr {
           align-items: center;
 }
 
+
+
 .layout .content .chat .chat-footer form .form-buttons {
   display: -webkit-box;
   display: -webkit-flex;
@@ -3981,7 +3983,7 @@ body.form-membership .form-wrapper hr {
   margin-right: 0px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1000px) {
   body.navigation-open:after {
     content: '';
     display: block;

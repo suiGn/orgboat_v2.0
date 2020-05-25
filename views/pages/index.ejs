@@ -14,23 +14,43 @@
 	  
     <div class="w-container">
       <div class="w-form">
-        <form id="email-form-3" name="email-form-3" data-name="Email Form 3" class="form-10">
+        <form id="email-form-3" name="formLogin" data-name="loginForm" class="form-10" action="/login" method="post">
           <h1 class="fingertipsslogan login-head-form">LOG IN</h1>
           <div class="underline login-blue-line"></div>
-		  <input type="text" id="email-2" name="email-2" data-name="Email 2" placeholder="E-mail" maxlength="256" class="start-form w-input">
-		  <input type="text" id="pwd-2" name="pwd-2" data-name="Pwd 2" placeholder="Password" maxlength="256" class="start-form w-input">
+		  <style>
+		  .text-block-43 {
+		    margin-top: -18px;
+		    margin-bottom: 15px;
+		    color: #cf404d;
+		    font-size: 14px;
+		  }
+		  </style>
+		  <div class="text-block-43"><%= opt3 %></div>
+		  <input type="text" id="email-2" name="usrname" data-name="Email 2" placeholder="Username or Email" maxlength="256" class="start-form w-input">
+		  <input type="text" id="pwd-2" name="pwd" data-name="Pwd 2" placeholder="Password" maxlength="256" class="start-form w-input">
 		  <input type="submit" value="Log In" data-wait="Please wait..." class="button-5 w-button">
-          <div class="login-form-footer">Sign Up | Forgot Account Info | Terms</div>
+          <div class="login-form-footer">
+			  <a class="login-form-footer" href="/subscribe" style="text-decoration: none;"> Sign Up |</a>
+			  <a class="login-form-footer" href="/reset-pwd" style="text-decoration: none;"> Forgot Account |</a>
+			  <a class="login-form-footer" href="/terms" style="text-decoration: none;"> Terms </a>
+		   </div>
         </form>
-        <div class="w-form-done">
-          <div>Thank you! Your submission has been received!</div>
-        </div>
-        <div class="w-form-fail">
-          <div>Oops! Something went wrong while submitting the form</div>
-        </div>
       </div>
     </div>
   </div>
+  <style>
+	  .image-66 {
+	    position: relative;
+	    z-index: 888;
+	    display: block;
+	    width: 610px;
+	    max-width: none;
+	    margin-top: -473px;
+	    margin-right: auto;
+	    margin-left: auto;
+	    opacity: 0;
+	  }
+	  </style>
   
   <div class="div-block-25">
     <div class="footer-text-2"> by Neurons Art &amp; Technology</div>
@@ -39,12 +59,10 @@
   <div class="lighthouse-background">
     <div class="lighthouse-dark-2">
       <h1 class="fingertipsslogan-2 boost">Your business at your fingertips.</h1>
+	  
 	  <img src="w/imgs/tour_measure1.png" alt="" class="image-64">
-      <div class="lightdiv">
-		  <img src="https://daks2k3a4ib2z.cloudfront.net/577edf7397ba26ad3cc0ae5d/583ea80c40b743510c5730a0_mesure_2.png" data-ix="lightsonauto" alt="" class="light-ray-2">
-	  </div>
-		  <a href="#" class="button-6 w-button">START NOW!</a>
-	  </div>
+	  <img src="w/imgs/mesure_2.png" alt="" class="image-66"><a href="/subscribe" class="button-6 w-button" data-ix="lighthouse">START NOW!</a>
+  </div>
   </div>
  <% include ../partials/w_footer.ejs %>
 </body>

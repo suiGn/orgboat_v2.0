@@ -1,48 +1,189 @@
 <!DOCTYPE html>
-<!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Thu May 21 2020 00:00:16 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="5ebcb8a4ac495468e7cdb7e9" data-wf-site="59084483abf1f4378f35067c">
+<html>
 <head>
   <meta charset="utf-8">
   <title>Subscribe</title>
      <% include ../partials/w_header.ejs %>
+	 <style>
+	     .form-label{
+	   	  padding-left: 42px;
+	   	  font-family: Roboto, sans-serif;
+	   	  font-size: 13px;
+	   	  font-weight:400;
+	   	  margin-bottom: 2px;
+		  color: #ff6666;
+	     }
+		 </style>
 </head>
 <body class="body-8">
   <% include ../partials/w_nav_lgOut.ejs %>
-  <div class="sign-up-div-2">
-    <h1 class="fingertipsslogan-2 login-head-form reg">SIGN UP</h1>
-    <div class="w-form">
-      <form id="email-form-3" name="email-form-3" data-name="Email Form 3" class="form-register-2">
-        <div class="name-lastname-rows w-row">
-          <div class="w-col w-col-6">
-	<input type="text" id="name" name="name" data-name="Name" placeholder="Name" maxlength="256" class="start-form-2 name-input-text w-input">
-		  </div>
-		  
-        <div class="w-col w-col-6">
-			<input type="text" id="lstname" name="lstname" data-name="Lstname" maxlength="256" placeholder="Last Name" class="start-form-2 name-input-text w-input">
-		</div>
-        </div>
-		<input type="text" id="email" name="email" data-name="Email" placeholder="E-mail" maxlength="256" class="start-form-2 w-input">
-		<input type="text" id="pwd-2" name="pwd-2" data-name="Pwd 2" placeholder="Password" maxlength="256" class="start-form-2 w-input">
-		<input type="text" id="pwd-3" name="pwd-3" data-name="Pwd 3" placeholder="Re-type Password" maxlength="256" class="start-form-2 w-input">
-        <div class="login-form-footer-2">
-			By registering you are agreeing to our terms and conditions.
-		</div>
-		<input type="submit" value="Register" data-wait="Please wait..." class="button w-button">
-	</form>
+  
+<div class="sign-up-div-2">
+<h1 class="fingertipsslogan-2 login-head-form reg">SIGN UP</h1>
+<div class="w-form">
+	
+	
+<form id="email-form-3" name="subForm" data-name="Subscribe Form" class="form-register-2" action="/subscribing" method="post" onsubmit="return validateForm()">
+	
+<label class="form-label" id="#labelName"></label>
+<input type="text" id="inputName" name="subName" placeholder="Name" maxlength="21" class="start-form-2 w-input" onchange="validData('vName', this.value)" required>
+
+<label class="form-label" id="labelEmail"></label>
+<input type="text" id="inputEmail" name="subEmail" placeholder="E-mail" maxlength="34" class="start-form-2 w-input" onchange="validData('vEmail', this.value)" required>
+
+<label class="form-label" id="labelUsername"></label>
+<input type="text" id="inputUsername" name="subUsername" placeholder="Username" maxlength="11" class="start-form-2 w-input" onchange="validData('vUser', this.value)" required>
+
+<label class="form-label"></label>
+<input type="password" id="pwd-2" name="subPwd" placeholder="Password" maxlength="21" class="start-form-2 w-input" required>
+
+<label class="form-label"></label>
+<input type="password" id="pwd-3" name="subRtPwd" placeholder="Re-type Password" maxlength="21" class="start-form-2 w-input" required>
+      
+<label class="form-label" id="labelUsername"><%= opt %></label>
+   
+<div class="login-form-footer-2">
+By registering you are agreeing to our terms and conditions.
+</div>
+<input type="submit" value="Register" data-wait="Please wait..." class="button w-button">
+</form>
+
+
       <div class="w-form-done">
         <div>Thank you! Your submission has been received!</div>
       </div>
-      <div class="w-form-fail">
-        <div>Oops! Something went wrong while submitting the form</div>
-      </div>
+     
     </div>
+	
+	
 	<img src="w/imgs/nat_logo.png" width="55" alt="" class="img-neurons">
     <div class="login-form-footer-2 foot2">
-		<a href="http://www.natsynapses.com" class="login-form-footer-2 footer2">By Neurons Art &amp; Technology</a>
+		<a href="#" class="login-form-footer-2 footer2">By Neurons Art &amp; Technology</a>
 	</div>
   </div>
  
   <% include ../partials/w_footer.ejs %>
+  
+  <script>
+
+  /** 
+  	OrgBoat
+   codedBY suiGN
+  Under MIT LICENSE
+  cleakerRM **/
+      //if user is running mozilla then use it's built-in WebSocket
+      window.WebSocket = window.WebSocket || window.MozWebSocket;
+      //if browser doesn't support WebSocket, just show some notification and exit
+      if (!window.WebSocket) {
+          content.html($('<p>', { text: 'Sorry, no WebSocket support on your browser.'} ));
+          input.hide();
+          $('span').hide();
+      }
+      //open connection
+  	var HOST = location.origin.replace(/^http/, 'ws')
+      var connection = new WebSocket(HOST);
+	
+
+  	//var connection = new WebSocket("wss://cleaker.herokuapp.com");
+      connection.onopen = function () {
+  		//clkcd is the code used to know what kind of connection is it. CleakerRunMe is a type.
+  		//runmeMasterMind is the code for our main survillance.
+  		console.log(`%c connected________________________________________
+			
+ ██████  ██████   ██████  ██████   ██████   █████  ████████ 
+██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
+██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
+██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
+ ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██  
+  `, "font-family:monospace")
+      };
+      //most important part - incoming messages
+      connection.onmessage = function (message) {
+          //parse JSON message.
+          try {
+              var json = JSON.parse(message.data);
+          } catch (e) {
+              console.log('Not a valid JSON: ', message.data);
+              return;
+          }
+  		//TYPES OF WS PACKETS FROM SERVER
+           if (json.type === 'validDataRes'){
+          	validDataRes(json.value, json.rcolor, json.input, json.label, json.check);
+          }
+  			};// ON Incoming Messages Closure
+	
+      connection.onerror = function (error) {
+          //just in case there were some problems with connection...
+          alert('i am Error - ' + connection.onERROR);
+      };
+	
+	
+  	//      _ ___   _  _  __
+  	//  |V||_  ||_|/ \| \(_ 
+  	//  | ||__ || |\_/|_/__)
+  	//  LOVE & Memories AFTER ALL.
+      /***/
+		
+  		function validData(data, value){
+  		connection.send(JSON.stringify({clkcd: "subVer" , value: value , code: data}));
+  		}
+  		function validDataRes(value, rcolor, input, label, check){
+  		$(label).text(value);
+  		document.getElementById(input).style.borderColor = rcolor;
+  		document.getElementById(input).dataset.check = check;		
+  		}
+		
+     	 function validateForm() {
+  		 var subName = document.forms["subForm"]["subName"];
+  		 var subUsername = document.forms["subForm"]["subUsername"];
+  		 var subEmail = document.forms["subForm"]["subEmail"];
+     		 var subPwd = document.forms["subForm"]["subPwd"];
+     		 var subRtPwd = document.forms["subForm"]["subRtPwd"];
+     	   if (subRtPwd.value != subPwd.value){
+     		   alert("Password does not match!");
+     		   return false;
+     	   }else if (subPwd.length <= 4) {
+  		   alert("Password most be 5 characters or more.");
+  		   return false;
+  		}else if (subName.dataset.check === "ni") {
+  		   alert("Invalid Name!");
+  		   return false;
+  		}else if (subUsername.dataset.check === "ui") {
+  		   alert("Invalid Username!");
+  		   return false;  	   
+     	   }else if (subUsername.dataset.check === "ut") {
+  		   alert("Username already taken!");
+  		   return false;
+     	   }else if (subEmail.dataset.check === "ei") {
+  		   alert("Invalid Email!");
+  		   return false;
+  	   }else if (subEmail.dataset.check === "et") {
+  		   alert("Email already taken!");
+  		   return false;
+  	   }else if (subName.length <= 3 || subUsername.length <= 5 || subEmail.length <= 3 ) {
+  		   alert("Please fill out fields correctly.");
+  		   return false;
+  		}else{
+     		   return true;		
+     		 }  
+     	 }
+	 
+  	 	 
+  	function pwdMatch(){
+		//USE ONKEYDOWN OR ONKEYUP
+  	 	//var subPwd = document.forms["subForm"]["subPwd"];
+  	 	//var subRtPwd = document.forms["subForm"]["subRtPwd"];
+  	 		//if (subPwd.value === subRtPwd.value){
+  	 			//subPwd.style.borderColor = "#39D1BB";
+  	 		    //subRtPwd.style.borderColor = "#39D1BB";
+  	 			 //}else if (subPwd.value != subRtPwd.value){
+  	 			 //subPwd.style.borderColor = "#ff6666";
+  	 			 //subRtPwd.style.borderColor = "#ff6666";
+  	 			//}
+  	 				}
+	 
+		
+	 
+	 </script>
 </body>
 </html>

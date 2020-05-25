@@ -1699,6 +1699,18 @@ p {
   text-align: left;
 }
 
+.image-66 {
+  position: relative;
+  z-index: 888;
+  display: block;
+  width: 610px;
+  max-width: none;
+  margin-top: -473px;
+  margin-right: auto;
+  margin-left: auto;
+  opacity: 0;
+}
+
 .fingertipsslogan-2.login-head-form {
   padding-top: 16px;
   text-align: center;
@@ -1712,9 +1724,9 @@ p {
   margin-top: 0px;
   margin-bottom: 34px;
   margin-left: 0px;
-  padding-top: 8px;
+  padding-top: 55px;
   color: #fff;
-  font-size: 21px;
+  font-size: 34px;
   text-align: center;
   letter-spacing: 3px;
 }
@@ -2216,6 +2228,10 @@ html.w-mod-js *[data-ix="display"] {
   .form-10 {
     padding-top: 21px;
   }
+  
+  
+  
+  
   .button-5 {
     margin-bottom: 25px;
   }

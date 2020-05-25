@@ -12,11 +12,12 @@
   },
   "dependencies": {
     "ejs": "^2.5.6",
-    "express": "^4.15.2",
+    "express": "^4.17.1",
     "express-validator": "^6.5.0",
     "jsonwebtoken": "^8.5.1",
     "node-uuid": "^1.4.8",
-    "pg": "^8.2.1"
+    "pg": "^8.2.1",
+    "websocket": "^1.0.31"
   },
   "devDependencies": {
     "request": "^2.81.0",
