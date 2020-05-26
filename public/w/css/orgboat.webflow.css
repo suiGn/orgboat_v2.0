@@ -121,6 +121,13 @@ p {
   color: #ecf0f1;
 }
 
+.div-block-26 {
+  width: 55%;
+  height: 44px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .navigation-bar {
   position: fixed;
   display: block;

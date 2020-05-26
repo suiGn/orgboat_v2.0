@@ -7,6 +7,9 @@
    <% include ../partials/w_header.ejs %>
 </head>
 <body class="bodylogin">
+	<div id="fb-root"></div>
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=847287435755171&autoLogAppEvents=1"></script>
+	
  
   <% include ../partials/w_nav_lgOut.ejs %>
   
@@ -34,6 +37,10 @@
 			  <a class="login-form-footer" href="/reset-pwd" style="text-decoration: none;"> Forgot Account |</a>
 			  <a class="login-form-footer" href="/terms" style="text-decoration: none;"> Terms </a>
 		   </div>
+		    <div class="div-block-26">
+		    	<div class="g-signin2" data-onsuccess="onSignIn" style="display: flex;  align-items: center; justify-content: center; margin-bottom: 8px;"></div>
+		<div class="fb-login-button" data-size="medium" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
+		    </div>
         </form>
       </div>
     </div>
@@ -58,7 +65,7 @@
   
   <div class="lighthouse-background">
     <div class="lighthouse-dark-2">
-      <h1 class="fingertipsslogan-2 boost">Your business at your fingertips.</h1>
+      <h1 class="fingertipsslogan-2 boost">Business at your fingertips.</h1>
 	  
 	  <img src="w/imgs/tour_measure1.png" alt="" class="image-64">
 	  <img src="w/imgs/mesure_2.png" alt="" class="image-66"><a href="/subscribe" class="button-6 w-button" data-ix="lighthouse">START NOW!</a>

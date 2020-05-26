@@ -41,12 +41,12 @@ exports.login = function(req, res){
 				 	      check:  true
 				 	     };
 				 	     const token = jwt.sign(payload, config.llave, {
-				 	      expiresIn: 1440
+				 	     	 expiresIn: 1440
 				 	     });
-				 	     res.json({
-				 	      mensaje: 'Autenticación correcta',
-				 	      token: token
-				 	     });
+					     res.json({
+					      mensaje: 'Autenticación correcta',
+					      token: token
+					     });
 						 
 				 	       } 
 				 	   })
@@ -55,18 +55,6 @@ exports.login = function(req, res){
 			};
 			
  
-	
-
-
-exports.datos = function(req, res){
- const datos = [
-  { id: 1, nombre: "Asfo" },
-  { id: 2, nombre: "Denisse" },
-  { id: 3, nombre: "Carlos" }
- ];
- 
- res.json(datos);
-};
 
 exports.resetPass = function(req, res){res.render('pages/sec/reset-pass')};
 exports.lockScreen= function(req, res){res.render('pages/sec/lock-screen')};
