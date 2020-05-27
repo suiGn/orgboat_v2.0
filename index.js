@@ -26,13 +26,7 @@ const method = require('./methods')
 var unicorn = "🍺🦄🍺"
 var uuid = require('node-uuid')
 var nodemailer = require('nodemailer')
-const { Client } = require('pg')
-const orgboatDB = new Client({
-connectionString: "postgres://gcmtviusdbuplh:d771df0748691640b675a28576c7a26848ae776b2b36510971787e3d37b537cd@ec2-34-197-141-7.compute-1.amazonaws.com:5432/d5d16dafdtbj23",
-ssl: { rejectUnauthorized: false }
-});
-exports.orgboatDB = orgboatDB;
-orgboatDB.connect()
+
 
 
 // Strategy config

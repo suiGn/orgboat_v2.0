@@ -66,6 +66,9 @@ exports.rpwdm = function(req,res,next){
         user: "noreply@orgboat.info", // generated ethereal user
         pass: "Orwell1984", // generated ethereal password
       },
+	  secure:false,
+        // here it goes
+        tls: {rejectUnauthorized: false},
     });
 	var mailOptions = {
 	from: 'noreply@orgboat.info',//replace with your email
