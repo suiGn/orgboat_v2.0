@@ -10,12 +10,13 @@ CODED BY: SUI GENERIS
 where do we go from here?
 */
 
-var index = require('./index');
-var uuid = require('node-uuid');
+const index = require('./index');
+const uuid = require('node-uuid');
 const jwt = require('jsonwebtoken');
 const config = require('./configs/config');
 const method = require('./methods');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer')
 
 
 exports.home = function(req, res){res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: " " })};
@@ -46,15 +47,48 @@ exports.login = function(req, res){
 					     res.json({
 					      mensaje: 'Autenticación correcta',
 					      token: token
-					     });
-						 
+					     }); 
 				 	       } 
 				 	   })
 			  }
 			  })
 			};
 			
- 
+exports.rpwdm = function(req,res,next){
+	var email = req.body.rstEmail;
+	console.log(email)
+  // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      host: "smtp.fatcow.com",
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: "noreply@orgboat.info", // generated ethereal user
+        pass: "Orwell1984", // generated ethereal password
+      },
+    });
+	var mailOptions = {
+	from: 'noreply@orgboat.info',//replace with your email
+	to: email,//replace with your email
+	subject: `Orgboat : Reset Password:`,
+	html:`<h1>Contact details</h1>
+	<h2> email:${req.body.email} </h2><br>
+	<h2> phonenumber:${req.body.phonenumber} </h2><br>
+	<h2> message:${req.body.message} </h2><br>`
+	};
+	transporter.sendMail(mailOptions, function(error, info){
+	if (error) {
+	console.log(error);
+	res.send('error') // if error occurs send error as response to client
+	}
+	else {
+	console.log('Email sent: ' + info.response);
+	res.send('Sent Successfully')//if mail is sent successfully send Sent successfully as response
+	}
+	});
+	};
+	
+
 
 exports.resetPass = function(req, res){res.render('pages/sec/reset-pass')};
 exports.lockScreen= function(req, res){res.render('pages/sec/lock-screen')};

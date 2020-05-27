@@ -21,13 +21,14 @@ const cookieSession = require('cookie-session')
 const { body,validationResult } = require("express-validator")
 const { sanitizeBody } = require("express-validator")
 var bodyParser = require("body-parser")
-var routes = require('./routes')
+const routes = require('./routes')
 const method = require('./methods')
 var unicorn = "🍺🦄🍺"
 var uuid = require('node-uuid')
+var nodemailer = require('nodemailer')
 const { Client } = require('pg')
 const orgboatDB = new Client({
-connectionString: "postgres://fqzgwpkbzidzom:9fd77d52e8fc5d2cf5da2093c977bda43b10a913ad0e0b91713991fbd41c0a5d@ec2-34-195-169-25.compute-1.amazonaws.com:5432/dds6n0grhdqssn",
+connectionString: "postgres://gcmtviusdbuplh:d771df0748691640b675a28576c7a26848ae776b2b36510971787e3d37b537cd@ec2-34-197-141-7.compute-1.amazonaws.com:5432/d5d16dafdtbj23",
 ssl: { rejectUnauthorized: false }
 });
 exports.orgboatDB = orgboatDB;
@@ -99,6 +100,8 @@ const server = express()
   .get('/subscribe', routes.subscribe)
   .post('/subscribing', routes.subscribing)
   .post('/login', routes.login)
+  .post('/rstpwd', routes.rpwdm)
+	
   .get('/reset-pwd', routes.resetPass)
   .get('/lock-screen', routes.lockScreen)
   .get('/workspace', routes.workspace)
