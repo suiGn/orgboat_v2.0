@@ -13,57 +13,31 @@ const path = require('path')
 const PORT = process.env.PORT || 5000
 const jwt = require('jsonwebtoken')
 const config = require('./configs/config')
-
-const passport = require('passport')
-const GoogleStrategy = require('passport-google-oauth20')
-const cookieSession = require('cookie-session')
-
 const { body,validationResult } = require("express-validator")
 const { sanitizeBody } = require("express-validator")
 var bodyParser = require("body-parser")
 const routes = require('./routes')
 const method = require('./methods')
+const mailer = require('./mailer')
 var unicorn = "🍺🦄🍺"
 var uuid = require('node-uuid')
 var nodemailer = require('nodemailer')
-
-
-
-// Strategy config
-passport.use(new GoogleStrategy({
-    clientID: '141888556380-24qsj6s4dc93nvqttbuebnus97rr6jdt.apps.googleusercontent.com',
-    clientSecret: 'jKTHL6GKPai38yy7GG658Fal',
-    callbackURL: 'http://localhost:5000/auth/google/callback'
-},
-    (accessToken, refreshToken, profile, done) => {
-        done(null, profile); // passes the profile data to serializeUser
-    }
-));
-// Used to stuff a piece of information into a cookie
-passport.serializeUser((user, done) => {
-    done(null, user);
+var session  = require('express-session');
+var cookieParser = require('cookie-parser');
+var passport = require('passport');
+const { Client } = require('pg')
+const orgboatDB = new Client({
+connectionString: "postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b",
+ssl: { rejectUnauthorized: false }
 });
-// Used to decode the received cookie and persist session
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
-// Middleware to check if the user is authenticated
-function isUserAuthenticated(req, res, next) {
-    if (req.user) {
-        next();
-    } else {
-        res.send('You must login!');
-    }
-}
-
+exports.orgboatDB = orgboatDB;
+orgboatDB.connect()
 
 
 const server = express()
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
   .use(express.static(path.join(__dirname, 'public')))
-  .use(passport.initialize()) // Used to initialize passport
-  .use(passport.session()) // Used to persist login sessions
   .use(cookieSession({
      maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
     // maxAge: 2 * 1000,
@@ -78,13 +52,7 @@ const server = express()
     }
 	))
 	// The middleware receives the data from Google and runs the function on Strategy config
-	.get('/auth/google/callback', passport.authenticate('google'), (req, res) => {
-    console.log(req.user.name)
-    res.redirect('/secret');
-	})
-	.get('/secret', isUserAuthenticated, (req, res) => {
-	    res.send(JSON.stringify(req.user.name));
-	})
+	
 	.get('/logout', (req, res) => {
 	    req.logout();
 	    res.redirect('/');
@@ -94,7 +62,8 @@ const server = express()
   .get('/subscribe', routes.subscribe)
   .post('/subscribing', routes.subscribing)
   .post('/login', routes.login)
-  .post('/rstpwd', routes.rpwdm)
+  .post('/rstpwd', mailer.rpwdm)
+  .get('/mail-confirmation', mailer.confirmation)
 	
   .get('/reset-pwd', routes.resetPass)
   .get('/lock-screen', routes.lockScreen)
