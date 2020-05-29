@@ -7,8 +7,6 @@
    <% include ../partials/w_header.ejs %>
 </head>
 <body class="bodylogin">
-	<div id="fb-root"></div>
-	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=847287435755171&autoLogAppEvents=1"></script>
 	
  
   <% include ../partials/w_nav_lgOut.ejs %>
@@ -36,10 +34,11 @@
 			  <a class="login-form-footer" href="/subscribe" style="text-decoration: none;"> Sign Up |</a>
 			  <a class="login-form-footer" href="/reset-pwd" style="text-decoration: none;"> Forgot Account |</a>
 			  <a class="login-form-footer" href="/terms" style="text-decoration: none;"> Terms </a>
+
 		   </div>
 		    <div class="div-block-26">
-		    	<div class="g-signin2" data-onsuccess="onSignIn" style="display: flex;  align-items: center; justify-content: center; margin-bottom: 8px;"></div>
-		<div class="fb-login-button" data-size="medium" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
+				<a href="/auth/google" class="btn btn-default"><span class="fa fa-user"></span> Google Signup</a>
+
 		    </div>
         </form>
       </div>
