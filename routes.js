@@ -24,7 +24,6 @@ exports.home = function (req, res) {
 	if (req.isAuthenticated()) {
 		res.redirect("/workspace");
 	} else {
-		console.log("home")
 		res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: " " })
 	}
 };
@@ -64,6 +63,43 @@ exports.login = function (req, res) {
 };
 
 
+exports.authGoogle = (req, res) => {
+
+	var name = req.user.displayName;
+	var usrname = req.user.emails[0].value;
+	var email = usrname;
+	var u_type = 1;
+	var dt = new Date();
+	var uuid_numbr = uuid.v4();
+
+
+
+	index.orgboatDB.query(`SELECT * FROM Usrs WHERE Usrname = '${usrname}'  OR email = '${usrname}'`, (err, resp) => {
+		if (err) {
+			res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: " " })
+		} else {
+
+			if (resp.rowCount == 0) {
+
+
+				//STORES DATA
+				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
+					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type], (error, results) => {
+
+					if (error) {
+						res.redirect('/');
+						throw error
+					}
+					console.log("New user saved!");
+				})
+			}
+			res.redirect('/workspace');
+
+		}
+	})
+
+}
+
 
 
 exports.resetPass = function (req, res) { res.render('pages/sec/reset-pass') };
@@ -80,6 +116,8 @@ exports.subscribing = function (req, res) {
 	var pwd = req.body.subPwd;
 	const saltRounds = 10
 	var hashPwd = "";
+
+
 	bcrypt.genSalt(saltRounds, function (err, salt) {
 		if (err) {
 			throw err
@@ -97,6 +135,8 @@ exports.subscribing = function (req, res) {
 	var uuid_numbr = uuid.v4();
 	var verified = 0;
 	var dt = new Date();
+	var u_type = 0;
+
 	if (method.nameRegex(clName) && method.usrnmRegex(usrname) && method.emailRegex(email)) {
 		if (clName.length <= 3 || usrname.length <= 3 || email.length <= 3 || pwd.length <= 4) {
 			res.render("pages/subscribe", { opt: "Too short." });
@@ -114,7 +154,7 @@ exports.subscribing = function (req, res) {
 							return;
 						} else {
 							//STORES DATA
-							index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, password, Verified, last_update, u_id, created) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [clName, usrname, email, hashPwd, verified, dt, uuid_numbr, dt], (error, results) => {
+							index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, password, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0)', [clName, usrname, email, hashPwd, verified, dt, uuid_numbr, dt], (error, results) => {
 								if (error) {
 									throw error
 								}
