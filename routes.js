@@ -20,7 +20,6 @@ const nodemailer = require('nodemailer')
 
 
 exports.home = function (req, res) {
-
 	if (req.isAuthenticated()) {
 		res.redirect("/workspace");
 	} else {
@@ -64,7 +63,6 @@ exports.login = function (req, res) {
 
 
 exports.authGoogle = (req, res) => {
-
 	var name = req.user.displayName;
 	var usrname = req.user.emails[0].value;
 	var email = usrname;
@@ -72,16 +70,12 @@ exports.authGoogle = (req, res) => {
 	var dt = new Date();
 	var uuid_numbr = uuid.v4();
 
-
-
 	index.orgboatDB.query(`SELECT * FROM Usrs WHERE Usrname = '${usrname}'  OR email = '${usrname}'`, (err, resp) => {
 		if (err) {
 			res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: " " })
 		} else {
 
 			if (resp.rowCount == 0) {
-
-
 				//STORES DATA
 				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
 					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type], (error, results) => {
@@ -94,11 +88,9 @@ exports.authGoogle = (req, res) => {
 				})
 			}
 			res.redirect('/workspace');
-
 		}
-	})
-
-}
+	});
+};
 
 
 

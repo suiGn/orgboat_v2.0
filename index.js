@@ -39,38 +39,28 @@ orgboatDB.connect()
 
 
 const server = express()
-
 	.use(express.static(path.join(__dirname, 'public')))
 	.use(cookieParser())
 	.use(bodyParser.urlencoded({ extended: false }))
 	.use(bodyParser.json())
-
-
 	.use(cookieSession({
 		//maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
 		 maxAge: 2 * 1000,
 		keys: ['randomstringhere']
 	}))
-
-
 	.use(passport.initialize())
 	.use(passport.session())
 	.use(flash()) // use connect-flash for flash messages stored in session
-
-
 	.set('views', path.join(__dirname, 'views'))
 	// passport.authenticate middleware is used here to authenticate the request
 	.set('view engine', 'ejs')
-
 	// The middleware receives the data from Google and runs the function on Strategy config
-
 	.get('/logout', (req, res) => {
 		req.logout();
 		res.redirect('/');
 	})
 	.get('/testing', (req, res) => res.render('pages/index'))
 	.get('/', routes.home)
-
 	.get('/subscribe', routes.subscribe)
 	.post('/subscribing', routes.subscribing)
 	.post('/login', routes.login)
@@ -84,7 +74,6 @@ const server = express()
 			scope: ['profile','email'] // Used to specify the required data
 		})
 	)
-
 	.get('/auth/google/callback', passport.authenticate('google'), routes.authGoogle)
 	.get('/lock-screen', routes.lockScreen)
 	.get('/workspace', isLoggedIn, function (req, res) { res.render('pages/workspace') })
@@ -128,18 +117,16 @@ function isLoggedIn(req, res, next) {
 }
 
 
-/** 				  o       o                                
+/** 			   o       o                                
 				   |       |                               
 				   o   o   o  
-							\ / \ / 
-							 o   o  */
+					\ / \ / 
+					 o   o  */
 /*_      _____ ___ ___  ___   ___ _  _____ _____ 
  \ \    / / __| _ ) __|/ _ \ / __| |/ / __|_   _|
   \ \/\/ /| _|| _ \__ \ (_) | (__| ' <| _|  | |  
    \_/\_/ |___|___/___/\___/ \___|_|\_\___| |_|
-			┌─┐┬  ┌─┐┌─┐┬┌─┌─┐┬─┐
-			│  │  ├┤ ├─┤├┴┐├┤ ├┬┘
-			└─┘┴─┘└─┘┴ ┴┴ ┴└─┘┴└─    
+  
 		serverside websocket managment **/
 var webSocketServer = require('websocket').server;
 var clients = [];

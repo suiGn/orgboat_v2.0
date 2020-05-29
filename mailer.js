@@ -81,7 +81,7 @@ exports.rpwdm = function(req,res,next){
 				});//closes Insert New Usr Into Table
   
 }else{
-res.render('pages/sec/mail-confirmation', { opt1: "Please try again with a different email.", opt2: "Account not found."})	
+res.render('pages/sec/response', { opt1: "Please try again with a different email.", opt2: "Account not found."})	
 }})
 	};
 	
