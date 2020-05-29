@@ -33,7 +33,6 @@ exports.login = function (req, res) {
 	var usrname = req.body.usrname;
 	var pwd = req.body.pwd;
 	index.orgboatDB.query('SELECT * FROM Usrs WHERE Usrname = $1 OR email = $1', [usrname], (err, resp) => {
-<<<<<<< HEAD
 	    if (err) {
 	     res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "No account found." });
 	          } else {
@@ -117,7 +116,6 @@ exports.changePass = function(req, res){
 	  
 exports.lockScreen= function(req, res){res.render('pages/sec/lock-screen')};
 exports.workspace = function(req, res){res.render('pages/workspace')};
-=======
 		if (err) {
 			res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "No account found." });
 		} else {
@@ -165,8 +163,6 @@ exports.authGoogle = (req, res) => {
 		} else {
 
 			if (resp.rowCount == 0) {
-
-
 				//STORES DATA
 				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
 					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type], (error, results) => {
@@ -190,24 +186,42 @@ exports.authGoogle = (req, res) => {
 exports.resetPass = function (req, res) { res.render('pages/sec/reset-pass') };
 exports.lockScreen = function (req, res) { res.render('pages/sec/lock-screen') };
 //exports.workspace = function(req, res){res.render('pages/workspace')};
->>>>>>> 7b8703185ef067dc2d9bdd3f5e5c086e0362b8ff
+				//STORES DATA
+				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
+					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type], (error, results) => {
 
+					if (error) {
+						res.redirect('/');
+						throw error
+					}
+					console.log("New user saved!");
+				})
+			}
+			res.redirect('/workspace');
+
+		}
+	})
+
+}
+
+
+
+exports.resetPass = function (req, res) { res.render('pages/sec/reset-pass') };
+exports.lockScreen = function (req, res) { res.render('pages/sec/lock-screen') };
+//exports.workspace = function(req, res){res.render('pages/workspace')};
 //subscribe
-<<<<<<< HEAD
 exports.subscribing = function(req,res){
 	var clName = req.body.subName; 
 	var usrname = req.body.subUsername; 
 	var email = req.body.subEmail; 
 	var pwd = req.body.subPwd; 
 	var saltRounds = 10;
-=======
 exports.subscribing = function (req, res) {
 	var clName = req.body.subName;
 	var usrname = req.body.subUsername;
 	var email = req.body.subEmail;
 	var pwd = req.body.subPwd;
 	const saltRounds = 10
->>>>>>> 7b8703185ef067dc2d9bdd3f5e5c086e0362b8ff
 	var hashPwd = "";
 
 

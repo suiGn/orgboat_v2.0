@@ -12,10 +12,6 @@
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
-<<<<<<< HEAD
-=======
-    "bcrypt-nodejs": "0.0.3",
->>>>>>> 7b8703185ef067dc2d9bdd3f5e5c086e0362b8ff
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",

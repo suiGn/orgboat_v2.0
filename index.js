@@ -22,17 +22,13 @@ const mailer = require('./mailer')
 var unicorn = "🍺🦄🍺"
 var uuid = require('node-uuid')
 var nodemailer = require('nodemailer')
-var cookieParser = require('cookie-parser');
-var passport = require('passport');
-<<<<<<< HEAD
-var flash = require('connect-flash');
-=======
-const cookieSession = require('cookie-session');
-var flash = require('connect-flash');
+var cookieParser = require('cookie-parser')
+var passport = require('passport')
+var flash = require('connect-flash')
+const cookieSession = require('cookie-session')
+var flash = require('connect-flash')
 
 require('./configs/passport')(passport); // pass passport for configuration
-
->>>>>>> 7b8703185ef067dc2d9bdd3f5e5c086e0362b8ff
 const { Client } = require('pg')
 const orgboatDB = new Client({
 	connectionString: "postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b",
@@ -43,7 +39,6 @@ orgboatDB.connect()
 
 
 const server = express()
-<<<<<<< HEAD
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
   .use(express.static(path.join(__dirname, 'public')))  
@@ -54,7 +49,6 @@ const server = express()
         scope: ['profile'] // Used to specify the required data
     }
 	))
-=======
 
 	.use(express.static(path.join(__dirname, 'public')))
 	.use(cookieParser())
@@ -78,14 +72,12 @@ const server = express()
 	// passport.authenticate middleware is used here to authenticate the request
 	.set('view engine', 'ejs')
 
->>>>>>> 7b8703185ef067dc2d9bdd3f5e5c086e0362b8ff
 	// The middleware receives the data from Google and runs the function on Strategy config
 
 	.get('/logout', (req, res) => {
 		req.logout();
 		res.redirect('/');
 	})
-<<<<<<< HEAD
   .get('/testing', (req, res) => res.render('pages/index'))
   .get('/', routes.home)
   .get('/subscribe', routes.subscribe)
@@ -148,7 +140,6 @@ const server = express()
 	var wsServer = new webSocketServer({
     httpServer: server
 		});
-=======
 	.get('/testing', (req, res) => res.render('pages/index'))
 	.get('/', routes.home)
 
@@ -235,7 +226,6 @@ var allMembers = [];
 var wsServer = new webSocketServer({
 	httpServer: server
 });
->>>>>>> 7b8703185ef067dc2d9bdd3f5e5c086e0362b8ff
 //exports.wsServer;
 // WebSocket server Starts from Here
 wsServer.on('request', function (request) {
