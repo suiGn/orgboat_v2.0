@@ -33,89 +33,6 @@ exports.login = function (req, res) {
 	var usrname = req.body.usrname;
 	var pwd = req.body.pwd;
 	index.orgboatDB.query('SELECT * FROM Usrs WHERE Usrname = $1 OR email = $1', [usrname], (err, resp) => {
-	    if (err) {
-	     res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "No account found." });
-	          } else {
-	              // selects return an array, so access the first in the array
-				  var usr = resp.rows[0];
-				  var hash = usr.password;
-	              // now lets compare the passwords
-			  	bcrypt.compare(pwd, hash, function(err, isMatch) {
-			  	  if (err) {
-			  	    throw err
-			  	  } else if (!isMatch) {
-			  	   res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "Invalid username or password." });
-			  	  } else {
-				 	     const payload = {
-				 	      check:  true
-				 	     };
-				 	     const token = jwt.sign(payload, config.llave, {
-				 	     	 expiresIn: 1440
-				 	     });
-					     res.json({
-					      mensaje: 'Autenticación correcta',
-					      token: token
-					     }); 
-				 	       } 
-				 	   })
-			  }
-			  })
-			};
-			
-
-
-exports.resetPass = function(req, res){res.render('pages/sec/reset-pass')};
-exports.pwdRst =  function(req, res) {
-	var uuid = req.query.uuid;
-	var email = req.query.em;
-	index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = $1', [email], (err, resp) => {
-	if(resp.rowCount >= 1){
-		var usr = resp.rows[0];
-		if (usr.random === uuid){
-			res.render('pages/sec/newPass', {opt: email, opt1: uuid})
-		}else{
-		res.render('pages/sec/response', {opt2: "Error", opt1: "Link Expired."})	
-		}
-		}else{		
-			res.render('pages/sec/response', {opt2: "Error", opt1: "Not valid. Try again."});
-		}
-})};
-
-exports.changePass = function(req, res){
-	var random = req.body.uuid;
-	var email = req.body.email;
-	var password = req.body.password;
-	var rtpass = req.body.rtpass;
-	var reset = "0";
-	var saltRounds = 10;
-		bcrypt.genSalt(saltRounds, function (err, salt) {
-		  if (err) {
-		    throw err
-		  } else {
-		    bcrypt.hash(password, salt, function(err, hash) {
-		      if (err) {
-		        throw err
-		      } else {
-			var Pwd = hash;
-			if (password == rtpass){
-			index.orgboatDB.query('UPDATE usrs SET Password = $1, Random = $4 WHERE Email = $2 AND Random = $3', [Pwd, email, random, reset], (error, results) => {
-			if (error) {
-			 res.render('pages/sec/response', {opt2: "Error", opt1: "Something weird happened. Please try again."});
-			 }else{
-			 res.render('pages/sec/response', {opt2: "Password Changed", opt1: "Please login with your new password."});	
-			 	}
-			})
-			}else{
-			res.render('pages/sec/response', {opt2: "Error", opt1: "Password does not match."});
-		}
-		      }
-		    })
-		  }
-		})
-		 	};
-	  
-exports.lockScreen= function(req, res){res.render('pages/sec/lock-screen')};
-exports.workspace = function(req, res){res.render('pages/workspace')};
 		if (err) {
 			res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "No account found." });
 		} else {
@@ -163,6 +80,8 @@ exports.authGoogle = (req, res) => {
 		} else {
 
 			if (resp.rowCount == 0) {
+
+
 				//STORES DATA
 				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
 					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type], (error, results) => {
@@ -184,38 +103,60 @@ exports.authGoogle = (req, res) => {
 
 
 exports.resetPass = function (req, res) { res.render('pages/sec/reset-pass') };
-exports.lockScreen = function (req, res) { res.render('pages/sec/lock-screen') };
-//exports.workspace = function(req, res){res.render('pages/workspace')};
-				//STORES DATA
-				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
-					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type], (error, results) => {
-
-					if (error) {
-						res.redirect('/');
-						throw error
-					}
-					console.log("New user saved!");
-				})
-			}
-			res.redirect('/workspace');
-
+exports.pwdRst =  function(req, res) {
+	var uuid = req.query.uuid;
+	var email = req.query.em;
+	index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = $1', [email], (err, resp) => {
+	if(resp.rowCount >= 1){
+		var usr = resp.rows[0];
+		if (usr.random === uuid){
+			res.render('pages/sec/newPass', {opt: email, opt1: uuid})
+		}else{
+		res.render('pages/sec/response', {opt2: "Error", opt1: "Link Expired."})	
 		}
-	})
-
-}
-
-
-
-exports.resetPass = function (req, res) { res.render('pages/sec/reset-pass') };
-exports.lockScreen = function (req, res) { res.render('pages/sec/lock-screen') };
-//exports.workspace = function(req, res){res.render('pages/workspace')};
-//subscribe
-exports.subscribing = function(req,res){
-	var clName = req.body.subName; 
-	var usrname = req.body.subUsername; 
-	var email = req.body.subEmail; 
-	var pwd = req.body.subPwd; 
+		}else{		
+			res.render('pages/sec/response', {opt2: "Error", opt1: "Not valid. Try again."});
+		}
+})};
+exports.changePass = function(req, res){
+	var random = req.body.uuid;
+	var email = req.body.email;
+	var password = req.body.password;
+	var rtpass = req.body.rtpass;
+	var reset = "0";
 	var saltRounds = 10;
+		bcrypt.genSalt(saltRounds, function (err, salt) {
+		  if (err) {
+		    throw err
+		  } else {
+		    bcrypt.hash(password, salt, function(err, hash) {
+		      if (err) {
+		        throw err
+		      } else {
+			var Pwd = hash;
+			if (password == rtpass){
+			index.orgboatDB.query('UPDATE usrs SET Password = $1, Random = $4 WHERE Email = $2 AND Random = $3', [Pwd, email, random, reset], (error, results) => {
+			if (error) {
+			 res.render('pages/sec/response', {opt2: "Error", opt1: "Something weird happened. Please try again."});
+			 }else{
+			 res.render('pages/sec/response', {opt2: "Password Changed", opt1: "Please login with your new password."});	
+			 	}
+			})
+			}else{
+			res.render('pages/sec/response', {opt2: "Error", opt1: "Password does not match."});
+		}
+		      }
+		    })
+		  }
+		})
+		 	};
+	  
+exports.lockScreen = function (req, res) { res.render('pages/sec/lock-screen') };
+//exports.workspace = function(req, res){res.render('pages/workspace')};
+
+
+
+//subscribe
 exports.subscribing = function (req, res) {
 	var clName = req.body.subName;
 	var usrname = req.body.subUsername;

@@ -5,7 +5,7 @@
 ██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
  ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██    
                                                                                                                                                                                                          
-*** CODED BY sui Gn
+*** CODED BY sui Gn Good
 workspace
 ****/
 const express = require('express')
@@ -22,13 +22,13 @@ const mailer = require('./mailer')
 var unicorn = "🍺🦄🍺"
 var uuid = require('node-uuid')
 var nodemailer = require('nodemailer')
-var cookieParser = require('cookie-parser')
-var passport = require('passport')
-var flash = require('connect-flash')
-const cookieSession = require('cookie-session')
-var flash = require('connect-flash')
+var cookieParser = require('cookie-parser');
+var passport = require('passport');
+const cookieSession = require('cookie-session');
+var flash = require('connect-flash');
 
 require('./configs/passport')(passport); // pass passport for configuration
+
 const { Client } = require('pg')
 const orgboatDB = new Client({
 	connectionString: "postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b",
@@ -39,16 +39,6 @@ orgboatDB.connect()
 
 
 const server = express()
-  .use(bodyParser.urlencoded({ extended: false }))
-  .use(bodyParser.json())
-  .use(express.static(path.join(__dirname, 'public')))  
-  .set('views', path.join(__dirname, 'views'))
-   // passport.authenticate middleware is used here to authenticate the request
-  .set('view engine', 'ejs').get('/auth/google', 
-    passport.authenticate('google', {
-        scope: ['profile'] // Used to specify the required data
-    }
-	))
 
 	.use(express.static(path.join(__dirname, 'public')))
 	.use(cookieParser())
@@ -78,80 +68,17 @@ const server = express()
 		req.logout();
 		res.redirect('/');
 	})
-  .get('/testing', (req, res) => res.render('pages/index'))
-  .get('/', routes.home)
-  .get('/subscribe', routes.subscribe)
-  .post('/subscribing', routes.subscribing)
-  .post('/login', routes.login)
-  .post('/rstpwd', mailer.rpwdm)
-  .get('/pwdRst', routes.pwdRst)
-  .get('/mail-confirmation', mailer.confirmation)
-  .get('/reset-pwd', routes.resetPass)
-  .post('/resetPwd', routes.changePass)
-  .get('/lock-screen', routes.lockScreen)
-  .get('/workspace', routes.workspace)
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
- 
-	//      _ ___   _  _  __
-	//  |V||_  ||_|/ \| \(_ 
-	//  | ||__ || |\_/|_/__)	
-		
-		function brdCstRight(room, obj){ //broadcast to room membrs Only
-		var BroadCastMembers = [ ];
-     	//Filters only members belonging to the same room
-		const members = allMembers.filter(goes => goes.room === room);
-		//Once filtered to only same room members to broadcast
-		members.forEach(function(element) {BroadCastMembers.push(element.client);});
-		// broadcast message to all connected clients in room
-		BroadCastMembers.forEach(function(EndClient){EndClient.sendUTF(obj);});	
-			};
-			
-	/** Helper function for escaping input strings */
-	function htmlEntities(str) {
-		return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-					      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-							}			
-							// Array with some colors
-							var colors = [ '#a8d069', '#30ad64', '#25ccbf', '#20ac99', '#f8c740', '#e2a62b',
-							 '#face6a', '#e4b962', '#fd7072', '#cf404d', '#d39f9a', 
-							'#735260', '#af4173', '#822e50', '#e64c40', '#bf3a30','#fc7d64','#49647b'];
-	// ... in random order
-	colors.sort(function(a,b) { return Math.random() > 0.5; } );
-	
-	
-	
-   /** 				  o       o                                
-					  |       |                               
-					  o   o   o  
-   					   \ / \ / 
-   					    o   o  */
-	/*_      _____ ___ ___  ___   ___ _  _____ _____ 
-	 \ \    / / __| _ ) __|/ _ \ / __| |/ / __|_   _|
-      \ \/\/ /| _|| _ \__ \ (_) | (__| ' <| _|  | |  
-	   \_/\_/ |___|___/___/\___/ \___|_|\_\___| |_|
-				┌─┐┬  ┌─┐┌─┐┬┌─┌─┐┬─┐
-				│  │  ├┤ ├─┤├┴┐├┤ ├┬┘
-				└─┘┴─┘└─┘┴ ┴┴ ┴└─┘┴└─    
-			serverside websocket managment **/
-	var webSocketServer = require('websocket').server;
-	var clients = [ ];
-	var allMembers = [ ];
-	
-	var wsServer = new webSocketServer({
-    httpServer: server
-		});
 	.get('/testing', (req, res) => res.render('pages/index'))
 	.get('/', routes.home)
 
 	.get('/subscribe', routes.subscribe)
 	.post('/subscribing', routes.subscribing)
 	.post('/login', routes.login)
-	.post('/rstpwd', mailer.rpwdm)
-	.get('/mail-confirmation', mailer.confirmation)
-
-
+	.get('/reset-pwd', routes.resetPass) // Reset Password request
+	.post('/rstpwd', mailer.rpwdm) //Send Reset Pwd Password
+	.get('/pwdRst', routes.pwdRst) //Change Password
+    .post('/resetPwd', routes.changePass)// Post Change Password
 	//Passport
-
 	.get('/auth/google',
 		passport.authenticate('google', {
 			scope: ['profile','email'] // Used to specify the required data
@@ -159,9 +86,6 @@ const server = express()
 	)
 
 	.get('/auth/google/callback', passport.authenticate('google'), routes.authGoogle)
-
-
-	.get('/reset-pwd', routes.resetPass)
 	.get('/lock-screen', routes.lockScreen)
 	.get('/workspace', isLoggedIn, function (req, res) { res.render('pages/workspace') })
 	.listen(PORT, () => console.log(`Listening on ${PORT}`))
@@ -191,8 +115,6 @@ var colors = ['#a8d069', '#30ad64', '#25ccbf', '#20ac99', '#f8c740', '#e2a62b',
 	'#735260', '#af4173', '#822e50', '#e64c40', '#bf3a30', '#fc7d64', '#49647b'];
 // ... in random order
 colors.sort(function (a, b) { return Math.random() > 0.5; });
-
-
 
 
 // route middleware to make sure

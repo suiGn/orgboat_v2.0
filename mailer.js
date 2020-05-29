@@ -2,7 +2,6 @@ const index = require('./index');
 const nodemailer = require('nodemailer');
 const uuid = require('node-uuid');
 
-exports.confirmation = function(req, res){res.render('pages/sec/mail-confirmation', { opt1: "", opt2: ""})};
 
 exports.rpwdm = function(req,res,next){
 	var email = req.body.rstEmail;
