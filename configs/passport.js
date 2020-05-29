@@ -6,13 +6,12 @@
 // load all the things we need
 var LocalStrategy = require('passport-local').Strategy;
 // load up the user model
-const index = require('./index');
-var mysql = require('mysql');
+//var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
-var dbconfig = require('./database');
-var connection = mysql.createConnection(dbconfig.connection);
+////var dbconfig = require('./database');
+//var connection = mysql.createConnection(dbconfig.connection);
 //connection.connect();
-index.orgboatDB.query('USE ' + dbconfig.database);
+//connection.query('USE ' + dbconfig.database);
 //connection.end();
 // expose this function to our app using module.exports
 
@@ -40,13 +39,11 @@ module.exports = function (passport) {
 
     // used to deserialize the user
     passport.deserializeUser(function (user, done) {
-        console.log(user);
-
         if (user.type == 'local') {
             id = user.id
-            index.orgboatDB.query("SELECT * FROM users WHERE id = ? ", [id], function (err, rows) {
-                done(err, rows[0]);
-            });
+            //connection.query("SELECT * FROM users WHERE id = ? ", [id], function (err, rows) {
+            //    done(err, rows[0]);
+            //});
         } else {
             done(null, user);
         }
@@ -59,7 +56,7 @@ module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: '88301559636-9lcb3e4h77t5etmruuqfnlsamo1r9822.apps.googleusercontent.com',
         clientSecret: 'qYayWv7JPQP3Hgiie-SZbYwz',
-        callbackURL: 'http://localhost:8000/auth/google/callback'
+        callbackURL: 'http://localhost:5000/auth/google/callback'
     },
         (accessToken, refreshToken, profile, done) => {
             done(null, profile); // passes the profile data to serializeUser
@@ -72,7 +69,7 @@ module.exports = function (passport) {
     // =========================================================================
     // we are using named strategies since we have one for login and one for signup
     // by default, if there was no name, it would just be called 'local'
-
+/*
     passport.use(
         'local-signup',
         new LocalStrategy({
@@ -85,7 +82,7 @@ module.exports = function (passport) {
                 // find a user whose email is the same as the forms email
                 // we are checking to see if the user trying to login already exists
                 //connection.connect();
-                index.orgboatDB.query("SELECT * FROM users WHERE username = ?", [username], function (err, rows) {
+                connection.query("SELECT * FROM users WHERE username = ?", [username], function (err, rows) {
                     if (err)
                         return done(err);
                     if (rows.length) {
@@ -112,13 +109,13 @@ module.exports = function (passport) {
                 //connection.end();
             })
     );
-
+*/
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
     // we are using named strategies since we have one for login and one for signup
     // by default, if there was no name, it would just be called 'local'
-
+/*
     passport.use(
         'local-login',
         new LocalStrategy({
@@ -146,4 +143,5 @@ module.exports = function (passport) {
                 //connection.end();
             })
     );
+    */
 };
