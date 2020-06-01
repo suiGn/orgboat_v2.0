@@ -45,7 +45,7 @@ const server = express()
 	.use(bodyParser.json())
 	.use(cookieSession({
 		maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
-		 //maxAge: 2 * 1000,
+		//maxAge: 2 * 1000,
 		keys: ['randomstringhere']
 	}))
 	.use(passport.initialize())
@@ -63,20 +63,31 @@ const server = express()
 	.get('/', routes.home)
 	.get('/subscribe', routes.subscribe)
 	.post('/subscribing', routes.subscribing)
-	.post('/login', routes.login)
+
+
+	// process the login form
+	.post('/login', passport.authenticate('local-login', {
+		successRedirect: '/workspace', // redirect to the secure profile section
+		failureRedirect: '/', // redirect back to the signup page if there is an error
+		failureFlash: true // allow flash messages
+	}), function (req, res) { res.redirect('/workspace'); })
+
+
 	.get('/reset-pwd', routes.resetPass) // Reset Password request
 	.post('/rstpwd', mailer.rpwdm) //Send Reset Pwd Password
 	.get('/pwdRst', routes.pwdRst) //Change Password
-    .post('/resetPwd', routes.changePass)// Post Change Password
+	.post('/resetPwd', routes.changePass)// Post Change Password
 	//Passport
 	.get('/auth/google',
 		passport.authenticate('google', {
-			scope: ['profile','email'] // Used to specify the required data
+			scope: ['profile', 'email'] // Used to specify the required data
 		})
 	)
 	.get('/auth/google/callback', passport.authenticate('google'), routes.authGoogle)
 	.get('/lock-screen', routes.lockScreen)
 	.get('/workspace', isLoggedIn, function (req, res) { res.render('pages/workspace') })
+
+	
 	.listen(PORT, () => console.log(`Listening on ${PORT}`))
 
 //      _ ___   _  _  __

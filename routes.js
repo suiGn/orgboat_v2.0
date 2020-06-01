@@ -28,38 +28,8 @@ exports.home = function (req, res) {
 };
 
 exports.subscribe = function (req, res) { res.render('pages/subscribe', { opt: " ", opt1: "Log In", opt2: "/" }) };
-exports.login = function (req, res) {
-	var usrname = req.body.usrname;
-	var pwd = req.body.pwd;
-	index.orgboatDB.query('SELECT * FROM Usrs WHERE Usrname = $1 OR email = $1', [usrname], (err, resp) => {
-		if (err) {
-			res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "No account found." });
-		} else {
-			// selects return an array, so access the first in the array
-			var usr = resp.rows[0];
-			var hash = usr.password;
-			// now lets compare the passwords
-			bcrypt.compare(pwd, hash, function (err, isMatch) {
-				if (err) {
-					throw err
-				} else if (!isMatch) {
-					res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "Invalid username or password." });
-				} else {
-					const payload = {
-						check: true
-					};
-					const token = jwt.sign(payload, config.llave, {
-						expiresIn: 1440
-					});
-					res.json({
-						mensaje: 'Autenticación correcta',
-						token: token
-					});
-				}
-			})
-		}
-	})
-};
+
+
 
 
 exports.authGoogle = (req, res) => {
@@ -77,15 +47,15 @@ exports.authGoogle = (req, res) => {
 
 			if (resp.rowCount == 0) {
 				//STORES DATA
-				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
+				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
 					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type], (error, results) => {
 
-					if (error) {
-						res.redirect('/');
-						throw error
-					}
-					console.log("New user saved!");
-				})
+						if (error) {
+							res.redirect('/');
+							throw error
+						}
+						console.log("New user saved!");
+					})
 			}
 			res.redirect('/workspace');
 		}
@@ -95,54 +65,56 @@ exports.authGoogle = (req, res) => {
 
 
 exports.resetPass = function (req, res) { res.render('pages/sec/reset-pass') };
-exports.pwdRst =  function(req, res) {
+exports.pwdRst = function (req, res) {
 	var uuid = req.query.uuid;
 	var email = req.query.em;
 	index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = $1', [email], (err, resp) => {
-	if(resp.rowCount >= 1){
-		var usr = resp.rows[0];
-		if (usr.random === uuid){
-			res.render('pages/sec/newPass', {opt: email, opt1: uuid})
-		}else{
-		res.render('pages/sec/response', {opt2: "Error", opt1: "Link Expired."})	
+		if (resp.rowCount >= 1) {
+			var usr = resp.rows[0];
+			if (usr.random === uuid) {
+				res.render('pages/sec/newPass', { opt: email, opt1: uuid })
+			} else {
+				res.render('pages/sec/response', { opt2: "Error", opt1: "Link Expired." })
+			}
+		} else {
+			res.render('pages/sec/response', { opt2: "Error", opt1: "Not valid. Try again." });
 		}
-		}else{		
-			res.render('pages/sec/response', {opt2: "Error", opt1: "Not valid. Try again."});
-		}
-})};
-exports.changePass = function(req, res){
+	})
+};
+
+exports.changePass = function (req, res) {
 	var random = req.body.uuid;
 	var email = req.body.email;
 	var password = req.body.password;
 	var rtpass = req.body.rtpass;
 	var reset = "0";
 	var saltRounds = 10;
-		bcrypt.genSalt(saltRounds, function (err, salt) {
-		  if (err) {
-		    throw err
-		  } else {
-		    bcrypt.hash(password, salt, function(err, hash) {
-		      if (err) {
-		        throw err
-		      } else {
-			var Pwd = hash;
-			if (password == rtpass){
-			index.orgboatDB.query('UPDATE usrs SET Password = $1, Random = $4 WHERE Email = $2 AND Random = $3', [Pwd, email, random, reset], (error, results) => {
-			if (error) {
-			 res.render('pages/sec/response', {opt2: "Error", opt1: "Something weird happened. Please try again."});
-			 }else{
-			 res.render('pages/sec/response', {opt2: "Password Changed", opt1: "Please login with your new password."});	
-			 	}
+	bcrypt.genSalt(saltRounds, function (err, salt) {
+		if (err) {
+			throw err
+		} else {
+			bcrypt.hash(password, salt, function (err, hash) {
+				if (err) {
+					throw err
+				} else {
+					var Pwd = hash;
+					if (password == rtpass) {
+						index.orgboatDB.query('UPDATE usrs SET Password = $1, Random = $4 WHERE Email = $2 AND Random = $3', [Pwd, email, random, reset], (error, results) => {
+							if (error) {
+								res.render('pages/sec/response', { opt2: "Error", opt1: "Something weird happened. Please try again." });
+							} else {
+								res.render('pages/sec/response', { opt2: "Password Changed", opt1: "Please login with your new password." });
+							}
+						})
+					} else {
+						res.render('pages/sec/response', { opt2: "Error", opt1: "Password does not match." });
+					}
+				}
 			})
-			}else{
-			res.render('pages/sec/response', {opt2: "Error", opt1: "Password does not match."});
 		}
-		      }
-		    })
-		  }
-		})
-		 	};
-	  
+	})
+};
+
 exports.lockScreen = function (req, res) { res.render('pages/sec/lock-screen') };
 //exports.workspace = function(req, res){res.render('pages/workspace')};
 
@@ -206,7 +178,7 @@ exports.subscribing = function (req, res) {
 				} //closes else first query 
 			}) //closes the vault first query - username
 		}// Pwd do not match
-		res.render('pages/workspace');
+		res.redirect('/');
 	} else {
 		res.render("pages/subscribe", { opt: "Oops! Something went wrong while submitting the form." });
 	}

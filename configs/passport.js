@@ -7,7 +7,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 // load up the user model
 //var mysql = require('mysql');
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt = require('bcryptjs');
 ////var dbconfig = require('./database');
 //var connection = mysql.createConnection(dbconfig.connection);
 //connection.connect();
@@ -21,6 +21,13 @@ var bcrypt = require('bcrypt-nodejs');
 // ==================================================================================================
 // Strategy config
 const GoogleStrategy = require('passport-google-oauth20');
+
+
+
+
+const index = require('./../index');
+
+
 
 
 
@@ -39,14 +46,7 @@ module.exports = function (passport) {
 
     // used to deserialize the user
     passport.deserializeUser(function (user, done) {
-        if (user.type == 'local') {
-            id = user.id
-            //connection.query("SELECT * FROM users WHERE id = ? ", [id], function (err, rows) {
-            //    done(err, rows[0]);
-            //});
-        } else {
-            done(null, user);
-        }
+        done(null, user);
     });
 
     // =========================================================================
@@ -115,33 +115,37 @@ module.exports = function (passport) {
     // =========================================================================
     // we are using named strategies since we have one for login and one for signup
     // by default, if there was no name, it would just be called 'local'
-/*
+
     passport.use(
         'local-login',
         new LocalStrategy({
             // by default, local strategy uses username and password, we will override with email
-            usernameField: 'username',
-            passwordField: 'password',
+            usernameField: 'usrname',
+            passwordField: 'pwd',
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
-            function (req, username, password, done) { // callback with email and password from our form
-                //connection.connect();
-                connection.query("SELECT * FROM users WHERE username = ?", [username], function (err, rows) {
-                    if (err)
-                        return done(err);
-                    if (!rows.length) {
-                        return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+            function (req, usrname, password, done) { // callback with email and password from our form
+                index.orgboatDB.query('SELECT * FROM Usrs WHERE Usrname = $1 OR email = $1', [usrname], (err, resp) => {
+                    if (err) {
+                        res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "No account found." });
+                    } else {
+                        // selects return an array, so access the first in the array
+                        var usr = resp.rows[0];
+                        var hash = usr.password;
+                        // now lets compare the passwords                        
+                        bcrypt.compare(password, hash, function (err, isMatch) {
+                            if (err) {
+                                return done(err);
+                            } else if (!isMatch) {
+                                return done(err);
+                            } else {
+                                console.log(true)
+                                return done(null, usr);
+                            }
+                        })
                     }
+                })
 
-                    // if the user is found but the password is wrong
-                    if (!bcrypt.compareSync(password, rows[0].password))
-                        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-
-                    // all is well, return successful user
-                    return done(null, rows[0]);
-                });
-                //connection.end();
             })
     );
-    */
 };
