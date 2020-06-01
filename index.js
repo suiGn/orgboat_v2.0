@@ -44,8 +44,8 @@ const server = express()
 	.use(bodyParser.urlencoded({ extended: false }))
 	.use(bodyParser.json())
 	.use(cookieSession({
-		//maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
-		 maxAge: 2 * 1000,
+		maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
+		 //maxAge: 2 * 1000,
 		keys: ['randomstringhere']
 	}))
 	.use(passport.initialize())
