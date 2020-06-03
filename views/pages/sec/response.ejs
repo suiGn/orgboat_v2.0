@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>OrgBoat Reset Password</title>
-
+    <title>OrgBoat</title>
     <!-- Favicon -->
     <link rel="icon" href="../../sl/dist/media/img/favicon.png" type="image/png">
     <!-- Bundle Styles -->
@@ -14,28 +13,29 @@
     <link rel="stylesheet" href="../../sl/dist/css/app.min.css">
 </head>
 <body class="form-membership">
-
 <div class="form-wrapper">
-
     <!-- logo -->
     <div class="logo">
        <a href="/">  <img src="media/imgs/blue_helm2.png" width="55" height="" alt="Blue Helm"> </a>
     </div>
     <!-- ./ logo -->
-
     <h5><%= opt2 %></h5>
 
 <p style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top"><%= opt1 %></p>
     
     <div class="form-group">
-    <a href="javascript:history.back()">Go Back</a>
+	<% if(opt2 === "Email Verified"){ %>
+    <a href="/">Log In</a>
+	<% }else {%>
+	<a href="javascript:history.back()">Go Back</a>
+	<% }%>
     </div>
     <hr>
         <p class="text-muted">Take a different action.</p>
         <a href="/subscribe" class="btn btn-sm btn-outline-light mr-1">Subscribe!</a>
         or
         <a href="/" class="btn btn-sm btn-outline-light ml-1">Login!</a>
-  
+		%>
 
 </div>
 

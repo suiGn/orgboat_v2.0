@@ -15,7 +15,8 @@ const jwt = require('jsonwebtoken')
 const config = require('./configs/config')
 const { body, validationResult } = require("express-validator")
 const { sanitizeBody } = require("express-validator")
-var bodyParser = require("body-parser")
+const bodyParser = require("body-parser")
+const multer = require('multer')
 const routes = require('./routes')
 const method = require('./methods')
 const mailer = require('./mailer')
@@ -36,6 +37,7 @@ const orgboatDB = new Client({
 });
 exports.orgboatDB = orgboatDB;
 orgboatDB.connect()
+
 
 
 const server = express()
@@ -62,17 +64,14 @@ const server = express()
 	.get('/testing', (req, res) => res.render('pages/index'))
 	.get('/', routes.home)
 	.get('/subscribe', routes.subscribe)
+	.get('/verMail', routes.verMail)
 	.post('/subscribing', routes.subscribing)
-
-
 	// process the login form
 	.post('/login', passport.authenticate('local-login', {
 		successRedirect: '/workspace', // redirect to the secure profile section
 		failureRedirect: '/', // redirect back to the signup page if there is an error
 		failureFlash: true // allow flash messages
 	}), function (req, res) { res.redirect('/workspace'); })
-
-
 	.get('/reset-pwd', routes.resetPass) // Reset Password request
 	.post('/rstpwd', mailer.rpwdm) //Send Reset Pwd Password
 	.get('/pwdRst', routes.pwdRst) //Change Password
@@ -85,7 +84,8 @@ const server = express()
 	)
 	.get('/auth/google/callback', passport.authenticate('google'), routes.authGoogle)
 	.get('/lock-screen', routes.lockScreen)
-	.get('/workspace', isLoggedIn, function (req, res) { res.render('pages/workspace') })
+	.get('/workspace', isLoggedIn, routes.workspace)
+	.post('/edProf', isLoggedIn, routes.editProfile)	
 
 	
 	.listen(PORT, () => console.log(`Listening on ${PORT}`))
@@ -115,8 +115,6 @@ var colors = ['#a8d069', '#30ad64', '#25ccbf', '#20ac99', '#f8c740', '#e2a62b',
 	'#735260', '#af4173', '#822e50', '#e64c40', '#bf3a30', '#fc7d64', '#49647b'];
 // ... in random order
 colors.sort(function (a, b) { return Math.random() > 0.5; });
-
-
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
@@ -126,6 +124,8 @@ function isLoggedIn(req, res, next) {
 	// if they aren't redirect them to the home page
 	res.redirect("/");
 }
+
+
 
 
 /** 			   o       o                                
@@ -150,7 +150,6 @@ var wsServer = new webSocketServer({
 // WebSocket server Starts from Here
 wsServer.on('request', function (request) {
 	var uuid_numbr = uuid.v4();
-
 	//accept connection if check 'request.origin'
 	var connection = request.accept(); //connecting from same website
 	var index = clients.push(connection) - 1; //client index to remove them on 'close' event
@@ -201,8 +200,6 @@ wsServer.on('request', function (request) {
 				}
 				method.dataSubmitVerification(pckr);
 			}//subVer
-
-
 		}//IF MESSAGE.TYPE CLOSURE
 	});//END CONNECTION.ON MESSAGE		
 

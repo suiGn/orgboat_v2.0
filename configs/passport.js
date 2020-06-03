@@ -14,23 +14,12 @@ var bcrypt = require('bcryptjs');
 //connection.query('USE ' + dbconfig.database);
 //connection.end();
 // expose this function to our app using module.exports
-
-
 // ==================================================================================================
 // Google STRATEGY ===================================================================================
 // ==================================================================================================
 // Strategy config
 const GoogleStrategy = require('passport-google-oauth20');
-
-
-
-
 const index = require('./../index');
-
-
-
-
-
 module.exports = function (passport) {
 
     // =========================================================================
@@ -38,7 +27,7 @@ module.exports = function (passport) {
     // =========================================================================
     // required for persistent login sessions
     // passport needs ability to serialize and unserialize users out of session
-
+	
     // used to serialize the user for the session
     passport.serializeUser(function (user, done) {
         done(null, user);
@@ -48,7 +37,6 @@ module.exports = function (passport) {
     passport.deserializeUser(function (user, done) {
         done(null, user);
     });
-
     // =========================================================================
     // Google SIGNUP ============================================================
     // =========================================================================
@@ -62,8 +50,6 @@ module.exports = function (passport) {
             done(null, profile); // passes the profile data to serializeUser
         }
     ));
-
-
     // =========================================================================
     // LOCAL SIGNUP ============================================================
     // =========================================================================
