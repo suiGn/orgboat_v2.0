@@ -28,7 +28,7 @@ var passport = require('passport');
 const cookieSession = require('cookie-session');
 var flash = require('connect-flash');
 
-require('./configs/passport')(passport); // pass passport for configuration
+require('./configs/passport')(passport);//pass passport for configuration
 
 const { Client } = require('pg')
 const orgboatDB = new Client({
@@ -36,8 +36,7 @@ const orgboatDB = new Client({
 	ssl: { rejectUnauthorized: false }
 });
 exports.orgboatDB = orgboatDB;
-orgboatDB.connect()
-
+orgboatDB.connect();
 
 
 const server = express()
@@ -71,7 +70,10 @@ const server = express()
 		successRedirect: '/workspace', // redirect to the secure profile section
 		failureRedirect: '/', // redirect back to the signup page if there is an error
 		failureFlash: true // allow flash messages
-	}), function (req, res) { res.redirect('/workspace'); })
+	}), function (req, res) { 
+			res.redirect('/pwdRst');
+	 })
+		
 	.get('/reset-pwd', routes.resetPass) // Reset Password request
 	.post('/rstpwd', mailer.rpwdm) //Send Reset Pwd Password
 	.get('/pwdRst', routes.pwdRst) //Change Password
@@ -88,7 +90,12 @@ const server = express()
 	.post('/edProf', isLoggedIn, routes.editProfile)	
 
 	
-	.listen(PORT, () => console.log(`Listening on ${PORT}`))
+	.listen(PORT, () => console.log(` ██████  ██████   ██████  ██████   ██████   █████  ████████ 
+██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
+██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
+██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
+ ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██   
+		Listening on ${PORT}`))
 
 //      _ ___   _  _  __
 //  |V||_  ||_|/ \| \(_ 
