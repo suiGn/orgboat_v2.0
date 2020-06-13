@@ -25,6 +25,10 @@ exports.home = function (req, res) {
 		res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: " " })
 	}
 };
+
+exports.badLogin = function (req,res){
+	res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "Invalid login credentials." });
+}
 exports.subscribe = function (req, res) { res.render('pages/subscribe', { opt: " ", opt1: "Log In", opt2: "/" }) };
 exports.authGoogle = (req, res) => {
 	var name = req.user.displayName;
@@ -156,7 +160,7 @@ exports.subscribing = function (req, res) {
 		if (clName.length <= 3 || usrname.length <= 3 || email.length <= 3 || pwd.length <= 4) {
 			res.render("pages/subscribe", { opt: "Too short." });
 		} else if (pwd != rtPwd) {
-			res.redirect("/");
+			res.redirect("pages/subscribe", {opt: "Password does not match!"});
 		} else {
 			//Verifies if the user already exists
 			index.orgboatDB.query('SELECT usrname FROM usrs WHERE Usrname = $1', [usrname], (err, resp) => {
@@ -176,13 +180,14 @@ exports.subscribing = function (req, res) {
 								console.log("New user saved!");
 								console.log(clName + usrname + email);
 								mailer.verifyEmail(email, uuid_numbr);
+								
 							})//closes Insert New Usr Into Table
 						}//else
 					})// Closes second query - email
 				} //closes else first query 
 			}) //closes the vault first query - username
 		}// Pwd do not match
-		res.redirect('/');
+		res.render("pages/sec/response", {opt2: "Please check your Email.", opt1: "Verify your email."});
 	} else {
 		res.render("pages/subscribe", { opt: "Oops! Something went wrong while submitting the form." });
 	}
@@ -190,6 +195,7 @@ exports.subscribing = function (req, res) {
 
 exports.workspace = function (req, res) { 
 	var socialData = "a"
+	//console.log(req.session);
 	res.render('pages/workspace', {user: req.session.passport.user, social: socialData});
 	console.log(req.user);
  }

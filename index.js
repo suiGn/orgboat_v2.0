@@ -68,11 +68,12 @@ const server = express()
 	// process the login form
 	.post('/login', passport.authenticate('local-login', {
 		successRedirect: '/workspace', // redirect to the secure profile section
-		failureRedirect: '/', // redirect back to the signup page if there is an error
+		failureRedirect: '/badLogin', // redirect back to the signup page if there is an error
 		failureFlash: true // allow flash messages
 	}), function (req, res) { 
-			res.redirect('/pwdRst');
+			res.redirect('/workspace');
 	 })
+	 .get('/badLogin', routes.badLogin)
 		
 	.get('/reset-pwd', routes.resetPass) // Reset Password request
 	.post('/rstpwd', mailer.rpwdm) //Send Reset Pwd Password
@@ -90,12 +91,13 @@ const server = express()
 	.post('/edProf', isLoggedIn, routes.editProfile)	
 
 	
-	.listen(PORT, () => console.log(` ██████  ██████   ██████  ██████   ██████   █████  ████████ 
+.listen(PORT, () => console.log(
+` ██████  ██████   ██████  ██████   ██████   █████  ████████ 
 ██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
 ██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
 ██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
  ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██   
-		Listening on ${PORT}`))
+		Listening on port: ${PORT}`))
 
 //      _ ___   _  _  __
 //  |V||_  ||_|/ \| \(_ 
@@ -125,14 +127,12 @@ colors.sort(function (a, b) { return Math.random() > 0.5; });
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated()) {
-		return next();
+	if (req.isAuthenticated()) {	
+	return next();
 	}
 	// if they aren't redirect them to the home page
 	res.redirect("/");
 }
-
-
 
 
 /** 			   o       o                                

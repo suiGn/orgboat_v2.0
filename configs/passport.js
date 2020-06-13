@@ -1,5 +1,4 @@
 // config/passport.js
-
 // ==================================================================================================
 // LOCAL STRATEGY ===================================================================================
 // ==================================================================================================
@@ -21,21 +20,26 @@ var bcrypt = require('bcryptjs');
 const GoogleStrategy = require('passport-google-oauth20');
 const index = require('./../index');
 module.exports = function (passport) {
-
     // =========================================================================
     // == passport session setup ===============================================
     // =========================================================================
     // required for persistent login sessions
     // passport needs ability to serialize and unserialize users out of session
-	
     // used to serialize the user for the session
     passport.serializeUser(function (user, done) {
-        done(null, user);
+		if (user.provider == "google"){
+		//console.log(user.emails[0].value);
+		done(null, user.emails[0].value);
+		}else{
+		//console.log(user.email);
+        done(null, user.email);
+	}
     });
-
     // used to deserialize the user
     passport.deserializeUser(function (user, done) {
-        done(null, user);
+		index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = $1', [user], (err, resp) => {
+        done(null, resp);
+	});
     });
     // =========================================================================
     // == Google SIGNUP ========================================================
@@ -50,11 +54,9 @@ module.exports = function (passport) {
             done(null, profile); // passes the profile data to serializeUser
         }
     ));
-   
     // =========================================================================
     // == LOCAL LOGIN ==========================================================
     // =========================================================================
-
     passport.use(
         'local-login',
         new LocalStrategy({
@@ -66,8 +68,7 @@ module.exports = function (passport) {
             function (req, usrname, password, done) { // callback with email and password from our form
                 index.orgboatDB.query('SELECT * FROM Usrs WHERE Usrname = $1 OR email = $1', [usrname], (err, resp) => {
                     if (resp.rowCount == 0) {
-                        res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "No account found." });
-						//return done(err);
+						return done(err);
                     } else {
                         // selects return an array, so access the first in the array
                         var usr = resp.rows[0];
@@ -79,13 +80,12 @@ module.exports = function (passport) {
                             } else if (!isMatch) {
                                 return done(err);
                             } else {
-                                console.log(true)
+                               //console.log(true)
                                 return done(null, usr);
                             }
                         })
                     }
                 })
-
             })
     );
 };
