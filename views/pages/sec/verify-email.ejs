@@ -16,29 +16,19 @@
 <div class="form-wrapper">
     <!-- logo -->
     <div class="logo">
-       <a href="/">  <img src="media/imgs/blue_helm2.png" width="55" height="" alt="Blue Helm"> </a>
+    <a href="/">  <img src="media/imgs/blue_helm2.png" width="55" height="" alt="Blue Helm"> </a>
     </div>
     <!-- ./ logo -->
-    <h5><%= opt2 %></h5>
+    <h5>Email Verification Required.</h5>
 
-<p style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top"><%= opt1 %></p>
+<p style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top">Please check your email to verify it.</p>
     
     <div class="form-group">
-	<% if(opt2 === "Email Verified" || opt2 === "Password Changed"){ %>
-    <a href="/">Log In</a>
-	<% }else {%>
-	<a href="javascript:history.back()">Go Back</a>
-	<% }%>
+    <a href="/resnd?uuid=<%=usr.u_id%>&em=<%=usr.email%>">Re-send Verification Link.</a></br>
+	<a href="/logout">Log Out.</a>
     </div>
-    <hr>
-        <p class="text-muted">Take a different action.</p>
-        <a href="/subscribe" class="btn btn-sm btn-outline-light mr-1">Subscribe!</a>
-        or
-        <a href="/" class="btn btn-sm btn-outline-light ml-1">Login!</a>
-		%>
-
+   
 </div>
-
 <!-- Bundle -->
 <script src="../../sl/vendor/bundle.js"></script>
 <!-- App scripts -->

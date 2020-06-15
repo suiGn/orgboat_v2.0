@@ -38,7 +38,7 @@ module.exports = function (passport) {
     // used to deserialize the user
     passport.deserializeUser(function (user, done) {
 		index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = $1', [user], (err, resp) => {
-        done(null, resp);
+        done(null, resp.rows);
 	});
     });
     // =========================================================================

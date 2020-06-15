@@ -94,6 +94,13 @@ exports.verMail = function (req, res) {
 			res.render('pages/sec/response', { opt2: "Error", opt1: "Something weird happened. Please try again." });
 			}}
 		})};
+
+exports.rsnvMail = function (req, res) {
+	var uuid = req.query.uuid;
+	var email = req.query.em;
+	mailer.verifyEmail(email, uuid);
+	res.render('pages/sec/verify-email', { usr: req.user[0]});
+};
 			
 exports.changePass = function (req, res) {
 	var random = req.body.uuid;
@@ -197,7 +204,6 @@ exports.workspace = function (req, res) {
 	var socialData = "a"
 	//console.log(req.session);
 	res.render('pages/workspace', {user: req.session.passport.user, social: socialData});
-	console.log(req.user);
  }
  
  exports.editProfile = function (req, res){

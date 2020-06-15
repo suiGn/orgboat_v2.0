@@ -64,6 +64,7 @@ const server = express()
 	.get('/', routes.home)
 	.get('/subscribe', routes.subscribe)
 	.get('/verMail', routes.verMail)
+	.get('/resnd', routes.rsnvMail)
 	.post('/subscribing', routes.subscribing)
 	// process the login form
 	.post('/login', passport.authenticate('local-login', {
@@ -127,9 +128,13 @@ colors.sort(function (a, b) { return Math.random() > 0.5; });
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated()) {	
+	if (req.user[0].verified === 0){
+		res.render('pages/sec/verify-email' , { usr: req.user[0]});
+		return;
+	}else if (req.isAuthenticated()) {	
 	return next();
 	}
+	
 	// if they aren't redirect them to the home page
 	res.redirect("/");
 }

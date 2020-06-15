@@ -58,7 +58,7 @@ exports.rpwdm = function(req,res,next){
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			                                     <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-			                                         valign="top"><a href="http://localhost:5000/pwdRst?uuid=`+uuid_numbr+`&em=`+email+`" itemprop="url" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: block; border-radius: 5px; text-transform: capitalize; background-color: #0a80ff; margin: 0; border-color: #0a80ff; border-style: solid; border-width: 10px 20px;">Reset Password</a></td>
+			                                         valign="top"><a href="https://www.orgboat.herokuapp.com/pwdRst?uuid=`+uuid_numbr+`&em=`+email+`" itemprop="url" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: block; border-radius: 5px; text-transform: capitalize; background-color: #0a80ff; margin: 0; border-color: #0a80ff; border-style: solid; border-width: 10px 20px;">Reset Password</a></td>
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			                                     <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; padding-top: 5px; vertical-align: top; margin: 0; text-align: right;" valign="top">&mdash; <b>OrgBoat´s</b> - Team</td>
@@ -129,7 +129,7 @@ const verifyEmail = (email, uuid ) => {
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                        <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top"><a href="http://localhost:5000/verMail?uuid=`+uuid+`&em=`+email+`" itemprop="url" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: block; border-radius: 5px; text-transform: capitalize; background-color: #0a80ff; margin: 0; border-color: #0a80ff; border-style: solid; border-width: 10px 20px;">Verify Email Address.</a></td>
+                                        valign="top"><a href="https://orgboat.herokuapp.com/verMail?uuid=`+uuid+`&em=`+email+`" itemprop="url" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: block; border-radius: 5px; text-transform: capitalize; background-color: #0a80ff; margin: 0; border-color: #0a80ff; border-style: solid; border-width: 10px 20px;">Verify Email Address.</a></td>
                                 </tr>
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; padding-top: 5px; vertical-align: top; margin: 0; text-align: right;" valign="top">&mdash; <b>OrgBoat´s</b> - Team</td>
@@ -145,9 +145,8 @@ const verifyEmail = (email, uuid ) => {
 				 	if (error) {
 				 	res.render('pages/sec/response', { opt1: "Please try again.", opt2: "Error"})
 	
-				 	}
-				 	else {
-				 	res.render('pages/sec/response', { opt1: "Please check your inbox to' reset your password'", opt2: "Sent Successfully"})
+				 	}else {
+				 	res.render('pages/sec/response', { opt1: "Please check your inbox to verify your email.", opt2: "Sent Successfully"})
 				 	}
 				 	});
 				};
