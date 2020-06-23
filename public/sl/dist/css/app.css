@@ -3095,7 +3095,7 @@ body.rtl .chat + .sidebar-group .sidebar {
 }
 
 body.dark {
-  background-color: #1a2236;
+  background-color: #212124;
   color: rgba(255, 255, 255, 0.75);
 }
 
@@ -3132,15 +3132,15 @@ body.dark .btn.btn-link {
 
 body.dark .form-control {
   border-color: #333b4f !important;
-  background-color: #1a2236 !important;
+  background-color: #212124 !important;
 }
 
 body.dark .form-control:focus {
-  border-color: #0a80ff !important;
+  border-color: #212124 !important;
 }
 
 body.dark nav.navigation {
-  background-color: #1a2236;
+  background-color: #212124;
   border-right-color: #293145;
 }
 
@@ -3153,7 +3153,7 @@ body.dark nav.navigation ul li > a:hover, body.dark nav.navigation ul li > a:foc
 }
 
 body.dark nav.navigation ul li > a.active {
-  background-color: #0a80ff;
+  background-color: #2c2b30;
 }
 
 body.dark .nav.nav-tabs .nav-item .nav-link {
@@ -3161,7 +3161,7 @@ body.dark .nav.nav-tabs .nav-item .nav-link {
 }
 
 body.dark .layout .content .sidebar-group .sidebar {
-  background-color: #1a2236;
+  background-color: #212124;
 }
 
 body.dark .layout .content .sidebar-group .sidebar .list-group-item.open-chat {
@@ -3178,11 +3178,19 @@ body.dark .layout .content .chat {
 }
 
 body.dark .layout .content .chat .chat-header {
-  border-bottom-color: #293145;
+  border-bottom-color: #212124;
 }
 
 body.dark .layout .content .chat .chat-body .messages .message-item:not(.outgoing-message) .message-content {
-  background-color: #293145;
+  background-color: #212124;
+  border: 0.5px solid;
+  border-color: #3cdbc3;
+}
+
+body.dark .layout .content .chat .chat-body .messages .message-item .message-content {
+  background-color: #212124;
+  border: 0.5px solid;
+  border-color: #f3c96e;
 }
 
 body.dark .layout .content .chat .chat-body .messages .message-item.messages-divider:before {
@@ -3190,25 +3198,25 @@ body.dark .layout .content .chat .chat-body .messages .message-item.messages-div
 }
 
 body.dark .layout .content .chat .chat-footer {
-  border-top-color: #293145;
+  border-top-color: #212124;
 }
 
 body.dark.rtl .layout .content .sidebar-group .sidebar .list-group-item .users-list-body .users-list-action {
-  -webkit-box-shadow: 8px 1px 10px 5px #1a2236 !important;
-     -moz-box-shadow: 8px 1px 10px 5px #1a2236 !important;
-          box-shadow: 8px 1px 10px 5px #1a2236 !important;
+  -webkit-box-shadow: 8px 1px 10px 5px #212124 !important;
+     -moz-box-shadow: 8px 1px 10px 5px #212124 !important;
+          box-shadow: 8px 1px 10px 5px #212124 !important;
 }
 
 body.dark .modal-content {
-  background-color: #1a2236;
+  background-color: #212124;
 }
 
 body.dark .list-group-item {
-  border-color: #293145;
+  border-color: #212124;
 }
 
 body.dark .dropdown-menu {
-  background-color: #293145;
+  background-color: #2c2b30;
   border-color: transparent;
 }
 
@@ -3236,7 +3244,7 @@ body.dark input[type=text], body.dark textarea, body.dark select {
 
 body.dark input[type=text]:focus, body.dark textarea:focus, body.dark select:focus {
   color: rgba(255, 255, 255, 0.7);
-  background-color: #293145;
+  background-color: #212124;
   border-color: #7e869a;
 }
 
@@ -3270,7 +3278,7 @@ body.dark .input-group-text {
 body.dark .nav-tabs .nav-link.active {
   border-color: #293145;
   border-bottom-color: #1a2236;
-  background-color: #1a2236;
+  background-color: #212124;
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -3280,11 +3288,11 @@ body.dark .nav-tabs .nav-link:hover, body.dark .nav-tabs .nav-link:focus {
 }
 
 body.dark .nav-tabs {
-  border-bottom-color: #293145;
+  border-bottom-color: #212124;
 }
 
 body.dark .custom-file-label {
-  background-color: #293145;
+  background-color: #212124;
   border-color: #424a5e;
   color: rgba(255, 255, 255, 0.7);
 }
