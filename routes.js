@@ -203,7 +203,7 @@ exports.subscribing = function (req, res) {
 exports.workspace = function (req, res) { 
 	var socialData = "a"
 	var social = JSON.parse(req.user[0].social);
-	console.log(social.fb);
+	console.log(req.user[0]);
 	res.render('pages/workspace', {user: req.user[0], social: social});
  }
  
