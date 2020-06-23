@@ -12,97 +12,71 @@
     <link rel="stylesheet" href="./sl/vendor/enjoyhint/enjoyhint.css">
     <!-- App styles -->
     <link rel="stylesheet" href="./sl/dist/css/app.css">
- 
 </head>
-<body class="dark">
-	
-
+<body class="dark">	
 <!-- page loading -->
 <div class="page-loading"></div>
 <!-- ./ page loading -->
-
 <!-- page tour modal 
 <% include ../partials/workspace/modals/pageTour.ejs %>
  ./ page tour modal -->
-
 <!-- disconnected modal -->
 <% include ../partials/workspace/modals/disconnected.ejs %>
 <!-- ./ disconnected modal -->
-
 <!-- voice call modal -->
 <% include ../partials/workspace/modals/voiceCall.ejs %>
 <!-- ./ voice call modal -->
-
 <!-- video call modal -->
 <% include ../partials/workspace/modals/videoCall.ejs %>
 <!-- ./ video call modal -->
-
 <!-- add friends modal -->
  <% include ../partials/workspace/modals/addContact.ejs %>
 <!-- ./ add friends modal -->
-
 <!-- new group modal -->
 <% include ../partials/workspace/modals/newGroup.ejs %>
 <!-- ./ new group modal -->
-
 <!-- setting modal -->
 <% include ../partials/workspace/modals/settings.ejs %>
 <!-- ./ setting modal -->
-
 <!-- edit profile modal -->
 <% include ../partials/workspace/modals/editProfile.ejs %>
 <!-- ./ edit profile modal -->
 <!-- edit profile Pic -->
 <% include ../partials/workspace/modals/changeProfilePic.ejs %>
 <!-- ./ edit profile modal -->
-
 <!-- layout -->
 <div class="layout">
-
     <!-- navigation -->
   <% include ../partials/workspace/navigation.ejs %>
     <!-- ./ navigation -->
-
     <!-- content -->
     <div class="content">
-
         <!-- sidebar group -->
         <div class="sidebar-group">
-
             <!-- Chats sidebar -->
           	<% include ../partials/workspace/sidebars/chats.ejs %>
             <!-- ./ Chats sidebar -->
-
             <!-- Friends sidebar -->
             <% include ../partials/workspace/sidebars/contacts.ejs %>
             <!-- ./ Friends sidebar -->
-
             <!-- Favorites (starred) sidebar -->
             <% include ../partials/workspace/sidebars/favorites.ejs %>
             <!-- ./ Favorites (starred) sidebar -->
-
             <!-- Archived sidebar -->
             <% include ../partials/workspace/sidebars/archived.ejs %>
             <!-- ./ Archived sidebar -->
-
         </div>
         <!-- ./ sidebar group -->
-
         <!-- chat -->
          <% include ../partials/workspace/chat.ejs %>
         <!-- ./ chat -->
-
 		<!-- Right Column Sidebar-->
        <% include ../partials/workspace/sidebars/right_sidebar.ejs %>
-	   <!--./ Right Column Sidebar-->
-	   
-	   
+	   <!--./ Right Column Sidebar--> 
     </div>
     <!-- ./ content -->
-
 </div>
 <!-- ./ layout -->
-
 <!-- Bundle -->
 <script src="./sl/vendor/bundle.js"></script>
 <script src="./sl/vendor/enjoyhint/enjoyhint.min.js"></script>

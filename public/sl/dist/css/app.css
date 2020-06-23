@@ -251,7 +251,7 @@ a:hover {
 
 a:not(.active.list-group-item), a:not(.btn):hover, a:not(.btn):active, a:not(.btn):focus {
   text-decoration: none !important;
-  color: black;
+  color: #0B80FF;
   outline: none;
 }
 
@@ -3103,14 +3103,15 @@ body.dark .text-muted {
   color: rgba(255, 255, 255, 0.4) !important;
 }
 
+
 body.dark .btn.btn-light {
-  background-color: #1a2236;
+  background-color: #212124;
   border-color: #3d4559;
   color: rgba(255, 255, 255, 0.75);
 }
 
 body.dark .btn.btn-light:hover, body.dark .btn.btn-light:focus {
-  background-color: #293145 !important;
+  background-color: #212124 !important;
   border-color: #3d4559 !important;
   color: rgba(255, 255, 255, 0.75) !important;
 }
@@ -3165,7 +3166,7 @@ body.dark .layout .content .sidebar-group .sidebar {
 }
 
 body.dark .layout .content .sidebar-group .sidebar .list-group-item.open-chat {
-  background-color: #1f273b;
+  background-color: #2c2b30;
 }
 
 body.dark .layout .content .sidebar-group .sidebar .list-group-item .users-list-body p {
@@ -3178,7 +3179,7 @@ body.dark .layout .content .chat {
 }
 
 body.dark .layout .content .chat .chat-header {
-  border-bottom-color: #212124;
+  border-bottom-color: #293145;
 }
 
 body.dark .layout .content .chat .chat-body .messages .message-item:not(.outgoing-message) .message-content {
@@ -3198,13 +3199,13 @@ body.dark .layout .content .chat .chat-body .messages .message-item.messages-div
 }
 
 body.dark .layout .content .chat .chat-footer {
-  border-top-color: #212124;
+  border-top-color: #293145;
 }
 
 body.dark.rtl .layout .content .sidebar-group .sidebar .list-group-item .users-list-body .users-list-action {
-  -webkit-box-shadow: 8px 1px 10px 5px #212124 !important;
-     -moz-box-shadow: 8px 1px 10px 5px #212124 !important;
-          box-shadow: 8px 1px 10px 5px #212124 !important;
+  -webkit-box-shadow: 8px 1px 10px 5px #293145 !important;
+     -moz-box-shadow: 8px 1px 10px 5px #293145 !important;
+          box-shadow: 8px 1px 10px 5px #293145 !important;
 }
 
 body.dark .modal-content {
@@ -3212,7 +3213,7 @@ body.dark .modal-content {
 }
 
 body.dark .list-group-item {
-  border-color: #212124;
+  border-color: #293145;
 }
 
 body.dark .dropdown-menu {
@@ -3270,7 +3271,7 @@ body.dark .custom-control-label::before {
 }
 
 body.dark .input-group-text {
-  background-color: #1a2236;
+  background-color: #212124;
   color: rgba(255, 255, 255, 0.7);
   border-color: #424a5e;
 }
