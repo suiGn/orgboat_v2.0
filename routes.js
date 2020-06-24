@@ -26,7 +26,7 @@ exports.home = function (req, res) {
 	}
 };
 
-exports.badLogin = function (req,res){
+exports.badLogin = function (req, res) {
 	res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: "Invalid login credentials." });
 }
 exports.subscribe = function (req, res) { res.render('pages/subscribe', { opt: " ", opt1: "Log In", opt2: "/" }) };
@@ -45,7 +45,7 @@ exports.authGoogle = (req, res) => {
 			if (resp.length == 0) {
 				//STORES DATA
 				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type, Pphoto) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)',
-					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type, profile_pic ], (error, results) => {
+					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type, profile_pic], (error, results) => {
 						if (error) {
 							res.redirect('/');
 							throw error
@@ -82,27 +82,30 @@ exports.verMail = function (req, res) {
 	var verified = 1;
 	index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = ?', [email], (err, resp) => {
 		console.log(resp)
-	if (resp.length >= 1) {
-	var usr = resp[0];
-		if (usr.u_id === uuid) {
-		index.orgboatDB.query('UPDATE usrs SET Verified = ? WHERE Email = ?', [verified, email], (error, results) => {
-		if (error) {
-			res.render('pages/sec/response', { opt2: "Error", opt1: "Something weird happened. Please try again." });
+		if (resp.length >= 1) {
+			var usr = resp[0];
+			if (usr.u_id === uuid) {
+				index.orgboatDB.query('UPDATE usrs SET verified = ? WHERE email = ?', [verified, email], (error, results) => {
+					if (error) {
+						res.render('pages/sec/response', { opt2: "Error", opt1: "Something weird happened. Please try again." });
+					} else {
+						res.render('pages/sec/response', { opt2: "Email Verified", opt1: "You can now login to your account." });
+					}
+				})
 			} else {
-			res.render('pages/sec/response', { opt2: "Email Verified", opt1: "You can now login to your account." });
+				res.render('pages/sec/response', { opt2: "Error", opt1: "Something weird happened. Please try again." });
 			}
-			})} else {
-			res.render('pages/sec/response', { opt2: "Error", opt1: "Something weird happened. Please try again." });
-			}}
-		})};
+		}
+	})
+};
 
 exports.rsnvMail = function (req, res) {
 	var uuid = req.query.uuid;
 	var email = req.query.em;
 	mailer.verifyEmail(email, uuid);
-	res.render('pages/sec/verify-email', { usr: req.user[0]});
+	res.render('pages/sec/verify-email', { usr: req.user[0] });
 };
-			
+
 exports.changePass = function (req, res) {
 	var random = req.body.uuid;
 	var email = req.body.email;
@@ -154,86 +157,90 @@ exports.subscribing = function (req, res) {
 				if (err) {
 					throw err
 				} else {
+
 					hashPwd = hash;
+
+					var rtPwd = req.body.subRtPwd;
+					var uuid_numbr = uuid.v4();
+					var verified = 0;
+					var dt = new Date();
+					var u_type = 0;
+					if (method.nameRegex(clName) && method.usrnmRegex(usrname) && method.emailRegex(email)) {
+						if (clName.length <= 3 || usrname.length <= 3 || email.length <= 3 || pwd.length <= 4) {
+							res.render("pages/subscribe", { opt: "Too short." });
+						} else if (pwd != rtPwd) {
+							res.redirect("pages/subscribe", { opt: "Password does not match!" });
+						} else {
+							//Verifies if the user already exists
+							index.orgboatDB.query('SELECT usrname FROM usrs WHERE Usrname = ?', [usrname], (err, resp) => {
+								if (resp.length >= 1) {
+									console.log("username exists");
+									return;
+								} else {
+									index.orgboatDB.query('SELECT Email FROM Usrs WHERE Email = ?', [email], (err, resp) => {
+										if (resp.length >= 1) {
+											return;
+										} else {
+											//STORES DATA
+											index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, password, Verified, last_update, u_id, created, u_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)', [clName, usrname, email, hashPwd, verified, dt, uuid_numbr, dt], (error, results) => {
+												if (error) {
+													throw error
+												}
+												console.log("New user saved!");
+												console.log(clName + usrname + email);
+												mailer.verifyEmail(email, uuid_numbr);
+
+											})//closes Insert New Usr Into Table
+										}//else
+									})// Closes second query - email
+								} //closes else first query 
+							}) //closes the vault first query - username
+						}// Pwd do not match
+						res.render("pages/sec/response", { opt2: "Please check your Email.", opt1: "Verify your email." });
+					} else {
+						res.render("pages/subscribe", { opt: "Oops! Something went wrong while submitting the form." });
+					}
 				}
 			})
 		}
 	})
-	var rtPwd = req.body.subRtPwd;
-	var uuid_numbr = uuid.v4();
-	var verified = 0;
-	var dt = new Date();
-	var u_type = 0;
-	if (method.nameRegex(clName) && method.usrnmRegex(usrname) && method.emailRegex(email)) {
-		if (clName.length <= 3 || usrname.length <= 3 || email.length <= 3 || pwd.length <= 4) {
-			res.render("pages/subscribe", { opt: "Too short." });
-		} else if (pwd != rtPwd) {
-			res.redirect("pages/subscribe", {opt: "Password does not match!"});
-		} else {
-			//Verifies if the user already exists
-			index.orgboatDB.query('SELECT usrname FROM usrs WHERE Usrname = ?', [usrname], (err, resp) => {
-				if (resp.length >= 1) {
-					console.log("username exists");
-					return;
-				} else {
-					index.orgboatDB.query('SELECT Email FROM Usrs WHERE Email = ?', [email], (err, resp) => {
-						if (resp.length >= 1) {
-							return;
-						} else {
-							//STORES DATA
-							index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, password, Verified, last_update, u_id, created, u_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)', [clName, usrname, email, hashPwd, verified, dt, uuid_numbr, dt], (error, results) => {
-								if (error) {
-									throw error
-								}
-								console.log("New user saved!");
-								console.log(clName + usrname + email);
-								mailer.verifyEmail(email, uuid_numbr);
-								
-							})//closes Insert New Usr Into Table
-						}//else
-					})// Closes second query - email
-				} //closes else first query 
-			}) //closes the vault first query - username
-		}// Pwd do not match
-		res.render("pages/sec/response", {opt2: "Please check your Email.", opt1: "Verify your email."});
-	} else {
-		res.render("pages/subscribe", { opt: "Oops! Something went wrong while submitting the form." });
-	}
 }
 
-exports.workspace = function (req, res) { 
+exports.workspace = function (req, res) {
 
 	var socialData = "a"
 	var social = JSON.parse(req.user[0].social);
-	res.render('pages/workspace', {user: req.user[0], social: social});
- }
- 
- exports.editProfile = function (req, res){
+	res.render('pages/workspace', { user: req.user[0], social: social });
+}
+
+exports.editProfile = function (req, res) {
 	var fullName = req.body.fullNameEditP;
- 	var avatar = req.body.avatarEditP;
- 	var city = req.body.cityEditP;
- 	var phone = req.body.phoneEditP;
- 	var website = req.body.websiteEditP;
- 	var isPublic = req.body.isPublicEditP;
- 	var about = req.body.aboutEditP;
-	var social = {fb: req.body.fbEditP, 
-		twt: req.body.twtEditP, 
-		inst: req.body.instEditP, 
-		lnkin: req.body.lnkinEditP , 
-		ytube: req.body.ytEditP ,
-		 gogl: req.body.goglEditP ,
-		 wa: req.body.waEditP};
-		 var email = req.user[0].email;
-		 var rqname = req.user[0].name;
-		 
-		 index.orgboatDB.query('UPDATE usrs SET Name = ?, city = ?, Phone = ?, website = ?, public = ?, about = ?, social = ? WHERE email = ?', [fullName, city, phone, website, isPublic, about, social, email], (error, results) => {
-			if (error) {
+	var avatar = req.body.avatarEditP;
+	var city = req.body.cityEditP;
+	var phone = req.body.phoneEditP;
+	var website = req.body.websiteEditP;
+	var isPublic = req.body.isPublicEditP;
+	var about = req.body.aboutEditP;
+	var social = {
+		fb: req.body.fbEditP,
+		twt: req.body.twtEditP,
+		inst: req.body.instEditP,
+		lnkin: req.body.lnkinEditP,
+		ytube: req.body.ytEditP,
+		gogl: req.body.goglEditP,
+		wa: req.body.waEditP
+	};
+	var email = req.user[0].email;
+	var rqname = req.user[0].name;
+
+	index.orgboatDB.query('UPDATE usrs SET Name = ?, city = ?, Phone = ?, website = ?, public = ?, about = ?, social = ? WHERE email = ?', [fullName, city, phone, website, isPublic, about, social, email], (error, results) => {
+		if (error) {
 			res.redirect("/workspace");
 			console.log(error);
-			} else {
+		} else {
 			res.redirect("/workspace");
 			console.log(email);
-			}
-		});	
- }
+		}
+	});
+}
 
