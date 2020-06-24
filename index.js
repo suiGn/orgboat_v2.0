@@ -40,13 +40,22 @@ var SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 
  // create database, ensure 'sqlite3' in your package.json
-var sequelize = new Sequelize("postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b");
+var sequelize = new Sequelize("postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b",{
+    dialect: 'postgres',
+    protocol: 'postgres',
+	dialectOptions: {
+		ssl: {
+		  require: true,
+		  rejectUnauthorized: false // <<<<<<< YOU NEED THIS
+		}
+	  }
+    });
 
 var sessionName = 'SESSION_ID';
 var secretKey = 'MYSECRETKEYDSAFGEWHWEfenig23974ovuwyfbhkjfvvfuo'
 
 sessionStore = new SequelizeStore({
-    db: sequelize
+	db: sequelize,
   })
 
 var sessionMiddleware = session({
@@ -57,6 +66,11 @@ var sessionMiddleware = session({
     resave: false,
     saveUninitialized: true
 });
+
+
+
+exports.orgboatDB = sequelize;
+
 
 /*
 const { Client } = require('pg')
