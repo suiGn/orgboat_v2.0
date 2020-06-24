@@ -6,10 +6,10 @@ const uuid = require('node-uuid');
 exports.rpwdm = function(req,res,next){
 	var email = req.body.rstEmail;
 	var uuid_numbr = uuid.v4();
-	index.orgboatDB.query('SELECT Email FROM Usrs WHERE Email = $1', [email], (err, resp) => {
-	if(resp.rowCount >= 1){
+	index.orgboatDB.query('SELECT Email FROM Usrs WHERE Email = ?', [email], (err, resp) => {
+	if(resp.length >= 1){
 		
-		index.orgboatDB.query('UPDATE usrs SET Random = $1 WHERE Email = $2', [uuid_numbr, email], (error, results) => {
+		index.orgboatDB.query('UPDATE usrs SET Random = ? WHERE Email = ?', [uuid_numbr, email], (error, results) => {
 		if (error) {
 		throw error
 				 }
