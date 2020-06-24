@@ -72,7 +72,6 @@ var sessionMiddleware = session({
 
 connection.query(`SELECT * FROM Usrs WHERE Usrname = 'aldoglez24' OR email = 'aldoglez24'`, (err, resp,fields) => {
 
-	console.log(resp[0].id)
 });
 
 exports.orgboatDB = connection;
