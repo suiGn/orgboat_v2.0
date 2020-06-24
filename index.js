@@ -35,41 +35,47 @@ var Sequelize = require('sequelize')
 var session = require('express-session');
 
 
-// initalize sequelize with session store
-var SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+var mysql = require('mysql');
+//const mysql = require('sync-mysql'); //Dependencia y configuración para MySQL
+
+var MySQLStore = require('express-mysql-session')(session);
+
+let options = {
+	host: 'kuantum.tech',
+	port: '3306',
+	user: 'remote',
+	password: 'r3m0t3',
+	database: 'cleaker'
+};
+
+var connection = mysql.createConnection(options); // or mysql.createPool(options);
+var sessionStore = new MySQLStore({}/* session store options */, connection);
 
 
- // create database, ensure 'sqlite3' in your package.json
-var sequelize = new Sequelize("postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b",{
-    dialect: 'postgres',
-    protocol: 'postgres',
-	dialectOptions: {
-		ssl: {
-		  require: true,
-		  rejectUnauthorized: false // <<<<<<< YOU NEED THIS
-		}
-	  }
-    });
+
 
 var sessionName = 'SESSION_ID';
 var secretKey = 'MYSECRETKEYDSAFGEWHWEfenig23974ovuwyfbhkjfvvfuo'
 
-sessionStore = new SequelizeStore({
-	db: sequelize,
-  })
+
 
 var sessionMiddleware = session({
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
-    name: sessionName,
-    store: sessionStore,
-    secret: secretKey,
-    resave: false,
-    saveUninitialized: true
+	cookie: { maxAge: 24 * 60 * 60 * 1000 },
+	name: sessionName,
+	store: sessionStore,
+	secret: secretKey,
+	resave: false,
+	saveUninitialized: true
 });
 
 
+connection.query(`SELECT * FROM Usrs WHERE Usrname = 'aldoglez24' OR email = 'aldoglez24'`, (err, resp,fields) => {
 
-exports.orgboatDB = sequelize;
+	console.log(resp[0].id)
+});
+
+exports.orgboatDB = connection;
 
 
 /*
@@ -124,11 +130,11 @@ const server = express()
 		successRedirect: '/workspace', // redirect to the secure profile section
 		failureRedirect: '/badLogin', // redirect back to the signup page if there is an error
 		failureFlash: true // allow flash messages
-	}), function (req, res) { 
-			res.redirect('/workspace');
-	 })
-	 .get('/badLogin', routes.badLogin)
-		
+	}), function (req, res) {
+		res.redirect('/workspace');
+	})
+	.get('/badLogin', routes.badLogin)
+
 	.get('/reset-pwd', routes.resetPass) // Reset Password request
 	.post('/rstpwd', mailer.rpwdm) //Send Reset Pwd Password
 	.get('/pwdRst', routes.pwdRst) //Change Password
@@ -142,11 +148,11 @@ const server = express()
 	.get('/auth/google/callback', passport.authenticate('google'), routes.authGoogle)
 	.get('/lock-screen', routes.lockScreen)
 	.get('/workspace', isLoggedIn, routes.workspace)
-	.post('/edProf', isLoggedIn, routes.editProfile)	
+	.post('/edProf', isLoggedIn, routes.editProfile)
 
-	
-.listen(PORT, () => console.log(
-` ██████  ██████   ██████  ██████   ██████   █████  ████████ 
+
+	.listen(PORT, () => console.log(
+		` ██████  ██████   ██████  ██████   ██████   █████  ████████ 
 ██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
 ██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
 ██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
@@ -181,14 +187,14 @@ colors.sort(function (a, b) { return Math.random() > 0.5; });
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
-	 if (req.isAuthenticated()) {	
-		if (req.user[0].verified === 0){
-			res.render('pages/sec/verify-email' , { usr: req.user[0].email});
+	if (req.isAuthenticated()) {
+		if (req.user[0].verified === 0) {
+			res.render('pages/sec/verify-email', { usr: req.user[0].email });
 			return;
-		}else{
-	return next();
+		} else {
+			return next();
+		}
 	}
-}
 	// if they aren't redirect them to the home page
 	res.redirect("/");
 }

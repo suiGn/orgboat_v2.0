@@ -36,8 +36,8 @@ exports.dataSubmitVerification = function dataSubmitVerification(pckr){
 			}// VERIFY NAME CLOSURE
 	else if (pckr.code == 'vUser'){//Validate Username
 			if (usrnmRegex(pckr.value)) {
-			index.orgboatDB.query('SELECT usrname FROM usrs WHERE usrname = $1', [pckr.value], (err, res) => {
-			if(res.rowCount >= 1){
+			index.orgboatDB.query('SELECT usrname FROM usrs WHERE usrname = ?', [pckr.value], (err, res) => {
+			if(res.length >= 1){
 			index.subVerificationRes("validDataRes", "Username already taken!", "#ff6666", "inputUsername", "#labelUsername", "ut");
 			 }else{	
 			index.subVerificationRes("validDataRes", "", "#39D1BB", "inputUsername", "#labelUsername", "g");//validUsername
@@ -48,8 +48,8 @@ exports.dataSubmitVerification = function dataSubmitVerification(pckr){
 			}// VALID USERNAME CLOSURE		
 	else if (pckr.code == 'vEmail'){//Validate Email
 			if (emailRegex(pckr.value)) {
-			index.orgboatDB.query('SELECT email FROM Usrs WHERE Email = $1', [pckr.value], (err, res) => {
-			if(res.rowCount >= 1){
+			index.orgboatDB.query('SELECT email FROM Usrs WHERE Email = ?', [pckr.value], (err, res) => {
+			if(res.length >= 1){
 			index.subVerificationRes("validDataRes", "Email already taken!", "#ff6666", "inputEmail", "#labelEmail", "et");	
 			}else{	
 			index.subVerificationRes("validDataRes", "", "#39D1BB", "inputEmail", "#labelEmail", "g");//validEmail

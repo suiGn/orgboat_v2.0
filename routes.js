@@ -170,17 +170,17 @@ exports.subscribing = function (req, res) {
 			res.redirect("pages/subscribe", {opt: "Password does not match!"});
 		} else {
 			//Verifies if the user already exists
-			index.orgboatDB.query('SELECT usrname FROM usrs WHERE Usrname = $1', [usrname], (err, resp) => {
-				if (resp.rowCount >= 1) {
+			index.orgboatDB.query('SELECT usrname FROM usrs WHERE Usrname = ?', [usrname], (err, resp) => {
+				if (resp.length >= 1) {
 					console.log("username exists");
 					return;
 				} else {
-					index.orgboatDB.query('SELECT Email FROM Usrs WHERE Email = $1', [email], (err, resp) => {
-						if (resp.rowCount >= 1) {
+					index.orgboatDB.query('SELECT Email FROM Usrs WHERE Email = ?', [email], (err, resp) => {
+						if (resp.length >= 1) {
 							return;
 						} else {
 							//STORES DATA
-							index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, password, Verified, last_update, u_id, created, u_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0)', [clName, usrname, email, hashPwd, verified, dt, uuid_numbr, dt], (error, results) => {
+							index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, password, Verified, last_update, u_id, created, u_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)', [clName, usrname, email, hashPwd, verified, dt, uuid_numbr, dt], (error, results) => {
 								if (error) {
 									throw error
 								}
@@ -201,9 +201,9 @@ exports.subscribing = function (req, res) {
 }
 
 exports.workspace = function (req, res) { 
+
 	var socialData = "a"
 	var social = JSON.parse(req.user[0].social);
-	console.log(req.user[0]);
 	res.render('pages/workspace', {user: req.user[0], social: social});
  }
  

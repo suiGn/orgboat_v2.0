@@ -37,8 +37,8 @@ module.exports = function (passport) {
     });
     // used to deserialize the user
     passport.deserializeUser(function (user, done) {
-		index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = $1', [user], (err, resp) => {
-        done(null, resp.rows);
+		index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = ?', [user], (err, resp) => {
+        done(null, resp);
 	});
     });
     // =========================================================================
@@ -66,12 +66,13 @@ module.exports = function (passport) {
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
             function (req, usrname, password, done) { // callback with email and password from our form
-                index.orgboatDB.query('SELECT * FROM Usrs WHERE Usrname = $1 OR email = $1', [usrname], (err, resp) => {
+                index.orgboatDB.query(`SELECT * FROM Usrs WHERE Usrname = '${usrname}' OR email = '${usrname}'`, (err, resp) => {
+
                     if (resp.rowCount == 0) {
 						return done(err);
                     } else {
                         // selects return an array, so access the first in the array
-                        var usr = resp.rows[0];
+                        var usr = resp[0];
                         var hash = usr.password;
                         // now lets compare the passwords                        
                         bcrypt.compare(password, hash, function (err, isMatch) {
