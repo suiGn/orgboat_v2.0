@@ -80,11 +80,12 @@ exports.verMail = function (req, res) {
 	var uuid = req.query.uuid;
 	var email = req.query.em;
 	var verified = 1;
-	index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = $1', [email], (err, resp) => {
-	if (resp.rowCount >= 1) {
-	var usr = resp.rows[0];
+	index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = ?', [email], (err, resp) => {
+		console.log(resp)
+	if (resp.length >= 1) {
+	var usr = resp[0];
 		if (usr.u_id === uuid) {
-		index.orgboatDB.query('UPDATE usrs SET Verified = $1 WHERE Email = $2', [verified, email], (error, results) => {
+		index.orgboatDB.query('UPDATE usrs SET Verified = ? WHERE Email = ?', [verified, email], (error, results) => {
 		if (error) {
 			res.render('pages/sec/response', { opt2: "Error", opt1: "Something weird happened. Please try again." });
 			} else {
