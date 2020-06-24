@@ -25,11 +25,40 @@ var uuid = require('node-uuid')
 var nodemailer = require('nodemailer')
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
-const cookieSession = require('cookie-session');
+//const cookieSession = require('cookie-session');
 var flash = require('connect-flash');
 
 require('./configs/passport')(passport);//pass passport for configuration
 
+
+var Sequelize = require('sequelize')
+var session = require('express-session');
+
+
+// initalize sequelize with session store
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+
+ // create database, ensure 'sqlite3' in your package.json
+var sequelize = new Sequelize("postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b");
+
+var sessionName = 'SESSION_ID';
+var secretKey = 'MYSECRETKEYDSAFGEWHWEfenig23974ovuwyfbhkjfvvfuo'
+
+sessionStore = new SequelizeStore({
+    db: sequelize
+  })
+
+var sessionMiddleware = session({
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    name: sessionName,
+    store: sessionStore,
+    secret: secretKey,
+    resave: false,
+    saveUninitialized: true
+});
+
+/*
 const { Client } = require('pg')
 const orgboatDB = new Client({
 	connectionString: "postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b",
@@ -37,18 +66,28 @@ const orgboatDB = new Client({
 });
 exports.orgboatDB = orgboatDB;
 orgboatDB.connect();
-
+*/
 
 const server = express()
 	.use(express.static(path.join(__dirname, 'public')))
 	.use(cookieParser())
 	.use(bodyParser.urlencoded({ extended: false }))
 	.use(bodyParser.json())
+
+
+
+
+	.use(sessionMiddleware)
+	/*
 	.use(cookieSession({
 		maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
 		//maxAge: 2 * 1000,
 		keys: ['randomstringhere']
 	}))
+	*/
+
+
+
 	.use(passport.initialize())
 	.use(passport.session())
 	.use(flash()) // use connect-flash for flash messages stored in session
