@@ -68,7 +68,7 @@ module.exports = function (passport) {
             function (req, usrname, password, done) { // callback with email and password from our form
                 index.orgboatDB.query(`SELECT * FROM Usrs WHERE Usrname = '${usrname}' OR email = '${usrname}'`, (err, resp) => {
 
-                    if (resp.rowCount == 0) {
+                    if (resp.length == 0) {
 						return done(err);
                     } else {
                         // selects return an array, so access the first in the array

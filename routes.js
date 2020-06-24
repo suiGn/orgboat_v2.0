@@ -42,9 +42,9 @@ exports.authGoogle = (req, res) => {
 		if (err) {
 			res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: " " })
 		} else {
-			if (resp.rowCount == 0) {
+			if (resp.length == 0) {
 				//STORES DATA
-				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type, Pphoto) VALUES ($1, $2, $3, $4, $5, $6, $7, $8 ,$9)',
+				index.orgboatDB.query('INSERT INTO usrs (name, usrname, email, Verified, last_update, u_id, created, u_type, Pphoto) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)',
 					[name, usrname, email, 1, dt, uuid_numbr, dt, u_type, profile_pic ], (error, results) => {
 						if (error) {
 							res.redirect('/');
@@ -62,9 +62,9 @@ exports.resetPass = function (req, res) { res.render('pages/sec/reset-pass') };
 exports.pwdRst = function (req, res) {
 	var uuid = req.query.uuid;
 	var email = req.query.em;
-	index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = $1', [email], (err, resp) => {
-		if (resp.rowCount >= 1) {
-			var usr = resp.rows[0];
+	index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = ?', [email], (err, resp) => {
+		if (resp.length >= 1) {
+			var usr = resp[0];
 			if (usr.random === uuid) {
 				res.render('pages/sec/newPass', { opt: email, opt1: uuid })
 			} else {
@@ -120,7 +120,7 @@ exports.changePass = function (req, res) {
 				} else {
 					var Pwd = hash;
 					if (password == rtpass) {
-						index.orgboatDB.query('UPDATE usrs SET Password = $1, Random = $4 WHERE Email = $2 AND Random = $3', [Pwd, email, random, reset], (error, results) => {
+						index.orgboatDB.query('UPDATE usrs SET Password = ?, Random = ? WHERE Email = ? AND Random = ?', [Pwd, email, random, reset], (error, results) => {
 							if (error) {
 								res.render('pages/sec/response', { opt2: "Error", opt1: "Something weird happened. Please try again." });
 							} else {
@@ -226,7 +226,7 @@ exports.workspace = function (req, res) {
 		 var email = req.user[0].email;
 		 var rqname = req.user[0].name;
 		 
-		 index.orgboatDB.query('UPDATE usrs SET Name = $1, city = $2, Phone = $3, website = $4, public = $5, about = $6, social = $7 WHERE email = $8', [fullName, city, phone, website, isPublic, about, social, email], (error, results) => {
+		 index.orgboatDB.query('UPDATE usrs SET Name = ?, city = ?, Phone = ?, website = ?, public = ?, about = ?, social = ? WHERE email = ?', [fullName, city, phone, website, isPublic, about, social, email], (error, results) => {
 			if (error) {
 			res.redirect("/workspace");
 			console.log(error);
