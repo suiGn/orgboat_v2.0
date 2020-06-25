@@ -199,43 +199,28 @@ io.on("connection", function (socket) {
 		message = msg.message;
 		from = user.u_id;
 		time = new Date();
-		console.log(msg);
-
-
 
 		connection.query(`
 
 				select * from chats_users where chat_uid = '${chat}'
 			 
-		 	`, function (err, chats) {
-
-			//console.log(chats);
+		`, function (err, chats) {
 
 			chats.forEach(qchat => {
-
-				console.log(chat)
 
 				if (from != qchat.u_id) {
 					io.to(qchat.u_id).emit('chat message', { from: from, message: message, time: time });
 				}
 
 			});
+		});
 
-			//io.to(user.u_id).emit('retrieve messages', { messages: rows, message_user_uid: user.message_user_uid });
-
-		}
-		);
-
-
-
-		/*
-		io.to(sku).emit('chat message', { from: from, message: message, time: time });
 		timeDB = formatLocalDate().slice(0, 19).replace('T', ' ');
 
 
-		connection.query(`insert into messages(user_sku_from, user_sku_to, message,time) 
-                            values ('${from}','${sku}','${message}','${timeDB}')`)
-		*/
+		connection.query(`insert into messages(chat_uid, u_id, message,time) 
+                            values ('${chat}','${from}','${message}','${timeDB}')`)
+
 
 	});
 
