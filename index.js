@@ -30,14 +30,10 @@ var flash = require('connect-flash');
 
 require('./configs/passport')(passport);//pass passport for configuration
 
-
 var Sequelize = require('sequelize')
 var session = require('express-session');
 
-
-
 var mysql = require('mysql');
-//const mysql = require('sync-mysql'); //Dependencia y configuración para MySQL
 
 var MySQLStore = require('express-mysql-session')(session);
 
@@ -52,13 +48,8 @@ let options = {
 var connection = mysql.createConnection(options); // or mysql.createPool(options);
 var sessionStore = new MySQLStore({}/* session store options */, connection);
 
-
-
-
 var sessionName = 'SESSION_ID';
 var secretKey = 'MYSECRETKEYDSAFGEWHWEfenig23974ovuwyfbhkjfvvfuo'
-
-
 
 var sessionMiddleware = session({
 	cookie: { maxAge: 24 * 60 * 60 * 1000 },
@@ -70,43 +61,16 @@ var sessionMiddleware = session({
 });
 
 
-connection.query(`SELECT * FROM Usrs WHERE Usrname = 'aldoglez24' OR email = 'aldoglez24'`, (err, resp,fields) => {
-
-});
 
 exports.orgboatDB = connection;
 
-
-/*
-const { Client } = require('pg')
-const orgboatDB = new Client({
-	connectionString: "postgres://icmhlgzksmpthq:550f027752b2d6a97bb12b26ce6136f5893fe3df5bfcc987aaa764da489b7948@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dcjc6vr923on5b",
-	ssl: { rejectUnauthorized: false }
-});
-exports.orgboatDB = orgboatDB;
-orgboatDB.connect();
-*/
 
 const server = express()
 	.use(express.static(path.join(__dirname, 'public')))
 	.use(cookieParser())
 	.use(bodyParser.urlencoded({ extended: false }))
 	.use(bodyParser.json())
-
-
-
-
 	.use(sessionMiddleware)
-	/*
-	.use(cookieSession({
-		maxAge: 24 * 60 * 60 * 1000, // One day in milliseconds
-		//maxAge: 2 * 1000,
-		keys: ['randomstringhere']
-	}))
-	*/
-
-
-
 	.use(passport.initialize())
 	.use(passport.session())
 	.use(flash()) // use connect-flash for flash messages stored in session
@@ -150,13 +114,144 @@ const server = express()
 	.post('/edProf', isLoggedIn, routes.editProfile)
 
 
-	.listen(PORT, () => console.log(
-		` ██████  ██████   ██████  ██████   ██████   █████  ████████ 
-		 ██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
-		 ██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
-		 ██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
-		  ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██   
-				Listening on port: ${PORT}`))
+
+//   __ _    __ 
+//  (_ / \	|_ 
+//  __)\_/	|__
+
+
+var http = require('http').Server(server);
+
+
+var io = require("socket.io")(http)
+var passportSocketIo = require("passport.socketio");
+
+
+//With Socket.io >= 1.0
+io.use(passportSocketIo.authorize({
+	cookieParser: cookieParser,         // the same middleware you registrer in express
+	key: sessionName,                   // the name of the cookie where express/connect stores its session_id
+	secret: secretKey,                  // the session_secret to parse the cookie
+	store: sessionStore,                // we NEED to use a sessionstore. no memorystore please
+	success: onAuthorizeSuccess,        // *optional* callback on success - read more below
+	fail: onAuthorizeFail,              // *optional* callback on fail/error - read more below
+}));
+
+io.use(function (socket, next) {
+	// Wrap the express middleware
+	sessionMiddleware(socket.request, {}, next);
+});
+
+io.on("connection", function (socket) {
+
+	var user = socket.request.session.passport.user;
+
+	socket.join(user.u_id);
+	console.log(`[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`)
+
+
+	//Transmit the messages from one user to another
+	socket.on('get chats', function (msg) {
+
+		console.log(`[Socket.io] - User ${user.usrname} ask for chats`)
+
+		connection.query(`
+						
+			select chats.chat_uid, chats.chat_name, chats.chat_type, chats.chat_u_id_1, chats.chat_u_id_2, 
+			m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,
+			user1.name as user1_name, user2.name as user2_name, last_user.name as last_user_name
+
+			#select *
+
+			from chats_users  
+
+			inner join chats on chats_users.chat_uid = chats.chat_uid 
+			left join messages m on m.chat_uid = chats.chat_uid 
+			and m.message_id = 
+				(
+				SELECT MAX(message_id) 
+				FROM messages z 
+				WHERE z.chat_uid = m.chat_uid
+				)
+				
+			left join usrs user1 on chats.chat_u_id_1 = user1.u_id
+			left join usrs user2 on chats.chat_u_id_2 = user2.u_id
+			left join usrs last_user on m.u_id = last_user.u_id
+
+			where chats_users.u_id = '${user.u_id}'
+			
+			order by time desc;
+			
+			`
+			, function (err, rows) {
+				io.to(user.u_id).emit('retrieve chats', { my_uid: user.u_id, chats: rows });
+			}
+		);
+
+
+	});
+
+
+	//Transmit the messages from one user to another
+	socket.on('chat message', function (msg) {
+		sku = msg.sku;
+		message = msg.message;
+		from = socket.request.session.passport.user.sku;
+		time = new Date();
+
+		io.to(sku).emit('chat message', { from: from, message: message, time: time });
+		timeDB = formatLocalDate().slice(0, 19).replace('T', ' ');
+		connection.query(`insert into messages(user_sku_from, user_sku_to, message,time) 
+                            values ('${from}','${sku}','${message}','${timeDB}')`)
+
+
+	});
+
+	//Client request the messages
+	socket.on('get messages', function (msg) {
+
+		console.log(`[Socket.io] - ${user.sku} request the messages from ${msg.sku}, page:${msg.page}`);
+
+		initMsg
+
+		connection.query(`select * from messages where  (user_sku_from = '${user.sku}' and user_sku_to  = '${msg.sku}') or 
+            (user_sku_from = '${msg.sku}' and user_sku_to  = '${user.sku}') order by time desc limit 10`, function (err, rows) {
+			io.to(user.sku).emit('retrieve messages', { messages: rows, sku: user.sku });
+		});
+
+	});
+
+});
+
+
+function onAuthorizeSuccess(data, accept) {
+	accept(null, true);
+}
+
+function onAuthorizeFail(data, message, error, accept) {
+	console.log("[Socket.io] - Failed connection: ", message)
+
+
+	// We use this callback to log all of our failed connections.
+	//accept(null, false);
+}
+
+
+// launch ======================================================================
+http.listen(PORT, function () {
+	console.log(
+		` 
+ ██████  ██████   ██████  ██████   ██████   █████  ████████ 
+██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
+██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
+██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
+ ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██   
+				Listening on port: ${PORT}`)
+
+});
+
+
+
 
 //      _ ___   _  _  __
 //  |V||_  ||_|/ \| \(_ 
@@ -187,7 +282,7 @@ colors.sort(function (a, b) { return Math.random() > 0.5; });
 function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
 	if (req.isAuthenticated()) {
-		if (req.user[0].verified === 0) {
+		if (req.user.verified === 0) {
 			res.render('pages/sec/verify-email', { usr: req.user[0].email });
 			return;
 		} else {

@@ -27,20 +27,24 @@ module.exports = function (passport) {
     // passport needs ability to serialize and unserialize users out of session
     // used to serialize the user for the session
     passport.serializeUser(function (user, done) {
-		if (user.provider == "google"){
-		//console.log(user.emails[0].value);
-		done(null, user.emails[0].value);
-		}else{
-		//console.log(user.email);
-        done(null, user.email);
-	}
+
+        if (user.provider == "google") {
+            index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = ?', [user.emails[0].value], (err, resp) => {
+                done(null, resp[0]);
+            });
+        } else {
+            done(null, user);
+        }
     });
+
     // used to deserialize the user
     passport.deserializeUser(function (user, done) {
-		index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = ?', [user], (err, resp) => {
-        done(null, resp);
-	});
+        index.orgboatDB.query('SELECT * FROM Usrs WHERE Email = ?', [user.email], (err, resp) => {
+            //console.log(resp)
+            done(null, resp);
+        });
     });
+
     // =========================================================================
     // == Google SIGNUP ========================================================
     // =========================================================================
@@ -69,7 +73,7 @@ module.exports = function (passport) {
                 index.orgboatDB.query(`SELECT * FROM Usrs WHERE Usrname = '${usrname}' OR email = '${usrname}'`, (err, resp) => {
 
                     if (resp.length == 0) {
-						return done(err);
+                        return done(err);
                     } else {
                         // selects return an array, so access the first in the array
                         var usr = resp[0];
@@ -81,7 +85,7 @@ module.exports = function (passport) {
                             } else if (!isMatch) {
                                 return done(err);
                             } else {
-                               //console.log(true)
+                                //console.log(true)
                                 return done(null, usr);
                             }
                         })

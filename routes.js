@@ -209,6 +209,7 @@ exports.subscribing = function (req, res) {
 exports.workspace = function (req, res) {
 
 	var socialData = "a"
+	
 	var social = JSON.parse(req.user[0].social);
 	res.render('pages/workspace', { user: req.user[0], social: social });
 }
