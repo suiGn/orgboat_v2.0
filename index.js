@@ -194,35 +194,98 @@ io.on("connection", function (socket) {
 
 	//Transmit the messages from one user to another
 	socket.on('chat message', function (msg) {
-		sku = msg.sku;
-		message = msg.message;
-		from = socket.request.session.passport.user.sku;
-		time = new Date();
 
+		chat = msg.chat;
+		message = msg.message;
+		from = user.u_id;
+		time = new Date();
+		console.log(msg);
+
+
+
+		connection.query(`
+
+				select * from chats_users where chat_uid = '${chat}'
+			 
+		 	`, function (err, chats) {
+
+			//console.log(chats);
+
+			chats.forEach(qchat => {
+
+				console.log(chat)
+
+				if (from != qchat.u_id) {
+					io.to(qchat.u_id).emit('chat message', { from: from, message: message, time: time });
+				}
+
+			});
+
+			//io.to(user.u_id).emit('retrieve messages', { messages: rows, message_user_uid: user.message_user_uid });
+
+		}
+		);
+
+
+
+		/*
 		io.to(sku).emit('chat message', { from: from, message: message, time: time });
 		timeDB = formatLocalDate().slice(0, 19).replace('T', ' ');
+
+
 		connection.query(`insert into messages(user_sku_from, user_sku_to, message,time) 
                             values ('${from}','${sku}','${message}','${timeDB}')`)
-
+		*/
 
 	});
 
 	//Client request the messages
 	socket.on('get messages', function (msg) {
 
-		console.log(`[Socket.io] - ${user.sku} request the messages from ${msg.sku}, page:${msg.page}`);
+		console.log(`[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, page:${msg.page}`);
 
-		initMsg
+		//initMsg
 
+		connection.query(`
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name  from messages
+			inner join usrs on messages.u_id = usrs.u_id
+ 			where  chat_uid = '${msg.id}' order by time desc limit 10
+		 `, function (err, rows) {
+			io.to(user.u_id).emit('retrieve messages', { messages: rows, message_user_uid: user.message_user_uid });
+		});
+
+
+
+
+		/*
 		connection.query(`select * from messages where  (user_sku_from = '${user.sku}' and user_sku_to  = '${msg.sku}') or 
             (user_sku_from = '${msg.sku}' and user_sku_to  = '${user.sku}') order by time desc limit 10`, function (err, rows) {
 			io.to(user.sku).emit('retrieve messages', { messages: rows, sku: user.sku });
 		});
+		*/
 
 	});
 
 });
 
+
+function formatLocalDate() {
+	var now = new Date(),
+		tzo = -now.getTimezoneOffset(),
+		dif = tzo >= 0 ? '+' : '-',
+		pad = function (num) {
+			var norm = Math.abs(Math.floor(num));
+			return (norm < 10 ? '0' : '') + norm;
+		};
+	return now.getFullYear()
+		+ '-' + pad(now.getMonth() + 1)
+		+ '-' + pad(now.getDate())
+		+ 'T' + pad(now.getHours())
+		+ ':' + pad(now.getMinutes())
+		+ ':' + pad(now.getSeconds())
+		+ dif + pad(tzo / 60)
+		+ ':' + pad(tzo % 60);
+}
 
 function onAuthorizeSuccess(data, accept) {
 	accept(null, true);
