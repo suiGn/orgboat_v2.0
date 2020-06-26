@@ -209,7 +209,7 @@ io.on("connection", function (socket) {
 			chats.forEach(qchat => {
 
 				if (from != qchat.u_id) {
-					io.to(qchat.u_id).emit('chat message', { from: from, message: message, time: time });
+					io.to(qchat.u_id).emit('chat message', { chat: chat, from: from, message: message, time: time });
 				}
 
 			});

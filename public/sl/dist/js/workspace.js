@@ -21,7 +21,7 @@ $(document).ready(function () {
         chats = response.chats;
 
         //Clean chat div
-        $("#chats-list").html("");
+        //$("#chats-list").html("");
 
         if (chats.length > 0) {
 
@@ -69,11 +69,12 @@ $(document).ready(function () {
                             </div>
                             <div class="users-list-body">
                                 <div>
-                                    <h5>${chat_name}</h5>
-                                    <p>${chat.last_message_message}</p>
+                                    <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
+                                    <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.last_message_message}</p>
                                 </div>
                                 <div class="users-list-action">
-                                    <small class="text-muted">${timeLabel}</small>
+                                <div class="new-message-count d-none" i='${chat.chat_uid}' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
+                                    <small class="text-muted last-message-time" i='${chat.chat_uid}'>${timeLabel}</small>
                                     <div class="action-toggle">
                                         <div class="dropdown">
                                             <a data-toggle="dropdown" href="#">
@@ -119,6 +120,16 @@ $(document).ready(function () {
             //End user SKU
             var id = $(this).attr("i");
             chat_selected = id;
+
+
+
+            $(`.last-message-user[ i = '${chat_selected}']`).removeClass('text-primary')
+            $(`.new-message-count[ i = '${chat_selected}']`).addClass('d-none')
+            $(`.last-message-time[ i = '${chat_selected}']`).addClass('text-muted')
+            $(`.last-message-time[ i = '${chat_selected}']`).removeClass('text-primary')
+
+
+
             $("#chat-name").text($(this).attr("n"))
 
 
@@ -136,16 +147,32 @@ $(document).ready(function () {
 
 
     socket.on('chat message', function (msg) {
-        
+
         console.log(msg)
 
+        if (msg.chat == chat_selected) {
+
+            message = `${msg.from}: ${msg.message}`
+            SohoExamle.Message.receive(msg.message, msg.time);
+
+        } else {
+
+            $(`.last-message-user[ i = '${msg.chat}']`).addClass('text-primary')
+            $(`.new-message-count[ i = '${msg.chat}']`).removeClass('d-none')
+            $(`.last-message-time[ i = '${msg.chat}']`).removeClass('text-muted')
+            $(`.last-message-time[ i = '${msg.chat}']`).addClass('text-primary')
+
+            //Create the notification 
+        }
 
 
-
+        $(`.last-message-chat[ i = '${msg.chat}']`).text(msg.message)
         
-        message = `${msg.from}: ${msg.message}`
-        SohoExamle.Message.receive(msg.message, msg.time);
-        
+
+
+
+
+
     });
 
 
@@ -154,9 +181,10 @@ $(document).ready(function () {
 
 
         console.log(response.messages)
+        $('.layout .content .chat .chat-body .messages').html('');
+
         if (response.messages.length > 0) {
             messages = response.messages.reverse();
-            $('.layout .content .chat .chat-body .messages').html('');
 
 
             actualLabelDate = "";
@@ -238,7 +266,12 @@ $(document).ready(function () {
         message = $.trim(message);
 
         if (message) {
+
             socket.emit('chat message', { chat: chat_selected, message: message });
+
+            $(`.last-message-chat[ i = '${chat_selected}']`).text(message)
+        
+
             SohoExamle.Message.send(message);
             input.val('');
         } else {
