@@ -191,7 +191,6 @@ io.on("connection", function (socket) {
 
 	});
 
-
 	//Transmit the messages from one user to another
 	socket.on('chat message', function (msg) {
 
@@ -202,14 +201,16 @@ io.on("connection", function (socket) {
 
 		connection.query(`
 
-				select * from chats_users where chat_uid = '${chat}'
+			select * from chats_users 
+			inner join chats on chats.chat_uid = chats_users.chat_uid
+			where chats_users.chat_uid = '${chat}'
 			 
 		`, function (err, chats) {
 
 			chats.forEach(qchat => {
 
 				if (from != qchat.u_id) {
-					io.to(qchat.u_id).emit('chat message', { chat: chat, from: from, message: message, time: time });
+					io.to(qchat.u_id).emit('chat message', { chat: chat, type: qchat.chat_type, from: from, from_name: user.name, message: message, time: time });
 				}
 
 			});
@@ -232,22 +233,18 @@ io.on("connection", function (socket) {
 		//initMsg
 
 		connection.query(`
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name  from messages
-			inner join usrs on messages.u_id = usrs.u_id
- 			where  chat_uid = '${msg.id}' order by time desc limit 10
+			
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type  
+
+			from messages inner join usrs on messages.u_id = usrs.u_id
+			inner join chats on chats.chat_uid = messages.chat_uid
+			where  messages.chat_uid = '${msg.id}' order by time desc limit 10;
+
 		 `, function (err, rows) {
 			io.to(user.u_id).emit('retrieve messages', { messages: rows, message_user_uid: user.message_user_uid });
 		});
 
 
-
-
-		/*
-		connection.query(`select * from messages where  (user_sku_from = '${user.sku}' and user_sku_to  = '${msg.sku}') or 
-            (user_sku_from = '${msg.sku}' and user_sku_to  = '${user.sku}') order by time desc limit 10`, function (err, rows) {
-			io.to(user.sku).emit('retrieve messages', { messages: rows, sku: user.sku });
-		});
-		*/
 
 	});
 

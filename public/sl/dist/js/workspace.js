@@ -94,8 +94,8 @@ $(document).ready(function () {
                         </li>
 
                     `)
-                
-                
+
+
                 } else if (chat.chat_type == 1) {
 
 
@@ -129,7 +129,7 @@ $(document).ready(function () {
                             <div class="users-list-body">
                                 <div>
                                     <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
-                                    <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.last_message_message}</p>
+                                    <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.last_user_name}: ${chat.last_message_message}</p>
                                 </div>
                                 <div class="users-list-action">
                                 <div class="new-message-count d-none" i='${chat.chat_uid}' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
@@ -154,7 +154,7 @@ $(document).ready(function () {
                         </li>
 
                     `)
-                
+
 
 
 
@@ -210,13 +210,15 @@ $(document).ready(function () {
     socket.on('chat message', function (msg) {
 
 
+        console.log(msg)
+
         var time = new Date(msg.time);
         var timeRecive = timeformat(time)
 
 
         if (msg.chat == chat_selected) {
 
-            SohoExamle.Message.receive(msg.message, timeRecive);
+            SohoExamle.Message.receive(msg.message, timeRecive, msg.type, msg.from_name);
 
         } else {
 
@@ -227,8 +229,14 @@ $(document).ready(function () {
 
         }
 
+        var msg_name = msg.from_name.split(' ')[0];
 
-        $(`.last-message-chat[ i = '${msg.chat}']`).text(msg.message)
+        if (msg.type == 1) {
+            $(`.last-message-chat[ i = '${msg.chat}']`).text(`${msg_name}: ${msg.message}`)
+        } else {
+            $(`.last-message-chat[ i = '${msg.chat}']`).text(msg.message)
+        }
+
         $(`.last-message-time[ i = '${msg.chat}']`).text(timeRecive)
         $(`.chat-conversation-select[ i = '${msg.chat}']`).attr("t", time.getTime());
 
@@ -285,17 +293,12 @@ $(document).ready(function () {
 
                 }
 
-                console.log(dateLabel)
-
-
-                var Difference_In_Time = new Date() - new Date(message.time);
-                var Difference_In_Days = Math.floor(Difference_In_Time / (1000 * 3600 * 24));
-                //console.log(Difference_In_Days);
-
                 var out = (my_uid == message_user_uid) ? 'outgoing-message' : '';
                 var ticks = (my_uid == message_user_uid) ? '<i class="ti-double-check text-info d-none"></i>' : '';
+                var usrname = (message.chat_type == 1 && my_uid != message_user_uid) ? `${message.name}: ` : '';
 
                 $('.layout .content .chat .chat-body .messages').append(`<div class="message-item ${out}">
+                        ${usrname}
                         <div class="message-content">
                             ` + message.message + `
                         </div>
@@ -316,7 +319,6 @@ $(document).ready(function () {
             });
         }
     });
-
 
     //Function when the user send a message
     $(document).on('submit', '.layout .content .chat .chat-footer form', function (e) {
@@ -345,7 +347,6 @@ $(document).ready(function () {
         }
 
     });
-
 
     $(document).on('submit', '.layout .content .chat .chat-footer form', function (e) {
         e.preventDefault();
@@ -378,12 +379,18 @@ $(document).ready(function () {
                     }, 200);
                 }
             },
-            receive: function (message, timeRecive) {
+            receive: function (message, timeRecive, type, from_name) {
                 var chat_body = $('.layout .content .chat .chat-body');
                 if (chat_body.length > 0) {
 
 
+                    var usrname = (type == 1) ? `${from_name}: ` : '';
+
+
+
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item">
+                        ${usrname}
+
                         <div class="message-content">
                             ` + message + `
                         </div>
@@ -405,7 +412,6 @@ $(document).ready(function () {
             }
         }
     };
-
 
     $(document).on('click', '.layout .content .sidebar-group .sidebar .list-group-item', function () {
 
