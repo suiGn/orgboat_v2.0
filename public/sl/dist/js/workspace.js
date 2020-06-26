@@ -14,6 +14,7 @@ $(document).ready(function () {
 
     socket.emit("get chats");
 
+
     socket.on('retrieve chats', function (response) {
 
 
@@ -21,7 +22,7 @@ $(document).ready(function () {
         chats = response.chats;
 
         //Clean chat div
-        //$("#chats-list").html("");
+        $("#chats-list").html("");
 
         if (chats.length > 0) {
 
@@ -61,7 +62,7 @@ $(document).ready(function () {
                     $("#chats-list").append(`    
         
 
-                        <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}'>
+                        <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
                             <div>
                                 <figure class="avatar">
                                     <span class="avatar-title bg-info rounded-circle">${chat_initial}</span>
@@ -145,15 +146,16 @@ $(document).ready(function () {
 
     });
 
-
     socket.on('chat message', function (msg) {
 
-        console.log(msg)
+
+        var time = new Date(msg.time);
+        var timeRecive = timeformat(time)
+
 
         if (msg.chat == chat_selected) {
 
-            message = `${msg.from}: ${msg.message}`
-            SohoExamle.Message.receive(msg.message, msg.time);
+            SohoExamle.Message.receive(msg.message, timeRecive);
 
         } else {
 
@@ -162,19 +164,17 @@ $(document).ready(function () {
             $(`.last-message-time[ i = '${msg.chat}']`).removeClass('text-muted')
             $(`.last-message-time[ i = '${msg.chat}']`).addClass('text-primary')
 
-            //Create the notification 
         }
 
 
         $(`.last-message-chat[ i = '${msg.chat}']`).text(msg.message)
-        
+        $(`.last-message-time[ i = '${msg.chat}']`).text(timeRecive)
+        $(`.chat-conversation-select[ i = '${msg.chat}']`).attr("t", time.getTime());
 
 
-
-
+        reorderChats()
 
     });
-
 
     //Client request the messages
     socket.on('retrieve messages', function (response) {
@@ -268,12 +268,17 @@ $(document).ready(function () {
         if (message) {
 
             socket.emit('chat message', { chat: chat_selected, message: message });
+            time = new Date();
+            timeSend = timeformat(time)
 
+            $(`.last-message-time[ i = '${chat_selected}']`).text(timeSend)
             $(`.last-message-chat[ i = '${chat_selected}']`).text(message)
-        
+            $(`.chat-conversation-select[ i = '${chat_selected}']`).attr("t", time.getTime());
 
-            SohoExamle.Message.send(message);
+            SohoExamle.Message.send(message, timeSend);
             input.val('');
+
+            reorderChats()
         } else {
             input.focus();
         }
@@ -287,11 +292,10 @@ $(document).ready(function () {
 
     var SohoExamle = {
         Message: {
-            send: function (message) {
+            send: function (message, timeSend) {
                 var chat_body = $('.layout .content .chat .chat-body');
                 if (chat_body.length > 0) {
 
-                    timeSend = timeformat(new Date())
 
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item outgoing-message">
                         <div class="message-content">
@@ -313,11 +317,10 @@ $(document).ready(function () {
                     }, 200);
                 }
             },
-            receive: function (message, time) {
+            receive: function (message, timeRecive) {
                 var chat_body = $('.layout .content .chat .chat-body');
                 if (chat_body.length > 0) {
 
-                    timeRecive = timeformat(new Date(time))
 
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item">
                         <div class="message-content">
@@ -356,7 +359,19 @@ $(document).ready(function () {
 
 });
 
+function reorderChats() {
 
+    var ul = $('ul#chats-list'),
+        li = ul.children('li');
+
+    li.detach().sort(function (a, b) {
+        return $(b).attr('t') - $(a).attr('t');
+    });
+
+    ul.append(li);
+
+
+}
 
 
 function timeformat(date) {
