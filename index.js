@@ -156,32 +156,30 @@ io.on("connection", function (socket) {
 		console.log(`[Socket.io] - User ${user.usrname} ask for chats`)
 
 		connection.query(`
+				
 						
-			select chats.chat_uid, chats.chat_name, chats.chat_type, chats.chat_u_id_1, chats.chat_u_id_2, 
-			m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,
-			user1.name as user1_name, user2.name as user2_name, last_user.name as last_user_name
-
-			#select *
-
+					
+			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat, usrs.name, 
+				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time
+			
 			from chats_users  
+
+			inner join chats_users chats2 on chats2.chat_uid = chats_users.chat_uid
+			inner join usrs on usrs.u_id = chats2.u_id
 
 			inner join chats on chats_users.chat_uid = chats.chat_uid 
 			left join messages m on m.chat_uid = chats.chat_uid 
-			and m.message_id = 
-				(
-				SELECT MAX(message_id) 
-				FROM messages z 
-				WHERE z.chat_uid = m.chat_uid
-				)
-				
-			left join usrs user1 on chats.chat_u_id_1 = user1.u_id
-			left join usrs user2 on chats.chat_u_id_2 = user2.u_id
-			left join usrs last_user on m.u_id = last_user.u_id
-
+				and m.message_id = 
+					(
+						SELECT MAX(message_id) 
+						FROM messages z 
+						WHERE z.chat_uid = m.chat_uid
+					)
+			
 			where chats_users.u_id = '${user.u_id}'
-			
+		
 			order by time desc;
-			
+	
 			`
 			, function (err, rows) {
 				io.to(user.u_id).emit('retrieve chats', { my_uid: user.u_id, chats: rows });

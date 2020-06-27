@@ -25,7 +25,13 @@ $(document).ready(function () {
 
         if (chats.length > 0) {
 
+
+
+            var last_chat;
+
+
             chats.forEach(chat => {
+
                 console.log(chat)
 
                 //Chat_type = 0 = 1:1
@@ -34,30 +40,27 @@ $(document).ready(function () {
                     var chat_initial;
                     var chat_name;
 
-                    if (chat.chat_u_id_1 != my_uid) {
-                        chat_name = chat.user1_name;
-                    } else {
-                        chat_name = chat.user2_name;
-                    }
+                    if (my_uid != chat.user_chat) {
 
-                    chat_initial = chat_name.substring(0, 1)
+                        chat_name = chat.name;
+                        chat_initial = chat_name.substring(0, 1)
 
-                    var timeMessage = new Date(chat.last_message_time);
-                    var timeLabel;
-                    var today = new Date();
-                    var yesterday = new Date();
-                    yesterday.setDate(yesterday.getDate() - 1);
+                        var timeMessage = new Date(chat.last_message_time);
+                        var timeLabel;
+                        var today = new Date();
+                        var yesterday = new Date();
+                        yesterday.setDate(yesterday.getDate() - 1);
 
-                    if (timeMessage.getDate() == today.getDate() && timeMessage.getMonth() == today.getMonth() && timeMessage.getFullYear() == today.getFullYear()) {
-                        timeLabel = timeformat(timeMessage);
-                    } else if (timeMessage.getDate() == yesterday.getDate() && timeMessage.getMonth() == yesterday.getMonth() && timeMessage.getFullYear() == yesterday.getFullYear()) {
-                        timeLabel = "Ayer";
-                    } else {
-                        timeLabel = getDateLabel(timeMessage)
-                    }
+                        if (timeMessage.getDate() == today.getDate() && timeMessage.getMonth() == today.getMonth() && timeMessage.getFullYear() == today.getFullYear()) {
+                            timeLabel = timeformat(timeMessage);
+                        } else if (timeMessage.getDate() == yesterday.getDate() && timeMessage.getMonth() == yesterday.getMonth() && timeMessage.getFullYear() == yesterday.getFullYear()) {
+                            timeLabel = "Ayer";
+                        } else {
+                            timeLabel = getDateLabel(timeMessage)
+                        }
 
 
-                    $("#chats-list").append(`    
+                        $("#chats-list").append(`    
         
 
                         <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
@@ -96,28 +99,40 @@ $(document).ready(function () {
                     `)
 
 
+
+
+
+
+
+                    }
+
                 } else if (chat.chat_type == 1) {
 
 
-                    var chat_name = chat.chat_name;
-                    var chat_initial = chat_name.substring(0, 1)
-                    var timeMessage = new Date(chat.last_message_time);
-                    var timeLabel;
-                    var today = new Date();
-                    var yesterday = new Date();
-                    yesterday.setDate(yesterday.getDate() - 1);
-
-                    if (timeMessage.getDate() == today.getDate() && timeMessage.getMonth() == today.getMonth() && timeMessage.getFullYear() == today.getFullYear()) {
-                        timeLabel = timeformat(timeMessage);
-                    } else if (timeMessage.getDate() == yesterday.getDate() && timeMessage.getMonth() == yesterday.getMonth() && timeMessage.getFullYear() == yesterday.getFullYear()) {
-                        timeLabel = "Ayer";
-                    } else {
-                        timeLabel = getDateLabel(timeMessage)
-                    }
+                    if (chat.user_chat == chat.last_message_user_uid) {
 
 
 
-                    $("#chats-list").append(`    
+
+                        var chat_name = chat.chat_name;
+                        var chat_initial = chat_name.substring(0, 1)
+                        var timeMessage = new Date(chat.last_message_time);
+                        var timeLabel;
+                        var today = new Date();
+                        var yesterday = new Date();
+                        yesterday.setDate(yesterday.getDate() - 1);
+
+                        if (timeMessage.getDate() == today.getDate() && timeMessage.getMonth() == today.getMonth() && timeMessage.getFullYear() == today.getFullYear()) {
+                            timeLabel = timeformat(timeMessage);
+                        } else if (timeMessage.getDate() == yesterday.getDate() && timeMessage.getMonth() == yesterday.getMonth() && timeMessage.getFullYear() == yesterday.getFullYear()) {
+                            timeLabel = "Ayer";
+                        } else {
+                            timeLabel = getDateLabel(timeMessage)
+                        }
+
+
+
+                        $("#chats-list").append(`    
         
 
                         <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
@@ -129,7 +144,7 @@ $(document).ready(function () {
                             <div class="users-list-body">
                                 <div>
                                     <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
-                                    <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.last_user_name}: ${chat.last_message_message}</p>
+                                    <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.name}: ${chat.last_message_message}</p>
                                 </div>
                                 <div class="users-list-action">
                                 <div class="new-message-count d-none" i='${chat.chat_uid}' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
@@ -156,6 +171,8 @@ $(document).ready(function () {
                     `)
 
 
+
+                    }
 
 
 
