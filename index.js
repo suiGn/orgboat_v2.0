@@ -5,7 +5,7 @@
 ██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
  ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██    
                                                                                                                                                                                                          
-*** CODED BY sui Gn Good
+*** CODED BY sui Gn
 workspace
 ****/
 const express = require('express')
