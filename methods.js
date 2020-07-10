@@ -26,6 +26,11 @@ const nameRegex = (subname) => {
 }	
 exports.nameRegex = nameRegex;
 
+exports.subscribingData = function subscribingData(){
+		console.log("got it");
+	
+}
+
 exports.dataSubmitVerification = function dataSubmitVerification(pckr){
 	if (pckr.code == 'vName'){//Verify Name
 			if (nameRegex(pckr.value)) { //Validate name

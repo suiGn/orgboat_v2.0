@@ -102,8 +102,8 @@ exports.verMail = function (req, res) {
 exports.rsnvMail = function (req, res) {
 	var uuid = req.query.uuid;
 	var email = req.query.em;
-	mailer.verifyEmail(email, uuid);
-	res.render('pages/sec/verify-email', { usr: req.user[0] });
+	mailer.verifyEmail(req, res, email, uuid);
+	//console.log(req.user[0]);
 };
 
 exports.changePass = function (req, res) {
@@ -157,9 +157,7 @@ exports.subscribing = function (req, res) {
 				if (err) {
 					throw err
 				} else {
-
 					hashPwd = hash;
-
 					var rtPwd = req.body.subRtPwd;
 					var uuid_numbr = uuid.v4();
 					var verified = 0;
@@ -167,18 +165,23 @@ exports.subscribing = function (req, res) {
 					var u_type = 0;
 					if (method.nameRegex(clName) && method.usrnmRegex(usrname) && method.emailRegex(email)) {
 						if (clName.length <= 3 || usrname.length <= 3 || email.length <= 3 || pwd.length <= 4) {
-							res.render("pages/subscribe", { opt: "Too short." });
+							res.render("pages/subscribe", { opt: "Too short.", opt1: "Log In" , opt2: "/"  });
+							returnl
 						} else if (pwd != rtPwd) {
-							res.redirect("pages/subscribe", { opt: "Password does not match!" });
+							res.render("pages/subscribe", { opt: "Password does not match.", opt1: "Log In" , opt2: "/"  });
+							return;
 						} else {
 							//Verifies if the user already exists
 							index.orgboatDB.query('SELECT usrname FROM usrs WHERE Usrname = ?', [usrname], (err, resp) => {
 								if (resp.length >= 1) {
 									console.log("username exists");
+										res.render("pages/subscribe", { opt: "Username Already Exists.", opt1: "Log In" , opt2: "/"  });
 									return;
 								} else {
 									index.orgboatDB.query('SELECT Email FROM Usrs WHERE Email = ?', [email], (err, resp) => {
 										if (resp.length >= 1) {
+											console.log("Email exists");
+											res.render("pages/subscribe", { opt: "Email Already Exists.", opt1: "Log In" , opt2: "/"  });
 											return;
 										} else {
 											//STORES DATA
@@ -188,7 +191,7 @@ exports.subscribing = function (req, res) {
 												}
 												console.log("New user saved!");
 												console.log(clName + usrname + email);
-												mailer.verifyEmail(email, uuid_numbr);
+												//mailer.verifyEmail(email, uuid_numbr);
 
 											})//closes Insert New Usr Into Table
 										}//else
@@ -196,9 +199,9 @@ exports.subscribing = function (req, res) {
 								} //closes else first query 
 							}) //closes the vault first query - username
 						}// Pwd do not match
-						res.render("pages/sec/response", { opt2: "Please check your Email.", opt1: "Verify your email." });
+							mailer.verifyEmail(req, res, email, uuid_numbr);
 					} else {
-						res.render("pages/subscribe", { opt: "Oops! Something went wrong while submitting the form." });
+						res.render("pages/subscribe", { opt: "Oops! Something went wrong while submitting the form.", opt1: "Log In" , opt2: "/"  });
 					}
 				}
 			})
@@ -207,10 +210,7 @@ exports.subscribing = function (req, res) {
 }
 
 exports.workspace = function (req, res) {
-
 	var socialData = "a"
-
-
 	var social = JSON.parse(req.user[0].social);
 
 	res.render('pages/workspace', { user: req.user[0], social: social });

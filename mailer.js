@@ -2,6 +2,20 @@ const index = require('./index');
 const nodemailer = require('nodemailer');
 const uuid = require('node-uuid');
 
+ // create reusable transporter object using the default SMTP transport
+const transporter = nodemailer.createTransport({
+    host: "smtp.fatcow.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+   	user: "noreply@orgboat.info", // generated ethereal user
+   	pass: "Orwell1984", // generated ethereal password
+	       },
+ secure:false,
+    // here it goes
+ tls: {rejectUnauthorized: false},
+	     });
+
 
 exports.rpwdm = function(req,res,next){
 	var email = req.body.rstEmail;
@@ -13,19 +27,7 @@ exports.rpwdm = function(req,res,next){
 		if (error) {
 		throw error
 				 }
-			   // create reusable transporter object using the default SMTP transport
-			     let transporter = nodemailer.createTransport({
-			       host: "smtp.fatcow.com",
-			       port: 587,
-			       secure: false, // true for 465, false for other ports
-			       auth: {
-			       	user: "noreply@orgboat.info", // generated ethereal user
-			       	pass: "Orwell1984", // generated ethereal password
-			       },
-			 	  secure:false,
-			         // here it goes
-			         tls: {rejectUnauthorized: false},
-			     });
+				 transporter;
 			 	var mailOptions = {
 			 	from: 'noreply@orgboat.info',//replace with your email
 			 	to: email,//replace with your email
@@ -72,6 +74,7 @@ exports.rpwdm = function(req,res,next){
 			 	transporter.sendMail(mailOptions, function(error, info){
 			 	if (error) {
 			 	res.render('pages/sec/response', { opt1: "Please try again.", opt2: "Error"})
+					console.log(error);
 	
 			 	}
 			 	else {
@@ -85,20 +88,8 @@ res.render('pages/sec/response', { opt1: "Please try again with a different emai
 }})
 	};
 	
-const verifyEmail = (email, uuid ) => {
-		  // create reusable transporter object using the default SMTP transport
-		 let transporter = nodemailer.createTransport({
-		     host: "smtp.fatcow.com",
-		     port: 587,
-		     secure: false, // true for 465, false for other ports
-		     auth: {
-		    	user: "noreply@orgboat.info", // generated ethereal user
-			   	pass: "Orwell1984", // generated ethereal password
-				       },
-			 secure:false,
-		     // here it goes
-			 tls: {rejectUnauthorized: false},
-				     });
+const verifyEmail = (req, res, email, uuid ) => {
+	transporter;
 			var mailOptions = {
 				from: 'noreply@orgboat.info',//replace with your email
 				to: email,//replace with your email
@@ -144,7 +135,6 @@ const verifyEmail = (email, uuid ) => {
 				 	transporter.sendMail(mailOptions, function(error, info){
 				 	if (error) {
 				 	res.render('pages/sec/response', { opt1: "Please try again.", opt2: "Error"})
-	
 				 	}else {
 				 	res.render('pages/sec/response', { opt1: "Please check your inbox to verify your email.", opt2: "Sent Successfully"})
 				 	}

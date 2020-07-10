@@ -26,6 +26,8 @@
     <div class="form-group">
 	<% if(opt2 === "Email Verified" || opt2 === "Password Changed"){ %>
     <a href="/">Log In</a>
+	<%}else if(opt2 === "Sent Successfully"){%>
+		<p> Thank you!</p>
 	<% }else {%>
 	<a href="javascript:history.back()">Go Back</a>
 	<% }%>

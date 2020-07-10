@@ -5,7 +5,7 @@
 ██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
  ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██    
                                                                                                                                                                                                          
-*** CODED BY sui Gn
+*** CODED BY sui Gn Good
 workspace
 ****/
 const express = require('express')
@@ -27,12 +27,9 @@ var cookieParser = require('cookie-parser');
 var passport = require('passport');
 //const cookieSession = require('cookie-session');
 var flash = require('connect-flash');
-
 require('./configs/passport')(passport);//pass passport for configuration
-
-var Sequelize = require('sequelize')
+var Sequelize = require('sequelize');
 var session = require('express-session');
-
 var mysql = require('mysql');
 
 var MySQLStore = require('express-mysql-session')(session);
@@ -121,13 +118,12 @@ const server = express()
 
 
 var http = require('http').Server(server);
-
-
 var io = require("socket.io")(http)
 var passportSocketIo = require("passport.socketio");
 
 
 //With Socket.io >= 1.0
+
 io.use(passportSocketIo.authorize({
 	cookieParser: cookieParser,         // the same middleware you registrer in express
 	key: sessionName,                   // the name of the cookie where express/connect stores its session_id
@@ -143,22 +139,15 @@ io.use(function (socket, next) {
 });
 
 io.on("connection", function (socket) {
-
 	var user = socket.request.session.passport.user;
-
+	if(user != null){
 	socket.join(user.u_id);
 	console.log(`[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`)
-
-
+	}
 	//Transmit the messages from one user to another
 	socket.on('get chats', function (msg) {
-
-		console.log(`[Socket.io] - User ${user.usrname} ask for chats`)
-
+		console.log(`[Socket.io] - User ${user.usrname} asked for chats`)
 		connection.query(`
-				
-						
-					
 			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat, usrs.name, 
 				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time
 			
@@ -175,65 +164,44 @@ io.on("connection", function (socket) {
 						FROM messages z 
 						WHERE z.chat_uid = m.chat_uid
 					)
-			
 			where chats_users.u_id = '${user.u_id}'
-		
 			order by time desc;
-	
 			`
 			, function (err, rows) {
 				io.to(user.u_id).emit('retrieve chats', { my_uid: user.u_id, chats: rows });
 			}
 		);
-
-
 	});
 
 	//Transmit the messages from one user to another
 	socket.on('chat message', function (msg) {
-
 		chat = msg.chat;
 		message = msg.message;
 		from = user.u_id;
 		time = new Date();
-
 		connection.query(`
-
 			select * from chats_users 
 			inner join chats on chats.chat_uid = chats_users.chat_uid
 			where chats_users.chat_uid = '${chat}'
-			 
 		`, function (err, chats) {
-
 			chats.forEach(qchat => {
-
 				if (from != qchat.u_id) {
 					io.to(qchat.u_id).emit('chat message', { chat: chat, type: qchat.chat_type, from: from, from_name: user.name, message: message, time: time });
 				}
-
 			});
 		});
 
 		timeDB = formatLocalDate().slice(0, 19).replace('T', ' ');
-
-
 		connection.query(`insert into messages(chat_uid, u_id, message,time) 
                             values ('${chat}','${from}','${message}','${timeDB}')`)
-
-
 	});
 
 	//Client request the messages
 	socket.on('get messages', function (msg) {
-
 		console.log(`[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, page:${msg.page}`);
-
 		//initMsg
-
 		connection.query(`
-			
 			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type  
-
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' order by time desc limit 10;
@@ -241,12 +209,16 @@ io.on("connection", function (socket) {
 		 `, function (err, rows) {
 			io.to(user.u_id).emit('retrieve messages', { messages: rows, message_user_uid: user.message_user_uid });
 		});
-
-
-
 	});
-
+	
+	
+	socket.on('subscribingData', function(data){
+		method.subscribingData(data);
+	});
+	
+	
 });
+
 
 
 function formatLocalDate() {
@@ -272,11 +244,9 @@ function onAuthorizeSuccess(data, accept) {
 }
 
 function onAuthorizeFail(data, message, error, accept) {
-	console.log("[Socket.io] - Failed connection: ", message)
-
-
+	console.log("[Socket.io] - User not Authenticated ", message)
 	// We use this callback to log all of our failed connections.
-	//accept(null, false);
+	accept(null, true);
 }
 
 
@@ -293,42 +263,27 @@ http.listen(PORT, function () {
 
 });
 
-
-
-
 //      _ ___   _  _  __
 //  |V||_  ||_|/ \| \(_ 
 //  | ||__ || |\_/|_/__)	
 
-function brdCstRight(room, obj) { //broadcast to room membrs Only
-	var BroadCastMembers = [];
-	//Filters only members belonging to the same room
-	const members = allMembers.filter(goes => goes.room === room);
-	//Once filtered to only same room members to broadcast
-	members.forEach(function (element) { BroadCastMembers.push(element.client); });
-	// broadcast message to all connected clients in room
-	BroadCastMembers.forEach(function (EndClient) { EndClient.sendUTF(obj); });
-};
-
-/** Helper function for escaping input strings */
-function htmlEntities(str) {
-	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
 // Array with some colors
 var colors = ['#a8d069', '#30ad64', '#25ccbf', '#20ac99', '#f8c740', '#e2a62b',
 	'#face6a', '#e4b962', '#fd7072', '#cf404d', '#d39f9a',
 	'#735260', '#af4173', '#822e50', '#e64c40', '#bf3a30', '#fc7d64', '#49647b'];
 // ... in random order
 colors.sort(function (a, b) { return Math.random() > 0.5; });
+
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
 	if (req.isAuthenticated()) {
-		if (req.user.verified === 0) {
-			res.render('pages/sec/verify-email', { usr: req.user[0].email });
+		if (req.user[0].verified === 0) {
+			//console.log(req.user[0]);
+			res.render('pages/sec/verify-email', { usr: req.user[0]});
 			return;
 		} else {
+			//console.log(req.user[0].verified);
 			return next();
 		}
 	}
@@ -347,39 +302,11 @@ function isLoggedIn(req, res, next) {
   \ \/\/ /| _|| _ \__ \ (_) | (__| ' <| _|  | |  
    \_/\_/ |___|___/___/\___/ \___|_|\_\___| |_|
   
-		serverside websocket managment **/
-var webSocketServer = require('websocket').server;
-var clients = [];
-var allMembers = [];
+		serverside websocket managment 
 
-var wsServer = new webSocketServer({
-	httpServer: server
-});
 //exports.wsServer;
 // WebSocket server Starts from Here
-wsServer.on('request', function (request) {
-	var uuid_numbr = uuid.v4();
-	//accept connection if check 'request.origin'
-	var connection = request.accept(); //connecting from same website
-	var index = clients.push(connection) - 1; //client index to remove them on 'close' event
-	//A connection was acepted.
-	//console.log('1. wsOnRqstLog - Connection Accepted UUID: ' + uuid_numbr + ' Request.Origin: ' + request.origin);
-	//starts - comunication with user - connection.on 
-	connection.sendUTF(JSON.stringify({ type: 'cleaked', uuid: uuid_numbr })); // 'cleaked' -- cleaker.js handshake innitiation
-	//Listening - on incoming comunication
-	connection.on('message', function (message) {
-		if (message.type === 'utf8') { //IF TEXT. 
-			pckr = JSON.parse(message.utf8Data); //parse to json
-			if (pckr.clkcd === 'CleakerRunMe') { //Create rooms for Broadcast Redirection.
-				var runMeMember = {
-					room: pckr.cleakerRoom,
-					index: index,
-					client: connection,
-					uuid: uuid_numbr
-				}
-				//Push into the array
-				allMembers.push(runMeMember) - 1;// index to remove them on 'close' event;			
-			}
+
 			else if (pckr.clkcd === 'onCleaker') { //CLEAKER NETWORK MONITORING
 				//console.log(pckr.cleaker); //for dev purposes, remove to not saturate the console.
 				//packet - send INFORMATION TO RUNME
@@ -411,10 +338,5 @@ wsServer.on('request', function (request) {
 			}//subVer
 		}//IF MESSAGE.TYPE CLOSURE
 	});//END CONNECTION.ON MESSAGE		
-
-	// User disconnected
-	connection.on('close', function (connection) {
-		//console.log(".disconnected - UUID:" + uuid_numbr);//logoutRecord
-		clients.splice(index, 1);// remove user from the list of connected clients
-	});
-}); // FINISHES WEB SERVER ON
+**/
+	

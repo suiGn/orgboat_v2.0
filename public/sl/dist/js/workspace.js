@@ -1,68 +1,42 @@
-
-
 $(document).ready(function () {
-
-
-
     var socket = io();
     var chats;
     var my_uid;
     var currentPage = 0;
     var chat_selected;
 
-
     socket.emit("get chats");
 
-
     socket.on('retrieve chats', function (response) {
-
-
         my_uid = response.my_uid;
         chats = response.chats;
-
         //Clean chat div
         $("#chats-list").html("");
-
         if (chats.length > 0) {
-
-
-
             var last_chat;
-
-
             chats.forEach(chat => {
-
                 console.log(chat)
-
                 //Chat_type = 0 = 1:1
                 if (chat.chat_type == 0) {
-
                     var chat_initial;
                     var chat_name;
-
                     if (my_uid != chat.user_chat) {
-
                         chat_name = chat.name;
                         chat_initial = chat_name.substring(0, 1)
-
                         var timeMessage = new Date(chat.last_message_time);
                         var timeLabel;
                         var today = new Date();
                         var yesterday = new Date();
                         yesterday.setDate(yesterday.getDate() - 1);
-
                         if (timeMessage.getDate() == today.getDate() && timeMessage.getMonth() == today.getMonth() && timeMessage.getFullYear() == today.getFullYear()) {
                             timeLabel = timeformat(timeMessage);
                         } else if (timeMessage.getDate() == yesterday.getDate() && timeMessage.getMonth() == yesterday.getMonth() && timeMessage.getFullYear() == yesterday.getFullYear()) {
-                            timeLabel = "Ayer";
+                            timeLabel = "Yestarday";
                         } else {
                             timeLabel = getDateLabel(timeMessage)
                         }
 
-
                         $("#chats-list").append(`    
-        
-
                         <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
                             <div>
                                 <figure class="avatar">
@@ -95,25 +69,10 @@ $(document).ready(function () {
                                 </div>
                             </div>
                         </li>
-
                     `)
-
-
-
-
-
-
-
                     }
-
                 } else if (chat.chat_type == 1) {
-
-
                     if (chat.user_chat == chat.last_message_user_uid) {
-
-
-
-
                         var chat_name = chat.chat_name;
                         var chat_initial = chat_name.substring(0, 1)
                         var timeMessage = new Date(chat.last_message_time);
@@ -121,7 +80,6 @@ $(document).ready(function () {
                         var today = new Date();
                         var yesterday = new Date();
                         yesterday.setDate(yesterday.getDate() - 1);
-
                         if (timeMessage.getDate() == today.getDate() && timeMessage.getMonth() == today.getMonth() && timeMessage.getFullYear() == today.getFullYear()) {
                             timeLabel = timeformat(timeMessage);
                         } else if (timeMessage.getDate() == yesterday.getDate() && timeMessage.getMonth() == yesterday.getMonth() && timeMessage.getFullYear() == yesterday.getFullYear()) {
@@ -130,11 +88,7 @@ $(document).ready(function () {
                             timeLabel = getDateLabel(timeMessage)
                         }
 
-
-
-                        $("#chats-list").append(`    
-        
-
+            $("#chats-list").append(`    
                         <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
                             <div>
                                 <figure class="avatar">
@@ -167,87 +121,48 @@ $(document).ready(function () {
                                 </div>
                             </div>
                         </li>
-
                     `)
-
-
-
                     }
-
-
-
                 }
-
-
-
             });
-
         }
-
-
-
-        // When the user selected a conversation
+        
+		// When the user selected a conversation
         $(".chat-conversation-select").click(function () {
-
             var chat_body = $('.layout .content .chat .chat-body');
             chat_body.scrollTop(chat_body.get(0).scrollHeight, -1).niceScroll({
                 cursorcolor: 'rgba(66, 66, 66, 0.20)',
                 cursorwidth: "4px",
                 cursorborder: '0px'
             }).resize();
-
             //End user SKU
             var id = $(this).attr("i");
             chat_selected = id;
-
-
-
-            $(`.last-message-user[ i = '${chat_selected}']`).removeClass('text-primary')
-            $(`.new-message-count[ i = '${chat_selected}']`).addClass('d-none')
-            $(`.last-message-time[ i = '${chat_selected}']`).addClass('text-muted')
-            $(`.last-message-time[ i = '${chat_selected}']`).removeClass('text-primary')
-
-
-
+            $(`.last-message-user[ i = '${chat_selected}']`).removeClass('text-primary');
+            $(`.new-message-count[ i = '${chat_selected}']`).addClass('d-none');
+            $(`.last-message-time[ i = '${chat_selected}']`).addClass('text-muted');
+            $(`.last-message-time[ i = '${chat_selected}']`).removeClass('text-primary');
             $("#chat-name").text($(this).attr("n"))
-
-
-
             //Get the conversation messages
             socket.emit('get messages', { id: id, page: currentPage + 1 });
-
-
-
         });
-
-
-
     });
 
     socket.on('chat message', function (msg) {
-
-
-        console.log(msg)
-
+        console.log(msg);
         var time = new Date(msg.time);
-        var timeRecive = timeformat(time)
-
-
+        var timeRecive = timeformat(time);
         if (msg.chat == chat_selected) {
-
             SohoExamle.Message.receive(msg.message, timeRecive, msg.type, msg.from_name);
-
         } else {
-
-            $(`.last-message-user[ i = '${msg.chat}']`).addClass('text-primary')
-            $(`.new-message-count[ i = '${msg.chat}']`).removeClass('d-none')
-            $(`.last-message-time[ i = '${msg.chat}']`).removeClass('text-muted')
-            $(`.last-message-time[ i = '${msg.chat}']`).addClass('text-primary')
-
+            $(`.last-message-user[ i = '${msg.chat}']`).addClass('text-primary');
+            $(`.new-message-count[ i = '${msg.chat}']`).removeClass('d-none');
+            $(`.last-message-time[ i = '${msg.chat}']`).removeClass('text-muted');
+            $(`.last-message-time[ i = '${msg.chat}']`).addClass('text-primary');
         }
-
+		
         var msg_name = msg.from_name.split(' ')[0];
-
+		
         if (msg.type == 1) {
             $(`.last-message-chat[ i = '${msg.chat}']`).text(`${msg_name}: ${msg.message}`)
         } else {
@@ -256,58 +171,38 @@ $(document).ready(function () {
 
         $(`.last-message-time[ i = '${msg.chat}']`).text(timeRecive)
         $(`.chat-conversation-select[ i = '${msg.chat}']`).attr("t", time.getTime());
-
-
         reorderChats()
-
     });
-
+	
     //Client request the messages
     socket.on('retrieve messages', function (response) {
-
-
         console.log(response.messages)
         $('.layout .content .chat .chat-body .messages').html('');
-
         if (response.messages.length > 0) {
             messages = response.messages.reverse();
-
-
             actualLabelDate = "";
-
             messages.forEach(message => {
-
                 message_user_uid = message.message_user_uid;
-
                 //console.log(message)
 
                 var chat_body = $('.layout .content .chat .chat-body');
-
                 var dateSend = new Date(message.time);
                 var timeSend = timeformat(dateSend);
-
                 var dateLabel = getDateLabel(dateSend);
                 var yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
                 var yesterdayLabel = getDateLabel(yesterday);
                 var todayLabel = getDateLabel(new Date());
 
-
-
                 if (dateLabel == yesterdayLabel) {
                     dateLabel = '&#160;&#160;&#160;&#160;&#160;&#160;Ayer&#160;&#160;&#160;&#160;&#160;&#160;';
                 } else if (dateLabel == todayLabel) {
                     dateLabel = '&#160;&#160;&#160;&#160;&#160;&#160;Hoy&#160;&#160;&#160;&#160;&#160;&#160;';
                 }
-
                 if (actualLabelDate == dateLabel) {
-
                 } else {
-
                     actualLabelDate = dateLabel;
-
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item messages-divider sticky-top" data-label="${actualLabelDate}"></div>`);
-
                 }
 
                 var out = (my_uid == message_user_uid) ? 'outgoing-message' : '';
@@ -331,38 +226,29 @@ $(document).ready(function () {
                     cursorwidth: "4px",
                     cursorborder: '0px'
                 }).resize();
-
-
             });
         }
     });
 
     //Function when the user send a message
     $(document).on('submit', '.layout .content .chat .chat-footer form', function (e) {
-
         var input = $(this).find('input[type=text]');
         var message = input.val();
-
         message = $.trim(message);
-
+		
         if (message) {
-
             socket.emit('chat message', { chat: chat_selected, message: message });
             time = new Date();
             timeSend = timeformat(time)
-
             $(`.last-message-time[ i = '${chat_selected}']`).text(timeSend)
             $(`.last-message-chat[ i = '${chat_selected}']`).text(message)
             $(`.chat-conversation-select[ i = '${chat_selected}']`).attr("t", time.getTime());
-
             SohoExamle.Message.send(message, timeSend);
             input.val('');
-
             reorderChats()
         } else {
             input.focus();
         }
-
     });
 
     $(document).on('submit', '.layout .content .chat .chat-footer form', function (e) {
