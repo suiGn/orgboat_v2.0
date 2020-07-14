@@ -22,7 +22,6 @@
 <h1 class="fingertipsslogan-2 login-head-form reg">SIGN UP</h1>
 <div class="w-form">
 	
-	
 <form id="email-form-3" name="subForm" data-name="Subscribe Form" class="form-register-2" action="/subscribing" method="post" onsubmit="return validateForm()">
 	
 <label class="form-label" id="#labelName"></label>
@@ -48,13 +47,11 @@ By registering you are agreeing to our terms and conditions.
 <input type="submit" value="Register" data-wait="Please wait..." class="button w-button">
 </form>
 
-
       <div class="w-form-done">
         <div>Thank you! Your submission has been received!</div>
       </div>
      
     </div>
-	
 	
 	<img src="w/imgs/nat_logo.png" width="55" alt="" class="img-neurons">
     <div class="login-form-footer-2 foot2">
@@ -67,24 +64,56 @@ By registering you are agreeing to our terms and conditions.
   
   <script>
 	  
-	  $(document).ready(function () {
-	      var socket = io();
-	      var chats;
-	      var my_uid;
-	      var currentPage = 0;
-	      var chat_selected;
-
-	      socket.emit("subscribingData");	  		
-
-
-	  });
-
-
-	  
-
-  
-	 
+	   var socket = io(); 
+	    //socket.emit("subscribingData", data);	
+		socket.on('subData', function (json) { 
+		 var data = JSON.parse(json);
+		validDataRes(data.value, data.rcolor, data.input, data.label, data.check);
+			});
+		function validData(data, value){
+		socket.emit("subscribingData", JSON.stringify({value: value , code: data}));
+		}	
+		function validDataRes(value, rcolor, input, label, check){
+		$(label).text(value);
+		document.getElementById(input).style.borderColor = rcolor;
+		document.getElementById(input).dataset.check = check;		
+		}
 		
+		//VALIDATE FORM CLIENT SIDE
+    	 function validateForm() {
+ 		 var subName = document.forms["subForm"]["subName"];
+ 		 var subUsername = document.forms["subForm"]["subUsername"];
+ 		 var subEmail = document.forms["subForm"]["subEmail"];
+    		 var subPwd = document.forms["subForm"]["subPwd"];
+    		 var subRtPwd = document.forms["subForm"]["subRtPwd"];
+    	   if (subRtPwd.value != subPwd.value){
+    		   alert("Password does not match!");
+    		   return false;
+    	   }else if (subPwd.length <= 4) {
+ 		   alert("Password most be 5 characters or more.");
+ 		   return false;
+ 		}else if (subName.dataset.check === "ni") {
+ 		   alert("Invalid Name!");
+ 		   return false;
+ 		}else if (subUsername.dataset.check === "ui") {
+ 		   alert("Invalid Username!");
+ 		   return false;  	   
+    	   }else if (subUsername.dataset.check === "ut") {
+ 		   alert("Username already taken!");
+ 		   return false;
+    	   }else if (subEmail.dataset.check === "ei") {
+ 		   alert("Invalid Email!");
+ 		   return false;
+ 	   }else if (subEmail.dataset.check === "et") {
+ 		   alert("Email already taken!");
+ 		   return false;
+ 	   }else if (subName.length <= 3 || subUsername.length <= 5 || subEmail.length <= 3 ) {
+ 		   alert("Please fill out fields correctly.");
+ 		   return false;
+ 		}else{
+    		   return true;		
+    		 }  
+    	 }
 	 
 	 </script>
 </body>

@@ -37,41 +37,39 @@ $(document).ready(function () {
                         }
 
                         $("#chats-list").append(`    
-                        <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
-                            <div>
-                                <figure class="avatar">
-                                    <span class="avatar-title bg-info rounded-circle">${chat_initial}</span>
-                                </figure>
-                            </div>
-                            <div class="users-list-body">
-                                <div>
-                                    <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
-                                    <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.last_message_message}</p>
-                                </div>
-                                <div class="users-list-action">
-                                <div class="new-message-count d-none" i='${chat.chat_uid}' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
-                                    <small class="text-muted last-message-time" i='${chat.chat_uid}'>${timeLabel}</small>
-                                    <div class="action-toggle">
-                                        <div class="dropdown">
-                                            <a data-toggle="dropdown" href="#">
-                                                <i data-feather="more-horizontal"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="#" class="dropdown-item">Open</a>
-                                                <a href="#" data-navigation-target="contact-information"
-                                                    class="dropdown-item">Profile</a>
-                                                <a href="#" class="dropdown-item">Add to archive</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item text-danger">Delete</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    `)
-                    }
-                } else if (chat.chat_type == 1) {
+      <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
+      <div>
+      <figure class="avatar">
+      <span class="avatar-title bg-info rounded-circle">${chat_initial}</span>
+      </figure>
+      </div>
+      <div class="users-list-body">
+      <div>
+      <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
+      <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.last_message_message}</p>
+      </div>
+      <div class="users-list-action">
+      <div class="new-message-count d-none" i='${chat.chat_uid}' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
+      <small class="text-muted last-message-time" i='${chat.chat_uid}'>${timeLabel}</small>
+      <div class="action-toggle">
+      <div class="dropdown">
+      <a data-toggle="dropdown" href="#">
+      <i data-feather="more-horizontal"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+      <a href="#" class="dropdown-item">Open</a>
+      <a href="#" data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+      <a href="#" class="dropdown-item">Add to archive</a>
+      <div class="dropdown-divider"></div>
+      <a href="#" class="dropdown-item text-danger">Delete</a>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </li>
+		`)}
+            } else if (chat.chat_type == 1) {
                     if (chat.user_chat == chat.last_message_user_uid) {
                         var chat_name = chat.chat_name;
                         var chat_initial = chat_name.substring(0, 1)
@@ -88,45 +86,42 @@ $(document).ready(function () {
                             timeLabel = getDateLabel(timeMessage)
                         }
 
-            $("#chats-list").append(`    
-                        <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
-                            <div>
-                                <figure class="avatar">
-                                    <span class="avatar-title bg-info rounded-circle">${chat_initial}</span>
-                                </figure>
-                            </div>
-                            <div class="users-list-body">
-                                <div>
-                                    <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
-                                    <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.name}: ${chat.last_message_message}</p>
-                                </div>
-                                <div class="users-list-action">
-                                <div class="new-message-count d-none" i='${chat.chat_uid}' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
-                                    <small class="text-muted last-message-time" i='${chat.chat_uid}'>${timeLabel}</small>
-                                    <div class="action-toggle">
-                                        <div class="dropdown">
-                                            <a data-toggle="dropdown" href="#">
-                                                <i data-feather="more-horizontal"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="#" class="dropdown-item">Open</a>
-                                                <a href="#" data-navigation-target="contact-information"
-                                                    class="dropdown-item">Profile</a>
-                                                <a href="#" class="dropdown-item">Add to archive</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item text-danger">Delete</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    `)
-                    }
-                }
-            });
+    $("#chats-list").append(`    
+     <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
+     <div>
+     <figure class="avatar">
+     <span class="avatar-title bg-info rounded-circle">${chat_initial}</span>
+     </figure>
+     </div>
+     <div class="users-list-body">
+     <div>
+     <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
+     <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.name}: ${chat.last_message_message}</p>
+     </div>
+     <div class="users-list-action">
+     <div class="new-message-count d-none" i='${chat.chat_uid}' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
+     <small class="text-muted last-message-time" i='${chat.chat_uid}'>${timeLabel}</small>
+     <div class="action-toggle">
+     <div class="dropdown">
+     <a data-toggle="dropdown" href="#">
+     <i data-feather="more-horizontal"></i>
+     </a>
+     <div class="dropdown-menu dropdown-menu-right">
+     <a href="#" class="dropdown-item">Open</a>
+     <a href="#" data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+     <a href="#" class="dropdown-item">Add to archive</a>
+     <div class="dropdown-divider"></div>
+     <a href="#" class="dropdown-item text-danger">Delete</a>
+     </div>
+     </div>
+     </div>
+     </div>
+     </div>
+     </li>
+		`)}}
+        });
         }
-        
+		
 		// When the user selected a conversation
         $(".chat-conversation-select").click(function () {
             var chat_body = $('.layout .content .chat .chat-body');
@@ -162,7 +157,6 @@ $(document).ready(function () {
         }
 		
         var msg_name = msg.from_name.split(' ')[0];
-		
         if (msg.type == 1) {
             $(`.last-message-chat[ i = '${msg.chat}']`).text(`${msg_name}: ${msg.message}`)
         } else {
@@ -184,7 +178,6 @@ $(document).ready(function () {
             messages.forEach(message => {
                 message_user_uid = message.message_user_uid;
                 //console.log(message)
-
                 var chat_body = $('.layout .content .chat .chat-body');
                 var dateSend = new Date(message.time);
                 var timeSend = timeformat(dateSend);
@@ -204,11 +197,9 @@ $(document).ready(function () {
                     actualLabelDate = dateLabel;
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item messages-divider sticky-top" data-label="${actualLabelDate}"></div>`);
                 }
-
                 var out = (my_uid == message_user_uid) ? 'outgoing-message' : '';
                 var ticks = (my_uid == message_user_uid) ? '<i class="ti-double-check text-info d-none"></i>' : '';
                 var usrname = (message.chat_type == 1 && my_uid != message_user_uid) ? `${message.name}: ` : '';
-
                 $('.layout .content .chat .chat-body .messages').append(`<div class="message-item ${out}">
                         ${usrname}
                         <div class="message-content">
@@ -220,7 +211,6 @@ $(document).ready(function () {
                             </div>
                         </div>
                     </div>`);
-
                 chat_body.scrollTop(chat_body.get(0).scrollHeight, -1).niceScroll({
                     cursorcolor: 'rgba(66, 66, 66, 0.20)',
                     cursorwidth: "4px",
@@ -235,7 +225,6 @@ $(document).ready(function () {
         var input = $(this).find('input[type=text]');
         var message = input.val();
         message = $.trim(message);
-		
         if (message) {
             socket.emit('chat message', { chat: chat_selected, message: message });
             time = new Date();
@@ -250,7 +239,7 @@ $(document).ready(function () {
             input.focus();
         }
     });
-
+	
     $(document).on('submit', '.layout .content .chat .chat-footer form', function (e) {
         e.preventDefault();
     });
@@ -260,8 +249,6 @@ $(document).ready(function () {
             send: function (message, timeSend) {
                 var chat_body = $('.layout .content .chat .chat-body');
                 if (chat_body.length > 0) {
-
-
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item outgoing-message">
                         <div class="message-content">
                             ` + message + `
@@ -285,12 +272,7 @@ $(document).ready(function () {
             receive: function (message, timeRecive, type, from_name) {
                 var chat_body = $('.layout .content .chat .chat-body');
                 if (chat_body.length > 0) {
-
-
                     var usrname = (type == 1) ? `${from_name}: ` : '';
-
-
-
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item">
                         ${usrname}
 
@@ -317,26 +299,17 @@ $(document).ready(function () {
     };
 
     $(document).on('click', '.layout .content .sidebar-group .sidebar .list-group-item', function () {
-
         $(this).closest('.sidebar-group').removeClass('mobile-open');
-
     });
-
-
 });
 
 function reorderChats() {
-
     var ul = $('ul#chats-list'),
         li = ul.children('li');
-
     li.detach().sort(function (a, b) {
         return $(b).attr('t') - $(a).attr('t');
     });
-
     ul.append(li);
-
-
 }
 
 
@@ -353,7 +326,6 @@ function timeformat(date) {
 
 
 function getDateLabel(date) {
-
     dateLabelDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
     dateLabelMonth = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
     dateLabelYear = date.getFullYear();

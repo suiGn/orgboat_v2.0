@@ -1,28 +1,26 @@
-/** SERVER APP: OrgBoat **
- ██████  ██████   ██████  ██████   ██████   █████  ████████ 
-██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
-██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
-██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
- ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██    
-                                                                                                                                                                                                         
-*** CODED BY sui Gn Good
-workspace
-****/
-const express = require('express')
-const path = require('path')
-const PORT = process.env.PORT || 5000
-const jwt = require('jsonwebtoken')
-const config = require('./configs/config')
-const { body, validationResult } = require("express-validator")
-const { sanitizeBody } = require("express-validator")
-const bodyParser = require("body-parser")
-const multer = require('multer')
-const routes = require('./routes')
-const method = require('./methods')
-const mailer = require('./mailer')
-var unicorn = "🍺🦄🍺"
-var uuid = require('node-uuid')
-var nodemailer = require('nodemailer')
+/************************************
+APP: OrgBoat                        *
+____ ____ ____ ___  ____ ____ ___   *
+|  | |__/ | __ |__] |  | |__|  |    *
+|__| |  \ |__] |__] |__| |  |  |    *                                                                                                                                                                                                                                                                                                 
+Coded by Sui Gn && Aldo.            *
+Copyrights Neurons Art & Technology *
+*************************************/
+const express = require('express');
+const path = require('path');
+const PORT = process.env.PORT || 5000;
+const jwt = require('jsonwebtoken');
+const config = require('./configs/config');
+const { body, validationResult } = require("express-validator");
+const { sanitizeBody } = require("express-validator");
+const bodyParser = require("body-parser");
+const multer = require('multer');
+const routes = require('./routes');
+const method = require('./methods');
+const mailer = require('./mailer');
+var unicorn = "🍺🦄🍺";
+var uuid = require('node-uuid');
+var nodemailer = require('nodemailer');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
 //const cookieSession = require('cookie-session');
@@ -31,9 +29,7 @@ require('./configs/passport')(passport);//pass passport for configuration
 var Sequelize = require('sequelize');
 var session = require('express-session');
 var mysql = require('mysql');
-
 var MySQLStore = require('express-mysql-session')(session);
-
 let options = {
 	host: 'kuantum.tech',
 	port: '3306',
@@ -41,13 +37,12 @@ let options = {
 	password: 'r3m0t3',
 	database: 'cleaker'
 };
-
 var connection = mysql.createConnection(options); // or mysql.createPool(options);
+var orgboatDB = connection;
+exports.orgboatDB = connection;
 var sessionStore = new MySQLStore({}/* session store options */, connection);
-
 var sessionName = 'SESSION_ID';
 var secretKey = 'MYSECRETKEYDSAFGEWHWEfenig23974ovuwyfbhkjfvvfuo'
-
 var sessionMiddleware = session({
 	cookie: { maxAge: 24 * 60 * 60 * 1000 },
 	name: sessionName,
@@ -56,10 +51,6 @@ var sessionMiddleware = session({
 	resave: false,
 	saveUninitialized: true
 });
-
-
-
-exports.orgboatDB = connection;
 
 
 const server = express()
@@ -94,7 +85,6 @@ const server = express()
 		res.redirect('/workspace');
 	})
 	.get('/badLogin', routes.badLogin)
-
 	.get('/reset-pwd', routes.resetPass) // Reset Password request
 	.post('/rstpwd', mailer.rpwdm) //Send Reset Pwd Password
 	.get('/pwdRst', routes.pwdRst) //Change Password
@@ -110,27 +100,29 @@ const server = express()
 	.get('/workspace', isLoggedIn, routes.workspace)
 	.post('/edProf', isLoggedIn, routes.editProfile)
 
-
-
-//   __ _    __ 
-//  (_ / \	|_ 
-//  __)\_/	|__
-
-
+/** 			   o       o                                
+				   |       |                               
+				   o   o   o  
+					\ / \ / 
+					 o   o  ebsocket IO
+      __ _    __ 
+     (_ / \	|_ 
+     __)\_/	|__
+	**/
+	
 var http = require('http').Server(server);
 var io = require("socket.io")(http)
 var passportSocketIo = require("passport.socketio");
-
+exports.io = io;
 
 //With Socket.io >= 1.0
-
 io.use(passportSocketIo.authorize({
-	cookieParser: cookieParser,         // the same middleware you registrer in express
-	key: sessionName,                   // the name of the cookie where express/connect stores its session_id
-	secret: secretKey,                  // the session_secret to parse the cookie
-	store: sessionStore,                // we NEED to use a sessionstore. no memorystore please
-	success: onAuthorizeSuccess,        // *optional* callback on success - read more below
-	fail: onAuthorizeFail,              // *optional* callback on fail/error - read more below
+	cookieParser: cookieParser,     // the same middleware you registrer in express
+	key: sessionName,               // the name of the cookie where express/connect stores its session_id
+	secret: secretKey,              // the session_secret to parse the cookie
+	store: sessionStore,            // we NEED to use a sessionstore. no memorystore please
+	success: onAuthorizeSuccess,    // *optional* callback on success - read more below
+	fail: onAuthorizeFail,          // *optional* callback on fail/error - read more below
 }));
 
 io.use(function (socket, next) {
@@ -140,9 +132,13 @@ io.use(function (socket, next) {
 
 io.on("connection", function (socket) {
 	var user = socket.request.session.passport.user;
-	if(user != null){
+	if (user != null || user != undefined){
 	socket.join(user.u_id);
 	console.log(`[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`)
+	}else{
+		var guest = uuid.v4();
+		socket.join(guest);
+		exports.guest = guest;
 	}
 	//Transmit the messages from one user to another
 	socket.on('get chats', function (msg) {
@@ -190,7 +186,6 @@ io.on("connection", function (socket) {
 				}
 			});
 		});
-
 		timeDB = formatLocalDate().slice(0, 19).replace('T', ' ');
 		connection.query(`insert into messages(chat_uid, u_id, message,time) 
                             values ('${chat}','${from}','${message}','${timeDB}')`)
@@ -205,21 +200,51 @@ io.on("connection", function (socket) {
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' order by time desc limit 10;
-
 		 `, function (err, rows) {
 			io.to(user.u_id).emit('retrieve messages', { messages: rows, message_user_uid: user.message_user_uid });
 		});
 	});
 	
-	
 	socket.on('subscribingData', function(data){
-		method.subscribingData(data);
+		method.subscribingData(data);	
 	});
-	
 	
 });
 
 
+// launch ======================================================================
+http.listen(PORT, function () {
+	console.log(
+		` 
+ ██████  ██████   ██████  ██████   ██████   █████  ████████ 
+██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
+██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
+██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
+ ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██   
+				Listening on port: ${PORT}`)
+
+});
+
+//      _ ___   _  _  __
+//  |V||_  ||_|/ \| \(_ 
+//  | ||__ || |\_/|_/__)	
+
+// route middleware to make sure
+function isLoggedIn(req, res, next) {
+	// if user is authenticated in the session, carry on
+	if (req.isAuthenticated()) {
+		if (req.user[0].verified === 0) {
+			//console.log(req.user[0]);
+			res.render('pages/sec/verify-email', { usr: req.user[0]});
+			return;
+		} else {
+			//console.log(req.user[0].verified);
+			return next();
+		}
+	}
+	// if they aren't redirect them to the home page
+	res.redirect("/");
+}
 
 function formatLocalDate() {
 	var now = new Date(),
@@ -250,93 +275,5 @@ function onAuthorizeFail(data, message, error, accept) {
 }
 
 
-// launch ======================================================================
-http.listen(PORT, function () {
-	console.log(
-		` 
- ██████  ██████   ██████  ██████   ██████   █████  ████████ 
-██    ██ ██   ██ ██       ██   ██ ██    ██ ██   ██    ██    
-██    ██ ██████  ██   ███ ██████  ██    ██ ███████    ██    
-██    ██ ██   ██ ██    ██ ██   ██ ██    ██ ██   ██    ██    
- ██████  ██   ██  ██████  ██████   ██████  ██   ██    ██   
-				Listening on port: ${PORT}`)
-
-});
-
-//      _ ___   _  _  __
-//  |V||_  ||_|/ \| \(_ 
-//  | ||__ || |\_/|_/__)	
-
-// Array with some colors
-var colors = ['#a8d069', '#30ad64', '#25ccbf', '#20ac99', '#f8c740', '#e2a62b',
-	'#face6a', '#e4b962', '#fd7072', '#cf404d', '#d39f9a',
-	'#735260', '#af4173', '#822e50', '#e64c40', '#bf3a30', '#fc7d64', '#49647b'];
-// ... in random order
-colors.sort(function (a, b) { return Math.random() > 0.5; });
-
-// route middleware to make sure
-function isLoggedIn(req, res, next) {
-	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated()) {
-		if (req.user[0].verified === 0) {
-			//console.log(req.user[0]);
-			res.render('pages/sec/verify-email', { usr: req.user[0]});
-			return;
-		} else {
-			//console.log(req.user[0].verified);
-			return next();
-		}
-	}
-	// if they aren't redirect them to the home page
-	res.redirect("/");
-}
 
 
-/** 			   o       o                                
-				   |       |                               
-				   o   o   o  
-					\ / \ / 
-					 o   o  */
-/*_      _____ ___ ___  ___   ___ _  _____ _____ 
- \ \    / / __| _ ) __|/ _ \ / __| |/ / __|_   _|
-  \ \/\/ /| _|| _ \__ \ (_) | (__| ' <| _|  | |  
-   \_/\_/ |___|___/___/\___/ \___|_|\_\___| |_|
-  
-		serverside websocket managment 
-
-//exports.wsServer;
-// WebSocket server Starts from Here
-
-			else if (pckr.clkcd === 'onCleaker') { //CLEAKER NETWORK MONITORING
-				//console.log(pckr.cleaker); //for dev purposes, remove to not saturate the console.
-				//packet - send INFORMATION TO RUNME
-				var activeUser = JSON.stringify({ type: "clkr_Start", cleaker: pckr.cleaker });
-				//console.log(pckr.cleaker);
-				brdCstRight("runmeMasterMind", activeUser);
-			} //ACTIVE USERS - RUNME CLOSURE
-			else if (pckr.clkcd === 'appCleaker') { // RECEIVING CLEAKER FROM A MOBILE APP
-				//console.log(pckr.cleaker);
-			}//MOBILE APP CLOSURE
-			else if (pckr.clkcd === 'keepMeAlive') { // TIMER TO KEEP SESSIONS ALIVE
-				//console.log("keepme");
-				var stayingAlive = JSON.stringify({ type: "stayingAlive", chorus: "A A A A" });
-				brdCstRight("runmeMasterMind", stayingAlive);
-			}// KEEP ME ALIVE CLOSURE
-
-			else if (pckr.clkcd == "subVer") {//Submit Data Verification
-				exports.subVerificationRes = function (type, value, color, input, label, check) {
-					connection.sendUTF(JSON.stringify({
-						type: type,
-						value: value,
-						rcolor: color,
-						input: input,
-						label: label,
-						check: check
-					}));
-				}
-				method.dataSubmitVerification(pckr);
-			}//subVer
-		}//IF MESSAGE.TYPE CLOSURE
-	});//END CONNECTION.ON MESSAGE		
-**/
-	
