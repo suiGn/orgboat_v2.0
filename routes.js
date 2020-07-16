@@ -210,10 +210,7 @@ exports.subscribing = function (req, res) {
 }
 
 exports.workspace = function (req, res) {
-	var socialData = "a"
-	var social = JSON.parse(req.user[0].social);
-
-	res.render('pages/workspace', { user: req.user[0], social: social });
+	res.render('pages/workspace', { user: req.user[0] });
 }
 
 exports.editProfile = function (req, res) {
@@ -224,19 +221,11 @@ exports.editProfile = function (req, res) {
 	var website = req.body.websiteEditP;
 	var isPublic = req.body.isPublicEditP;
 	var about = req.body.aboutEditP;
-	var social = {
-		fb: req.body.fbEditP,
-		twt: req.body.twtEditP,
-		inst: req.body.instEditP,
-		lnkin: req.body.lnkinEditP,
-		ytube: req.body.ytEditP,
-		gogl: req.body.goglEditP,
-		wa: req.body.waEditP
-	};
 	var email = req.user[0].email;
 	var rqname = req.user[0].name;
-
-	index.orgboatDB.query('UPDATE usrs SET Name = ?, city = ?, Phone = ?, website = ?, public = ?, about = ?, social = ? WHERE email = ?', [fullName, city, phone, website, isPublic, about, social, email], (error, results) => {
+	console.log(email);
+	
+	index.orgboatDB.query('UPDATE usrs SET Name = ?, city = ?, Phone = ?, website = ?, public = ?, about = ?  WHERE email = ?', [fullName, city, phone, website, isPublic, about, email], (error, results) => {
 		if (error) {
 			res.redirect("/workspace");
 			console.log(error);
@@ -244,6 +233,6 @@ exports.editProfile = function (req, res) {
 			res.redirect("/workspace");
 			console.log(email);
 		}
-	});
+});
 }
 
