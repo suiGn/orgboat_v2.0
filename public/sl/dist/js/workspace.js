@@ -10,16 +10,16 @@ $(document).ready(function () {
     socket.on('retrieve chats', function (response) {
         my_uid = response.my_uid;
         chats = response.chats;
-        //Clean chat div
-        $("#chats-list").html("");
+        $("#chats-list").html(""); //Clean chat div
         if (chats.length > 0) {
             var last_chat;
             chats.forEach(chat => {
-                console.log(chat)
+         	    console.log(chat);
                 //Chat_type = 0 = 1:1
                 if (chat.chat_type == 0) {
                     var chat_initial;
                     var chat_name;
+					var chat_with_usr = chat.user_chat;
                     if (my_uid != chat.user_chat) {
                         chat_name = chat.name;
                         chat_initial = chat_name.substring(0, 1)
@@ -31,47 +31,48 @@ $(document).ready(function () {
                         if (timeMessage.getDate() == today.getDate() && timeMessage.getMonth() == today.getMonth() && timeMessage.getFullYear() == today.getFullYear()) {
                             timeLabel = timeformat(timeMessage);
                         } else if (timeMessage.getDate() == yesterday.getDate() && timeMessage.getMonth() == yesterday.getMonth() && timeMessage.getFullYear() == yesterday.getFullYear()) {
-                            timeLabel = "Yestarday";
+                            timeLabel = "Yesterday";
                         } else {
                             timeLabel = getDateLabel(timeMessage)
                         }
 
                         $("#chats-list").append(`    
-      <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
+      <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}' u='${chat_with_usr}'>					
       <div>
       <figure class="avatar">
       <span class="avatar-title bg-info rounded-circle">${chat_initial}</span>
       </figure>
-      </div>
+      </div>				
       <div class="users-list-body">
       <div>
       <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
       <p class = 'last-message-chat' i='${chat.chat_uid}'>${chat.last_message_message}</p>
-      </div>
+      </div>				
       <div class="users-list-action">
       <div class="new-message-count d-none" i='${chat.chat_uid}' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
-      <small class="text-muted last-message-time" i='${chat.chat_uid}'>${timeLabel}</small>
+      <small class="text-muted last-message-time" i='${chat.chat_uid}'>${timeLabel} 111</small>
       <div class="action-toggle">
-      <div class="dropdown">
+      <div class="dropdown">						
       <a data-toggle="dropdown" href="#">
-      <i data-feather="more-horizontal"></i>
-      </a>
+      <i class="far fa-ellipsis-h"></i>
+      </a>					
       <div class="dropdown-menu dropdown-menu-right">
       <a href="#" class="dropdown-item">Open</a>
       <a href="#" data-navigation-target="contact-information" class="dropdown-item">Profile</a>
       <a href="#" class="dropdown-item">Add to archive</a>
       <div class="dropdown-divider"></div>
       <a href="#" class="dropdown-item text-danger">Delete</a>
+      </div>					
       </div>
-      </div>
-      </div>
-      </div>
+      </div>							
+      </div>					
       </div>
       </li>
 		`)}
             } else if (chat.chat_type == 1) {
                     if (chat.user_chat == chat.last_message_user_uid) {
                         var chat_name = chat.chat_name;
+						var chat_with_usr = chat.user_chat;
                         var chat_initial = chat_name.substring(0, 1)
                         var timeMessage = new Date(chat.last_message_time);
                         var timeLabel;
@@ -87,7 +88,7 @@ $(document).ready(function () {
                         }
 
     $("#chats-list").append(`    
-     <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}'>
+     <li class="list-group-item chat-conversation-select" i='${chat.chat_uid}' n='${chat_name}' t='${timeMessage.getTime()}' u='${chat_with_usr}'>
      <div>
      <figure class="avatar">
      <span class="avatar-title bg-info rounded-circle">${chat_initial}</span>
@@ -104,7 +105,7 @@ $(document).ready(function () {
      <div class="action-toggle">
      <div class="dropdown">
      <a data-toggle="dropdown" href="#">
-     <i data-feather="more-horizontal"></i>
+     <i class="far fa-ellipsis-h"></i>
      </a>
      <div class="dropdown-menu dropdown-menu-right">
      <a href="#" class="dropdown-item">Open</a>
@@ -119,10 +120,11 @@ $(document).ready(function () {
      </div>
      </li>
 		`)}}
-        });
-        }
 		
-		// When the user selected a conversation
+        });
+        } 
+		
+		// When user selects a conversation
         $(".chat-conversation-select").click(function () {
             var chat_body = $('.layout .content .chat .chat-body');
             chat_body.scrollTop(chat_body.get(0).scrollHeight, -1).niceScroll({
@@ -138,7 +140,64 @@ $(document).ready(function () {
             $(`.last-message-time[ i = '${chat_selected}']`).addClass('text-muted');
             $(`.last-message-time[ i = '${chat_selected}']`).removeClass('text-primary');
             $("#chat-name").text($(this).attr("n"))
-            //Get the conversation messages
+			$("#conversation-opts").html(""); //Reset chat Options
+			$("#nochatselected").html(""); //Clean chat div
+			$("#conversation-opts").append(`
+                        <li class="list-inline-item d-xl-none d-inline">
+                            <a href="#" class="btn btn-outline-light mobile-navigation-button">
+                                <i data-feather="menu"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item" data-toggle="tooltip" title="Voice call">
+                            <a href="#" class="btn btn-outline-light text-success" data-toggle="modal"
+                               data-target="#call">
+                                <i class="far fa-phone-alt"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item" data-toggle="tooltip" title="Video call">
+                            <a href="#" class="btn btn-outline-light text-warning" data-toggle="modal"
+                               data-target="#videoCall">
+                                 <i class="far fa-video"></i>
+				
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#" class="btn btn-outline-light" data-toggle="dropdown">
+                               <i class="far fa-ellipsis-h"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="#" data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+                                <a href="#" class="dropdown-item">Add to archive</a>
+                                <a href="#" class="dropdown-item">Delete</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item text-danger">Block</a>
+                            </div>
+                        </li>
+				`);
+			$(".chat-footer").html(""); //Clean chat div
+			$(".chat-footer").append(`
+                <form>
+                    <div>
+                        <button class="btn btn-light mr-3" data-toggle="tooltip" title="Emoji" type="button">
+						<i class="far fa-smile-wink"></i>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Write a message.">
+                    <div class="form-buttons">
+                        <button class="btn btn-light" data-toggle="tooltip" title="Add files" type="button">
+						<i class="fas fa-paperclip"></i>
+                        </button>
+                        <button class="btn btn-light" data-toggle="tooltip"
+                                title="Send a voice record" type="button">
+					<i class="fas fa-microphone-alt"></i>
+                        </button>
+                        <button class="btn btn-primary" type="submit">
+						<i class="far fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+				`);
+            //Get the messages
             socket.emit('get messages', { id: id, page: currentPage + 1 });
         });
     });
@@ -198,17 +257,18 @@ $(document).ready(function () {
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item messages-divider sticky-top" data-label="${actualLabelDate}"></div>`);
                 }
                 var out = (my_uid == message_user_uid) ? 'outgoing-message' : '';
-                var ticks = (my_uid == message_user_uid) ? '<i class="ti-double-check text-info d-none"></i>' : '';
+                var ticks = (my_uid == message_user_uid) ? '<i class="fas fa-check-double"></i>' : ''; // double checked
                 var usrname = (message.chat_type == 1 && my_uid != message_user_uid) ? `${message.name}: ` : '';
-                $('.layout .content .chat .chat-body .messages').append(`<div class="message-item ${out}">
+                $('.layout .content .chat .chat-body .messages').append(`
+					<div class="message-item ${out}">
                         ${usrname}
                         <div class="message-content">
-                            ` + message.message + `
-                        </div>
+                         ` + message.message + `
                         <div class="message-avatar">
                             <div>
                                 <div class="time">${timeSend} ${ticks}</div>
                             </div>
+                        </div>
                         </div>
                     </div>`);
                 chat_body.scrollTop(chat_body.get(0).scrollHeight, -1).niceScroll({
@@ -250,14 +310,15 @@ $(document).ready(function () {
                 var chat_body = $('.layout .content .chat .chat-body');
                 if (chat_body.length > 0) {
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item outgoing-message">
-                        <div class="message-content">
-                            ` + message + `
-                        </div>
+                        <div class="message-content" >
+                          ` + message + `
                         <div class="message-avatar">
                             <div>
-                                <div class="time">${timeSend} <i class="ti-double-check text-info d-none"></i></div>
+                                <div class="time">${timeSend} <i class="fas fa-check"></i></div>
                             </div>
                         </div>
+                        </div>
+                        
                     </div>`);
 
                     setTimeout(function () {
@@ -275,13 +336,12 @@ $(document).ready(function () {
                     var usrname = (type == 1) ? `${from_name}: ` : '';
                     $('.layout .content .chat .chat-body .messages').append(`<div class="message-item">
                         ${usrname}
-
                         <div class="message-content">
-                            ` + message + `
+                           ` + message + `
                         </div>
                         <div class="message-avatar">
                             <div>
-                                <div class="time">${timeRecive}</div>
+                                <div class="time">${timeRecive} <i class="fas fa-check"></i></div>
                             </div>
                         </div>
                     </div>`);

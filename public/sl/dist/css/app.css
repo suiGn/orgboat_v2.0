@@ -3069,12 +3069,13 @@ body.rtl .chat .chat-body .messages .message-item ul {
   padding-right: 0 !important;
 }
 
-body.rtl .chat .chat-body .messages .message-item .message-content.message-file .file-icon {
+body.rtl .chat .chat-body .messages .message-item .message-content .message-file .file-icon {
   margin-right: 0 !important;
   margin-left: 1rem;
+  word-break: break-word;
 }
 
-body.rtl .chat .chat-body .messages .message-item.outgoing-message {
+body.rtl .chat .chat-body .messages .message-item .outgoing-message {
   margin-left: 0 !important;
   margin-right: auto;
 }
@@ -3192,6 +3193,8 @@ body.dark .layout .content .chat .chat-body .messages .message-item .message-con
   background-color: #212124;
   border: 0.5px solid;
   border-color: #f3c96e;
+   max-width: 377px;
+   word-wrap: break-word;
 }
 
 body.dark .layout .content .chat .chat-body .messages .message-item.messages-divider:before {
@@ -3829,7 +3832,8 @@ body.form-membership .form-wrapper hr {
 
 .layout .content .chat .chat-body .messages .message-item {
   max-width: 75%;
-  margin-bottom: 3rem;
+  margin-bottom: .5rem;
+  margin-left: 1%;
 }
 
 .layout .content .chat .chat-body .messages .message-item:last-child {
@@ -3847,7 +3851,15 @@ body.form-membership .form-wrapper hr {
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1px;
+}
+
+.message-avatar{
+	float: right;
+	position: relative;
+	margin-left: 5px;
+	margin-top: 8px;
+	display:block;
 }
 
 .layout .content .chat .chat-body .messages .message-item .message-avatar .avatar {
@@ -3863,7 +3875,15 @@ body.form-membership .form-wrapper hr {
   color: #828282;
   margin-top: 2px;
   font-style: italic;
-  font-size: 12px;
+  font-size: 11px;
+}
+
+.outgoing-message .message-avatar .time{
+	color: #f2f2f0 !important;
+}
+
+.dark .outgoing-message .message-avatar .time{
+	color: #828282 !important;
 }
 
 .layout .content .chat .chat-body .messages .message-item .message-avatar .time .ti-double-check:before, .layout .content .chat .chat-body .messages .message-item .message-avatar .time .ti-double-check:after {
@@ -3881,21 +3901,24 @@ body.form-membership .form-wrapper hr {
      -moz-border-radius: 7px;
           border-radius: 7px;
   padding: 10px 20px;
+    max-width:377px;
+	  word-break: break-word;
 }
 
-.layout .content .chat .chat-body .messages .message-item .message-content.message-file {
+.layout .content .chat .chat-body .messages .message-item .message-content .message-file {
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
-  word-break: break-word;
+
 }
 
-.layout .content .chat .chat-body .messages .message-item .message-content.message-file .file-icon {
+.layout .content .chat .chat-body .messages .message-item .message-content .message-file .file-icon {
   font-size: 24px;
   margin-right: 1rem;
   color: #828282;
+  word-break: break-word;
 }
 
 .layout .content .chat .chat-body .messages .message-item .message-content.message-file ul {
@@ -3910,6 +3933,7 @@ body.form-membership .form-wrapper hr {
 
 .layout .content .chat .chat-body .messages .message-item.outgoing-message {
   margin-left: auto;
+  margin-right: 8%;
 }
 
 .layout .content .chat .chat-body .messages .message-item.outgoing-message .message-avatar {
@@ -3923,12 +3947,15 @@ body.form-membership .form-wrapper hr {
 .layout .content .chat .chat-body .messages .message-item.outgoing-message .message-content {
   background-color: #0a80ff;
   color: white;
+  
 }
 
 .layout .content .chat .chat-body .messages .messages-divider {
   width: 100%;
   max-width: 100%;
   position: relative;
+  margin-top: 21px;
+  margin-bottom: 34px;
 }
 
 .layout .content .chat .chat-body .messages .messages-divider:before {
@@ -3965,9 +3992,9 @@ body.form-membership .form-wrapper hr {
   display: flex;
   -webkit-box-align: center;
   -webkit-align-items: center;
-     -moz-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+     align-items: center;
 }
 
 
