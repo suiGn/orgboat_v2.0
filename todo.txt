@@ -1,3 +1,8 @@
+Sebastian:
+- Migrar Base de Datos
+- Re conectar Google Auth
+
+----------------------------------------------
 Avatar.
 Agregar Contactos by email or username.
 View Profile.
