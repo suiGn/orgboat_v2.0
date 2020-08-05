@@ -3,7 +3,7 @@ APP: OrgBoat                        *
 ____ ____ ____ ___  ____ ____ ___   *
 |  | |__/ | __ |__] |  | |__|  |    *
 |__| |  \ |__] |__] |__| |  |  |    *                                                                                                                                                                                                                                                                                                 
-Coded by Sui Gn && Aldo.            *
+Coded by Sui Gn			            *
 Copyrights Neurons Art & Technology *
 *************************************/
 const express = require('express');
