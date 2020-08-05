@@ -30,6 +30,7 @@ var Sequelize = require('sequelize');
 var session = require('express-session');
 var mysql = require('mysql');
 var MySQLStore = require('express-mysql-session')(session);
+
 let options = {
 	host: 'kuantum.tech',
 	port: '3306',
@@ -37,6 +38,7 @@ let options = {
 	password: 'r3m0t3',
 	database: 'cleaker'
 };
+
 var connection = mysql.createConnection(options); // or mysql.createPool(options);
 var orgboatDB = connection;
 exports.orgboatDB = connection;
@@ -66,25 +68,25 @@ const server = express()
 	// passport.authenticate middleware is used here to authenticate the request
 	.set('view engine', 'ejs')
 	// The middleware receives the data from Google and runs the function on Strategy config
-	.get('/logout', (req, res) => {
-		req.logout();
-		res.redirect('/');
-	})
-	.get('/testing', (req, res) => res.render('pages/index'))
 	.get('/', routes.home)
+	// process the login form
+	.post('/login', passport.authenticate('local-login', {
+	successRedirect: '/workspace', // redirect to the secure profile section
+	failureRedirect: '/badLogin', // redirect back to the signup page if there is an error
+	failureFlash: true // allow flash messages
+	}), function (req, res) {
+	res.redirect('/workspace');
+	})
+	.get('/badLogin', routes.badLogin)
+	.get('/logout', (req, res) => {
+	req.logout();
+	res.redirect('/');
+		})
+	.get('/testing', (req, res) => res.render('pages/index', { opt1: "Sign Up", opt2: "/subscribe", opt3: " " }))
 	.get('/subscribe', routes.subscribe)
 	.get('/verMail', routes.verMail)
 	.get('/resnd', routes.rsnvMail)
 	.post('/subscribing', routes.subscribing)
-	// process the login form
-	.post('/login', passport.authenticate('local-login', {
-		successRedirect: '/workspace', // redirect to the secure profile section
-		failureRedirect: '/badLogin', // redirect back to the signup page if there is an error
-		failureFlash: true // allow flash messages
-	}), function (req, res) {
-		res.redirect('/workspace');
-	})
-	.get('/badLogin', routes.badLogin)
 	.get('/reset-pwd', routes.resetPass) // Reset Password request
 	.post('/rstpwd', mailer.rpwdm) //Send Reset Pwd Password
 	.get('/pwdRst', routes.pwdRst) //Change Password
