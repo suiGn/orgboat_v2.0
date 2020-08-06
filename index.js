@@ -30,7 +30,6 @@ var Sequelize = require('sequelize');
 var session = require('express-session');
 var mysql = require('mysql');
 var MySQLStore = require('express-mysql-session')(session);
-
 let options = {
 	host: 'kuantum.tech',
 	port: '3306',
