@@ -1,38 +1,43 @@
-const index = require('./index');
-const nodemailer = require('nodemailer');
-const uuid = require('node-uuid');
+const index = require("./index");
+const nodemailer = require("nodemailer");
+const uuid = require("node-uuid");
 
- // create reusable transporter object using the default SMTP transport
+// create reusable transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
-    host: "smtp.fatcow.com",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-   	user: "noreply@orgboat.info", // generated ethereal user
-   	pass: "Orwell1984", // generated ethereal password
-	       },
- secure:false,
-    // here it goes
- tls: {rejectUnauthorized: false},
-	     });
+  host: "smtp.fatcow.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: "noreply@orgboat.info", // generated ethereal user
+    pass: "Orwell1984", // generated ethereal password
+  },
+  secure: false,
+  // here it goes
+  tls: { rejectUnauthorized: false },
+});
 
-
-exports.rpwdm = function(req,res,next){
-	var email = req.body.rstEmail;
-	var uuid_numbr = uuid.v4();
-	index.orgboatDB.query('SELECT Email FROM Usrs WHERE Email = ?', [email], (err, resp) => {
-	if(resp.length >= 1){
-		
-		index.orgboatDB.query('UPDATE usrs SET Random = ? WHERE Email = ?', [uuid_numbr, email], (error, results) => {
-		if (error) {
-		throw error
-				 }
-				 transporter;
-			 	var mailOptions = {
-			 	from: 'noreply@orgboat.info',//replace with your email
-			 	to: email,//replace with your email
-			 	subject: `Orgboat : Reset Password:`,
-			 	html:`<div class="col-md-12">
+exports.rpwdm = function (req, res, next) {
+  var email = req.body.rstEmail;
+  var uuid_numbr = uuid.v4();
+  index.orgboatDB.query(
+    "SELECT email FROM usrs WHERE email = ?",
+    [email],
+    (err, resp) => {
+      if (resp.length >= 1) {
+        index.orgboatDB.query(
+          "UPDATE usrs SET Random = ? WHERE email = ?",
+          [uuid_numbr, email],
+          (error, results) => {
+            if (error) {
+              throw error;
+            }
+            transporter;
+            var mailOptions = {
+              from: "noreply@orgboat.info", //replace with your email
+              to: email, //replace with your email
+              subject: `Orgboat : Reset Password:`,
+              html:
+                `<div class="col-md-12">
 			 <table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #eaf0f7; margin: 0;" bgcolor="#eaf0f7">
 			     <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			         <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
@@ -53,14 +58,20 @@ exports.rpwdm = function(req,res,next){
 			                                         valign="top">OrgBoat</td>
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-			                                     <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #3f5db3; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top">`+ email +`</td>
+			                                     <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #3f5db3; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top">` +
+                email +
+                `</td>
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			                                     <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top">Expires in 24 hours. Click the button to reset your password:</td>
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			                                     <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-			                                         valign="top"><a href="https://orgboat.herokuapp.com/pwdRst?uuid=`+uuid_numbr+`&em=`+email+`" itemprop="url" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: block; border-radius: 5px; text-transform: capitalize; background-color: #0a80ff; margin: 0; border-color: #0a80ff; border-style: solid; border-width: 10px 20px;">Reset Password</a></td>
+			                                         valign="top"><a href="https://orgboat.herokuapp.com/pwdRst?uuid=` +
+                uuid_numbr +
+                `&em=` +
+                email +
+                `" itemprop="url" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: block; border-radius: 5px; text-transform: capitalize; background-color: #0a80ff; margin: 0; border-color: #0a80ff; border-style: solid; border-width: 10px 20px;">Reset Password</a></td>
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			                                     <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; padding-top: 5px; vertical-align: top; margin: 0; text-align: right;" valign="top">&mdash; <b>OrgBoat´s</b> - Team</td>
@@ -69,32 +80,42 @@ exports.rpwdm = function(req,res,next){
 			                         </td>
 			                     </tr>
 			                 </table>
-			                         </div>`
-			 	};
-			 	transporter.sendMail(mailOptions, function(error, info){
-			 	if (error) {
-			 	res.render('pages/sec/response', { opt1: "Please try again.", opt2: "Error"})
-					console.log(error);
-	
-			 	}
-			 	else {
-			 	res.render('pages/sec/response', { opt1: "Please check your inbox to reset your password", opt2: "Sent Successfully"})
-			 	}
-			 	});
-				});//closes Insert New Usr Into Table
-  
-}else{
-res.render('pages/sec/response', { opt1: "Please try again with a different email.", opt2: "Account not found."})	
-}})
-	};
-	
-const verifyEmail = (req, res, email, uuid ) => {
-	transporter;
-			var mailOptions = {
-				from: 'noreply@orgboat.info',//replace with your email
-				to: email,//replace with your email
-				subject: `Orgboat : Verify Email:`,
-				html:`<div class="col-md-12">
+			                         </div>`,
+            };
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                res.render("pages/sec/response", {
+                  opt1: "Please try again.",
+                  opt2: "Error",
+                });
+                console.log(error);
+              } else {
+                res.render("pages/sec/response", {
+                  opt1: "Please check your inbox to reset your password",
+                  opt2: "Sent Successfully",
+                });
+              }
+            });
+          }
+        ); //closes Insert New Usr Into Table
+      } else {
+        res.render("pages/sec/response", {
+          opt1: "Please try again with a different email.",
+          opt2: "Account not found.",
+        });
+      }
+    }
+  );
+};
+
+const verifyEmail = (req, res, email, uuid) => {
+  transporter;
+  var mailOptions = {
+    from: "noreply@orgboat.info", //replace with your email
+    to: email, //replace with your email
+    subject: `Orgboat : Verify Email:`,
+    html:
+      `<div class="col-md-12">
 <table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #eaf0f7; margin: 0;" bgcolor="#eaf0f7">
     <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
         <td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
@@ -113,14 +134,20 @@ const verifyEmail = (req, res, email, uuid ) => {
  					   <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #0a80ff; font-size: 24px; font-weight: 700; text-align: center; vertical-align: top; margin: 0; padding: 0 0 10px;" valign="top">OrgBoat</td>
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                       <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #3f5db3; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top">`+ email +`</td>
+                       <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #3f5db3; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top">` +
+      email +
+      `</td>
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;" valign="top">Please click the following link to verify your email.</td>
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                        <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top"><a href="https://orgboat.herokuapp.com/verMail?uuid=`+uuid+`&em=`+email+`" itemprop="url" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: block; border-radius: 5px; text-transform: capitalize; background-color: #0a80ff; margin: 0; border-color: #0a80ff; border-style: solid; border-width: 10px 20px;">Verify Email Address.</a></td>
+                                        valign="top"><a href="https://orgboat.herokuapp.com/verMail?uuid=` +
+      uuid +
+      `&em=` +
+      email +
+      `" itemprop="url" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: block; border-radius: 5px; text-transform: capitalize; background-color: #0a80ff; margin: 0; border-color: #0a80ff; border-style: solid; border-width: 10px 20px;">Verify Email Address.</a></td>
                                 </tr>
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; padding-top: 5px; vertical-align: top; margin: 0; text-align: right;" valign="top">&mdash; <b>OrgBoat´s</b> - Team</td>
@@ -130,16 +157,21 @@ const verifyEmail = (req, res, email, uuid ) => {
                     </tr>
                 </table>
                         </div>
-				 `
-				 	};
-				 	transporter.sendMail(mailOptions, function(error, info){
-				 	if (error) {
-				 	res.render('pages/sec/response', { opt1: "Please try again.", opt2: "Error"})
-				 	}else {
-				 	res.render('pages/sec/response', { opt1: "Please check your inbox to verify your email.", opt2: "Sent Successfully"})
-				 	}
-				 	});
-				};
-		
+				 `,
+  };
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      res.render("pages/sec/response", {
+        opt1: "Please try again.",
+        opt2: "Error",
+      });
+    } else {
+      res.render("pages/sec/response", {
+        opt1: "Please check your inbox to verify your email.",
+        opt2: "Sent Successfully",
+      });
+    }
+  });
+};
+
 exports.verifyEmail = verifyEmail;
-	
