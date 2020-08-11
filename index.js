@@ -15,6 +15,7 @@ const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const fs = require("fs");
 const routes = require("./routes");
 const method = require("./methods");
 const mailer = require("./mailer");
@@ -113,8 +114,48 @@ const server = express()
   )
   .get("/lock-screen", routes.lockScreen)
   .get("/workspace", isLoggedIn, routes.workspace)
-  .post("/edProf", isLoggedIn, routes.editProfile);
-
+  .post("/edProf", isLoggedIn, routes.editProfile)
+  .post("/uploadpPhoto", function (req, res) {
+    //console.log(req.user[0].u_id);
+    var storage = multer.diskStorage({
+      //Fun
+      destination: (req, file, cb) => {
+        cb(null, "./uploads");
+      },
+      filename: (req, file, cb) => {
+        //console.log(file);
+        var filetype = "";
+        if (file.mimetype === "image/gif") {
+          filetype = "gif";
+        }
+        if (file.mimetype === "image/png") {
+          filetype = "png";
+        }
+        if (file.mimetype === "image/jpeg") {
+          filetype = "jpg";
+        }
+        cb(
+          null,
+          "avatar-" + req.user[0].u_id + "-" + Date.now() + "." + filetype
+        );
+      },
+    });
+    var upload = multer({ storage: storage }).single("avatarEditP");
+    upload(req, res, function (err) {
+      //console.log(req);
+      if (err) {
+        console.log(err);
+        res.redirect("/workspace");
+      }
+      //console.log(req.file.path);
+      routes.savedbimage(req);
+      res.redirect("/workspace");
+    });
+  })
+  .get("/pphoto", (req, res) => {
+    console.log(req.user[0].pphoto);
+    res.sendFile(path.join(__dirname, req.user[0].pphoto));
+  });
 /** 			   o       o                                
 				   |       |                               
 				   o   o   o  
@@ -128,6 +169,7 @@ const server = express()
 var http = require("http").Server(server);
 var io = require("socket.io")(http);
 var passportSocketIo = require("passport.socketio");
+const { router } = require("websocket");
 exports.io = io;
 
 //With Socket.io >= 1.0

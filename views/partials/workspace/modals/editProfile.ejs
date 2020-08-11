@@ -23,8 +23,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personal" role="tabpanel">
-						
-                        <form method="post" action="/edProf" method="post">
+                        <form method="post" action="/edProf" method="post" >
                             <div class="form-group">
                                 <label for="fullname" class="col-form-label">Full Name</label>
                                 <div class="input-group">
@@ -41,13 +40,13 @@
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <figure class="avatar mr-3 item-rtl">
-                                            <img src="http://via.placeholder.com/128X128" class="rounded-circle"
+                                            <img src="<%= user.pphoto %>" class="rounded-circle"
                                                  alt="image">
                                         </figure>
                                     </div>
                                     <div class="custom-file">
-                                        <input type="file" name="avatarEditP" class="custom-file-input" id="customFile">
-                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                        <input type="file" name="avatarEditP" class="custom-file-input" id="customFileProfile">
+                                        <label class="custom-file-label" for="customFileProfile">Choose file</label>
                                     </div>
                                 </div>
                             </div>

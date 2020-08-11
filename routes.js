@@ -17,6 +17,8 @@ const config = require("./configs/config");
 const method = require("./methods");
 const bcrypt = require("bcrypt");
 const mailer = require("./mailer");
+const multer = require("multer");
+const { CustomValidation } = require("express-validator/src/context-items");
 
 exports.home = function (req, res) {
   if (req.isAuthenticated()) {
@@ -341,8 +343,7 @@ exports.editProfile = function (req, res) {
   var about = req.body.aboutEditP;
   var email = req.user[0].email;
   var rqname = req.user[0].name;
-  console.log(email);
-
+  console.log(avatar);
   index.orgboatDB.query(
     "UPDATE usrs SET name = ?, city = ?, phone = ?, website = ?, public = ?, about = ?  WHERE email = ?",
     [fullName, city, phone, website, isPublic, about, email],
@@ -353,6 +354,25 @@ exports.editProfile = function (req, res) {
       } else {
         res.redirect("/workspace");
         console.log(email);
+      }
+    }
+  );
+};
+
+exports.savedbimage = function (req, res) {
+  console.log(req);
+  var photo = req.file.path;
+  var uidd = req.user[0].u_id;
+  index.orgboatDB.query(
+    "UPDATE usrs SET pphoto = ? WHERE u_id = ?",
+    [photo, uidd],
+    (error, results) => {
+      if (error) {
+        //res.redirect("/workspace");
+        console.log(error);
+      } else {
+        //res.redirect("/workspace");
+        console.log("Okay");
       }
     }
   );
