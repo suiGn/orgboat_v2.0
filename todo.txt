@@ -1,7 +1,3 @@
-Sebastian:
-- Migrar Base de Datos
-- Re conectar Google Auth
-
 ----------------------------------------------
 Avatar.
 --------
