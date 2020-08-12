@@ -343,11 +343,6 @@ exports.editProfile = function (req, res) {
   var about = req.body.aboutEditP;
   var email = req.user[0].email;
   var rqname = req.user[0].name;
-<<<<<<< HEAD
-  console.log(avatar);
-=======
-  console.log(email);
->>>>>>> a3f752804accfeb852a39a92040a8da13d176626
   index.orgboatDB.query(
     "UPDATE usrs SET name = ?, city = ?, phone = ?, website = ?, public = ?, about = ?  WHERE email = ?",
     [fullName, city, phone, website, isPublic, about, email],
