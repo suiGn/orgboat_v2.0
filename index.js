@@ -144,7 +144,7 @@ const server = express()
     upload(req, res, function (err) {
       //console.log(req);
       if (err) {
-        console.log(err);
+        //console.log(err);
         res.redirect("/workspace");
       }
       //console.log(req.file.path);
@@ -153,9 +153,18 @@ const server = express()
     });
   })
   .get("/pphoto", (req, res) => {
-    console.log(req.user[0].pphoto);
+    //console.log(req.user[0].pphoto);
     res.sendFile(path.join(__dirname, req.user[0].pphoto));
+  })
+  .get("/pphotoChat/:name", (req, res) => {
+
+    (async () => {
+      const result = await routes.pphotourl(req.params.name);
+      //console.log(result);
+      res.sendFile(path.join(__dirname,result));
+    })();
   });
+
 /** 			   o       o                                
 				   |       |                               
 				   o   o   o  
@@ -204,9 +213,10 @@ io.on("connection", function (socket) {
   //Transmit the messages from one user to another
   socket.on("get chats", function (msg) {
     console.log(`[Socket.io] - User ${user.usrname} asked for chats`);
+    //console.log(user.pphoto);
     connection.query(
       `
-			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat, usrs.name, 
+			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name, 
 				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time
 			
 			from chats_users  
