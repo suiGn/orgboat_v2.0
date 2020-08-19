@@ -311,7 +311,7 @@ io.on("connection", function (socket) {
         "');",
       function (err, rows) {
         //console.log(rows);
-        socket.emit("retrieve viewprofile", {
+        io.to(user.u_id).emit("retrieve viewprofile", {
           usrprofile: rows,
         });
       }
