@@ -303,7 +303,7 @@ io.on("connection", function (socket) {
   });
 
   socket.on("ViewProfile", function (data) {
-    orgboatDB.query(
+    connection.query(
       "select usrname, pphoto,name,about,phone,city,website from usrs where u_id=(select u_id from chats_users where chat_uid = '" +
         data.id +
         "' and u_id!='" +
