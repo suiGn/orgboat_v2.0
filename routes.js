@@ -358,7 +358,6 @@ exports.editProfile = function (req, res) {
   );
 };
 
-
 exports.savedbimage = function (req, res) {
   console.log(req);
   var photo = req.file.path;
@@ -381,12 +380,11 @@ exports.savedbimage = function (req, res) {
 exports.pphotourl = async function (req, res) {
   //console.log(req);
   var usrname = req;
-  return new Promise((resolve,reject)=>{
+  return new Promise((resolve, reject) => {
     index.orgboatDB.query(
-      "SELECT pphoto FROM usrs WHERE usrname = "+usrname,
-      function(err, result) {
-        if(result.length < 1)
-            return err ? reject(err) : resolve("");
+      "SELECT pphoto FROM usrs WHERE name = " + usrname,
+      function (err, result) {
+        if (result.length < 1) return err ? reject(err) : resolve("");
         return err ? reject(err) : resolve(result[0].pphoto);
       }
     );

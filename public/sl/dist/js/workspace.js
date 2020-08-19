@@ -4,13 +4,13 @@ $(document).ready(function () {
   var my_uid;
   var currentPage = 0;
   var chat_selected;
-
+  var name_chat_selected;
   socket.emit("get chats");
 
   socket.on("retrieve chats", function (response) {
     my_uid = response.my_uid;
     chats = response.chats;
-    pphoto = response.photo;
+    //pphoto = response.photo;
     console.log(chats);
     $("#chats-list").html(""); //Clean chat div
     if (chats.length > 0) {
@@ -210,14 +210,14 @@ $(document).ready(function () {
                                <i class="far fa-ellipsis-h"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+                                <button onClick="profiledata('${chat_selected}')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
                                 <a href="#" class="dropdown-item">Add to archive</a>
                                 <a href="#" class="dropdown-item">Delete</a>
                                 <div class="dropdown-divider"></div>
                                 <a href="#" class="dropdown-item text-danger">Block</a>
                             </div>
                         </li>
-				`);
+        `);
       $(".chat-footer").html(""); //Clean chat div
       $(".chat-footer").append(`
                 <form>
@@ -245,9 +245,8 @@ $(document).ready(function () {
       socket.emit("get messages", { id: id, page: currentPage + 1 });
     });
   });
-
   socket.on("chat message", function (msg) {
-    console.log(msg);
+    console.log(msg.from_name);
     var time = new Date(msg.time);
     var timeRecive = timeformat(time);
     if (msg.chat == chat_selected) {
@@ -283,7 +282,7 @@ $(document).ready(function () {
 
   //Client request the messages
   socket.on("retrieve messages", function (response) {
-    console.log(response.messages);
+    console.log(response.messages[1]);
     $(".layout .content .chat .chat-body .messages").html("");
     if (response.messages.length > 0) {
       messages = response.messages.reverse();
@@ -347,10 +346,13 @@ $(document).ready(function () {
             cursorborder: "0px",
           })
           .resize();
+        $(".chat-header-user figure").empty();
+        $(".chat-header-user figure").append(
+          `<img src="/pphotoChat/'${response.messages[1].name}'" class="rounded-circle" alt="image"></img>`
+        );
       });
     }
   });
-
   //Function when the user send a message
   $(document).on(
     "submit",
@@ -492,4 +494,83 @@ function getDateLabel(date) {
   dateLabelYear = date.getFullYear();
   dateLabel = dateLabelDate + "/" + dateLabelMonth + "/" + dateLabelYear;
   return dateLabel;
+}
+
+function profiledata(id) {
+  //console.log(id);
+  var socket = io();
+  socket.emit("ViewProfile", { id: id });
+  socket.on("retrieve viewprofile", function (data) {
+    console.log(data.usrprofile[0]);
+    $(".avatar.avatar-xl.mb-4.Profile").empty();
+    $(".avatar.avatar-xl.mb-4.Profile").append(
+      `<img src="/pphotoChat/'${data.usrprofile[0].name}'" class="rounded-circle" alt="image"></img>`
+    );
+    $(".text-center h5.mb-1.Profile")[0].innerText = data.usrprofile[0].name;
+    $(".tab-content div.tab-pane.fade.show.active.right-sidebar ").empty();
+    $(".tab-content div.tab-pane.fade.show.active.right-sidebar ").append(
+      `<p class="text-muted About">'${data.usrprofile[0].about}'
+    </p>
+    <div class="mt-4 mb-4">
+      <h6>
+        <i class="far fa-phone-alt" style="opacity: 69%;"></i> Phone
+      </h6>
+      <p class="text-muted">${data.usrprofile[0].phone}</p>
+    </div>
+    <div class="mt-4 mb-4">
+      <h6><i class="far fa-city" style="opacity: 69%;"></i> City</h6>
+      <p class="text-muted">${data.usrprofile[0].city}</p>
+    </div>
+    <div class="mt-4 mb-4">
+      <h6>
+        <i class="far fa-window-maximize" style="opacity: 69%;"></i>
+        Website
+      </h6>
+      <p><a href="#">${data.usrprofile[0].website}</a></p>
+    </div>
+
+    <div class="mt-4 mb-4">
+      <h6 class="mb-3">Settings</h6>
+      <div class="form-group">
+        <div class="form-item custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="customSwitch11"
+          />
+          <label class="custom-control-label" for="customSwitch11"
+            >Block</label
+          >
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-item custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            checked=""
+            id="customSwitch12"
+          />
+          <label class="custom-control-label" for="customSwitch12"
+            >Mute</label
+          >
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-item custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="customSwitch13"
+          />
+          <label class="custom-control-label" for="customSwitch13"
+            >Get notification</label
+          >
+        </div>
+      </div>
+    </div>`
+    );
+    //$("mb-1.Profile").innertext = data[0].name;
+    //console.log($(".mb-1 Profile")[1].innerText);
+  });
 }

@@ -153,15 +153,14 @@ const server = express()
     });
   })
   .get("/pphoto", (req, res) => {
-    //console.log(req.user[0].pphoto);
+    //console.log(req);
     res.sendFile(path.join(__dirname, req.user[0].pphoto));
   })
   .get("/pphotoChat/:name", (req, res) => {
-
     (async () => {
+      console.log(req.params.name);
       const result = await routes.pphotourl(req.params.name);
-      //console.log(result);
-      res.sendFile(path.join(__dirname,result));
+      res.sendFile(path.join(__dirname, result));
     })();
   });
 
@@ -179,6 +178,7 @@ var http = require("http").Server(server);
 var io = require("socket.io")(http);
 var passportSocketIo = require("passport.socketio");
 const { router } = require("websocket");
+const { error } = require("console");
 exports.io = io;
 
 //With Socket.io >= 1.0
@@ -300,6 +300,22 @@ io.on("connection", function (socket) {
 
   socket.on("subscribingData", function (data) {
     method.subscribingData(data);
+  });
+
+  socket.on("ViewProfile", function (data) {
+    orgboatDB.query(
+      "select usrname, pphoto,name,about,phone,city,website from usrs where u_id=(select u_id from chats_users where chat_uid = '" +
+        data.id +
+        "' and u_id!='" +
+        user.u_id +
+        "');",
+      function (err, rows) {
+        //console.log(rows);
+        socket.emit("retrieve viewprofile", {
+          usrprofile: rows,
+        });
+      }
+    );
   });
 });
 
