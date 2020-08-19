@@ -180,7 +180,7 @@ var passportSocketIo = require("passport.socketio");
 const { router } = require("websocket");
 const { error } = require("console");
 exports.io = io;
-
+io.set("origins", "*:*");
 //With Socket.io >= 1.0
 io.use(
   passportSocketIo.authorize({
