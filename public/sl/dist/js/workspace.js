@@ -347,8 +347,12 @@ $(document).ready(function () {
           })
           .resize();
         $(".chat-header-user figure").empty();
+        var chat_usr_name = response.messages[1];
+        if (chat_usr_name.message_user_uid == my_uid) {
+          chat_usr_name = response.messages[0];
+        }
         $(".chat-header-user figure").append(
-          `<img src="/pphotoChat/'${response.messages[1].name}'" class="rounded-circle" alt="image"></img>`
+          `<img src="/pphotoChat/'${chat_usr_name.name}'" class="rounded-circle" alt="image"></img>`
         );
       });
     }
