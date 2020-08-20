@@ -73,7 +73,7 @@ $(document).ready(function () {
       <div class="action-toggle">
       <div class="dropdown">						
       <a data-toggle="dropdown" href="#">
-      <i class="far fa-ellipsis-h"></i>
+      <i class="fa fa-ellipsis-h"></i>
       </a>					
       <div class="dropdown-menu dropdown-menu-right">
       <a href="#" class="dropdown-item">Open</a>
@@ -141,7 +141,7 @@ $(document).ready(function () {
      <div class="action-toggle">
      <div class="dropdown">
      <a data-toggle="dropdown" href="#">
-     <i class="far fa-ellipsis-h"></i>
+     <i class="fa fa-ellipsis-h"></i>
      </a>
      <div class="dropdown-menu dropdown-menu-right">
      <a href="#" class="dropdown-item">Open</a>
@@ -195,19 +195,19 @@ $(document).ready(function () {
                         <li class="list-inline-item" data-toggle="tooltip" title="Voice call">
                             <a href="#" class="btn btn-outline-light text-success" data-toggle="modal"
                                data-target="#call">
-                                <i class="far fa-phone-alt"></i>
+                                <i class="fas fa-phone-alt"></i>
                             </a>
                         </li>
                         <li class="list-inline-item" data-toggle="tooltip" title="Video call">
                             <a href="#" class="btn btn-outline-light text-warning" data-toggle="modal"
                                data-target="#videoCall">
-                                 <i class="far fa-video"></i>
+                                 <i class="fa fa-video"></i>
 				
                             </a>
                         </li>
                         <li class="list-inline-item">
                             <a href="#" class="btn btn-outline-light" data-toggle="dropdown">
-                               <i class="far fa-ellipsis-h"></i>
+                               <i class="fa fa-ellipsis-h"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <button onClick="profiledata('${chat_selected}')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
