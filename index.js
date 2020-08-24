@@ -285,7 +285,7 @@ io.on("connection", function (socket) {
     //initMsg
     connection.query(
       `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type  
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto 
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' order by time desc limit 10;

@@ -293,7 +293,9 @@ $(document).ready(function () {
 
   //Client request the messages
   socket.on("retrieve messages", function (response) {
-    console.log(response.messages[1]);
+    console.log(response.messages);
+    var pphoto = "";
+    var name = "";
     $(".layout .content .chat .chat-body .messages").html("");
     if (response.messages.length > 0) {
       messages = response.messages.reverse();
@@ -333,6 +335,11 @@ $(document).ready(function () {
           message.chat_type == 1 && my_uid != message_user_uid
             ? `${message.name}: `
             : "";
+        if (my_uid != message_user_uid) {
+          pphoto = message.pphoto;
+          name = message.name;
+        }
+
         $(".layout .content .chat .chat-body .messages").append(
           `
 					<div class="message-item ${out}">
@@ -358,14 +365,19 @@ $(document).ready(function () {
           })
           .resize();
         $(".chat-header-user figure").empty();
-        var chat_usr_name = response.messages[1];
-        if (chat_usr_name.message_user_uid == my_uid) {
-          chat_usr_name = response.messages[0];
-        }
-        $(".chat-header-user figure").append(
-          `<img src="/pphotoChat/'${chat_usr_name.name}'" class="rounded-circle" alt="image"></img>`
-        );
       });
+      if (pphoto === "") {
+        $(".chat-header-user figure").append(
+          `<span class="avatar-title bg-info rounded-circle">${name.substring(
+            0,
+            1
+          )}</span>`
+        );
+      } else {
+        $(".chat-header-user figure").append(
+          `<img src="/pphotoChat/'${name}'" class="rounded-circle" alt="image"></img>`
+        );
+      }
     }
   });
   //Function when the user send a message
@@ -518,9 +530,18 @@ function profiledata(id) {
   socket.on("retrieve viewprofile", function (data) {
     console.log(data.usrprofile[0]);
     $(".avatar.avatar-xl.mb-4.Profile").empty();
-    $(".avatar.avatar-xl.mb-4.Profile").append(
-      `<img src="/pphotoChat/'${data.usrprofile[0].name}'" class="rounded-circle" alt="image"></img>`
-    );
+    if (data.usrprofile[0].pphoto === "") {
+      $(".avatar.avatar-xl.mb-4.Profile").append(
+        `<span class="avatar-title bg-info rounded-circle">${data.usrprofile[0].name.substring(
+          0,
+          1
+        )}</span>`
+      );
+    } else {
+      $(".avatar.avatar-xl.mb-4.Profile").append(
+        `<img src="/pphotoChat/'${data.usrprofile[0].name}'" class="rounded-circle" alt="image"></img>`
+      );
+    }
     $(".text-center h5.mb-1.Profile")[0].innerText = data.usrprofile[0].name;
     $(".tab-content div.tab-pane.fade.show.active.right-sidebar ").empty();
     $(".tab-content div.tab-pane.fade.show.active.right-sidebar ").append(
