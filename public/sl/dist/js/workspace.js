@@ -17,7 +17,7 @@ $(document).ready(function () {
       var last_chat;
       chats.forEach((chat) => {
         console.log(chat);
-
+        //var pphoto =
         //Chat_type = 0 = 1:1
         if (chat.chat_type == 0) {
           var chat_initial;
@@ -46,14 +46,21 @@ $(document).ready(function () {
             } else {
               timeLabel = getDateLabel(timeMessage);
             }
-
+            //var pphotoUser = new File([""], chat.pphoto);
+            //var p = "";
+            console.log(chat.pphoto);
+            if (chat.pphoto === "") {
+              p = `<span class="avatar-title bg-info rounded-circle">${chat_initial}</span>`;
+            } else {
+              p = `<img src="/pphotoChat/'${chat_name}'" class="rounded-circle" alt="image">`;
+            }
             $("#chats-list").append(`    
       <li class="list-group-item chat-conversation-select" i='${
         chat.chat_uid
       }' n='${chat_name}' t='${timeMessage.getTime()}' u='${chat_with_usr}'>					
       <div>
       <figure class="avatar">
-      <img src="/pphotoChat/'${chat_name}'" class="rounded-circle" alt="image">
+      ${p}
       </figure>
       </div>				
       <div class="users-list-body">
@@ -77,7 +84,9 @@ $(document).ready(function () {
       </a>					
       <div class="dropdown-menu dropdown-menu-right">
       <a href="#" class="dropdown-item">Open</a>
-      <a href="#" data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+      <button onClick="profiledata('${
+        chat.chat_uid
+      }')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
       <a href="#" class="dropdown-item">Add to archive</a>
       <div class="dropdown-divider"></div>
       <a href="#" class="dropdown-item text-danger">Delete</a>
@@ -145,7 +154,9 @@ $(document).ready(function () {
      </a>
      <div class="dropdown-menu dropdown-menu-right">
      <a href="#" class="dropdown-item">Open</a>
-     <a href="#" data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+     <button onClick="profiledata('${
+       chat.chat_uid
+     }')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
      <a href="#" class="dropdown-item">Add to archive</a>
      <div class="dropdown-divider"></div>
      <a href="#" class="dropdown-item text-danger">Delete</a>
@@ -530,7 +541,7 @@ function profiledata(id) {
         <i class="far fa-window-maximize" style="opacity: 69%;"></i>
         Website
       </h6>
-      <p><a href="#">${data.usrprofile[0].website}</a></p>
+      <p><a href="${data.usrprofile[0].website}">${data.usrprofile[0].website}</a></p>
     </div>
 
     <div class="mt-4 mb-4">

@@ -216,7 +216,7 @@ io.on("connection", function (socket) {
     //console.log(user.pphoto);
     connection.query(
       `
-			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name, 
+			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, 
 				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time
 			
 			from chats_users  
@@ -236,6 +236,7 @@ io.on("connection", function (socket) {
 			order by time desc;
 			`,
       function (err, rows) {
+        console.log(rows);
         io.to(user.u_id).emit("retrieve chats", {
           my_uid: user.u_id,
           chats: rows,
