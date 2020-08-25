@@ -71,8 +71,21 @@
       </li>
       <li data-toggle="tooltip" title="User menu" data-placement="right">
         <a href="./login.html" data-toggle="dropdown">
-          <figure class="avatar">
-            <img src="/pphoto" class="rounded-circle" alt="image" />
+          <figure class="avatar" id="Perfilpphoto" data="<%= user.pphoto %>">
+            <script>
+              var p = document
+                .getElementById("Perfilpphoto")
+                .getAttribute("data");
+              if (p === "") {
+                document.getElementById(
+                  "Perfilpphoto"
+                ).innerHTML = `<span class="avatar-title bg-info rounded-circle"><%= user.name.substring(0,1) %></span>`;
+              } else {
+                document.getElementById(
+                  "Perfilpphoto"
+                ).innerHTML = `<img src="/pphoto" class="rounded-circle" alt="image" />`;
+              }
+            </script>
           </figure>
         </a>
         <div class="dropdown-menu">

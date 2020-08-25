@@ -549,17 +549,17 @@ function profiledata(id) {
     </p>
     <div class="mt-4 mb-4">
       <h6>
-        <i class="far fa-phone-alt" style="opacity: 69%;"></i> Phone
+        <i class="fas fa-phone-alt" style="opacity: 69%;"></i> Phone
       </h6>
       <p class="text-muted">${data.usrprofile[0].phone}</p>
     </div>
     <div class="mt-4 mb-4">
-      <h6><i class="far fa-city" style="opacity: 69%;"></i> City</h6>
+      <h6><i class="fas fa-city" style="opacity: 69%;"></i> City</h6>
       <p class="text-muted">${data.usrprofile[0].city}</p>
     </div>
     <div class="mt-4 mb-4">
       <h6>
-        <i class="far fa-window-maximize" style="opacity: 69%;"></i>
+        <i class="fa fa-window-maximize" style="opacity: 69%;"></i>
         Website
       </h6>
       <p><a href="${data.usrprofile[0].website}">${data.usrprofile[0].website}</a></p>

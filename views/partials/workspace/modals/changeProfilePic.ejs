@@ -25,9 +25,22 @@
                                 <label class="col-form-label">Choose Photo:</label>
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <figure class="avatar mr-3 item-rtl">
-                                            <img src="/pphoto" class="rounded-circle"
-                                                 alt="image">
+                                        <figure class="avatar mr-3 item-rtl" id="changeprofilepicPphoto" data="<%= user.pphoto %>">
+                                            <script>
+                                                var p = document
+                                                  .getElementById("changeprofilepicPphoto")
+                                                  .getAttribute("data");
+                                                if (p === "") {
+                                                  document.getElementById(
+                                                    "changeprofilepicPphoto"
+                                                  ).innerHTML = `<span class="avatar-title bg-info rounded-circle"><%= user.name.substring(0,1) %></span>`;
+                                                } else {
+                                                  document.getElementById(
+                                                    "changeprofilepicPphoto"
+                                                  ).innerHTML = `<img src="/pphoto" class="rounded-circle" alt="image" />`;
+                                                }
+                                              </script>
+                                            
                                         </figure>
                                     </div>
                                     <div class="custom-file">
