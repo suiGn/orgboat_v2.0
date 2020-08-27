@@ -217,7 +217,7 @@ io.on("connection", function (socket) {
     connection.query(
       `
 			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, 
-				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time
+				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
 			
 			from chats_users  
 
@@ -236,8 +236,41 @@ io.on("connection", function (socket) {
 			order by time desc;
 			`,
       function (err, rows) {
-        console.log(rows);
+        //console.log(rows);
         io.to(user.u_id).emit("retrieve chats", {
+          my_uid: user.u_id,
+          chats: rows,
+        });
+      }
+    );
+  });
+  socket.on("get chats archived", function (msg) {
+    console.log(`[Socket.io] - User ${user.usrname} asked for chats`);
+    //console.log(user.pphoto);
+    connection.query(
+      `
+			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, 
+				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
+			
+			from chats_users  
+
+			inner join chats_users chats2 on chats2.chat_uid = chats_users.chat_uid
+			inner join usrs on usrs.u_id = chats2.u_id
+
+			inner join chats on chats_users.chat_uid = chats.chat_uid 
+			left join messages m on m.chat_uid = chats.chat_uid 
+				and m.message_id = 
+					(
+						SELECT MAX(message_id) 
+						FROM messages z 
+						WHERE z.chat_uid = m.chat_uid
+					)
+			where chats_users.u_id = '${user.u_id}'
+			order by time desc;
+			`,
+      function (err, rows) {
+        //console.log(rows);
+        io.to(user.u_id).emit("retrieve chats archived", {
           my_uid: user.u_id,
           chats: rows,
         });
@@ -315,6 +348,22 @@ io.on("connection", function (socket) {
         io.to(user.u_id).emit("retrieve viewprofile", {
           usrprofile: rows,
         });
+      }
+    );
+  });
+  socket.on("archived chat", function (chat) {
+    connection.query(
+      `UPDATE chats_users SET archiveChat=1 WHERE chat_uid ='${chat.chat}' and u_id='${user.u_id}'`,
+      function (err, rows) {
+        io.to(user.u_id).emit("archived response");
+      }
+    );
+  });
+  socket.on("Unarchive chat", function (chat) {
+    connection.query(
+      `UPDATE chats_users SET archiveChat=0 WHERE chat_uid ='${chat.chat}' and u_id='${user.u_id}'`,
+      function (err, rows) {
+        io.to(user.u_id).emit("Unarchive response");
       }
     );
   });

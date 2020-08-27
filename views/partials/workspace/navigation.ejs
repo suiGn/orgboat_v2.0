@@ -19,6 +19,7 @@
           data-toggle="tooltip"
           title="Chats"
           data-placement="right"
+          onclick="GetChats()"
         >
           <span class="badge badge-warning"></span>
           <i data-feather="message-circle"></i>
@@ -49,11 +50,11 @@
       </li>
       <li class="brackets">
         <a
-          data-navigation-target="archived"
           href="#"
           data-toggle="tooltip"
           title="Archived"
           data-placement="right"
+          onclick="ChatArchive(this)"
         >
           <i data-feather="archive"></i>
         </a>
