@@ -625,7 +625,7 @@ function ChatArchive(user) {
     var chats = data.chats;
     var currentPage = 0;
     var chat_selected;
-    $("#chats-list").html(""); //Clean chat div
+    $("#chats-archive-list").html(""); //Clean chat div
     if (chats.length > 0) {
       var last_chat;
       chats.forEach((chat) => {
@@ -667,7 +667,7 @@ function ChatArchive(user) {
             } else {
               p = `<img src="/pphotoChat/'${chat_name}'" class="rounded-circle" alt="image">`;
             }
-            $("#chats-list").append(`    
+            $("#chats-archive-list").append(`    
       <li class="list-group-item chat-conversation-select" i='${
         chat.chat_uid
       }' n='${chat_name}' t='${timeMessage.getTime()}' u='${chat_with_usr}'>					
@@ -739,7 +739,7 @@ function ChatArchive(user) {
               timeLabel = getDateLabel(timeMessage);
             }
 
-            $("#chats-list").append(`    
+            $("#chats-archive-list").append(`    
      <li class="list-group-item chat-conversation-select" i='${
        chat.chat_uid
      }' n='${chat_name}' t='${timeMessage.getTime()}' u='${chat_with_usr}'>
