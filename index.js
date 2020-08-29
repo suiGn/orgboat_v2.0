@@ -351,6 +351,17 @@ io.on("connection", function (socket) {
       }
     );
   });
+  socket.on("ViewOwnProfile", function (data) {
+    connection.query(
+      `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
+      function (err, rows) {
+        //console.log(rows);
+        io.to(user.u_id).emit("retrieve viewownprofile", {
+          usrprofile: rows,
+        });
+      }
+    );
+  });
   socket.on("archived chat", function (chat) {
     connection.query(
       `UPDATE chats_users SET archiveChat=1 WHERE chat_uid ='${chat.chat}' and u_id='${user.u_id}'`,

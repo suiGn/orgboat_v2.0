@@ -105,7 +105,11 @@
             data-target="#editProfileModal"
             >Edit Profile</a
           >
-          <a href="#" class="dropdown-item" data-navigation-target="own_profile"
+          <a
+            href="#"
+            class="dropdown-item"
+            onClick="ownprofile('<%= user.u_id %>')"
+            data-navigation-target="contact-information"
             >View Profile</a
           >
           <a

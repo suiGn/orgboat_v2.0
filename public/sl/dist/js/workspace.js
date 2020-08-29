@@ -528,10 +528,97 @@ function getDateLabel(date) {
 }
 
 function profiledata(id) {
-  //console.log(id);
+  console.log(id);
   var socket = io();
   socket.emit("ViewProfile", { id: id });
   socket.on("retrieve viewprofile", function (data) {
+    console.log(data.usrprofile[0]);
+    $(".avatar.avatar-xl.mb-4.Profile").empty();
+    if (data.usrprofile[0].pphoto === "") {
+      $(".avatar.avatar-xl.mb-4.Profile").append(
+        `<span class="avatar-title bg-info rounded-circle">${data.usrprofile[0].name.substring(
+          0,
+          1
+        )}</span>`
+      );
+    } else {
+      $(".avatar.avatar-xl.mb-4.Profile").append(
+        `<img src="/pphotoChat/'${data.usrprofile[0].name}'" class="rounded-circle" alt="image"></img>`
+      );
+    }
+    $(".text-center h5.mb-1.Profile")[0].innerText = data.usrprofile[0].name;
+    $(".tab-content div.tab-pane.fade.show.active.right-sidebar ").empty();
+    $(".tab-content div.tab-pane.fade.show.active.right-sidebar ").append(
+      `<p class="text-muted About">'${data.usrprofile[0].about}'
+    </p>
+    <div class="mt-4 mb-4">
+      <h6>
+        <i class="fas fa-phone-alt" style="opacity: 69%;"></i> Phone
+      </h6>
+      <p class="text-muted">${data.usrprofile[0].phone}</p>
+    </div>
+    <div class="mt-4 mb-4">
+      <h6><i class="fas fa-city" style="opacity: 69%;"></i> City</h6>
+      <p class="text-muted">${data.usrprofile[0].city}</p>
+    </div>
+    <div class="mt-4 mb-4">
+      <h6>
+        <i class="fa fa-window-maximize" style="opacity: 69%;"></i>
+        Website
+      </h6>
+      <p><a href="${data.usrprofile[0].website}">${data.usrprofile[0].website}</a></p>
+    </div>
+
+    <div class="mt-4 mb-4">
+      <h6 class="mb-3">Settings</h6>
+      <div class="form-group">
+        <div class="form-item custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="customSwitch11"
+          />
+          <label class="custom-control-label" for="customSwitch11"
+            >Block</label
+          >
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-item custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            checked=""
+            id="customSwitch12"
+          />
+          <label class="custom-control-label" for="customSwitch12"
+            >Mute</label
+          >
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-item custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="customSwitch13"
+          />
+          <label class="custom-control-label" for="customSwitch13"
+            >Get notification</label
+          >
+        </div>
+      </div>
+    </div>`
+    );
+    //$("mb-1.Profile").innertext = data[0].name;
+    //console.log($(".mb-1 Profile")[1].innerText);
+  });
+}
+function ownprofile(id) {
+  console.log(id);
+  var socket = io();
+  socket.emit("ViewOwnProfile", { id: id });
+  socket.on("retrieve viewownprofile", function (data) {
     console.log(data.usrprofile[0]);
     $(".avatar.avatar-xl.mb-4.Profile").empty();
     if (data.usrprofile[0].pphoto === "") {
