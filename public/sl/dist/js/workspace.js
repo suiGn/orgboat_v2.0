@@ -332,9 +332,7 @@ $(document).ready(function () {
         }
         var out = my_uid == message_user_uid ? "outgoing-message" : "";
         var ticks =
-          my_uid == message_user_uid
-            ? '<i class="fas fa-check-double"></i>'
-            : ""; // double checked
+          my_uid == message_user_uid ? '<i class="fas fa-check"></i>' : ""; // double checked
         var usrname =
           message.chat_type == 1 && my_uid != message_user_uid
             ? `${message.name}: `
@@ -352,11 +350,11 @@ $(document).ready(function () {
                          ` +
             message.message +
             `
-                        <div class="message-avatar">
+                          <div class="message-avatar">
                             <div>
                                 <div class="time">${timeSend} ${ticks}</div>
                             </div>
-                        </div>
+                          </div>
                         </div>
                     </div>`
         );
@@ -430,11 +428,11 @@ $(document).ready(function () {
                           ` +
               message +
               `
-                        <div class="message-avatar">
+                          <div class="message-avatar">
                             <div>
                                 <div class="time">${timeSend} <i class="fas fa-check"></i></div>
                             </div>
-                        </div>
+                          </div>
                         </div>
                         
                     </div>`
@@ -463,11 +461,11 @@ $(document).ready(function () {
                            ` +
               message +
               `
-                        </div>
-                        <div class="message-avatar">
-                            <div>
-                                <div class="time">${timeRecive} <i class="fas fa-check"></i></div>
-                            </div>
+                          <div class="message-avatar">
+                              <div>
+                                  <div class="time">${timeRecive} <i class="fas fa-check"></i></div>
+                              </div>
+                          </div>
                         </div>
                     </div>`
           );
@@ -974,11 +972,11 @@ function SendMessage(chat_selected) {
                           ` +
               message +
               `
-                        <div class="message-avatar">
+                          <div class="message-avatar">
                             <div>
                                 <div class="time">${timeSend} <i class="fas fa-check"></i></div>
                             </div>
-                        </div>
+                          </div>
                         </div>
                         
                     </div>`
@@ -1006,12 +1004,12 @@ function SendMessage(chat_selected) {
                         <div class="message-content">
                            ` +
               message +
-              `
-                        </div>
-                        <div class="message-avatar">
-                            <div>
+              `           
+                            <div class="message-avatar">
+                              <div>
                                 <div class="time">${timeRecive} <i class="fas fa-check"></i></div>
-                            </div>
+                              </div>
+                          </div>
                         </div>
                     </div>`
           );
