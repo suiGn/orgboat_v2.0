@@ -10,7 +10,7 @@ $(document).ready(function () {
   socket.on("retrieve chats", function (response) {
     my_uid = response.my_uid;
     chats = response.chats;
-    chatlist(my_uid, chats, "#chats-list", 1);
+    chatlist(my_uid, chats, "#chats-list", 1, "ArchiveChat");
   });
   socket.on("chat message", function (msg) {
     console.log(msg.from_name);
@@ -134,6 +134,115 @@ $(document).ready(function () {
     }
   });
   //Function when the user send a message
+  $(document).on(
+    "submit",
+    ".layout .content .chat .chat-footer form",
+    function (e) {
+      var input = $(this).find("input[type=text]");
+      var message = input.val();
+      message = $.trim(message);
+      if (message) {
+        socket.emit("chat message", { chat: chat_selected, message: message });
+        time = new Date();
+        timeSend = timeformat(time);
+        $(`.last-message-time[ i = '${chat_selected}']`).text(timeSend);
+        $(`.last-message-chat[ i = '${chat_selected}']`).text(message);
+        $(`.chat-conversation-select[ i = '${chat_selected}']`).attr(
+          "t",
+          time.getTime()
+        );
+        SohoExamle.Message.send(message, timeSend);
+        input.val("");
+        reorderChats();
+      } else {
+        input.focus();
+      }
+    }
+  );
+
+  $(document).on(
+    "submit",
+    ".layout .content .chat .chat-footer form",
+    function (e) {
+      e.preventDefault();
+    }
+  );
+
+  var SohoExamle = {
+    Message: {
+      send: function (message, timeSend) {
+        var chat_body = $(".layout .content .chat .chat-body");
+        if (chat_body.length > 0) {
+          $(".layout .content .chat .chat-body .messages").append(
+            `<div class="message-item outgoing-message">
+                        <div class="message-content" >
+                          ` +
+              message +
+              `
+                          <div class="message-avatar">
+                            <div>
+                                <div class="time">${timeSend} <i class="fas fa-check"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                    </div>`
+          );
+
+          setTimeout(function () {
+            chat_body
+              .scrollTop(chat_body.get(0).scrollHeight, -1)
+              .niceScroll({
+                cursorcolor: "rgba(66, 66, 66, 0.20)",
+                cursorwidth: "4px",
+                cursorborder: "0px",
+              })
+              .resize();
+          }, 200);
+        }
+      },
+      receive: function (message, timeRecive, type, from_name) {
+        var chat_body = $(".layout .content .chat .chat-body");
+        if (chat_body.length > 0) {
+          var usrname = type == 1 ? `${from_name}: ` : "";
+          $(".layout .content .chat .chat-body .messages").append(
+            `<div class="message-item">
+                        ${usrname}
+                        <div class="message-content">
+                           ` +
+              message +
+              `
+                          <div class="message-avatar">
+                              <div>
+                                  <div class="time">${timeRecive} <i class="fas fa-check"></i></div>
+                              </div>
+                          </div>
+                        </div>
+                    </div>`
+          );
+
+          setTimeout(function () {
+            chat_body
+              .scrollTop(chat_body.get(0).scrollHeight, -1)
+              .niceScroll({
+                cursorcolor: "rgba(66, 66, 66, 0.20)",
+                cursorwidth: "4px",
+                cursorborder: "0px",
+              })
+              .resize();
+          }, 200);
+        }
+      },
+    },
+  };
+
+  $(document).on(
+    "click",
+    ".layout .content .sidebar-group .sidebar .list-group-item",
+    function () {
+      $(this).closest(".sidebar-group").removeClass("mobile-open");
+    }
+  );
 });
 
 function reorderChats() {
@@ -269,7 +378,7 @@ function ChatArchive(user) {
   socket.on("retrieve chats archived", function (data) {
     var my_uid = data.my_uid;
     var chats = data.chats;
-    chatlist(my_uid, chats, "#chats-archive-list", 0);
+    chatlist(my_uid, chats, "#chats-archive-list", 0, "Unarchive");
   });
 }
 function SendMessage(chat_selected) {
@@ -385,7 +494,7 @@ function Unarchive(chat_selected) {
     ChatArchive();
   });
 }
-chatlist = (my_uid, chats, seccion, chatType) => {
+chatlist = (my_uid, chats, seccion, chatType, arhive) => {
   var socket = io();
   var currentPage = 0;
   var chat_selected;
@@ -458,9 +567,9 @@ chatlist = (my_uid, chats, seccion, chatType) => {
       <button onClick="profiledata('${
         chat.chat_uid
       }')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
-      <a href="#" onClick="Unarchive('${
-        chat.chat_uid
-      }')"class="dropdown-item">Unarchive</a>
+      <a href="#" onClick="${arhive}('${
+            chat.chat_uid
+          }')"class="dropdown-item">${arhive}</a>
       <div class="dropdown-divider"></div>
       <a href="#" class="dropdown-item text-danger">Delete</a>
       </div>					
@@ -530,9 +639,9 @@ chatlist = (my_uid, chats, seccion, chatType) => {
      <button onClick="profiledata('${
        chat.chat_uid
      }')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
-     <a href="#" onClick="Unarchive('${
-       chat.chat_uid
-     }')" class="dropdown-item">Unarchive</a>
+     <a href="#" onClick="${arhive}('${
+            chat.chat_uid
+          }')" class="dropdown-item">${arhive}</a>
      <div class="dropdown-divider"></div>
      <a href="#" class="dropdown-item text-danger">Delete</a>
      </div>
@@ -596,7 +705,7 @@ chatlist = (my_uid, chats, seccion, chatType) => {
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <button onClick="profiledata('${chat_selected}')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
-                                <a href="#" onClick="Unarchive('${chat_selected}')" class="dropdown-item">Unarchive</a>
+                                <a href="#" onClick="${arhive}('${chat_selected}')" class="dropdown-item">${arhive}</a>
                                 <a href="#" class="dropdown-item">Delete</a>
                                 <div class="dropdown-divider"></div>
                                 <a href="#" class="dropdown-item text-danger">Block</a>
