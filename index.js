@@ -202,13 +202,6 @@ io.on("connection", function (socket) {
   var user = socket.request.session.passport.user;
   if (user != null || user != undefined) {
     socket.join(user.u_id);
-    var mode;
-    if (user.theme === 0) {
-      mode = "";
-    } else {
-      mode = "dark";
-    }
-    user.mode = mode;
     console.log(
       `[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`
     );

@@ -330,7 +330,13 @@ exports.subscribing = function (req, res) {
 };
 
 exports.workspace = function (req, res) {
-  res.render("pages/workspace", { user: req.user[0] });
+  res.render("pages/workspace", {
+    user: req.user[0],
+    modo: req.user[0].theme ? "dark" : "",
+  });
+  //if (modo === "dark")
+  //  res.render("pages/workspace", { user: req.user[0], modo: "dark" });
+  //else res.render("pages/workspace", { user: req.user[0], modo: "" });
 };
 
 exports.editProfile = function (req, res) {
