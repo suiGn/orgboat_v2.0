@@ -378,6 +378,24 @@ io.on("connection", function (socket) {
       }
     );
   });
+  socket.on("theme", function () {
+    connection.query(
+      `SELECT theme FROM usrs WHERE u_id='${user.u_id}'`,
+      function (err, rows) {
+        io.to(user.u_id).emit("retrive theme", {
+          theme: rows,
+        });
+      }
+    );
+  });
+  socket.on("change theme", () => {
+    connection.query(
+      `UPDATE usrs SET theme = !theme WHERE u_id='${user.u_id}'`,
+      (err, rows) => {
+        io.to(user.u_id).emit("retrive change theme");
+      }
+    );
+  });
 });
 
 // launch ======================================================================
