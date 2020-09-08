@@ -337,6 +337,7 @@ io.on("connection", function (socket) {
     method.subscribingData(data);
   });
 
+  //Show profile
   socket.on("ViewProfile", function (data) {
     connection.query(
       "select usrname, pphoto,name,about,phone,city,website from usrs where u_id=(select u_id from chats_users where chat_uid = '" +
@@ -352,6 +353,7 @@ io.on("connection", function (socket) {
       }
     );
   });
+  // Show own profile
   socket.on("ViewOwnProfile", function (data) {
     connection.query(
       `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
@@ -363,6 +365,7 @@ io.on("connection", function (socket) {
       }
     );
   });
+  //Archived a chat
   socket.on("archived chat", function (chat) {
     connection.query(
       `UPDATE chats_users SET archiveChat=1 WHERE chat_uid ='${chat.chat}' and u_id='${user.u_id}'`,
@@ -371,6 +374,7 @@ io.on("connection", function (socket) {
       }
     );
   });
+  //Unarchive a chat
   socket.on("Unarchive chat", function (chat) {
     connection.query(
       `UPDATE chats_users SET archiveChat=0 WHERE chat_uid ='${chat.chat}' and u_id='${user.u_id}'`,
@@ -379,6 +383,7 @@ io.on("connection", function (socket) {
       }
     );
   });
+  //Obtaine theme have a user
   socket.on("theme", function () {
     connection.query(
       `SELECT theme FROM usrs WHERE u_id='${user.u_id}'`,
@@ -389,6 +394,7 @@ io.on("connection", function (socket) {
       }
     );
   });
+  //Change theme user
   socket.on("change theme", () => {
     connection.query(
       `UPDATE usrs SET theme = !theme WHERE u_id='${user.u_id}'`,
@@ -396,6 +402,82 @@ io.on("connection", function (socket) {
         io.to(user.u_id).emit("retrive change theme");
       }
     );
+  });
+  //For search
+  socket.on("SearchUserByEmailOrUsername", (data) => {
+    connection.query(
+      `SELECT name,usrname,email,u_id FROM usrs WHERE email='${data.email}' or usrname='${data.usrname}'`,
+      (err, rows) => {
+        io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+          users: rows,
+        });
+      }
+    );
+  });
+  // Add new contact
+  socket.on("AddContact", (data) => {
+    var chat_type = 0;
+    var uuid_numbr = uuid.v4();
+    routes.validateExistChat(user.u_id, data.u_id).then((result) => {
+      //console.log(result);
+      message = `Hola soy ${user.name} , me gustaria contactar contigo.`;
+      if (result === false) {
+        console.log(result);
+        connection.query(
+          `INSERT  INTO chats (chat_uid,chat_name,chat_type) VALUES ('${uuid_numbr}','Chat1:1',${chat_type})`
+        );
+        connection.query(
+          `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${data.u_id}',${chat_type})`
+        );
+        connection.query(
+          `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${user.u_id}',${chat_type})`
+        );
+        io.to(user.u_id).emit("init message", {
+          chat: uuid_numbr,
+          message,
+        });
+      }
+    });
+  });
+  //Obtaine contacts
+  socket.on("GetContacts", () => {
+    connection.query(
+      `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, 
+      m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
+    
+    from chats_users  
+
+    inner join chats_users chats2 on chats2.chat_uid = chats_users.chat_uid
+    inner join usrs on usrs.u_id = chats2.u_id
+
+    inner join chats on chats_users.chat_uid = chats.chat_uid 
+    left join messages m on m.chat_uid = chats.chat_uid 
+      and m.message_id = 
+        (
+          SELECT MAX(message_id) 
+          FROM messages z 
+          WHERE z.chat_uid = m.chat_uid
+        )
+    where chats_users.u_id = '${user.u_id}'
+    order by time desc;`,
+      (err, chats) => {
+        io.to(user.u_id).emit("retrive GetContacts", {
+          my_uid: user.u_id,
+          chats,
+        });
+      }
+    );
+  });
+  //Init Message
+  socket.on("init message", (msg) => {
+    chat = msg.chat;
+    message = msg.message;
+    from = user.u_id;
+    time = new Date();
+    timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
+    console.log(message);
+    connection.query(`insert into messages(chat_uid, u_id, message,time) 
+                            values ('${chat}','${from}','${message}','${timeDB}')`);
   });
 });
 

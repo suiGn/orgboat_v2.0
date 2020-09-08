@@ -396,3 +396,26 @@ exports.pphotourl = async function (req, res) {
     );
   });
 };
+
+exports.validateExistChat = async function (user_uid, contact_uid) {
+  return new Promise((resolve, reject) => {
+    index.orgboatDB.query(
+      `SELECT chat_uid FROM chats_users WHERE u_id = '${contact_uid}'`,
+      (err, contacts) => {
+        index.orgboatDB.query(
+          `SELECT chat_uid FROM chats_users WHERE u_id='${user_uid}'`,
+          (err, chatuid) => {
+            console.log(chatuid);
+            console.log(contacts);
+            const found = contacts.some((r) =>
+              chatuid.some((u) => u.chat_uid === r.chat_uid)
+            );
+            //console.log(found);
+            return resolve(found);
+          }
+        );
+        //return err ? reject(err) : resolve(false);
+      }
+    );
+  });
+};
