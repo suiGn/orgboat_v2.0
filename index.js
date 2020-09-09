@@ -430,12 +430,14 @@ io.on("connection", function (socket) {
           `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${data.u_id}',${chat_type})`
         );
         connection.query(
-          `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${user.u_id}',${chat_type})`
+          `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${user.u_id}',${chat_type})`,
+          (err, data) => {
+            io.to(user.u_id).emit("retrive Addcontact", {
+              chat: uuid_numbr,
+              message,
+            });
+          }
         );
-        io.to(user.u_id).emit("init message", {
-          chat: uuid_numbr,
-          message,
-        });
       }
     });
   });
@@ -475,7 +477,7 @@ io.on("connection", function (socket) {
     from = user.u_id;
     time = new Date();
     timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
-    console.log(message);
+    console.log(msg);
     connection.query(`insert into messages(chat_uid, u_id, message,time) 
                             values ('${chat}','${from}','${message}','${timeDB}')`);
   });

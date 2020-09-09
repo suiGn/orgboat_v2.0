@@ -7,7 +7,7 @@ SearchUserByEmailOrUserName = () => {
     $("#searchusers-list").html("");
     data.users.forEach((user) => {
       $("#searchusers-list").append(
-        `<li>${user.name}<button type="button" onclick="AddUserContact('${user.u_id}')">Add</button></li>`
+        `<li>${user.name}<button type="button" onclick="AddUserContact('${user.u_id}')" data-dismiss="modal">Add</button></li>`
       );
     });
   });
@@ -16,6 +16,13 @@ AddUserContact = (u_id) => {
   console.log(u_id);
   var socket = io();
   socket.emit("AddContact", { u_id: u_id });
+  socket.on("retrive Addcontact", (mssg) => {
+    console.log(mssg);
+    socket.emit("init message", {
+      chat: mssg.chat,
+      message: mssg.message,
+    });
+  });
 };
 
 ChargeContacts = () => {
@@ -23,7 +30,7 @@ ChargeContacts = () => {
   socket.emit("GetContacts");
   socket.on("retrive GetContacts", (contacts) => {
     //console.log(contacts);
-    $("#contacts-list").html("");
+    $("#contacts-list").empty();
     if (contacts.chats.length > 0) {
       var currentPage = 0;
       var my_uid = contacts.my_uid;
