@@ -17,6 +17,7 @@ AddUserContact = (u_id) => {
   var socket = io();
   socket.emit("AddContact", { u_id: u_id });
   socket.on("retrive Addcontact", (mssg) => {
+    ChargeContacts();
     console.log(mssg);
     socket.emit("init message", {
       chat: mssg.chat,
