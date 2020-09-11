@@ -179,6 +179,7 @@ var io = require("socket.io")(http);
 var passportSocketIo = require("passport.socketio");
 const { router } = require("websocket");
 const { error } = require("console");
+const { json } = require("sequelize");
 exports.io = io;
 io.set("origins", "*:*");
 //With Socket.io >= 1.0
@@ -217,8 +218,9 @@ io.on("connection", function (socket) {
     //console.log(user.pphoto);
     connection.query(
       `
-			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, 
-				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
+			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,
+        m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
+        ,chats_users.delete_chat
 			
 			from chats_users  
 
@@ -307,8 +309,8 @@ io.on("connection", function (socket) {
       }
     );
     timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
-    connection.query(`insert into messages(chat_uid, u_id, message,time) 
-                            values ('${chat}','${from}','${message}','${timeDB}')`);
+    connection.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
+                            values ('${chat}','${from}','${message}','${timeDB}',0)`);
   });
 
   //Client request the messages
@@ -478,8 +480,79 @@ io.on("connection", function (socket) {
     time = new Date();
     timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
     console.log(msg);
-    connection.query(`insert into messages(chat_uid, u_id, message,time) 
-                            values ('${chat}','${from}','${message}','${timeDB}')`);
+    connection.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
+                            values ('${chat}','${from}','${message}','${timeDB}',0)`);
+  });
+  //Delete Chat
+  socket.on("Delete Chat", (chatid) => {
+    connection.query(
+      `UPDATE chats_users SET delete_chat = 1 WHERE chat_uid='${chatid.chat_uid}' AND u_id='${user.u_id}'`,
+      (err, data) => {
+        if (err) {
+          return json({
+            ok: false,
+            err: {
+              message: "No se pudo eliminar el chat",
+            },
+          });
+        }
+        connection.query(
+          `UPDATE messages SET delete_message =1 WHERE chat_uid='${chatid.chat_uid}' AND u_id='${user.u_id}'`,
+          (err, data) => {
+            if (err) {
+              return json({
+                ok: false,
+                err: {
+                  message: "No se pudo eliminar el chat",
+                },
+              });
+            }
+            io.to(user.u_id).emit("retrive delete chat");
+          }
+        );
+      }
+    );
+  });
+  socket.on("newChat", (chat) => {
+    connection.query(
+      `SELECT archiveChat,delete_chat,chat_uid,u_id FROM chats_users WHERE chat_uid='${chat.chat_uid}' and u_id='${user.u_id}'`,
+      (err, chats) => {
+        if (err) {
+          return json({
+            ok: false,
+            err: {
+              message: "error al iniciar el chat",
+            },
+          });
+        }
+        if (chats.length >= 1) {
+          console.log(chats);
+          if (chats[0].delete_chat == 1) {
+            connection.query(
+              `UPDATE chats_users SET delete_chat = 0 WHERE chat_uid='${chat.chat_uid}' AND u_id='${user.u_id}'`,
+              (err, data) => {
+                if (err) {
+                  return json({
+                    ok: false,
+                    err: {
+                      message: "error al iniciar el chat",
+                    },
+                  });
+                }
+                io.to(user.u_id).emit("retrive newchat");
+              }
+            );
+          }
+        } else {
+          return json({
+            ok: false,
+            err: {
+              message: "error no se agregado al usuario",
+            },
+          });
+        }
+      }
+    );
   });
 });
 

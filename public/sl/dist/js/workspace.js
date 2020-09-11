@@ -17,7 +17,11 @@ $(document).ready(function () {
         console.log(chat);
         //var pphoto =
         //Chat_type = 0 = 1:1
-        if (chat.chat_type == 0 && chat.archiveChat == 0) {
+        if (
+          chat.chat_type == 0 &&
+          chat.archiveChat == 0 &&
+          chat.delete_chat == 0
+        ) {
           var chat_initial;
           var chat_name;
           var chat_with_usr = chat.user_chat;
@@ -89,7 +93,9 @@ $(document).ready(function () {
         chat.chat_uid
       }')" class="dropdown-item">Add to archive</a>
       <div class="dropdown-divider"></div>
-      <a href="#" class="dropdown-item text-danger">Delete</a>
+      <a href="#" class="dropdown-item text-danger" onclick="DeleteChat('${
+        chat.chat_uid
+      }')">Delete</a>
       </div>					
       </div>
       </div>							
@@ -225,7 +231,7 @@ $(document).ready(function () {
                             <div class="dropdown-menu dropdown-menu-right">
                                 <button onClick="profiledata('${chat_selected}')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
                                 <a href="#" onClick="ArchiveChat('${chat_selected}')" class="dropdown-item">Add to archive</a>
-                                <a href="#" class="dropdown-item">Delete</a>
+                                <a href="#" class="dropdown-item" onclick="DeleteChat('${chat_selected}')">Delete</a>
                                 <div class="dropdown-divider"></div>
                                 <a href="#" class="dropdown-item text-danger">Block</a>
                             </div>
@@ -817,7 +823,7 @@ chatlist = (my_uid, chats, seccion, chatType, arhive) => {
             chat.chat_uid
           }')"class="dropdown-item">${arhive}</a>
       <div class="dropdown-divider"></div>
-      <a href="#" class="dropdown-item text-danger">Delete</a>
+      <a href="#" class="dropdown-item text-danger" onclick="DeleteChat('${chat_selected}')">Delete</a>
       </div>					
       </div>
       </div>							
@@ -889,7 +895,7 @@ chatlist = (my_uid, chats, seccion, chatType, arhive) => {
             chat.chat_uid
           }')" class="dropdown-item">${arhive}</a>
      <div class="dropdown-divider"></div>
-     <a href="#" class="dropdown-item text-danger">Delete</a>
+     <a href="#" class="dropdown-item text-danger" onclick="DeleteChat('${chat_selected}')">Delete</a>
      </div>
      </div>
      </div>
@@ -952,7 +958,7 @@ chatlist = (my_uid, chats, seccion, chatType, arhive) => {
                             <div class="dropdown-menu dropdown-menu-right">
                                 <button onClick="profiledata('${chat_selected}')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
                                 <a href="#" onClick="${arhive}('${chat_selected}')" class="dropdown-item">${arhive}</a>
-                                <a href="#" class="dropdown-item">Delete</a>
+                                <a href="#" class="dropdown-item" onclick="DeleteChat('${chat_selected}')">Delete</a>
                                 <div class="dropdown-divider"></div>
                                 <a href="#" class="dropdown-item text-danger">Block</a>
                             </div>

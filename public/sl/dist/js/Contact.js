@@ -65,7 +65,7 @@ ChargeContacts = () => {
                           <i class="fa fa-ellipsis-h"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                          <a href="#" class="dropdown-item" data-navigation-target="chats">New chat</a>
+                          <a href="#" class="dropdown-item" data-navigation-target="chats" onclick="NewChat('${contact.chat_uid}')">New chat</a>
                           <a href="#" data-navigation-target="contact-information" class="dropdown-item" onClick="profiledata('${contact.chat_uid}')">Profile</a>
                           <div class="dropdown-divider"></div>
                             <a href="#" class="dropdown-item text-danger">Block</a>
@@ -82,5 +82,13 @@ ChargeContacts = () => {
         }
       });
     }
+  });
+};
+
+NewChat = (idchat) => {
+  let socket = io();
+  socket.emit("newChat", { chat_uid: idchat });
+  socket.on("retrive newchat", () => {
+    socket.emit("get chats");
   });
 };
