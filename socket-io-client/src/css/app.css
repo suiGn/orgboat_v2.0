@@ -2244,9 +2244,9 @@ body {
   font-size: 14px;
 }
 
-body:not(.form-membership) {
+/* body:not(.form-membership) {
   overflow: hidden;
-}
+} */
 
 .btn {
   border-color: transparent;

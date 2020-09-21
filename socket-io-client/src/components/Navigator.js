@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 export default class Navigator extends React.Component{
     render(){
         return(
@@ -14,8 +15,6 @@ export default class Navigator extends React.Component{
                         <a className="active" data-navigation-target="chats" href="#" data-toggle="tooltip" title="Chats"
                            data-placement="right">
                             <span className="badge badge-warning"></span>
-                            {/* <i className="ti-comment"></i> */}
-                            {/* <i className="far fa-comment"></i> */}
                             <i data-feather="message-circle"></i>
                         </a>
                     </li>

@@ -72,12 +72,10 @@ const server = express()
   .post(
     "/login",
     passport.authenticate("local-login", {
-      successRedirect: "/workspace", // redirect to the secure profile section
-      failureRedirect: "/badLogin", // redirect back to the signup page if there is an error
-      failureFlash: true, // allow flash messages
+      successFlash: 'Welcome!', failureFlash: 'Invalid username or password.'
     }),
     function (req, res) {
-      res.redirect("/workspace");
+      res.redirect("http://127.0.0.1:3000/workspace");
     }
   )
   .get("/badLogin", routes.badLogin)
