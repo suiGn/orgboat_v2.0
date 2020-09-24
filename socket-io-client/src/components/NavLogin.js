@@ -20,7 +20,7 @@ export default class NavLogin extends React.Component{
       <div className="w-container">
         <nav role="navigation" className="navigation-menu w-nav-menu">
           <a
-            href="/subscribe"
+            href="/signup"
             className="navigation-link login w-nav-link"
           >
             Sign Up

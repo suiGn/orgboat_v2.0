@@ -263,6 +263,11 @@ p {
   text-decoration: none;
 }
 
+.login-form-footer a{
+  color: inherit!important;
+  text-decoration: none!important;
+}
+
 .lighthouse-background {
   position: relative;
   width: 100%;
@@ -1709,9 +1714,13 @@ p {
  text-decoration: none;
 }
 
+.google-button a{
+  color: inherit!important;
+}
+
 .google-button:focus,
 .google-button:hover {
-  box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1);
+  box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1)!important;
 }
 
 .google-button:active {
