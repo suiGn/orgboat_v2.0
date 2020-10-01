@@ -2285,7 +2285,7 @@ a:hover, a:focus {
 }
 
 .list-group-item {
-  background-color: inherit;
+  background-color: inheritno;
   border-color: #ebebeb;
 }
 
@@ -4111,4 +4111,22 @@ body.form-membership .form-wrapper hr {
     width: 100% !important;
     margin-bottom: 20px;
   }
+}
+
+
+.dark .list-group-item{
+  background-color: #1a2236!important;
+}
+
+.chat-body-custom{
+  margin-top: 144px;
+}
+
+.custom-chat-message .lead{
+  margin-top: 21px;
+  text-align: center;
+}
+
+.content-custom{
+  overflow: hidden; outline: none;
 }
