@@ -6,15 +6,15 @@ import SignUp from './components/SignUp.js'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
-  return (
-    <Router>
-      <Switch>
-        <Route exact  path="/" component={Login}/>
-        <Route  path="/workspace" component={Workspace}/>
-        <Route  path="/signup" component={SignUp}/>
-      </Switch>
-    </Router>
 
+  return (
+      <Router>
+        <Switch>
+          <Route exact  path="/" component={Login}/>
+          <Route  path="/workspace" component={Workspace}/>
+          <Route  path="/signup" component={SignUp}/>
+        </Switch>
+      </Router>
   );
 }
 

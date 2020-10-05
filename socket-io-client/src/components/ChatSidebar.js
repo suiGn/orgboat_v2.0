@@ -1,36 +1,13 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
-import { createStore } from 'redux';
+
 const ENDPOINT = "http://127.0.0.1:5000";
 
-function ChatSidebar(props) {
-  // const [response, setResponse] = useState([]);
+function ChatSidebar(props, clicked ) {
+  // const [clicked, setClicked] = useState([]);
   let chats;
   let my_uid;
-  // useEffect(() => {
-  //   const socket = socketIOClient(ENDPOINT);
-  //   socket.emit("get chats");
-  //   socket.on("retrieve chats", (response) => {
-  //     setResponse(response);
-  //     // console.log(response);
-  //   });
-  // }, [ENDPOINT]);
 
-
-
-// a "reducer" that handle some events and return a state
-  function counter(state, action) {
-    return  action.id
-  }
-
-  let store = createStore(counter)
-
-store.subscribe(() =>
-  // console.log(store.dispatch({ type: 'id' }))
-  console.log(store.getState())
-)
-
-  
   chats = props.response.chats;
   my_uid = props.response.my_uid;
   console.log("Respuesta", props);
@@ -160,13 +137,13 @@ store.subscribe(() =>
                   }
                   return (
                     <li
-                      className="list-group-item chat-conversation-select"
+                      className={(clicked === chat.chat_uid && 'is-active' ) ? 'list-group-item chat-conversation-select chat-is-active' : 'list-group-item chat-conversation-select' } 
                       key={chat.chat_uid}
                       i={chat.chat_uid}
                       n={chat_name}
                       t={timeMessage.getTime()}
                       u={chat_with_usr}
-                      onClick={()=>store.dispatch( {id : chat.chat_uid, type: 'ID' })}
+                      onClick={ () => {props.setClicked(chat.chat_uid)}}
                     >
                       <div>
                         <figure className="avatar">{p}</figure>
