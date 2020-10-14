@@ -4,7 +4,7 @@ import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://127.0.0.1:5000";
 
 function ArchiveSidebar(props, clicked) {
-  const [archive, setUnarchive] = useState([]);
+  const [unarchive, setUnarchive] = useState([]);
   let chats = props.response.chats;
 
   let my_uid = props.response.my_uid;
@@ -57,6 +57,7 @@ function ArchiveSidebar(props, clicked) {
     const socket = socketIOClient(ENDPOINT);
     socket.emit("Unarchive chat", { chat: chat_selected });
     socket.on("Unarchive response", function (data) {
+      socket.emit("get chats");
       // ChatArchive();
       // setUnarchive
     });
