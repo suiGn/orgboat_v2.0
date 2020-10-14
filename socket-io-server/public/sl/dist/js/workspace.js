@@ -69,8 +69,8 @@ $(document).ready(function () {
         <div>
         <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
         <p class = 'last-message-chat' i='${chat.chat_uid}'>${
-                chat.last_message_message
-              }</p>
+              chat.last_message_message
+            }</p>
         </div>				
         <div class="users-list-action">
           <div class="new-message-count d-none" i='${

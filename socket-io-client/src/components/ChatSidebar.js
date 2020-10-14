@@ -3,7 +3,7 @@ import socketIOClient from "socket.io-client";
 
 const ENDPOINT = "http://127.0.0.1:5000";
 
-function ChatSidebar(props, clicked ) {
+function ChatSidebar(props, clicked) {
   // const [clicked, setClicked] = useState([]);
   let chats;
   let my_uid;
@@ -32,6 +32,34 @@ function ChatSidebar(props, clicked ) {
     let dateLabelYear = date.getFullYear();
     let dateLabel = dateLabelDate + "/" + dateLabelMonth + "/" + dateLabelYear;
     return dateLabel;
+  }
+
+  // function profiledata(id) {
+  //   var socket = io();
+  //   socket.emit("ViewProfile", { id: id });
+  //   socket.on("retrieve viewprofile", function (data) {
+  //     UiProfile(data);
+  //   });
+  // }
+
+  // function ChatArchive(user) {
+  //   //console.log(user);
+  //   const socket = socketIOClient(ENDPOINT);
+  //   socket.emit("get chats archived");
+  //   socket.on("retrieve chats archived", function (data) {
+  //     let my_uid = data.my_uid;
+  //     let chats = data.chats;
+  //     chatlist(my_uid, chats, "#chats-archive-list", 0, "Unarchive");
+  //   });
+  // }
+
+  function ArchiveChat(chat_selected) {
+    console.log("Archivar");
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("archived chat", { chat: chat_selected });
+    socket.on("archived response", function () {
+      socket.emit("get chats");
+    });
   }
 
   return (
@@ -137,13 +165,19 @@ function ChatSidebar(props, clicked ) {
                   }
                   return (
                     <li
-                      className={(clicked === chat.chat_uid && 'is-active' ) ? 'list-group-item chat-conversation-select chat-is-active' : 'list-group-item chat-conversation-select' } 
+                      className={
+                        clicked === chat.chat_uid && "is-active"
+                          ? "list-group-item chat-conversation-select chat-is-active"
+                          : "list-group-item chat-conversation-select"
+                      }
                       key={chat.chat_uid}
                       i={chat.chat_uid}
                       n={chat_name}
                       t={timeMessage.getTime()}
                       u={chat_with_usr}
-                      onClick={ () => {props.setClicked(chat.chat_uid)}}
+                      onClick={() => {
+                        props.setClicked(chat.chat_uid);
+                      }}
                     >
                       <div>
                         <figure className="avatar">{p}</figure>
@@ -171,16 +205,16 @@ function ChatSidebar(props, clicked ) {
                           <div className="action-toggle">
                             <div className="dropdown">
                               <a data-toggle="dropdown" href="#">
-                                <i className="fa fa-ellipsis-h"></i>
+                                <i className="ti-more-alt"></i>
                               </a>
                               <div className="dropdown-menu dropdown-menu-right">
                                 <a href="#" className="dropdown-item">
                                   Open
                                 </a>
                                 <button
-                                //   onClick="profiledata('${
-                                //   chat.chat_uid
-                                // }')"
+                                  //   onClick="profiledata('${
+                                  //   chat.chat_uid
+                                  // }')"
                                   data-navigation-target="contact-information"
                                   className="dropdown-item"
                                 >
@@ -188,9 +222,7 @@ function ChatSidebar(props, clicked ) {
                                 </button>
                                 <a
                                   href="#"
-                                //   onClick="ArchiveChat('${
-                                //   chat.chat_uid
-                                // }')"
+                                  onClick={() => ArchiveChat(chat.chat_uid)}
                                   className="dropdown-item"
                                 >
                                   Add to archive
@@ -199,9 +231,9 @@ function ChatSidebar(props, clicked ) {
                                 <a
                                   href="#"
                                   className="dropdown-item text-danger"
-                                //   onclick="DeleteChat('${
-                                //   chat.chat_uid
-                                // }')"
+                                  //   onclick="DeleteChat('${
+                                  //   chat.chat_uid
+                                  // }')"
                                 >
                                   Delete
                                 </a>
@@ -245,7 +277,7 @@ function ChatSidebar(props, clicked ) {
                         n={chat_name}
                         t={timeMessage.getTime()}
                         u={chat_with_usr}
-                        onClick={()=>console.log("holaaaa")}
+                        onClick={() => console.log("holaaaa")}
                       >
                         <div>
                           <figure className="avatar">
