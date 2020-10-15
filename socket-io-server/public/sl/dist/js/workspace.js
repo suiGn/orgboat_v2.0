@@ -60,47 +60,46 @@ $(document).ready(function () {
       <li class="list-group-item chat-conversation-select" i='${
         chat.chat_uid
       }' n='${chat_name}' t='${timeMessage.getTime()}' u='${chat_with_usr}'>					
-        <div>
-          <figure class="avatar">
-          ${p}
-          </figure>
-        </div>				
+      <div>
+      <figure class="avatar">
+      ${p}
+      </figure>
+      </div>				
       <div class="users-list-body">
-        <div>
-        <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
-        <p class = 'last-message-chat' i='${chat.chat_uid}'>${
+      <div>
+      <h5 class = 'last-message-user' i='${chat.chat_uid}'>${chat_name}</h5>
+      <p class = 'last-message-chat' i='${chat.chat_uid}'>${
               chat.last_message_message
             }</p>
-        </div>				
-        <div class="users-list-action">
-          <div class="new-message-count d-none" i='${
-            chat.chat_uid
-          }' style='height:9px; width:9px; margin-bottom: 12px;' >
-          </div>
-            <small class="text-muted last-message-time" i='${
-              chat.chat_uid
-            }'>${timeLabel} 111</small>
-            <div class="action-toggle">
-              <div class="dropdown">						
-                <a data-toggle="dropdown" href="#">
-                <i class="fa fa-ellipsis-h"></i>
-                </a>					
-                <div class="dropdown-menu dropdown-menu-right">
-                  <a href="#" class="dropdown-item">Open</a>
-                  <button onClick="profiledata('${
-                    chat.chat_uid
-                  }')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
-                  <a href="#" onClick="ArchiveChat('${
-                    chat.chat_uid
-                  }')" class="dropdown-item">Add to archive</a>
-                  <div class="dropdown-divider"></div>
-                  <a href="#" class="dropdown-item text-danger" onclick="DeleteChat('${
-                    chat.chat_uid
-                  }')">Delete</a>
-                </div>					
-              </div>
-            </div>							
-        </div>					
+      </div>				
+      <div class="users-list-action">
+      <div class="new-message-count d-none" i='${
+        chat.chat_uid
+      }' style='height:9px; width:9px; margin-bottom: 12px;' ></div>
+      <small class="text-muted last-message-time" i='${
+        chat.chat_uid
+      }'>${timeLabel} 111</small>
+      <div class="action-toggle">
+      <div class="dropdown">						
+      <a data-toggle="dropdown" href="#">
+      <i class="fa fa-ellipsis-h"></i>
+      </a>					
+      <div class="dropdown-menu dropdown-menu-right">
+      <a href="#" class="dropdown-item">Open</a>
+      <button onClick="profiledata('${
+        chat.chat_uid
+      }')" data-navigation-target="contact-information" class="dropdown-item">Profile</button>
+      <a href="#" onClick="ArchiveChat('${
+        chat.chat_uid
+      }')" class="dropdown-item">Add to archive</a>
+      <div class="dropdown-divider"></div>
+      <a href="#" class="dropdown-item text-danger" onclick="DeleteChat('${
+        chat.chat_uid
+      }')">Delete</a>
+      </div>					
+      </div>
+      </div>							
+      </div>					
       </div>
       </li>
 		`);
