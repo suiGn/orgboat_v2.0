@@ -1,14 +1,12 @@
 const { io, orgboatDB, sessionStore, server } = require("../index");
 const { json } = require("sequelize");
+const uuid = require("node-uuid");
 
 io.on("connection", function (socket) {
   //login in socket
   try {
     var user = socket.request.session.passport.user;
-  } catch {
-    console.log("problema");
-  }
-  console.log(user);
+    console.log(user);
   if (user != null || user != undefined) {
     socket.join(user.u_id);
     console.log(
@@ -370,6 +368,9 @@ io.on("connection", function (socket) {
       }
     );
   });
+  } catch {
+    console.log("problema");
+  }
   //Delete message
   //socket.on('Delete message',())
 });
