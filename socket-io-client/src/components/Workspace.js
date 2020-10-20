@@ -6,11 +6,13 @@ import ArchiveSidebar from "./ArchiveSidebar";
 import FriendSidebar from "./FriendSidebar";
 import FavoriteSidebar from "./FavoriteSidebar";
 import ChatBody from "./ChatBody";
+import Profile from "./Profile.js";
 const ENDPOINT = "http://127.0.0.1:5000";
 
 function Workspace() {
   const [response, setResponse] = useState([]);
   const [clicked, setClicked] = useState(0);
+  const [userProfile, setuserProfile] = useState([]);
   let chats;
 
   useEffect(() => {
@@ -27,13 +29,14 @@ function Workspace() {
 
   return (
     <div className="layout">
-      <Navigator />
+      <Navigator my_uid={my_uid} setuserProfile={setuserProfile} />
       <div className="content">
         <div className="sidebar-group">
           <ChatSidebar
             clicked={clicked}
             setClicked={setClicked}
             response={response}
+            setuserProfile={setuserProfile}
           />
           <ArchiveSidebar
             clicked={clicked}
@@ -44,6 +47,7 @@ function Workspace() {
           <FavoriteSidebar />
         </div>
         <ChatBody my_uid={my_uid} clicked={clicked} />
+        <Profile userProfile={userProfile} />
       </div>
     </div>
   );

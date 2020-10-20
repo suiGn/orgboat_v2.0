@@ -34,31 +34,20 @@ function ChatSidebar(props, clicked) {
     return dateLabel;
   }
 
-  // function profiledata(id) {
-  //   var socket = io();
-  //   socket.emit("ViewProfile", { id: id });
-  //   socket.on("retrieve viewprofile", function (data) {
-  //     UiProfile(data);
-  //   });
-  // }
-
-  // function ChatArchive(user) {
-  //   //console.log(user);
-  //   const socket = socketIOClient(ENDPOINT);
-  //   socket.emit("get chats archived");
-  //   socket.on("retrieve chats archived", function (data) {
-  //     let my_uid = data.my_uid;
-  //     let chats = data.chats;
-  //     chatlist(my_uid, chats, "#chats-archive-list", 0, "Unarchive");
-  //   });
-  // }
-
   function ArchiveChat(chat_selected) {
-    console.log("Archivar");
     const socket = socketIOClient(ENDPOINT);
     socket.emit("archived chat", { chat: chat_selected });
     socket.on("archived response", function () {
       socket.emit("get chats");
+    });
+  }
+
+  function profiledata(id) {
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("ViewProfile", { id: id });
+    socket.on("retrieve viewprofile", function (data) {
+      console.log(data);
+      props.setuserProfile(data);
     });
   }
 
@@ -212,9 +201,7 @@ function ChatSidebar(props, clicked) {
                                   Open
                                 </a>
                                 <button
-                                  //   onClick="profiledata('${
-                                  //   chat.chat_uid
-                                  // }')"
+                                  onClick={() => profiledata(chat.chat_uid)}
                                   data-navigation-target="contact-information"
                                   className="dropdown-item"
                                 >
