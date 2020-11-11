@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://127.0.0.1:5000";
 
 function ChatBodyMessage(props) {
-  let messages = props.messages;
+  const [newMessage, setnewMessage] = useState([]);
+
+  let messages = [].concat(props.messages).reverse();
+
   let actualLabelDate = "";
   let message_user_uid;
   let pphoto = "";
@@ -9,8 +14,6 @@ function ChatBodyMessage(props) {
   let p;
   let chat_uid = props.chat_uid;
   let my_uid = props.my_uid;
-
-  console.log("uid", my_uid);
 
   function timeformat(date) {
     var h = date.getHours();
@@ -57,19 +60,17 @@ function ChatBodyMessage(props) {
     }
   }
   let dateSend = new Date(messages[0].time);
-  let dateLabel = getDateLabel(dateSend);
+
   let yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   let yesterdayLabel = getDateLabel(yesterday);
   let todayLabel = getDateLabel(new Date());
 
-  function getTodayLabel() {
+  function getTodayLabel(dateLabel) {
     if (dateLabel == yesterdayLabel) {
-      dateLabel =
-        "&#160;&#160;&#160;&#160;&#160;&#160;Ayer&#160;&#160;&#160;&#160;&#160;&#160;";
+      dateLabel = "Ayer";
     } else if (dateLabel == todayLabel) {
-      dateLabel =
-        "&#160;&#160;&#160;&#160;&#160;&#160;Hoy&#160;&#160;&#160;&#160;&#160;&#160;";
+      dateLabel = "Hoy";
     }
 
     if (actualLabelDate == dateLabel) {
@@ -85,7 +86,19 @@ function ChatBodyMessage(props) {
     }
   }
 
-  console.log(messages);
+  function SendMessage(event) {
+    event.preventDefault();
+
+    const socket = socketIOClient(ENDPOINT);
+    if (newMessage.length > 0) {
+      socket.emit("chat message", { chat: chat_uid, message: newMessage });
+      socket.emit("get chats");
+      socket.emit("get messages", { id: chat_uid, page: props.currentPage });
+      setnewMessage("");
+    }
+  }
+
+  console.log("cookie", document.cookie);
 
   return (
     <div>
@@ -162,46 +175,48 @@ function ChatBodyMessage(props) {
       </div>
       <div className="chat-body">
         <div className="messages">
-          {getTodayLabel()}
-
-          {messages.map((message) => {
+          {messages.map((message, index) => {
             message_user_uid = message.message_user_uid;
 
+            dateSend = new Date(message.time);
             let timeSend = timeformat(dateSend);
-            console.log("nuevo", my_uid, message_user_uid);
             let out = my_uid == message_user_uid ? "outgoing-message" : "";
             let ticks =
-              my_uid == message_user_uid ? <i class="ti-check"></i> : ""; // double checked
+              my_uid == message_user_uid ? <i className="ti-check"></i> : ""; // double checked
             let usrname =
               message.chat_type == 1 && my_uid != message_user_uid
                 ? message.name
                 : "";
+
             return (
-              <div className={"message-item " + out}>
-                {usrname}
-                <div className="message-content">
-                  <a
-                    href="#"
-                    className="btn btn-outline-light"
-                    data-toggle="dropdown"
-                  >
-                    <i className="ti-more" />
-                  </a>
-                  <div className="dropdown-menu dropdown-menu-right">
+              <div className="messages-container" key={index + 1}>
+                {getTodayLabel(getDateLabel(dateSend))}
+                <div className={"message-item " + out}>
+                  {usrname}
+                  <div className="message-content">
                     <a
                       href="#"
-                      className="dropdown-item"
-                      onclick="DeleteChat('a4bbbc58-97ea-46a9-8065-6a3194b9527b')"
+                      className="btn btn-outline-light"
+                      data-toggle="dropdown"
                     >
-                      Delete
+                      <i className="ti-more" />
                     </a>
-                  </div>
-                  {message.message}
-                  <div className="message-avatar">
-                    <div>
-                      <div className="time">
-                        {timeSend} {ticks}
-                        <i class="ti-check"></i>
+                    <div className="dropdown-menu dropdown-menu-right">
+                      <a
+                        href="#"
+                        className="dropdown-item"
+                        onClick="DeleteChat('a4bbbc58-97ea-46a9-8065-6a3194b9527b')"
+                      >
+                        Delete
+                      </a>
+                    </div>
+                    {message.message}
+                    <div className="message-avatar">
+                      <div>
+                        <div className="time">
+                          {timeSend} {ticks}
+                          <i className="ti-check"></i>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -210,6 +225,50 @@ function ChatBodyMessage(props) {
             );
           })}
         </div>
+      </div>
+      <div className="chat-footer">
+        <form
+          onSubmit={(event) => props.SendMessage(event, newMessage, chat_uid)}
+        >
+          <div>
+            <button
+              className="btn btn-light mr-3"
+              data-toggle="tooltip"
+              title="Emoji"
+              type="button"
+            >
+              <i className="ti-face-smile" />
+            </button>
+          </div>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Write a message."
+            value={newMessage}
+            onChange={(e) => setnewMessage(e.target.value)}
+          />
+          <div className="form-buttons">
+            <button
+              className="btn btn-light"
+              data-toggle="tooltip"
+              title="Add files"
+              type="button"
+            >
+              <i className="ti-clip" />
+            </button>
+            <button
+              className="btn btn-light d-sm-none d-block"
+              data-toggle="tooltip"
+              title="Send a voice record"
+              type="button"
+            >
+              <i data-feather="mic" />
+            </button>
+            <button className="btn btn-primary" type="submit">
+              <i className="ti-location-arrow" />
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

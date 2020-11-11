@@ -4139,7 +4139,7 @@ body.form-membership .form-wrapper hr {
   -moz-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 .layout
@@ -4516,4 +4516,73 @@ body.form-membership .form-wrapper hr {
 .content-custom {
   overflow: hidden;
   outline: none;
+}
+
+.chat-body {
+  outline: none;
+  height: calc(100vh - 188px);
+}
+
+body.dark
+  .layout
+  .content
+  .chat
+  .chat-body
+  .messages
+  .message-item
+  .message-content {
+  background-color: #212124;
+  border: 0.5px solid;
+  border-color: #f3c96e;
+  max-width: 377px;
+  word-wrap: break-word;
+}
+
+.messages-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1em;
+  max-width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dark .outgoing-message .message-avatar .time {
+  color: #828282 !important;
+}
+
+body.dark
+  .layout
+  .content
+  .chat
+  .chat-body
+  .messages
+  .message-item:not(.outgoing-message)
+  .message-content {
+  background-color: #212124;
+  border: 0.5px solid;
+  border-color: #3cdbc3;
+}
+
+body.dark,
+body.dark .layout .content .sidebar-group .sidebar,
+body.dark .list-group-item,
+body.dark .form-control,
+body.dark nav.navigation {
+  background-color: #212124 !important;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+body.dark .dropdown-menu,
+body.dark .dropdown-menu .dropdown-item {
+  background-color: #2c2b30;
+  border-color: transparent;
+}
+
+body.dark .btn.btn-light {
+  background-color: #212124;
+  border-color: #3d4559;
+  color: rgba(255, 255, 255, 0.75);
 }

@@ -114,7 +114,10 @@ function Navigator(props) {
                 Settings
               </a>
               <div className="dropdown-divider"></div>
-              <a href="login.html" className="dropdown-item text-danger">
+              <a
+                href="http://127.0.0.1:5000/logout"
+                className="dropdown-item text-danger"
+              >
                 Logout
               </a>
             </div>

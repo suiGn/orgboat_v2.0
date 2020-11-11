@@ -7,39 +7,54 @@ import ReactDOM from "react-dom";
 import $ from "jquery";
 const ENDPOINT = "http://127.0.0.1:5000";
 
-function ChatBody({ my_uid, clicked }) {
-  const [chatMessages, setChatMessages] = useState([]);
+function ChatBody({ messages, my_uid, clicked, SendMessage }) {
+  // const [chatMessages, setChatMessages] = useState([]);
   let messagesArray;
   let currentPage = 0;
 
   console.log(clicked);
-  useEffect(() => {
-    if (clicked != 0) {
-      const socket = socketIOClient(ENDPOINT);
-      console.log("uid", clicked);
+  // useEffect(() => {
+  //   if (clicked != 0) {
+  //     const socket = socketIOClient(ENDPOINT);
+  //     console.log("uid", clicked);
 
-      socket.on("retrieve messages", (response) => {
-        setChatMessages(response);
-        console.log("messages", response);
-      });
+  //     socket.on("retrieve messages", (response) => {
+  //       setChatMessages((chatMessages) => [...chatMessages, response]);
+  //       socket.emit("get chats");
+  //       console.log("messages", response);
+  //     });
+  //     currentPage = currentPage + 1;
+  //     socket.emit("get messages", { id: clicked, page: currentPage });
+  //   }
+  // }, [clicked]);
 
-      socket.emit("get messages", { id: clicked, page: currentPage + 1 });
-    }
-  }, [clicked]);
+  // function SendMessage(event, newMessage, chat_uid) {
+  //   event.preventDefault();
 
-  messagesArray = chatMessages;
+  //   const socket = socketIOClient(ENDPOINT);
+  //   if (newMessage.length > 0) {
+  //     socket.emit("chat message", { chat: chat_uid, message: newMessage });
+  //     socket.emit("get chats");
+  //     socket.emit("get messages", { id: chat_uid, page: currentPage });
+  //     // setnewMessage("");
+  //   }
+  // }
+
+  messagesArray = messages;
   // messages = response.chats;
   // my_uid = response.my_uid;
   // console.log("Respuesta", response);
   return (
     <div className="chat">
-      {messagesArray &&
-      messagesArray.messages &&
-      messagesArray.messages.length > 0 ? (
+      {messagesArray[messagesArray.length - 1] &&
+      messagesArray[messagesArray.length - 1].messages &&
+      messagesArray[messagesArray.length - 1].messages.length > 0 ? (
         <ChatBodyMessage
-          messages={messagesArray.messages.reverse()}
+          messages={messagesArray[messagesArray.length - 1].messages}
           chat_uid={clicked}
           my_uid={my_uid}
+          page={currentPage}
+          SendMessage={SendMessage}
         />
       ) : (
         <ChatBodyNoMessage />

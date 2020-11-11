@@ -731,6 +731,7 @@ function SendMessage(chat_selected) {
     input.focus();
   }
 }
+
 function ArchiveChat(chat_selected) {
   console.log("Archivar");
   var socket = io();
