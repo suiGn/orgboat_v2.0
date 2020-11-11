@@ -4586,3 +4586,10 @@ body.dark .btn.btn-light {
   border-color: #3d4559;
   color: rgba(255, 255, 255, 0.75);
 }
+
+.text-block-43 {
+  margin-top: -18px;
+  margin-bottom: 15px;
+  color: #cf404d;
+  font-size: 14px;
+}

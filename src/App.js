@@ -9,7 +9,8 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" component={Login} />
+        <Route exact path="/" component={Login} isBadLogin={''}/>
+        <Route path="/badLogin" render={(props) => (<Login isBadLogin={'Invalid Username or Password'} />)} />
         <Route path="/workspace" component={Workspace} />
         <Route path="/signup" component={SignUp} />
       </Switch>

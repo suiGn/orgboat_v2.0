@@ -79,8 +79,9 @@ const server = express()
   .post(
     "/login",
     passport.authenticate("local-login", {
-      successFlash: "Welcome!",
-      failureFlash: "Invalid username or password.",
+      successRedirect: "/workspace", // redirect to the secure profile section
+      failureRedirect: "/badLogin", // redirect back to the signup page if there is an error
+      failureFlash: true, // allow flash messages
     }),
     function (req, res) {
       console.log("Inicio Session");
