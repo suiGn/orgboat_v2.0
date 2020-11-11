@@ -17,3 +17,5 @@ process.env.URL_FRONT = urlFront;
 module.exports = {
   llave: "miclaveultrasecreta123*",
 };
+sessionName = "SESSION_ID";
+secretKey = "MYSECRETKEYDSAFGEWHWEfenig23974ovuwyfbhkjfvvfuo";

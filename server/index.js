@@ -7,9 +7,10 @@ Coded by Sui Gn			            *
 Copyrights Neurons Art & Technology *
 *************************************/
 const express = require("express");
+const cookieSession = require("cookie-session");
 const path = require("path");
 const PORT = process.env.PORT || 5000;
-const FRONT_END = process.env.URL_FRONT || "http://127.0.0.1:3000";
+//const FRONT_END = process.env.URL_FRONT || "http://127.0.0.1:5000";
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const config = require("./configs/config");
@@ -26,6 +27,8 @@ var uuid = require("node-uuid");
 var nodemailer = require("nodemailer");
 var cookieParser = require("cookie-parser");
 var passport = require("passport");
+var cors = require('cors');
+const buildPath = path.join(__dirname, '..', 'build');
 const {
   isLoggedIn,
   sessionMiddleware,
@@ -46,7 +49,6 @@ let options = {
   password: "wel73mofval4ua95",
   database: "v0mgbm8nfthxqwz1",
 };
-
 var connection = mysql.createConnection(options); // or mysql.createPool(options);
 var orgboatDB = connection;
 exports.orgboatDB = connection;
@@ -54,6 +56,7 @@ var sessionStore = new MySQLStore({} /* session store options */, connection);
 exports.sessionStore = sessionStore;
 
 const server = express()
+  //.use(cors())
   .use(express.static(path.join(__dirname, "public")))
   .use(cookieParser())
   .use(bodyParser.urlencoded({ extended: false }))
@@ -62,12 +65,17 @@ const server = express()
   .use(passport.initialize())
   .use(passport.session())
   .use(flash()) // use connect-flash for flash messages stored in session
-  .set("views", path.join(__dirname, "views"))
+  .use(express.static(buildPath))
+  
+  //.set("views", path.join(__dirname, "views"))
   // passport.authenticate middleware is used here to authenticate the request
-  .set("view engine", "ejs")
+  //.set("view engine", "ejs")
   // The middleware receives the data from Google and runs the function on Strategy config
-  .get("/", routes.home)
+  //.get("/", routes.home)
   // process the login form
+  .get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+  })
   .post(
     "/login",
     passport.authenticate("local-login", {
@@ -76,7 +84,7 @@ const server = express()
     }),
     function (req, res) {
       console.log("Inicio Session");
-      res.redirect(`${FRONT_END}/workspace`);
+      res.redirect(`/workspace`);
     }
   )
   .get("/badLogin", routes.badLogin)
@@ -112,7 +120,6 @@ const server = express()
     routes.authGoogle
   )
   .get("/lock-screen", routes.lockScreen)
-  .get("/workspace", isLoggedIn, routes.workspace)
   .post("/edProf", isLoggedIn, routes.editProfile)
   .post("/uploadpPhoto", function (req, res) {
     //console.log(req.user[0].u_id);
@@ -164,18 +171,19 @@ const server = express()
   });
 
 /** 			   o       o                                
-				   |       |                               
-				   o   o   o  
-					\ / \ / 
-					 o   o  ebsocket IO
+           |       |                               
+           o   o   o  
+          \ / \ / 
+           o   o  ebsocket IO
       __ _    __ 
      (_ / \	|_ 
      __)\_/	|__
-	**/
+  **/
 
 var http = require("http").Server(server);
 var io = require("socket.io")(http);
 var passportSocketIo = require("passport.socketio");
+const { json } = require("sequelize");
 //Move Socket in file socket.js
 io.set("origins", "*:*");
 //With Socket.io >= 1.0

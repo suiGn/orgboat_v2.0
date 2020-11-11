@@ -6,6 +6,8 @@
 
 const { sessionStore } = require("../index");
 var session = require("express-session");
+require('../configs/config');
+const { NONE } = require("sequelize");
 
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
@@ -61,10 +63,11 @@ function onAuthorizeFail(data, message, error, accept) {
 }
 
 var sessionMiddleware = session({
-  cookie: { maxAge: 24 * 60 * 60 * 1000 },
-  name: process.env.sessionName,
+  cookie: {
+    httpOnly: true , maxAge: 24 * 60 * 60 * 1000 },
+  name: sessionName,
   store: sessionStore,
-  secret: process.env.secretKey,
+  secret: secretKey,
   resave: false,
   saveUninitialized: true,
 });
@@ -75,4 +78,5 @@ module.exports = {
   isLoggedIn,
   formatLocalDate,
   sessionMiddleware,
+  formatLocalDate
 };
