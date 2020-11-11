@@ -88,7 +88,6 @@ const server = express()
       res.redirect(`/workspace`);
     }
   )
-  .get("/badLogin", routes.badLogin)
   .get("/logout", (req, res) => {
     req.logout();
     res.redirect("/");
