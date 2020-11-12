@@ -7,7 +7,7 @@ import FriendSidebar from "./FriendSidebar";
 import FavoriteSidebar from "./FavoriteSidebar";
 import ChatBody from "./ChatBody";
 import Profile from "./Profile.js";
-const ENDPOINT = "http://127.0.0.1:5000/";
+const ENDPOINT = "http://localhost:5000/";
 
 function Workspace() {
   const [response, setResponse] = useState([]);

@@ -14,7 +14,7 @@ function Login(props) {
               name="formLogin"
               data-name="loginForm"
               className="form-10"
-              action="http://127.0.0.1:5000/login"
+              action="http://localhost:5000/login"
               method="post"
             >
               <h1 className="fingertipsslogan login-head-form">LOG IN</h1>

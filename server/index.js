@@ -10,7 +10,7 @@ const express = require("express");
 const cookieSession = require("cookie-session");
 const path = require("path");
 const PORT = process.env.PORT || 5000;
-//const FRONT_END = process.env.URL_FRONT || "http://127.0.0.1:5000";
+//const FRONT_END = process.env.URL_FRONT || "http://localhost:5000";
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const config = require("./configs/config");
@@ -56,7 +56,7 @@ var sessionStore = new MySQLStore({} /* session store options */, connection);
 exports.sessionStore = sessionStore;
 
 const server = express()
-  //.use(cors())
+  .use(cors())
   .use(express.static(path.join(__dirname, "public")))
   .use(cookieParser())
   .use(bodyParser.urlencoded({ extended: false }))
@@ -71,8 +71,8 @@ const server = express()
   // passport.authenticate middleware is used here to authenticate the request
   //.set("view engine", "ejs")
   // The middleware receives the data from Google and runs the function on Strategy config
-  //.get("/", routes.home)
   // process the login form
+  .get("/logged",routes.home)
   .get('*', function(req, res) {
     res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
   })
@@ -184,14 +184,15 @@ var http = require("http").Server(server);
 var io = require("socket.io")(http);
 var passportSocketIo = require("passport.socketio");
 const { json } = require("sequelize");
+require('./configs/config')
 //Move Socket in file socket.js
 io.set("origins", "*:*");
 //With Socket.io >= 1.0
 io.use(
   passportSocketIo.authorize({
     cookieParser: cookieParser, // the same middleware you registrer in express
-    key: process.env.sessionName, // the name of the cookie where express/connect stores its session_id
-    secret: process.env.secretKey, // the session_secret to parse the cookie
+    key: sessionName, // the name of the cookie where express/connect stores its session_id
+    secret: secretKey, // the session_secret to parse the cookie
     store: sessionStore, // we NEED to use a sessionstore. no memorystore please
     success: onAuthorizeSuccess, // *optional* callback on success - read more below
     fail: onAuthorizeFail, // *optional* callback on fail/error - read more below

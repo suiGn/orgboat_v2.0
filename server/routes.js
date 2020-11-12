@@ -22,23 +22,13 @@ const { CustomValidation } = require("express-validator/src/context-items");
 
 exports.home = function (req, res) {
   if (req.isAuthenticated()) {
-    res.redirect("/workspace");
+    console.log('home');
+    res.json({ok:true});
   } else {
-    res.render("pages/index", {
-      opt1: "Sign Up",
-      opt2: "/subscribe",
-      opt3: " ",
-    });
+    res.json({ok:false});
   }
 };
 
-exports.badLogin = function (req, res) {
-  res.render("pages/index", {
-    opt1: "Sign Up",
-    opt2: "/subscribe",
-    opt3: "Invalid login credentials.",
-  });
-};
 exports.subscribe = function (req, res) {
   res.render("pages/subscribe", { opt: " ", opt1: "Log In", opt2: "/" });
 };
