@@ -27,7 +27,7 @@ function SignUp() {
             name="subForm"
             data-name="Subscribe Form"
             className="form-register-2"
-            action="http://127.0.0.1:5000/subscribing"
+            action="http://localhost:5000/subscribing"
             method="post"
             onsubmit="return validateForm()"
           >

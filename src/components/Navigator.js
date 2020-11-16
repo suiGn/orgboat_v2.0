@@ -1,6 +1,6 @@
 import React from "react";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://127.0.0.1:5000";
+const ENDPOINT = "http://localhost:5000";
 
 function Navigator(props) {
   function profiledata(id) {
@@ -115,7 +115,7 @@ function Navigator(props) {
               </a>
               <div className="dropdown-divider"></div>
               <a
-                href="http://127.0.0.1:5000/logout"
+                href="http://localhost:5000/logout"
                 className="dropdown-item text-danger"
               >
                 Logout

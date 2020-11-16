@@ -3,33 +3,13 @@ import NavLogin from "./NavLogin";
 import light from "../Images/mesure_2.png";
 import lighthouse from "../Images/tour_measure1.png";
 
-function Login() {
-  // const [data, setData] = useState([]);
-
-  // useEffect(() => {
-  //   fetchLogin();
-  // }, []);
-
-  // const fetchLogin = () => {
-  //   console.log("hola");
-  //   fetch("http://127.0.0.1:5000/login", {
-  //     method: "POST",
-  //   })
-  //     .then((res) => res.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       setData(result.rows);
-  //     })
-  //     .catch((err) => console.log("error"));
-  // };
-
+function Login(props) {
   return (
     <div className="bodylogin">
       <NavLogin />
       <div className="hero-section centered">
         <div className="w-container">
-          <div className="w-form">
-            <form
+          <div className="w-form">            <form
               id="email-form-3"
               name="formLogin"
               data-name="loginForm"
@@ -39,6 +19,7 @@ function Login() {
             >
               <h1 className="fingertipsslogan login-head-form">LOG IN</h1>
               <div className="underline login-blue-line"></div>
+              <div class="text-block-43">{props.isBadLogin}</div>
               {/* <div className="text-block-43">Login</div> */}
               <input
                 type="text"

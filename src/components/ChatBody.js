@@ -5,7 +5,7 @@ import ChatBodyMessage from "./ChatBodyMessage";
 import ChatSideBar from "./ChatSidebar";
 import ReactDOM from "react-dom";
 import $ from "jquery";
-const ENDPOINT = "http://127.0.0.1:5000";
+const ENDPOINT = "http://localhost:5000";
 
 function ChatBody({ messages, my_uid, clicked, SendMessage }) {
   // const [chatMessages, setChatMessages] = useState([]);
