@@ -111,7 +111,8 @@ function ChatBodyMessage(props) {
                 href="#"
                 className="btn btn-outline-light mobile-navigation-button"
               >
-                <i className="ti-more" />
+                {/* <i className="ti-more" /> */}
+                <i className="fal fa-ellipsis-h-alt"></i>
               </a>
             </li>
             <li
@@ -125,7 +126,8 @@ function ChatBodyMessage(props) {
                 data-toggle="modal"
                 data-target="#call"
               >
-                <i className="ti-mobile" />
+                {/* <i className="ti-mobile" /> */}
+                <i className="fas fa-phone"></i>
               </a>
             </li>
             <li
@@ -139,7 +141,8 @@ function ChatBodyMessage(props) {
                 data-toggle="modal"
                 data-target="#videoCall"
               >
-                <i className="ti-video-camera" />
+                {/* <i className="ti-video-camera" /> */}
+                <i className="fas fa-video"></i>
               </a>
             </li>
             <li className="list-inline-item">
@@ -194,12 +197,13 @@ function ChatBodyMessage(props) {
                 <div className={"message-item " + out}>
                   {usrname}
                   <div className="message-content">
-                    <a
+                    {message.message}
+                    {/* <a
                       href="#"
                       className="btn btn-outline-light"
                       data-toggle="dropdown"
                     >
-                      <i className="ti-more" />
+                      <i class="fas fa-ellipsis-h"></i>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right">
                       <a
@@ -209,8 +213,23 @@ function ChatBodyMessage(props) {
                       >
                         Delete
                       </a>
+                    </div> */}
+                    <div class="btn action-toggle">
+                      <div class="dropdown">
+                        <a
+                          className="text-light"
+                          data-toggle="dropdown"
+                          href="#"
+                        >
+                          <i class="fas fa-ellipsis-h"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-left">
+                          <a href="#" class="dropdown-item">
+                            Delete
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                    {message.message}
                     <div className="message-avatar">
                       <div>
                         <div className="time">
@@ -254,7 +273,8 @@ function ChatBodyMessage(props) {
               title="Add files"
               type="button"
             >
-              <i className="ti-clip" />
+              {/* <i className="ti-clip" /> */}
+              <i className="fas fa-paperclip"></i>
             </button>
             <button
               className="btn btn-light d-sm-none d-block"
@@ -265,7 +285,8 @@ function ChatBodyMessage(props) {
               <i data-feather="mic" />
             </button>
             <button className="btn btn-primary" type="submit">
-              <i className="ti-location-arrow" />
+              {/* <i className="ti-location-arrow" /> */}
+              <i className="fas fa-paper-plane"></i>
             </button>
           </div>
         </form>

@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NavLogin from "./NavLogin";
-import light from '../Images/mesure_2.png'
-import lighthouse from '../Images/tour_measure1.png'
+import light from "../Images/mesure_2.png";
+import lighthouse from "../Images/tour_measure1.png";
 
 function Login() {
+  // const [data, setData] = useState([]);
+
+  // useEffect(() => {
+  //   fetchLogin();
+  // }, []);
+
+  // const fetchLogin = () => {
+  //   console.log("hola");
+  //   fetch("http://127.0.0.1:5000/login", {
+  //     method: "POST",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((result) => {
+  //       console.log(result);
+  //       setData(result.rows);
+  //     })
+  //     .catch((err) => console.log("error"));
+  // };
+
   return (
     <div className="bodylogin">
       <NavLogin />
@@ -15,7 +34,7 @@ function Login() {
               name="formLogin"
               data-name="loginForm"
               className="form-10"
-              action="http://127.0.0.1:5000/login"
+              action="http://localhost:5000/login"
               method="post"
             >
               <h1 className="fingertipsslogan login-head-form">LOG IN</h1>
@@ -102,17 +121,22 @@ function Login() {
 
       <div className="lighthouse-background">
         <div className="lighthouse-dark-2">
-          <h1 className="fingertipsslogan-2 boost">Business at your fingertips.</h1>
+          <h1 className="fingertipsslogan-2 boost">
+            Business at your fingertips.
+          </h1>
 
           <img src={lighthouse} alt="lighthouse" className="image-64" />
           <img src={light} alt="light" className="image-66" />
-          <a href="/subscribe" className="button-6 w-button" data-ix="lighthouse">
+          <a
+            href="/subscribe"
+            className="button-6 w-button"
+            data-ix="lighthouse"
+          >
             START NOW!
           </a>
         </div>
       </div>
     </div>
-
   );
 }
 
