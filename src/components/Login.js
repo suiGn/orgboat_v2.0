@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NavLogin from "./NavLogin";
-import light from '../Images/mesure_2.png'
-import lighthouse from '../Images/tour_measure1.png'
+import light from "../Images/mesure_2.png";
+import lighthouse from "../Images/tour_measure1.png";
 
 function Login(props) {
   return (
@@ -102,17 +102,22 @@ function Login(props) {
 
       <div className="lighthouse-background">
         <div className="lighthouse-dark-2">
-          <h1 className="fingertipsslogan-2 boost">Business at your fingertips.</h1>
+          <h1 className="fingertipsslogan-2 boost">
+            Business at your fingertips.
+          </h1>
 
           <img src={lighthouse} alt="lighthouse" className="image-64" />
           <img src={light} alt="light" className="image-66" />
-          <a href="/subscribe" className="button-6 w-button" data-ix="lighthouse">
+          <a
+            href="/subscribe"
+            className="button-6 w-button"
+            data-ix="lighthouse"
+          >
             START NOW!
           </a>
         </div>
       </div>
     </div>
-
   );
 }
 

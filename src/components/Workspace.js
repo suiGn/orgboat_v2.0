@@ -19,9 +19,8 @@ function Workspace() {
 
   let chats;
   let currentPage = 0;
-
+  const socket = socketIOClient(ENDPOINT);
   useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
     socket.emit("get chats");
     console.log(response);
     socket.on("retrieve chats", (response) => {
@@ -40,19 +39,46 @@ function Workspace() {
     socket.emit("get messages", { id: clicked, page: currentPage });
   }, [clicked, ENDPOINT]);
 
+  useEffect(() => {
+    socket.on("retrieve messages", (response) => {
+      setChatMessages((chatMessages) => [...chatMessages, response]);
+      // setChatMessages(response);
+      // socket.emit("get chats");
+      console.log("messages", response);
+    });
+    currentPage = currentPage + 1;
+    socket.emit("get messages", { id: clicked, page: currentPage });
+  }, []);
+
   console.log(clicked);
   let my_uid = response.my_uid;
 
   function SendMessage(event, newMessage, chat_uid) {
     event.preventDefault();
 
-    const socket = socketIOClient(ENDPOINT);
+    // const socket = socketIOClient(ENDPOINT);
     if (newMessage.length > 0) {
       socket.emit("chat message", { chat: chat_uid, message: newMessage });
       socket.emit("get chats");
       socket.emit("get messages", { id: chat_uid, page: currentPage });
       // setnewMessage("");
     }
+  }
+
+  function ArchiveChat(chat_selected) {
+    // const socket = socketIOClient(ENDPOINT);
+    socket.emit("archived chat", { chat: chat_selected });
+    socket.on("archived response", function () {
+      socket.emit("get chats");
+    });
+  }
+
+  function profiledata(id) {
+    // const socket = socketIOClient(ENDPOINT);
+    socket.emit("ViewProfile", { id: id });
+    socket.on("retrieve viewprofile", function (data) {
+      setuserProfile(data);
+    });
   }
 
   return (
@@ -65,7 +91,9 @@ function Workspace() {
             clicked={clicked}
             setClicked={setClicked}
             response={response}
-            setuserProfile={setuserProfile}
+            ArchiveChat={ArchiveChat}
+            profiledata={profiledata}
+            // setuserProfile={setuserProfile}
           />
           <ArchiveSidebar
             clicked={clicked}

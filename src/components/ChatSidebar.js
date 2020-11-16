@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
+import { User, MessageCircle, Star, Moon } from "react-feather";
 
 const ENDPOINT = "http://localhost:5000";
 
@@ -34,22 +35,22 @@ function ChatSidebar(props, clicked) {
     return dateLabel;
   }
 
-  function ArchiveChat(chat_selected) {
-    const socket = socketIOClient(ENDPOINT);
-    socket.emit("archived chat", { chat: chat_selected });
-    socket.on("archived response", function () {
-      socket.emit("get chats");
-    });
-  }
+  // function ArchiveChat(chat_selected) {
+  //   const socket = socketIOClient(ENDPOINT);
+  //   socket.emit("archived chat", { chat: chat_selected });
+  //   socket.on("archived response", function () {
+  //     socket.emit("get chats");
+  //   });
+  // }
 
-  function profiledata(id) {
-    const socket = socketIOClient(ENDPOINT);
-    socket.emit("ViewProfile", { id: id });
-    socket.on("retrieve viewprofile", function (data) {
-      console.log(data);
-      props.setuserProfile(data);
-    });
-  }
+  // function profiledata(id) {
+  //   const socket = socketIOClient(ENDPOINT);
+  //   socket.emit("ViewProfile", { id: id });
+  //   socket.on("retrieve viewprofile", function (data) {
+  //     console.log(data);
+  //     props.setuserProfile(data);
+  //   });
+  // }
 
   return (
     <div id="chats" className="sidebar active">
@@ -194,14 +195,17 @@ function ChatSidebar(props, clicked) {
                           <div className="action-toggle">
                             <div className="dropdown">
                               <a data-toggle="dropdown" href="#">
-                                <i className="ti-more-alt"></i>
+                                {/* <i className="ti-more-alt"></i> */}
+                                <i class="fas fa-ellipsis-h"></i>
                               </a>
                               <div className="dropdown-menu dropdown-menu-right">
                                 <a href="#" className="dropdown-item">
                                   Open
                                 </a>
                                 <button
-                                  onClick={() => profiledata(chat.chat_uid)}
+                                  onClick={() =>
+                                    props.profiledata(chat.chat_uid)
+                                  }
                                   data-navigation-target="contact-information"
                                   className="dropdown-item"
                                 >
@@ -209,7 +213,9 @@ function ChatSidebar(props, clicked) {
                                 </button>
                                 <a
                                   href="#"
-                                  onClick={() => ArchiveChat(chat.chat_uid)}
+                                  onClick={() =>
+                                    props.ArchiveChat(chat.chat_uid)
+                                  }
                                   className="dropdown-item"
                                 >
                                   Add to archive

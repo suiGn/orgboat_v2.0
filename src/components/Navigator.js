@@ -2,6 +2,7 @@ import React ,{useState} from "react";
 import socketIOClient from "socket.io-client";
 import EditProfile from './EditProfile';
 import { BrowserRouter as Redirect } from "react-router-dom";
+import { User, MessageCircle, Star, Moon } from "react-feather";
 const ENDPOINT = "http://localhost:5000";
 
 function Navigator(props) {
@@ -48,7 +49,8 @@ function Navigator(props) {
               data-placement="right"
             >
               <span className="badge badge-warning"></span>
-              <i data-feather="message-circle"></i>
+              {/* <i data-feather="message-circle"></i> */}
+              <MessageCircle />
             </a>
           </li>
           <li>
@@ -60,7 +62,8 @@ function Navigator(props) {
               data-placement="right"
             >
               <span className="badge badge-danger"></span>
-              <i data-feather="user"></i>
+              {/* <i data-feather="user"></i> */}
+              <User />
             </a>
           </li>
           <li>
@@ -71,7 +74,8 @@ function Navigator(props) {
               data-placement="right"
               href="#"
             >
-              <i data-feather="star"></i>
+              {/* <i data-feather="star"></i> */}
+              <Star />
             </a>
           </li>
           <li className="brackets">
@@ -93,7 +97,8 @@ function Navigator(props) {
               title="Dark mode"
               data-placement="right"
             >
-              <i data-feather="moon"></i>
+              {/* <i data-feather="moon"></i> */}
+              <Moon />
             </a>
           </li>
           <li data-toggle="tooltip" title="User menu" data-placement="right">
