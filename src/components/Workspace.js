@@ -37,19 +37,15 @@ function Workspace() {
   }, [clicked, ENDPOINT]);
 
   useEffect(() => {
-    // if (clicked != 0) {
-    console.log("uid", clicked);
     socket.on("retrieve messages", (response) => {
       setChatMessages((chatMessages) => [...chatMessages, response]);
-
+      // setChatMessages(response);
+      // socket.emit("get chats");
       console.log("messages", response);
     });
     currentPage = currentPage + 1;
-    socket.on("chat message", (response) => {
-      console.log("messages 1", response);
-    });
-    // }
-  }, [chatMessages]);
+    socket.emit("get messages", { id: clicked, page: currentPage });
+  }, []);
 
   console.log(clicked);
   let my_uid = response.my_uid;
