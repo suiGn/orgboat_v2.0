@@ -1,8 +1,12 @@
-import React from "react";
+import React ,{useState} from "react";
 import socketIOClient from "socket.io-client";
+import EditProfile from './EditProfile';
+import { BrowserRouter as Redirect } from "react-router-dom";
 const ENDPOINT = "http://localhost:5000";
 
 function Navigator(props) {
+  const [logout, setLogout] = useState(false);
+
   function profiledata(id) {
     const socket = socketIOClient(ENDPOINT);
     console.log(id);
@@ -13,6 +17,20 @@ function Navigator(props) {
     });
   }
 
+  const logoutSever =  async() => {
+    fetch('http://localhost:5000/logout')
+    .then(response => { return response.json()})
+    .then(data=>{
+      setLogout(data.ok);
+    });
+  }
+  const handleShow = () => props.setShow(true);
+
+  const renderRedirect = () => {
+    if(logout){
+      return <Redirect to='/' />
+    }
+  }
   return (
     <nav className="navigation">
       <div className="nav-group">
@@ -91,6 +109,7 @@ function Navigator(props) {
             <div className="dropdown-menu">
               <a
                 href="#"
+                onClick={handleShow}
                 className="dropdown-item"
                 data-toggle="modal"
                 data-target="#editProfileModal"
@@ -114,12 +133,14 @@ function Navigator(props) {
                 Settings
               </a>
               <div className="dropdown-divider"></div>
-              <a
-                href="http://localhost:5000/logout"
+              {renderRedirect}
+              <button
+                href="#"
                 className="dropdown-item text-danger"
+                onClick={logoutSever}
               >
                 Logout
-              </a>
+              </button>
             </div>
           </li>
         </ul>

@@ -83,7 +83,6 @@
                     required
                     />
                     <label className="form-label" id="labelUsername">
-                    &lt;%= opt %&gt;
                     </label>
                     <div className="login-form-footer-2">
                     By registering you are agreeing to our terms and conditions.

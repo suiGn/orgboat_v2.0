@@ -73,6 +73,14 @@ const server = express()
   // The middleware receives the data from Google and runs the function on Strategy config
   // process the login form
   .get("/logged",routes.home)
+  .get("/logout", (req, res) => {
+    console.log('LogOut');
+    req.logout();
+    res.json({
+      ok:true
+    })
+    //res.redirect("/");
+  })
   .get('*', function(req, res) {
     res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
   })
@@ -87,17 +95,6 @@ const server = express()
       console.log("Inicio Session");
       res.redirect(`/workspace`);
     }
-  )
-  .get("/logout", (req, res) => {
-    req.logout();
-    res.redirect("/");
-  })
-  .get("/testing", (req, res) =>
-    res.render("pages/index", {
-      opt1: "Sign Up",
-      opt2: "/subscribe",
-      opt3: " ",
-    })
   )
   .get("/subscribe", routes.subscribe)
   .get("/verMail", routes.verMail)

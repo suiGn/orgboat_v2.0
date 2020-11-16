@@ -7,6 +7,7 @@ import FriendSidebar from "./FriendSidebar";
 import FavoriteSidebar from "./FavoriteSidebar";
 import ChatBody from "./ChatBody";
 import Profile from "./Profile.js";
+import EditProfile from './EditProfile';
 const ENDPOINT = "http://localhost:5000/";
 
 function Workspace() {
@@ -14,6 +15,8 @@ function Workspace() {
   const [clicked, setClicked] = useState(0);
   const [userProfile, setuserProfile] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
+  const [show, setShow] = useState(false);
+
   let chats;
   let currentPage = 0;
 
@@ -54,7 +57,8 @@ function Workspace() {
 
   return (
     <div className="layout">
-      <Navigator my_uid={my_uid} setuserProfile={setuserProfile} />
+      <EditProfile show={show} handleClose={setShow} />
+      <Navigator my_uid={my_uid} setuserProfile={setuserProfile} setEditProfile={setShow}/>
       <div className="content">
         <div className="sidebar-group">
           <ChatSidebar
@@ -78,6 +82,7 @@ function Workspace() {
           clicked={clicked}
         />
         <Profile userProfile={userProfile} />
+
       </div>
     </div>
   );

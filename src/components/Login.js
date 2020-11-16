@@ -46,7 +46,7 @@ function Login(props) {
                 className="button-5 w-button"
               />
               <div className="login-form-footer">
-                <a className="login-form-footer" href="/subscribe">
+                <a className="login-form-footer" href="/signup">
                   {" "}
                   Sign Up |
                 </a>
