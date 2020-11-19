@@ -3,6 +3,7 @@ import socketIOClient from "socket.io-client";
 import EditProfile from "./EditProfile";
 import { BrowserRouter as Redirect } from "react-router-dom";
 import { User, MessageCircle, Star, Moon, Archive } from "react-feather";
+import blue_helm2 from "../Images/blue_helm2.png"
 const ENDPOINT = "http://localhost:5000";
 
 function Navigator(props) {
@@ -38,7 +39,7 @@ function Navigator(props) {
       <div className="nav-group">
         <ul>
           <li className="logo">
-            <a href="#"></a>
+            <a href="#"><img src={blue_helm2} width={55} height alt="Blue Helm" /></a>
           </li>
           <li>
             <a
