@@ -1,10 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import socketIOClient from "socket.io-client";
+import {
+  Menu,
+  Phone,
+  Video,
+  MoreHorizontal,
+  Paperclip,
+  Send,
+  Smile,
+  Mic,
+  Check,
+} from "react-feather";
 const ENDPOINT = "http://localhost:5000";
 
 function ChatBodyMessage(props) {
   const [newMessage, setnewMessage] = useState([]);
-
   let messages = [].concat(props.messages).reverse();
 
   let actualLabelDate = "";
@@ -98,8 +108,6 @@ function ChatBodyMessage(props) {
     }
   }
 
-  console.log("cookie", document.cookie);
-
   return (
     <div>
       <div className="chat-header">
@@ -111,8 +119,7 @@ function ChatBodyMessage(props) {
                 href="#"
                 className="btn btn-outline-light mobile-navigation-button"
               >
-                {/* <i className="ti-more" /> */}
-                <i className="fal fa-ellipsis-h-alt"></i>
+                <Menu />
               </a>
             </li>
             <li
@@ -126,8 +133,7 @@ function ChatBodyMessage(props) {
                 data-toggle="modal"
                 data-target="#call"
               >
-                {/* <i className="ti-mobile" /> */}
-                <i className="fas fa-phone"></i>
+                <Phone />
               </a>
             </li>
             <li
@@ -141,8 +147,7 @@ function ChatBodyMessage(props) {
                 data-toggle="modal"
                 data-target="#videoCall"
               >
-                {/* <i className="ti-video-camera" /> */}
-                <i className="fas fa-video"></i>
+                <Video />
               </a>
             </li>
             <li className="list-inline-item">
@@ -151,7 +156,7 @@ function ChatBodyMessage(props) {
                 className="btn btn-outline-light"
                 data-toggle="dropdown"
               >
-                <i className="ti-more" />
+                <MoreHorizontal />
               </a>
               <div className="dropdown-menu dropdown-menu-right">
                 <a
@@ -179,8 +184,7 @@ function ChatBodyMessage(props) {
       <div className="chat-body">
         <div className="messages">
           {messages.map((message, index) => {
-            message_user_uid = message.message_user_uid;
-
+            message_user_uid = message.message_user_uid || message.from;
             dateSend = new Date(message.time);
             let timeSend = timeformat(dateSend);
             let out = my_uid == message_user_uid ? "outgoing-message" : "";
@@ -221,7 +225,7 @@ function ChatBodyMessage(props) {
                           data-toggle="dropdown"
                           href="#"
                         >
-                          <i class="fas fa-ellipsis-h"></i>
+                          <MoreHorizontal />
                         </a>
                         <div class="dropdown-menu dropdown-menu-left">
                           <a href="#" class="dropdown-item">
@@ -234,7 +238,7 @@ function ChatBodyMessage(props) {
                       <div>
                         <div className="time">
                           {timeSend} {ticks}
-                          <i className="ti-check"></i>
+                          {/* <Check /> */}
                         </div>
                       </div>
                     </div>
@@ -246,9 +250,7 @@ function ChatBodyMessage(props) {
         </div>
       </div>
       <div className="chat-footer">
-        <form
-          onSubmit={(event) => props.SendMessage(event, newMessage, chat_uid)}
-        >
+        <form onSubmit={(event) => SendMessage(event, newMessage, chat_uid)}>
           <div>
             <button
               className="btn btn-light mr-3"
@@ -256,7 +258,7 @@ function ChatBodyMessage(props) {
               title="Emoji"
               type="button"
             >
-              <i className="ti-face-smile" />
+              <Smile />
             </button>
           </div>
           <input
@@ -273,8 +275,7 @@ function ChatBodyMessage(props) {
               title="Add files"
               type="button"
             >
-              {/* <i className="ti-clip" /> */}
-              <i className="fas fa-paperclip"></i>
+              <Paperclip />
             </button>
             <button
               className="btn btn-light d-sm-none d-block"
@@ -282,11 +283,10 @@ function ChatBodyMessage(props) {
               title="Send a voice record"
               type="button"
             >
-              <i data-feather="mic" />
+              <Mic />
             </button>
             <button className="btn btn-primary" type="submit">
-              {/* <i className="ti-location-arrow" /> */}
-              <i className="fas fa-paper-plane"></i>
+              <Send />
             </button>
           </div>
         </form>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
+import { X, MoreHorizontal } from "react-feather";
 
 const ENDPOINT = "http://localhost:5000";
 
@@ -8,7 +9,6 @@ function ArchiveSidebar(props, clicked) {
   let chats = props.response.chats;
 
   let my_uid = props.response.my_uid;
-  console.log("Respuesta", props);
   function timeformat(date) {
     var h = date.getHours();
     var m = date.getMinutes();
@@ -52,6 +52,7 @@ function ArchiveSidebar(props, clicked) {
               className="btn btn-outline-light text-danger sidebar-close"
             >
               <i data-feather="x" />
+              <X />
             </a>
           </li>
         </ul>
@@ -156,7 +157,7 @@ function ArchiveSidebar(props, clicked) {
                           <div className="action-toggle">
                             <div className="dropdown">
                               <a data-toggle="dropdown" href="#">
-                                <i className="ti-more-alt"></i>
+                                <MoreHorizontal />
                               </a>
                               <div className="dropdown-menu dropdown-menu-right">
                                 <a href="#" className="dropdown-item">

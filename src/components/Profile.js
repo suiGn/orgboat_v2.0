@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
-
+import { X, Upload, FileText } from "react-feather";
 const ENDPOINT = "http://localhost:5000";
 
 function Profile(props, clicked) {
-  console.log("user", props);
   let userPhoto;
   let data;
 
@@ -14,7 +13,7 @@ function Profile(props, clicked) {
     props.userProfile.usrprofile.length > 0
   ) {
     data = props.userProfile.usrprofile[0];
-    console.log(data);
+
     if (data.pphoto === "") {
       userPhoto = (
         <span class="avatar-title bg-info rounded-circle">
@@ -43,7 +42,7 @@ function Profile(props, clicked) {
                 href="#"
                 className="btn btn-outline-light text-danger sidebar-close"
               >
-                <i data-feather="x" />
+                <X />
               </a>
             </li>
           </ul>
@@ -167,7 +166,7 @@ function Profile(props, clicked) {
                 <h6 className="mb-3 d-flex align-items-center justify-content-between">
                   <span>Recent Files</span>
                   <a href="#" className="btn btn-link small">
-                    <i data-feather="upload" className="mr-2" /> Upload
+                    <Upload /> Upload
                   </a>
                 </h6>
                 <div>
