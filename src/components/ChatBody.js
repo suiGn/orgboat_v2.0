@@ -37,7 +37,7 @@ function ChatBody({ my_uid, clicked }) {
   console.log("messagesArray", messagesArray);
   return (
     <div className="chat">
-      {messagesArray && messagesArray.length > 0 ? (
+      {messagesArray && messagesArray.length > 0 && clicked ? (
         <ChatBodyMessage
           messages={messagesArray}
           chat_uid={clicked}

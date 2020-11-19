@@ -2763,6 +2763,8 @@ figure.avatar.avatar-state-dark:before {
   -ms-flex-align: center;
   align-items: center;
   line-height: 13px;
+  color: white;
+  font-family: "Inter", sans-serif;
 }
 
 .modal-content .modal-header .modal-title i,
@@ -3433,7 +3435,7 @@ body.dark.rtl
 }
 
 body.dark .modal-content {
-  background-color: #1a2236;
+  background-color: #212124;
 }
 
 body.dark .list-group-item {
@@ -4050,6 +4052,7 @@ body.form-membership .form-wrapper hr {
   -ms-flex: 1;
   flex: 1;
   padding: 30px;
+  overscroll-behavior-y: contain;
 }
 
 .layout .content .chat .chat-body:not(.no-message) {

@@ -26,7 +26,7 @@ function Navigator(props) {
         setLogout(data.ok);
       });
   };
-  const handleShow = () => props.setShow(true);
+  // const handleShow = () => props.setShow(true);
 
   const renderRedirect = () => {
     if (logout) {
@@ -111,10 +111,10 @@ function Navigator(props) {
             <div className="dropdown-menu">
               <a
                 href="#"
-                onClick={handleShow}
                 className="dropdown-item"
                 data-toggle="modal"
                 data-target="#editProfileModal"
+                onClick={() => profiledata(props.my_uid)}
               >
                 Edit profile
               </a>

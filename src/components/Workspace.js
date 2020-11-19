@@ -37,30 +37,32 @@ function Workspace() {
   let my_uid = response.my_uid;
 
   return (
-    <div className="layout">
-      <EditProfile show={show} handleClose={setShow} />
-      <Navigator
-        my_uid={my_uid}
-        setuserProfile={setuserProfile}
-        setEditProfile={setShow}
-      />
-      <div className="content">
-        <div className="sidebar-group">
-          <ChatSidebar
-            clicked={clicked}
-            setClicked={setClicked}
-            response={response}
-          />
-          <ArchiveSidebar
-            clicked={clicked}
-            setClicked={setClicked}
-            response={response}
-          />
-          <FriendSidebar />
-          <FavoriteSidebar />
+    <div>
+      <EditProfile my_uid={my_uid} userProfile={userProfile} show={show} />
+      <div className="layout">
+        <Navigator
+          my_uid={my_uid}
+          setuserProfile={setuserProfile}
+          setEditProfile={setShow}
+        />
+        <div className="content">
+          <div className="sidebar-group">
+            <ChatSidebar
+              clicked={clicked}
+              setClicked={setClicked}
+              response={response}
+            />
+            <ArchiveSidebar
+              clicked={clicked}
+              setClicked={setClicked}
+              response={response}
+            />
+            <FriendSidebar />
+            <FavoriteSidebar />
+          </div>
+          <ChatBody my_uid={my_uid} clicked={clicked} />
+          <Profile userProfile={userProfile} />
         </div>
-        <ChatBody my_uid={my_uid} clicked={clicked} />
-        <Profile userProfile={userProfile} />
       </div>
     </div>
   );
