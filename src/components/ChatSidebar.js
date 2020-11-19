@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
-import { User, MessageCircle, Star, Moon } from "react-feather";
+import { User, PlusCircle, X, MoreHorizontal } from "react-feather";
 
 const ENDPOINT = "http://localhost:5000";
 
@@ -11,7 +11,7 @@ function ChatSidebar(props, clicked) {
 
   chats = props.response.chats;
   my_uid = props.response.my_uid;
-  console.log("Respuesta", props);
+
   function timeformat(date) {
     var h = date.getHours();
     var m = date.getMinutes();
@@ -35,22 +35,21 @@ function ChatSidebar(props, clicked) {
     return dateLabel;
   }
 
-  // function ArchiveChat(chat_selected) {
-  //   const socket = socketIOClient(ENDPOINT);
-  //   socket.emit("archived chat", { chat: chat_selected });
-  //   socket.on("archived response", function () {
-  //     socket.emit("get chats");
-  //   });
-  // }
+  function ArchiveChat(chat_selected) {
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("archived chat", { chat: chat_selected });
+    socket.on("archived response", function () {
+      socket.emit("get chats");
+    });
+  }
 
-  // function profiledata(id) {
-  //   const socket = socketIOClient(ENDPOINT);
-  //   socket.emit("ViewProfile", { id: id });
-  //   socket.on("retrieve viewprofile", function (data) {
-  //     console.log(data);
-  //     props.setuserProfile(data);
-  //   });
-  // }
+  function profiledata(id) {
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("ViewProfile", { id: id });
+    socket.on("retrieve viewprofile", function (data) {
+      props.setuserProfile(data);
+    });
+  }
 
   return (
     <div id="chats" className="sidebar active">
@@ -68,7 +67,7 @@ function ChatSidebar(props, clicked) {
               data-toggle="modal"
               data-target="#newGroup"
             >
-              <i data-feather="users" />
+              <User />
             </a>
           </li>
           <li className="list-inline-item">
@@ -79,7 +78,7 @@ function ChatSidebar(props, clicked) {
               href="#"
               data-navigation-target="friends"
             >
-              <i data-feather="plus-circle" />
+              <PlusCircle />
             </a>
           </li>
           <li className="list-inline-item d-xl-none d-inline">
@@ -87,7 +86,7 @@ function ChatSidebar(props, clicked) {
               href="#"
               className="btn btn-outline-light text-danger sidebar-close"
             >
-              <i data-feather="x" />
+              <X />
             </a>
           </li>
         </ul>
@@ -137,7 +136,6 @@ function ChatSidebar(props, clicked) {
                   }
                   //var pphotoUser = new File([""], chat.pphoto);
                   //var p = "";
-                  console.log(chat.pphoto);
                   if (chat.pphoto === "") {
                     p = (
                       <span className="avatar-title bg-info rounded-circle">
@@ -190,22 +188,19 @@ function ChatSidebar(props, clicked) {
                             className="text-muted last-message-time"
                             i={chat.chat_uid}
                           >
-                            {timeLabel} 111
+                            {timeLabel}
                           </small>
                           <div className="action-toggle">
                             <div className="dropdown">
                               <a data-toggle="dropdown" href="#">
-                                {/* <i className="ti-more-alt"></i> */}
-                                <i class="fas fa-ellipsis-h"></i>
+                                <MoreHorizontal />
                               </a>
                               <div className="dropdown-menu dropdown-menu-right">
                                 <a href="#" className="dropdown-item">
                                   Open
                                 </a>
                                 <button
-                                  onClick={() =>
-                                    props.profiledata(chat.chat_uid)
-                                  }
+                                  onClick={() => profiledata(chat.chat_uid)}
                                   data-navigation-target="contact-information"
                                   className="dropdown-item"
                                 >
@@ -213,9 +208,7 @@ function ChatSidebar(props, clicked) {
                                 </button>
                                 <a
                                   href="#"
-                                  onClick={() =>
-                                    props.ArchiveChat(chat.chat_uid)
-                                  }
+                                  onClick={() => ArchiveChat(chat.chat_uid)}
                                   className="dropdown-item"
                                 >
                                   Add to archive
@@ -308,7 +301,7 @@ function ChatSidebar(props, clicked) {
                               <div className="action-toggle">
                                 <div className="dropdown">
                                   <a data-toggle="dropdown" href="#">
-                                    <i className="fa fa-ellipsis-h"></i>
+                                    <MoreHorizontal />
                                   </a>
                                   <div className="dropdown-menu dropdown-menu-right">
                                     <a href="#" className="dropdown-item">

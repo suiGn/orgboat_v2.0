@@ -1,8 +1,8 @@
-import React ,{useState} from "react";
+import React, { useState } from "react";
 import socketIOClient from "socket.io-client";
-import EditProfile from './EditProfile';
+import EditProfile from "./EditProfile";
 import { BrowserRouter as Redirect } from "react-router-dom";
-import { User, MessageCircle, Star, Moon } from "react-feather";
+import { User, MessageCircle, Star, Moon, Archive } from "react-feather";
 const ENDPOINT = "http://localhost:5000";
 
 function Navigator(props) {
@@ -10,28 +10,29 @@ function Navigator(props) {
 
   function profiledata(id) {
     const socket = socketIOClient(ENDPOINT);
-    console.log(id);
+
     socket.emit("ViewOwnProfile", { id: id });
     socket.on("retrieve viewownprofile", function (data) {
-      console.log(data);
       props.setuserProfile(data);
     });
   }
 
-  const logoutSever =  async() => {
-    fetch('http://localhost:5000/logout')
-    .then(response => { return response.json()})
-    .then(data=>{
-      setLogout(data.ok);
-    });
-  }
+  const logoutSever = async () => {
+    fetch("http://localhost:5000/logout")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setLogout(data.ok);
+      });
+  };
   const handleShow = () => props.setShow(true);
 
   const renderRedirect = () => {
-    if(logout){
-      return <Redirect to='/' />
+    if (logout) {
+      return <Redirect to="/" />;
     }
-  }
+  };
   return (
     <nav className="navigation">
       <div className="nav-group">
@@ -49,7 +50,6 @@ function Navigator(props) {
               data-placement="right"
             >
               <span className="badge badge-warning"></span>
-              {/* <i data-feather="message-circle"></i> */}
               <MessageCircle />
             </a>
           </li>
@@ -62,7 +62,6 @@ function Navigator(props) {
               data-placement="right"
             >
               <span className="badge badge-danger"></span>
-              {/* <i data-feather="user"></i> */}
               <User />
             </a>
           </li>
@@ -74,7 +73,6 @@ function Navigator(props) {
               data-placement="right"
               href="#"
             >
-              {/* <i data-feather="star"></i> */}
               <Star />
             </a>
           </li>
@@ -86,7 +84,7 @@ function Navigator(props) {
               title="Archived"
               data-placement="right"
             >
-              <i data-feather="archive"></i>
+              <Archive />
             </a>
           </li>
           <li>
@@ -97,7 +95,6 @@ function Navigator(props) {
               title="Dark mode"
               data-placement="right"
             >
-              {/* <i data-feather="moon"></i> */}
               <Moon />
             </a>
           </li>
