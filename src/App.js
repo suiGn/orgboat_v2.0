@@ -35,6 +35,7 @@ function App() {
         </Route>
         <Route path="/signup" component={SignUp} />
         <Route path="/reset-pwd" component={ResetPass} />
+        <Route path="/response" component={ResetPass} />
       </Switch>
     </Router>
   );
