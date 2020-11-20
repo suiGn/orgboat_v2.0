@@ -84,24 +84,21 @@ exports.rpwdm = function (req, res, next) {
             };
             transporter.sendMail(mailOptions, function (error, info) {
               if (error) {
-                res.render("pages/sec/response", {
-                  opt1: "Please try again.",
-                  opt2: "Error",
+                res.json({
+                  ok:false
                 });
                 console.log(error);
               } else {
-                res.render("pages/sec/response", {
-                  opt1: "Please check your inbox to reset your password",
-                  opt2: "Sent Successfully",
+                res.json({
+                  ok:true
                 });
               }
             });
           }
         ); //closes Insert New Usr Into Table
       } else {
-        res.render("pages/sec/response", {
-          opt1: "Please try again with a different email.",
-          opt2: "Account not found.",
+        res.json({
+          ok:false
         });
       }
     }

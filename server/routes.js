@@ -71,7 +71,7 @@ exports.authGoogle = (req, res) => {
 };
 
 exports.resetPass = function (req, res) {
-  res.render("pages/sec/reset-pass");
+  res.redirect("/");
 };
 exports.pwdRst = function (req, res) {
   var uuid = req.query.uuid;
