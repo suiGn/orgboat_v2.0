@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
-import { User, PlusCircle, X, MoreHorizontal } from "react-feather";
+import { Users, PlusCircle, X, MoreHorizontal } from "react-feather";
 
 const ENDPOINT = "http://localhost:5000";
 
@@ -67,7 +67,7 @@ function ChatSidebar(props, clicked) {
               data-toggle="modal"
               data-target="#newGroup"
             >
-              <User />
+              <Users />
             </a>
           </li>
           <li className="list-inline-item">

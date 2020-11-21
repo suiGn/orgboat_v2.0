@@ -22,10 +22,10 @@ const { CustomValidation } = require("express-validator/src/context-items");
 
 exports.home = function (req, res) {
   if (req.isAuthenticated()) {
-    console.log('home');
-    res.json({ok:true});
+    console.log("home");
+    res.json({ ok: true });
   } else {
-    res.json({ok:false});
+    res.json({ ok: false });
   }
 };
 
@@ -339,6 +339,7 @@ exports.editProfile = function (req, res) {
   var about = req.body.aboutEditP;
   var email = req.user[0].email;
   var rqname = req.user[0].name;
+  console.log(req.body);
   index.orgboatDB.query(
     "UPDATE usrs SET name = ?, city = ?, phone = ?, website = ?, public = ?, about = ?  WHERE email = ?",
     [fullName, city, phone, website, isPublic, about, email],
@@ -355,7 +356,7 @@ exports.editProfile = function (req, res) {
 };
 
 exports.savedbimage = function (req, res) {
-  console.log(req);
+  console.log(req.file);
   var photo = req.file.path;
   var uidd = req.user[0].u_id;
   index.orgboatDB.query(

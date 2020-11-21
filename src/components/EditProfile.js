@@ -1,55 +1,92 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
+import { User, Target, Edit2, Phone, X } from "react-feather";
+import axios from "axios";
 const ENDPOINT = "http://localhost:5000";
 
 function EditProfile(props) {
   const socket = socketIOClient(ENDPOINT);
+  const [name, setName] = useState("");
+  const [city, setCity] = useState("");
+  const [phone, setPhone] = useState("");
+  const [webSite, setWebSite] = useState("");
+  const [about, setAbout] = useState("");
+  const [pphoto, setPphoto] = useState("");
+
   console.log(props);
   let profileInfo;
 
-  if (
-    props.userProfile &&
-    props.userProfile.usrprofile &&
-    props.userProfile.usrprofile.length > 0
-  ) {
-    profileInfo = props.userProfile.usrprofile[0];
-  } else {
-    profileInfo = "";
+  useEffect(() => {
+    if (
+      props.userProfile &&
+      props.userProfile.usrprofile &&
+      props.userProfile.usrprofile.length > 0
+    ) {
+      profileInfo = props.userProfile.usrprofile[0];
+      setName(profileInfo.name);
+      setCity(profileInfo.city);
+      setPhone(profileInfo.phone);
+      setWebSite(profileInfo.website);
+      setAbout(profileInfo.about);
+      setPphoto(profileInfo.pphoto);
+    } else {
+      profileInfo = "";
+    }
+  }, [props.userProfile.usrprofile]);
+
+  function SaveProfile(e) {
+    e.preventDefault();
+    axios.post("/edProf", {
+      fullNameEditP: name,
+      cityEditP: city,
+      phoneEditP: phone,
+      websiteEditP: webSite,
+      aboutEditP: about,
+    });
+  }
+
+  function SaveImage(e) {
+    e.preventDefault();
+    axios.post("/uploadpPhoto", {
+      path: pphoto,
+      u_id: props.my_uid,
+    });
   }
 
   console.log(profileInfo);
 
   return (
     <div
-      class="modal fade"
+      className="modal fade"
       id="editProfileModal"
-      tabindex="-1"
+      tabIndex={-1}
       role="dialog"
       aria-hidden="true"
     >
       <div
-        class="modal-dialog modal-dialog-centered modal-dialog-zoom"
+        className="modal-dialog modal-dialog-centered modal-dialog-zoom"
         role="document"
       >
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              <i data-feather="edit-2" class="mr-2"></i> Edit Profile
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">
+              <Edit2 className="mr-2" />
+              Edit Profile
             </h5>
             <button
               type="button"
-              class="close"
+              className="close"
               data-dismiss="modal"
               aria-label="Close"
             >
-              <i class="ti-close"></i>
+              <X />
             </button>
           </div>
-          <div class="modal-body">
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item">
+          <div className="modal-body">
+            <ul className="nav nav-tabs" role="tablist">
+              <li className="nav-item">
                 <a
-                  class="nav-link active"
+                  className="nav-link active"
                   data-toggle="tab"
                   href="#personal"
                   role="tab"
@@ -71,9 +108,9 @@ function EditProfile(props) {
                   Update Profile Picture
                 </a>
               </li>
-              <li class="nav-item">
+              <li className="nav-item">
                 <a
-                  class="nav-link"
+                  className="nav-link"
                   data-toggle="tab"
                   href="#about"
                   role="tab"
@@ -84,156 +121,184 @@ function EditProfile(props) {
                 </a>
               </li>
             </ul>
-            <div class="tab-content">
-              <div class="tab-pane show active" id="personal" role="tabpanel">
-                <form method="post" action="/edProf" method="post" />
-                <div class="form-group">
-                  <label for="fullname" class="col-form-label">
-                    Full Name
-                  </label>
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="fullNameEditP"
-                      id="fullname"
-                      value={profileInfo.name}
-                    />
-                    <div class="input-group-append">
-                      <span class="input-group-text">
-                        <i data-feather="user"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="city" class="col-form-label">
-                    City
-                  </label>
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      name="cityEditP"
-                      class="form-control"
-                      id="city"
-                      placeholder="Ex: Columbia"
-                      value={profileInfo.city}
-                    />
-                    <div class="input-group-append">
-                      <span class="input-group-text">
-                        <i data-feather="target"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="phone" class="col-form-label">
-                    Phone
-                  </label>
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="phoneEditP"
-                      id="phone"
-                      placeholder="(555) 555 55 55"
-                      value={profileInfo.phone}
-                    />
-                    <div class="input-group-append">
-                      <span class="input-group-text">
-                        <i data-feather="phone"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="website" class="col-form-label">
-                    Website
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="websiteEditP"
-                    id="website"
-                    placeholder="https://"
-                    value={profileInfo.website}
-                  />
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    checked
-                    id="customCheck1"
-                  />
-                  <label
-                    class="custom-control-label"
-                    name="isPublicEditP"
-                    for="customCheck1"
-                  >
-                    Public Profile
-                  </label>
-                </div>
-              </div>
-              <div className="tab-pane" id="profilePic" role="tabpanel">
+            <div className="tab-content">
+              <div
+                className="tab-pane show active"
+                id="personal"
+                role="tabpanel"
+              >
                 <form
-                  id="uploadForm"
-                  encType="multipart/form-data"
                   method="post"
-                  action="/uploadpPhoto"
+                  // action="/edProf"
+                  // onSubmit={(e) => e.preventDefault()}
+                  onSubmit={(e) => SaveProfile(e)}
                 >
-                  <label className="col-form-label">Choose Photo:</label>
-                  <div className="d-flex align-items-center">
-                    <div>
-                      <figure
-                        className="avatar mr-3 item-rtl"
-                        id="changeprofilepicPphoto"
-                        data={profileInfo.pphoto}
-                      ></figure>
-                    </div>
-                    <div className="custom-file">
+                  <div className="form-group">
+                    <label htmlFor="fullname" className="col-form-label">
+                      Full Name
+                    </label>
+                    <div className="input-group">
                       <input
-                        type="file"
-                        name="avatarEditP"
-                        className="custom-file-input"
-                        id="customFile"
-                        style={{ fontColor: "white !important" }}
-                        onchange="inputPath(this.value)"
+                        type="text"
+                        className="form-control"
+                        name="fullNameEditP"
+                        id="fullname"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                       />
-                      <label
-                        className="custom-file-label"
-                        id="cPPIT"
-                        htmlFor="customFile"
-                        style={{
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        Choose file
-                      </label>
+                      <div className="input-group-append">
+                        <span className="input-group-text">
+                          <User />
+                        </span>
+                      </div>
                     </div>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="city" className="col-form-label">
+                      City
+                    </label>
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        name="cityEditP"
+                        className="form-control"
+                        id="city"
+                        placeholder="Ex: Columbia"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                      />
+                      <div className="input-group-append">
+                        <span className="input-group-text">
+                          <Target />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="phone" className="col-form-label">
+                      Phone
+                    </label>
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="phoneEditP"
+                        id="phone"
+                        placeholder="(555) 555 55 55"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                      <div className="input-group-append">
+                        <span className="input-group-text">
+                          <Phone />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="website" className="col-form-label">
+                      Website
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="websiteEditP"
+                      id="website"
+                      placeholder="https://"
+                      value={webSite}
+                      onChange={(e) => setWebSite(e.target.value)}
+                    />
+                  </div>
+                  <div className="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      defaultChecked
+                      id="customCheck1"
+                    />
+                    <label
+                      className="custom-control-label"
+                      name="isPublicEditP"
+                      htmlFor="customCheck1"
+                    >
+                      Public Profile
+                    </label>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="submit" className="btn btn-primary">
+                      Save
+                    </button>
                   </div>
                 </form>
               </div>
-              <div class="tab-pane" id="about" role="tabpanel">
-                <div class="form-group">
-                  <label for="about-text" class="col-form-label">
-                    {profileInfo.about}
+              <div class="tab-pane" id="profilePic" role="tabpanel">
+                <div className="form-group">
+                  <form
+                    id="uploadForm"
+                    method="post"
+                    onSubmit={(e) => {
+                      SaveImage(e);
+                    }}
+                  >
+                    <label className="col-form-label">Avatar</label>
+                    <div className="d-flex align-items-center">
+                      <div>
+                        <figure
+                          className="avatar mr-3 item-rtl"
+                          id="changeprofilepicPphoto"
+                          data={pphoto}
+                        ></figure>
+                      </div>
+                      <div className="custom-file">
+                        <input
+                          type="file"
+                          name="avatarEditP"
+                          className="custom-file-input"
+                          id="customFile"
+                          style={{ fontColor: "white !important" }}
+                          data={pphoto}
+                          onChange={(e) => setPphoto(e.target.value)}
+                        />
+                        <label
+                          className="custom-file-label"
+                          id="cPPIT"
+                          htmlFor="customFile"
+                          style={{
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {pphoto ? pphoto : "Choose file"}
+                        </label>
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        style={{ marginRight: "-28px !important" }}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div className="tab-pane" id="about" role="tabpanel">
+                <div className="form-group">
+                  <label htmlFor="about-text" className="col-form-label">
+                    Write a few words that describe you
                   </label>
                   <textarea
                     name="aboutEditP"
-                    class="form-control"
+                    className="form-control"
                     id="about-text"
-                  ></textarea>
+                    value={about}
+                    onChange={(e) => setAbout(e.target.value)}
+                  />
                 </div>
               </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">
-                Save
-              </button>
-              <form />
             </div>
           </div>
         </div>
