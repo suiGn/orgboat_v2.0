@@ -4,8 +4,14 @@ import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:5000";
 
 function FriendSidebar() {
-  const [archive, setArchive] = useState([]);
-
+  const [contact, setContact] = useState([]);
+  const socket = socketIOClient(ENDPOINT);
+  useEffect(() => {
+    socket.emit("GetContacts");
+    socket.on("retrive GetContacts", (contacts) => {
+      setContact(contacts);
+    });
+  }, []);
   return (
     <div id="friends" className="sidebar">
       <header>
@@ -44,416 +50,70 @@ function FriendSidebar() {
       </form>
       <div className="sidebar-body">
         <ul className="list-group list-group-flush">
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar">
-                <img
-                  src="http://via.placeholder.com/128X128"
-                  className="rounded-circle"
-                  alt="image"
-                />
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Harrietta Souten</h5>
-                <p>Dental Hygienist</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar avatar-state-warning">
-                <span className="avatar-title bg-success rounded-circle">
-                  A
-                </span>
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Aline McShee</h5>
-                <p>Marketing Assistant</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar avatar-state-success">
-                <img
-                  src="http://via.placeholder.com/128X128"
-                  className="rounded-circle"
-                  alt="image"
-                />
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Brietta Blogg</h5>
-                <p>Actuary</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar avatar-state-success">
-                <img
-                  src="http://via.placeholder.com/128X128"
-                  className="rounded-circle"
-                  alt="image"
-                />
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Karl Hubane</h5>
-                <p>Chemical Engineer</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar">
-                <img
-                  src="http://via.placeholder.com/128X128"
-                  className="rounded-circle"
-                  alt="image"
-                />
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Jillana Tows</h5>
-                <p>Project Manager</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar avatar-state-success">
-                <span className="avatar-title bg-info rounded-circle">AD</span>
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Alina Derington</h5>
-                <p>Nurse</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar avatar-state-secondary">
-                <span className="avatar-title bg-warning rounded-circle">
-                  S
-                </span>
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Stevy Kermeen</h5>
-                <p>Associate Professor</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar">
-                <img
-                  src="http://via.placeholder.com/128X128"
-                  className="rounded-circle"
-                  alt="image"
-                />
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Stevy Kermeen</h5>
-                <p>Senior Quality Engineer</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar">
-                <img
-                  src="http://via.placeholder.com/128X128"
-                  className="rounded-circle"
-                  alt="image"
-                />
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Gloriane Shimmans</h5>
-                <p>Web Designer</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item" data-navigation-target="chats">
-            <div>
-              <figure className="avatar avatar-state-warning">
-                <span className="avatar-title bg-secondary rounded-circle">
-                  B
-                </span>
-              </figure>
-            </div>
-            <div className="users-list-body">
-              <div>
-                <h5>Bernhard Perrett</h5>
-                <p>Software Engineer</p>
-              </div>
-              <div className="users-list-action">
-                <div className="action-toggle">
-                  <div className="dropdown">
-                    <a data-toggle="dropdown" href="#">
-                      <i data-feather="more-horizontal" />
-                    </a>
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <a href="#" className="dropdown-item">
-                        New chat
-                      </a>
-                      <a
-                        href="#"
-                        data-navigation-target="contact-information"
-                        className="dropdown-item"
-                      >
-                        Profile
-                      </a>
-                      <div className="dropdown-divider" />
-                      <a href="#" className="dropdown-item text-danger">
-                        Block
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
+          {contact.chats &&
+            contact.chats.map((user) => {
+              let my_uid = contact.my_uid;
+              if (user.chat_type === 0) {
+                if (my_uid != user.user_chat) {
+                  let chat_name = user.name;
+                  let chat_initial = chat_name.substring(0, 1);
+                  return (
+                    <li
+                      className="list-group-item"
+                      i={user.chat_uid}
+                      n={chat_name}
+                      data-navigation-target="chats"
+                    >
+                      <div>
+                        <figure className="avatar">
+                          <img
+                            src="http://via.placeholder.com/128X128"
+                            className="rounded-circle"
+                            alt="image"
+                          />
+                        </figure>
+                      </div>
+                      <div className="users-list-body">
+                        <div>
+                          <h5 i={user.chat_uid} n={chat_name}>
+                            {chat_name}
+                          </h5>
+                          <p>{chat_name}</p>
+                        </div>
+                        <div className="users-list-action">
+                          <div className="action-toggle">
+                            <div className="dropdown">
+                              <a data-toggle="dropdown" href="#">
+                                <i data-feather="more-horizontal" />
+                              </a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a href="#" className="dropdown-item">
+                                  New chat
+                                </a>
+                                <a
+                                  href="#"
+                                  data-navigation-target="contact-information"
+                                  className="dropdown-item"
+                                >
+                                  Profile
+                                </a>
+                                <div className="dropdown-divider" />
+                                <a
+                                  href="#"
+                                  className="dropdown-item text-danger"
+                                >
+                                  Block
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                }
+              }
+            })}
         </ul>
       </div>
     </div>

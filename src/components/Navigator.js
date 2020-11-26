@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import EditProfile from "./EditProfile";
-import { BrowserRouter as Redirect } from "react-router-dom";
+import { BrowserRouter as Redirect, Link } from "react-router-dom";
 import { User, MessageCircle, Star, Moon, Archive } from "react-feather";
-import blue_helm2 from "../Images/blue_helm2.png"
+import blue_helm2 from "../Images/blue_helm2.png";
+import axios from "axios";
 const ENDPOINT = "http://localhost:5000";
 
 function Navigator(props) {
   const [logout, setLogout] = useState(false);
-
+  // useEffect(() => {
+  //   renderRedirect();
+  // }, []);
   function profiledata(id) {
     const socket = socketIOClient(ENDPOINT);
 
@@ -18,15 +21,23 @@ function Navigator(props) {
     });
   }
 
-  const logoutSever = async () => {
-    fetch("http://localhost:5000/logout")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setLogout(data.ok);
-      });
-  };
+  function logoutServer() {
+    axios.get("/logout").then((res) => {
+      if (res.data.ok == true) {
+        console.log(res);
+        setLogout(true);
+        props.setloggedIn(false);
+      }
+    });
+
+    // fetch("http://localhost:5000/logout")
+    //   .then((response) => {
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     setLogout(data.ok);
+    //   });
+  }
   // const handleShow = () => props.setShow(true);
 
   const renderRedirect = () => {
@@ -39,7 +50,9 @@ function Navigator(props) {
       <div className="nav-group">
         <ul>
           <li className="logo">
-            <a href="#"><img src={blue_helm2} width={55} height alt="Blue Helm" /></a>
+            <a href="#">
+              <img src={blue_helm2} width={55} height alt="Blue Helm" />
+            </a>
           </li>
           <li>
             <a
@@ -136,14 +149,15 @@ function Navigator(props) {
                 Settings
               </a>
               <div className="dropdown-divider"></div>
-              {renderRedirect}
-              <button
-                href="#"
-                className="dropdown-item text-danger"
-                onClick={logoutSever}
-              >
-                Logout
-              </button>
+              <Link to="/">
+                <button
+                  href="#"
+                  className="dropdown-item text-danger"
+                  onClick={logoutServer}
+                >
+                  Logout
+                </button>
+              </Link>
             </div>
           </li>
         </ul>

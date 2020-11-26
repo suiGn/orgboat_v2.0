@@ -21,14 +21,14 @@ const fs = require("fs");
 const routes = require("./routes");
 const method = require("./methods");
 const mailer = require("./mailer");
-const {upload} =  require("./middlewares/multer");
+const { upload } = require("./middlewares/multer");
 var unicorn = "🍺🦄🍺";
 var uuid = require("node-uuid");
 var nodemailer = require("nodemailer");
 var cookieParser = require("cookie-parser");
 var passport = require("passport");
-var cors = require('cors');
-const buildPath = path.join(__dirname, '..', 'build');
+var cors = require("cors");
+const buildPath = path.join(__dirname, "..", "build");
 const {
   isLoggedIn,
   sessionMiddleware,
@@ -66,23 +66,23 @@ const server = express()
   .use(passport.session())
   .use(flash()) // use connect-flash for flash messages stored in session
   .use(express.static(buildPath))
-  
+
   //.set("views", path.join(__dirname, "views"))
   // passport.authenticate middleware is used here to authenticate the request
   //.set("view engine", "ejs")
   // The middleware receives the data from Google and runs the function on Strategy config
   // process the login form
-  .get("/logged",routes.home)
+  .get("/logged", routes.home)
   .get("/logout", (req, res) => {
-    console.log('LogOut');
+    console.log("LogOut");
     req.logout();
     res.json({
-      ok:true
-    })
-    //res.redirect("/");
+      ok: true,
+    });
+    // res.redirect("/");
   })
-  .get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+  .get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "..", "build", "index.html"));
   })
   .post(
     "/login",
@@ -118,9 +118,9 @@ const server = express()
   )
   .get("/lock-screen", routes.lockScreen)
   .post("/edProf", isLoggedIn, routes.editProfile)
-  .post("/uploadpPhoto", upload.single('file'), function (req, res) {
+  .post("/uploadpPhoto", upload.single("file"), function (req, res) {
     //console.log(req.user[0].u_id);
-    
+
     upload(req, res, function (err) {
       //console.log(req);
       if (err) {
@@ -158,7 +158,7 @@ var http = require("http").Server(server);
 var io = require("socket.io")(http);
 var passportSocketIo = require("passport.socketio");
 const { json } = require("sequelize");
-require('./configs/config')
+require("./configs/config");
 //Move Socket in file socket.js
 io.set("origins", "*:*");
 //With Socket.io >= 1.0
