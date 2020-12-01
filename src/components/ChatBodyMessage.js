@@ -9,6 +9,7 @@ import {
   Send,
   Smile,
   Mic,
+  ChevronDown,
   Check,
 } from "react-feather";
 const ENDPOINT = "http://localhost:5000";
@@ -55,17 +56,21 @@ function ChatBodyMessage(props) {
     }
     if (pphoto == "") {
       return (
-        <span className="avatar-title bg-info rounded-circle">
-          {name.substring(0, 1)}
-        </span>
+        <figure className="avatar">
+          <span className="avatar-title bg-info rounded-circle">
+            {name.substring(0, 1)}
+          </span>
+        </figure>
       );
     } else {
       return (
-        <img
-          src={"pphotoChat/" + name}
-          className="rounded-circle"
-          alt="image"
-        />
+        <figure>
+          <img
+            src={"pphotoChat/" + name}
+            className="rounded-circle"
+            alt="image"
+          />
+        </figure>
       );
     }
   }
@@ -200,7 +205,7 @@ function ChatBodyMessage(props) {
                 {getTodayLabel(getDateLabel(dateSend))}
                 <div className={"message-item " + out}>
                   {usrname}
-                  <div className="message-content">
+                  <div className="message-content relative">
                     {message.message}
                     {/* <a
                       href="#"
@@ -218,14 +223,14 @@ function ChatBodyMessage(props) {
                         Delete
                       </a>
                     </div> */}
-                    <div class="btn action-toggle">
-                      <div class="dropdown">
+                    <div class="btn action-toggle action-dropdown-chat">
+                      <div class="dropdown dropdown-chat-message">
                         <a
                           className="text-light"
                           data-toggle="dropdown"
                           href="#"
                         >
-                          <MoreHorizontal />
+                          <ChevronDown />
                         </a>
                         <div class="dropdown-menu dropdown-menu-left">
                           <a href="#" class="dropdown-item">
@@ -234,8 +239,8 @@ function ChatBodyMessage(props) {
                         </div>
                       </div>
                     </div>
-                    <div className="message-avatar">
-                      <div>
+                    <div className="message-avatar flex-end relative custom-time-holder">
+                      <div className="custom-time">
                         <div className="time">
                           {timeSend} {ticks}
                           {/* <Check /> */}
