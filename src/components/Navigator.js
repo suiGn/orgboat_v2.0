@@ -25,8 +25,8 @@ function Navigator(props) {
     axios.get("/logout").then((res) => {
       if (res.data.ok == true) {
         console.log(res);
-        setLogout(true);
-        props.setloggedIn(false);
+        setLogout(res.ok);
+        //props.setloggedIn(false);
       }
     });
 
@@ -38,6 +38,10 @@ function Navigator(props) {
     //     setLogout(data.ok);
     //   });
   }
+  useEffect(() => {
+    props.setloggedIn(false);
+    console.log(logout);
+  }, [logout]);
   // const handleShow = () => props.setShow(true);
 
   const renderRedirect = () => {
