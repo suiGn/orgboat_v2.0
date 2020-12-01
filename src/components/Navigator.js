@@ -55,7 +55,7 @@ function Navigator(props) {
         <ul>
           <li className="logo">
             <a href="#">
-              <img src={blue_helm2} width={55} height alt="Blue Helm" />
+              <img src={blue_helm2} width={42} height alt="Blue Helm" />
             </a>
           </li>
           <li>

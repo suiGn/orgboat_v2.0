@@ -1,6 +1,6 @@
 body {
   background-color: #edeff2;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   color: #6a859c;
   font-size: 16px;
   line-height: 20px;
@@ -43,7 +43,7 @@ h4 {
   font-weight: 700;
 }
 
-h5 {
+/* h5 {
   margin-top: 0px;
   margin-bottom: 20px;
   color: #676770;
@@ -52,7 +52,7 @@ h5 {
   font-weight: 300;
   letter-spacing: 4px;
   text-transform: uppercase;
-}
+} */
 
 h6 {
   margin-top: 0px;
@@ -168,7 +168,7 @@ p {
   display: block;
   width: 100%;
   padding-top: 19px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   color: #fff;
   font-weight: 800;
   text-align: center;
@@ -237,12 +237,24 @@ p {
   padding: 16px 33px 16px 34px;
   border-bottom: 1px solid #2e80b6;
   background-color: #bfe0ff;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(50, 55, 64, 0.67)), to(rgba(50, 55, 64, 0.67))), url('../../Images/gif.gif');
-  background-image: linear-gradient(180deg, rgba(50, 55, 64, 0.67), rgba(50, 55, 64, 0.67)), url('../../Images/gif.gif');
+  background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(50, 55, 64, 0.67)),
+      to(rgba(50, 55, 64, 0.67))
+    ),
+    url("../../Images/gif.gif");
+  background-image: linear-gradient(
+      180deg,
+      rgba(50, 55, 64, 0.67),
+      rgba(50, 55, 64, 0.67)
+    ),
+    url("../../Images/gif.gif");
   background-position: 0px 0px, 0px 0px;
   background-size: auto, cover;
   direction: ltr;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   color: #fff;
   font-weight: 400;
   text-align: left;
@@ -263,16 +275,29 @@ p {
   text-decoration: none;
 }
 
-.login-form-footer a{
-  color: inherit!important;
-  text-decoration: none!important;
+.login-form-footer a {
+  color: inherit !important;
+  text-decoration: none !important;
 }
 
 .lighthouse-background {
   position: relative;
   width: 100%;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(84, 174, 184, 0.93)), to(rgba(84, 174, 184, 0.93))), url('../../Images/stocks.png'), -webkit-gradient(linear, left top, left bottom, from(#26d8ad), to(#26d8ad));
-  background-image: linear-gradient(180deg, rgba(84, 174, 184, 0.93), rgba(84, 174, 184, 0.93)), url('../../Images/stocks.png'), linear-gradient(180deg, #26d8ad, #26d8ad);
+  background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(84, 174, 184, 0.93)),
+      to(rgba(84, 174, 184, 0.93))
+    ),
+    url("../../Images/stocks.png"),
+    -webkit-gradient(linear, left top, left bottom, from(#26d8ad), to(#26d8ad));
+  background-image: linear-gradient(
+      180deg,
+      rgba(84, 174, 184, 0.93),
+      rgba(84, 174, 184, 0.93)
+    ),
+    url("../../Images/stocks.png"), linear-gradient(180deg, #26d8ad, #26d8ad);
   background-position: 0px 0px, 0px 0px, 0px 0px;
   background-size: auto, 64px, auto;
 }
@@ -349,8 +374,20 @@ p {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(54, 61, 71, 0.84)), to(rgba(54, 61, 71, 0.84))), url('../../Images/gif.gif');
-  background-image: linear-gradient(180deg, rgba(54, 61, 71, 0.84), rgba(54, 61, 71, 0.84)), url('../../Images/gif.gif');
+  background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(54, 61, 71, 0.84)),
+      to(rgba(54, 61, 71, 0.84))
+    ),
+    url("../../Images/gif.gif");
+  background-image: linear-gradient(
+      180deg,
+      rgba(54, 61, 71, 0.84),
+      rgba(54, 61, 71, 0.84)
+    ),
+    url("../../Images/gif.gif");
   background-position: 0px 0px, 0px 0px;
   background-size: auto, 480px;
 }
@@ -361,8 +398,20 @@ p {
   top: 0px;
   right: 0px;
   z-index: 9999;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(54, 61, 71, 0.84)), to(rgba(54, 61, 71, 0.84))), url('../../Images/gif.gif');
-  background-image: linear-gradient(180deg, rgba(54, 61, 71, 0.84), rgba(54, 61, 71, 0.84)), url('../../Images/gif.gif');
+  background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(54, 61, 71, 0.84)),
+      to(rgba(54, 61, 71, 0.84))
+    ),
+    url("../../Images/gif.gif");
+  background-image: linear-gradient(
+      180deg,
+      rgba(54, 61, 71, 0.84),
+      rgba(54, 61, 71, 0.84)
+    ),
+    url("../../Images/gif.gif");
   background-position: 0px 0px, 0px 0px;
   background-size: auto, 480px;
 }
@@ -581,8 +630,20 @@ p {
   margin-top: 8px;
   padding-top: 0px;
   float: none;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(54, 61, 71, 0.84)), to(rgba(54, 61, 71, 0.84))), url('../../Images/gif.gif');
-  background-image: linear-gradient(180deg, rgba(54, 61, 71, 0.84), rgba(54, 61, 71, 0.84)), url('../../Images/gif.gif');
+  background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(54, 61, 71, 0.84)),
+      to(rgba(54, 61, 71, 0.84))
+    ),
+    url("../../Images/gif.gif");
+  background-image: linear-gradient(
+      180deg,
+      rgba(54, 61, 71, 0.84),
+      rgba(54, 61, 71, 0.84)
+    ),
+    url("../../Images/gif.gif");
   background-position: 0px 0px, 0px 0px;
   background-size: auto, 480px;
 }
@@ -1021,7 +1082,7 @@ p {
 }
 
 .opt-icon {
-  font-family:  sans-serif;
+  font-family: sans-serif;
   /* Fontawesome, */
   color: #3b99d9;
   font-size: 15px;
@@ -1413,8 +1474,20 @@ p {
   border-color: rgba(0, 0, 0, 0.28);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(54, 61, 71, 0.84)), to(rgba(54, 61, 71, 0.84))), url('../../Images/gif.gif');
-  background-image: linear-gradient(180deg, rgba(54, 61, 71, 0.84), rgba(54, 61, 71, 0.84)), url('../../Images/gif.gif');
+  background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(54, 61, 71, 0.84)),
+      to(rgba(54, 61, 71, 0.84))
+    ),
+    url("../../Images/gif.gif");
+  background-image: linear-gradient(
+      180deg,
+      rgba(54, 61, 71, 0.84),
+      rgba(54, 61, 71, 0.84)
+    ),
+    url("../../Images/gif.gif");
   background-position: 0px 0px, 0px 0px;
   background-size: auto, 480px;
 }
@@ -1575,7 +1648,7 @@ p {
 
 .icon-experience {
   margin-right: 5px;
-  font-family:  sans-serif;
+  font-family: sans-serif;
   /* 'Fontawesome webfont', */
 }
 
@@ -1631,7 +1704,13 @@ p {
   padding-left: 0px;
   float: left;
   background-color: #ecf0f1;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#fff));
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#fff),
+    to(#fff)
+  );
   background-image: linear-gradient(180deg, #fff, #fff);
   color: #49647b;
   font-size: 12px;
@@ -1705,22 +1784,22 @@ p {
   color: #737373;
   border-radius: 5px;
   white-space: nowrap;
-  box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+  box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.05);
   transition-property: background-color, box-shadow;
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
   padding: 0;
- padding-bottom: 8px;
- text-decoration: none;
+  padding-bottom: 8px;
+  text-decoration: none;
 }
 
-.google-button a{
-  color: inherit!important;
+.google-button a {
+  color: inherit !important;
 }
 
 .google-button:focus,
 .google-button:hover {
-  box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1)!important;
+  box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.1) !important;
 }
 
 .google-button:active {
@@ -1738,15 +1817,12 @@ p {
   box-sizing: border-box;
 }
 
-
 .google-button__text {
   display: inline-block;
   vertical-align: middle;
   padding: 0 24px;
   font-size: 14px;
-
 }
-
 
 .sign-up-div-2 {
   display: block;
@@ -1760,7 +1836,7 @@ p {
   position: static;
   display: block;
   margin-bottom: 5px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   color: #fff;
   font-weight: 800;
   text-align: left;
@@ -1854,8 +1930,20 @@ p {
 }
 
 .bodylogin {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(54, 61, 71, 0.84)), to(rgba(54, 61, 71, 0.84))), url('../../Images/gif.gif');
-  background-image: linear-gradient(180deg, rgba(54, 61, 71, 0.84), rgba(54, 61, 71, 0.84)), url('../../Images/gif.gif');
+  background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(54, 61, 71, 0.84)),
+      to(rgba(54, 61, 71, 0.84))
+    ),
+    url("../../Images/gif.gif");
+  background-image: linear-gradient(
+      180deg,
+      rgba(54, 61, 71, 0.84),
+      rgba(54, 61, 71, 0.84)
+    ),
+    url("../../Images/gif.gif");
   background-position: 0px 0px, 0px 0px;
   background-size: auto, 480px;
 }
@@ -2295,10 +2383,7 @@ html.w-mod-js *[data-ix="display"] {
   .form-10 {
     padding-top: 21px;
   }
-  
-  
-  
-  
+
   .button-5 {
     margin-bottom: 25px;
   }
