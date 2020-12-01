@@ -21,7 +21,7 @@ const fs = require("fs");
 const routes = require("./routes");
 const method = require("./methods");
 const mailer = require("./mailer");
-const { upload } = require("./middlewares/multer");
+const multer = require("multer");
 var unicorn = "🍺🦄🍺";
 var uuid = require("node-uuid");
 var nodemailer = require("nodemailer");
@@ -54,6 +54,8 @@ var orgboatDB = connection;
 exports.orgboatDB = connection;
 var sessionStore = new MySQLStore({} /* session store options */, connection);
 exports.sessionStore = sessionStore;
+
+
 
 const server = express()
   .use(cors())
@@ -118,11 +120,18 @@ const server = express()
   )
   .get("/lock-screen", routes.lockScreen)
   .post("/edProf", isLoggedIn, routes.editProfile)
-  .post("/uploadpPhoto", upload.single("file"), function (req, res) {
-    //console.log(req.user[0].u_id);
-
-    upload(req, res, function (err) {
-      //console.log(req);
+  .post("/uploadpPhoto",(req,res)=>{
+    //Multer
+    const storage = multer.diskStorage({
+      destination: "../public/uploads/",
+    filename: function(req, file, cb){
+      cb(null,"IMAGE-" + Date.now() + path.extname(file.originalname));
+    }
+    });
+    const upload = multer({ storage: storage }).single("myImage");
+    upload(req,res, (err)=>{
+      console.log("Request ---", req.body);
+      console.log("Request file ---", req.file);//Here you get file.
       if (err) {
         //console.log(err);
         res.redirect("/workspace");

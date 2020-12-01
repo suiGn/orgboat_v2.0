@@ -12,6 +12,7 @@ function EditProfile(props) {
   const [webSite, setWebSite] = useState("");
   const [about, setAbout] = useState("");
   const [pphoto, setPphoto] = useState("");
+  const [fileState, setFileState] = useState(null);
 
   console.log(props);
   let profileInfo;
@@ -34,6 +35,27 @@ function EditProfile(props) {
     }
   }, [props.userProfile.usrprofile]);
 
+  function onFormSubmit(e){
+    e.preventDefault();
+    console.log(fileState);
+    const formData = new FormData();
+    formData.append('myImage',fileState);
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+    };
+    axios.post("/uploadpPhoto",formData,config)
+        .then((response) => {
+            //alert("The file is successfully uploaded");
+        }).catch((error) => {
+    });
+  }
+  function onChange(e) {
+    setFileState(e.target.files[0]);
+  }
+
+  console.log(profileInfo);
   function SaveProfile(e) {
     e.preventDefault();
     axios.post("/edProf", {
@@ -44,17 +66,6 @@ function EditProfile(props) {
       aboutEditP: about,
     });
   }
-
-  function SaveImage(e) {
-    e.preventDefault();
-    axios.post("/uploadpPhoto", {
-      path: pphoto,
-      u_id: props.my_uid,
-    });
-  }
-
-  console.log(profileInfo);
-
   return (
     <div
       className="modal fade"
@@ -236,9 +247,7 @@ function EditProfile(props) {
                   <form
                     id="uploadForm"
                     method="post"
-                    onSubmit={(e) => {
-                      SaveImage(e);
-                    }}
+                    onSubmit={onFormSubmit}
                   >
                     <label className="col-form-label">Avatar</label>
                     <div className="d-flex align-items-center">
@@ -252,12 +261,12 @@ function EditProfile(props) {
                       <div className="custom-file">
                         <input
                           type="file"
-                          name="avatarEditP"
+                          name="myImage"
                           className="custom-file-input"
                           id="customFile"
                           style={{ fontColor: "white !important" }}
-                          data={pphoto}
-                          onChange={(e) => setPphoto(e.target.value)}
+                          //data={pphoto}
+                          onChange={onChange}
                         />
                         <label
                           className="custom-file-label"
