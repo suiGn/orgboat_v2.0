@@ -4,34 +4,47 @@ import Login from "./components/Login.js";
 import Workspace from "./components/Workspace.js";
 import SignUp from "./components/SignUp.js";
 import ResetPass from "./components/reset-pass";
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
-
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 
 function App() {
   const [loggedIn, setloggedIn] = useState(false);
-  useEffect(()=>{
+  useEffect(() => {
     (async () => {
       const response = await fetch("/logged");
       const data = await response.json();
       setloggedIn(data.ok);
       console.log(data.ok);
     })();
-  },[])
-  const logged = async() => {
+  }, []);
+  const logged = async () => {
     const response = await fetch("/logged");
     const data = await response.json();
     setloggedIn(data.ok);
     console.log(data.ok);
-  }
+  };
   return (
     <Router>
       <Switch>
         <Route exact path="/">
-          {loggedIn ? <Redirect to="/workspace" /> : <Login isBadLogin={''}/>}
+          {loggedIn ? <Redirect to="/workspace" /> : <Login isBadLogin={""} />}
         </Route>
-        <Route path="/badLogin" render={(props) => (<Login isBadLogin={'Invalid Username or Password'} />)} />
-        <Route path="/workspace" > 
-          {loggedIn ? <Workspace /> : <Redirect to="/" />}
+        <Route
+          path="/badLogin"
+          render={(props) => (
+            <Login isBadLogin={"Invalid Username or Password"} />
+          )}
+        />
+        <Route path="/workspace">
+          {loggedIn ? (
+            <Workspace setloggedIn={setloggedIn} />
+          ) : (
+            <Redirect to="/" />
+          )}
         </Route>
         <Route path="/signup" component={SignUp} />
         <Route path="/reset-pwd" component={ResetPass} />
@@ -40,6 +53,5 @@ function App() {
     </Router>
   );
 }
-
 
 export default App;
