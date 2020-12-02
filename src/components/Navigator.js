@@ -5,6 +5,7 @@ import { BrowserRouter as Redirect, Link } from "react-router-dom";
 import { User, MessageCircle, Star, Moon, Archive } from "react-feather";
 import blue_helm2 from "../Images/blue_helm2.png";
 import axios from "axios";
+import Cookies from 'universal-cookie';
 const ENDPOINT = "http://localhost:5000";
 
 function Navigator(props) {
@@ -12,6 +13,7 @@ function Navigator(props) {
   // useEffect(() => {
   //   renderRedirect();
   // }, []);
+  const cookies = new Cookies();
   function profiledata(id) {
     const socket = socketIOClient(ENDPOINT);
 
@@ -25,7 +27,9 @@ function Navigator(props) {
     axios.get("/logout").then((res) => {
       if (res.data.ok == true) {
         console.log(res);
-        setLogout(res.ok);
+        //cookies.remove("SESSION_ID", {path: "/", domain: "localhost"});
+        window.location.reload();
+        //setLogout(res.ok);
         //props.setloggedIn(false);
       }
     });
@@ -38,10 +42,12 @@ function Navigator(props) {
     //     setLogout(data.ok);
     //   });
   }
-  useEffect(() => {
-    props.setloggedIn(false);
-    console.log(logout);
-  }, [logout]);
+  // useEffect(() => {
+  //   //props.setloggedIn(false);
+  //   //renderRedirect();
+  //   console.log(logout);
+  //   window.location.reload();
+  // }, [logout]);
   // const handleShow = () => props.setShow(true);
 
   const renderRedirect = () => {
@@ -155,7 +161,7 @@ function Navigator(props) {
               <div className="dropdown-divider"></div>
               <Link to="/">
                 <button
-                  href="#"
+                  href="/"
                   className="dropdown-item text-danger"
                   onClick={logoutServer}
                 >

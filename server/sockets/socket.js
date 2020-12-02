@@ -209,14 +209,18 @@ io.on("connection", function (socket) {
     });
     //Obtaine theme have a user
     socket.on("theme", function () {
-      orgboatDB.query(
-        `SELECT theme FROM usrs WHERE u_id='${user.u_id}'`,
-        function (err, rows) {
-          io.to(user.u_id).emit("retrive theme", {
-            theme: rows,
-          });
-        }
-      );
+      try{
+        orgboatDB.query(
+          `SELECT theme FROM usrs WHERE u_id='${user.u_id}'`,
+          function (err, rows) {
+            io.to(user.u_id).emit("retrive theme", {
+              theme: rows,
+            });
+          }
+        );
+      }catch(e){
+        console.log(e);
+      }
     });
     //Change theme user
     socket.on("change theme", () => {
