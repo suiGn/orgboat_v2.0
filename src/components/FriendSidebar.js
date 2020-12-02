@@ -28,7 +28,7 @@ function FriendSidebar() {
               data-toggle="modal"
               data-target="#addFriends"
             >
-              <i data-feather="user-plus" />
+              <i data-feather="user-plus" className="mr-2" /> Add Contact
             </a>
           </li>
           <li className="list-inline-item d-xl-none d-inline">
