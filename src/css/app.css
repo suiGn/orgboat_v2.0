@@ -4383,15 +4383,19 @@ body.form-membership .form-wrapper hr {
     z-index: 1020;
   }
   body.navigation-open .navigation {
-    display: block;
+    /* display: block; */
+    opacity: 1;
   }
+
   .navigation {
-    display: none;
+    /* display: none; */
     position: fixed;
+    opacity: 0;
     bottom: 0;
     top: 0;
     left: 0;
     z-index: 1021;
+    transition: all.2s ease-in-out;
   }
   body:not(.rtl) .sidebar-group {
     position: fixed;
