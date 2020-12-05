@@ -193,8 +193,7 @@ function ChatBodyMessage(props) {
             dateSend = new Date(message.time);
             let timeSend = timeformat(dateSend);
             let out = my_uid == message_user_uid ? "outgoing-message" : "";
-            let ticks =
-              my_uid == message_user_uid ? <i className="ti-check"></i> : ""; // double checked
+            let ticks = my_uid == message_user_uid ? <Check /> : ""; // double checked
             let usrname =
               message.chat_type == 1 && my_uid != message_user_uid
                 ? message.name
