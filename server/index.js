@@ -123,7 +123,7 @@ const server = express()
   .post("/uploadpPhoto",(req,res)=>{
     //Multer
     const storage = multer.diskStorage({
-      destination: "../public/uploads/",
+      destination: "../build/uploads/",
     filename: function(req, file, cb){
       cb(null,"IMAGE-" + Date.now() + path.extname(file.originalname));
     }
@@ -143,6 +143,9 @@ const server = express()
   })
   .get("/pphoto", (req, res) => {
     //console.log(req);
+    //res.json()
+    //let p = path.join(__dirname, req.user[0].pphoto);
+    //console.log(p);
     res.sendFile(path.join(__dirname, req.user[0].pphoto));
   })
   .get("/pphotoChat/:name", (req, res) => {

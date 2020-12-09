@@ -3,7 +3,7 @@ import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:5000";
 
 function AddContact(props){
-  const [email,setEmail] = useState('');
+  const [email,setEmail] = useState('Search by Email or Username');
   function SearchUserByEmailOrUserName() {
     console.log(email);
     const socket = socketIOClient(ENDPOINT);
@@ -19,7 +19,10 @@ function AddContact(props){
       //   );
       // });
     });
-  };
+  }
+  // useEffect(() => {
+  //   console.log(email);
+  // }, [email]);
 
   function handleEmail(e) {
     setEmail(e.target.value);
@@ -38,20 +41,20 @@ function AddContact(props){
       </div>
       <div className="modal-body">
         {/*<div class="alert alert-info">Send invitations to Contact.</div>*/}
-        <form>
+        <form onSubmit={SearchUserByEmailOrUserName}>
           <div className="form-group">
-            <label htmlFor="emails" className="col-form-label">Search by Email or Username</label>
+    <label htmlFor="emails" className="col-form-label" onChange={handleEmail}>{email}</label>
             <input type="text" className="form-control" id="emails" />
           </div>
-        </form>
-      </div>
-      <div>
+          <div>
         <ul className="list-group list-group-flush" id="searchusers-list" />
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-primary" onclick={SearchUserByEmailOrUserName}>
+        <button type="button" className="btn btn-primary">
           Submit
         </button>
+      </div>
+        </form>
       </div>
     </div>
   </div>
