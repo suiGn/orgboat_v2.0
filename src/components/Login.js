@@ -5,11 +5,16 @@ import lighthouse from "../Images/tour_measure1.png";
 
 function Login(props) {
   return (
-    <div className="bodylogin">
+    <div
+      style={{ display: props.load == false ? "flex" : "none" }}
+      className="bodylogin"
+    >
       <NavLogin />
       <div className="hero-section centered">
         <div className="w-container">
-          <div className="w-form">            <form
+          <div className="w-form">
+            {" "}
+            <form
               id="email-form-3"
               name="formLogin"
               data-name="loginForm"
