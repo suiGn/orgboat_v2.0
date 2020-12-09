@@ -13,7 +13,19 @@ import {
 
 function App() {
   const [loggedIn, setloggedIn] = useState(false);
+  const [load, setLoad] = useState(false);
+
+  function fakeRequest() {
+    return new Promise((resolve) => setTimeout(() => resolve(), 2500));
+  }
+
   useEffect(() => {
+    fakeRequest().then(() => {
+      setLoad(true);
+    });
+
+    console.log("mounted");
+
     (async () => {
       const response = await fetch("/logged");
       const data = await response.json();
@@ -29,9 +41,19 @@ function App() {
   };
   return (
     <Router>
+      <div
+        style={{ display: load == false ? "flex" : "none" }}
+        class="loader-container"
+      >
+        <div class="loader"></div>
+      </div>
       <Switch>
         <Route exact path="/">
-          {loggedIn ? <Redirect to="/workspace" /> : <Login isBadLogin={""} />}
+          {loggedIn ? (
+            <Redirect to="/workspace" />
+          ) : (
+            <Login load={load} isBadLogin={""} />
+          )}
         </Route>
         <Route
           path="/badLogin"
