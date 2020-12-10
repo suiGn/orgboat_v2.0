@@ -16,14 +16,13 @@ function App() {
   const [load, setLoad] = useState(false);
 
   function fakeRequest() {
-    return new Promise((resolve) => setTimeout(() => resolve(), 2500));
+    return new Promise((resolve) => setTimeout(() => resolve(), 2000));
   }
 
   useEffect(() => {
     fakeRequest().then(() => {
       setLoad(true);
     });
-
     console.log("mounted");
 
     (async () => {
@@ -33,12 +32,6 @@ function App() {
       console.log(data.ok);
     })();
   }, []);
-  const logged = async () => {
-    const response = await fetch("/logged");
-    const data = await response.json();
-    setloggedIn(data.ok);
-    console.log(data.ok);
-  };
   return (
     <Router>
       <div

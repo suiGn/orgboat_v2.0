@@ -6,7 +6,7 @@ import lighthouse from "../Images/tour_measure1.png";
 function Login(props) {
   return (
     <div
-      style={{ display: props.load == false ? "flex" : "none" }}
+      style={{ display: props.load == false ? "none" : "block" }}
       className="bodylogin"
     >
       <NavLogin />
