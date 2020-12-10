@@ -116,7 +116,12 @@ function ChatBodyMessage(props) {
   return (
     <div>
       <div className="chat-header">
-        <div className="chat-header-user">{getPhoto()}</div>
+        <div className="chat-header-user">{getPhoto()}
+          <div>
+            <h5 id="chat-name">{name} </h5>
+            <small className="text-success">{/* <i>writing...</i>*/}</small>
+          </div>
+        </div>
         <div className="chat-header-action">
           <ul className="list-inline">
             <li className="list-inline-item d-xl-none d-inline">
