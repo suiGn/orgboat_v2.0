@@ -131,7 +131,7 @@ io.on("connection", function (socket) {
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto 
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message 
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit 10;
@@ -385,9 +385,71 @@ io.on("connection", function (socket) {
         }
       );
     });
+
+    //Add Favorite
+    socket.on("AddFavorite", (chat) => {
+      orgboatDB.query(
+        `SELECT archiveChat,delete_chat,chat_uid,u_id FROM chats_users WHERE chat_uid='${chat.chat_uid}' and u_id='${user.u_id}'`,
+        (err, chats) => {
+          if (err) {
+            return json({
+              ok: false,
+              err: {
+                message: "error al iniciar el chat",
+              },
+            });
+          }
+          if (chats.length >= 1) {
+            console.log(chats);
+            if (chats[0].delete_chat == 1) {
+              orgboatDB.query(
+                `UPDATE chats_users SET favorite = 0 WHERE chat_uid='${chat.chat_uid}' AND u_id='${user.u_id}'`,
+                (err, data) => {
+                  if (err) {
+                    return json({
+                      ok: false,
+                      err: {
+                        message: "error al iniciar el chat",
+                      },
+                    });
+                  }
+                  io.to(user.u_id).emit("retrive AddFavorite");
+                }
+              );
+            }
+          } else {
+            return json({
+              ok: false,
+              err: {
+                message: "error no se agregado al usuario",
+              },
+            });
+          }
+        }
+      );
+    });
+    //Delete message
+    socket.on('Delete message',(message)=>{
+      // if(message.u_id == user.u_id){
+
+      // }
+      console.log(message);
+      orgboatDB.query(
+        `UPDATE messages SET delete_message=1 WHERE message_id='${message.message.message_id}'`,
+        (err,data)=>{
+          if (err) {
+            return json({
+              ok: false,
+              err: {
+                message: "error al eliminar chat",
+              },
+            });
+          }
+          io.to(user.u_id).emit("retriveDeleteMessage");
+        }
+      )
+    })
   } catch {
     console.log("problema");
   }
-  //Delete message
-  //socket.on('Delete message',())
 });

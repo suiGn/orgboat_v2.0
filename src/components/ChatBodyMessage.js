@@ -112,6 +112,15 @@ function ChatBodyMessage(props) {
       setnewMessage("");
     }
   }
+  function DeleteMessage(message){
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("Delete message", { message: message });
+    socket.on("retriveDeleteMessage", () => {
+      //socket.emit("get chats");
+      socket.emit("get messages", { id: chat_uid, page: props.currentPage });
+      setnewMessage("");
+    });
+  };
 
   return (
     <div>
@@ -194,6 +203,7 @@ function ChatBodyMessage(props) {
       <div className="chat-body">
         <div className="messages">
           {messages.map((message, index) => {
+            console.log(message);
             message_user_uid = message.message_user_uid || message.from;
             dateSend = new Date(message.time);
             let timeSend = timeformat(dateSend);
@@ -203,7 +213,6 @@ function ChatBodyMessage(props) {
               message.chat_type == 1 && my_uid != message_user_uid
                 ? message.name
                 : "";
-
             return (
               <div className="messages-container" key={index + 1}>
                 {getTodayLabel(getDateLabel(dateSend))}
@@ -222,7 +231,7 @@ function ChatBodyMessage(props) {
                       <a
                         href="#"
                         className="dropdown-item"
-                        onClick="DeleteChat('a4bbbc58-97ea-46a9-8065-6a3194b9527b')"
+                        onClick={() => DeleteMessage(message)}
                       >
                         Delete
                       </a>
@@ -237,7 +246,7 @@ function ChatBodyMessage(props) {
                           <ChevronDown />
                         </a>
                         <div class="dropdown-menu dropdown-menu-left">
-                          <a href="#" class="dropdown-item">
+                          <a href="#" class="dropdown-item" onClick={() => DeleteMessage(message)}>
                             Delete
                           </a>
                         </div>

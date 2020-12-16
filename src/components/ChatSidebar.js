@@ -51,6 +51,14 @@ function ChatSidebar(props, clicked) {
     });
   }
 
+  function DeleteChat(idchat) {
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("Delete Chat", { chat_uid: idchat });
+    socket.on("retrive delete chat", () => {
+      socket.emit("get chats");
+    });
+  };
+
   return (
     <div id="chats" className="sidebar active">
       <header>
@@ -216,6 +224,7 @@ function ChatSidebar(props, clicked) {
                                 <div className="dropdown-divider"></div>
                                 <a
                                   href="#"
+                                  onClick={() => DeleteChat(chat.chat_uid)}
                                   className="dropdown-item text-danger"
                                   //   onclick="DeleteChat('${
                                   //   chat.chat_uid

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
+import { MoreHorizontal } from "react-feather";
+
 
 const ENDPOINT = "http://localhost:5000";
 
@@ -12,6 +14,13 @@ function FriendSidebar() {
       setContact(contacts);
     });
   }, []);
+  function NewChat(idchat){
+    console.log(idchat);
+    socket.emit("newChat", { chat_uid: idchat });
+    socket.on("retrive newchat", () => {
+      socket.emit("get chats");
+    });
+  };
   return (
     <div id="friends" className="sidebar">
       <header>
@@ -56,7 +65,23 @@ function FriendSidebar() {
               if (user.chat_type === 0) {
                 if (my_uid != user.user_chat) {
                   let chat_name = user.name;
+                  let p;
                   let chat_initial = chat_name.substring(0, 1);
+                  if (user.pphoto === "") {
+                    p = (
+                      <span className="avatar-title bg-info rounded-circle">
+                        {chat_initial}
+                      </span>
+                    );
+                  } else {
+                    p = (
+                      <img
+                        src={"/pphotoChat/" + chat_name}
+                        className="rounded-circle"
+                        alt="image"
+                      />
+                    );
+                  }
                   return (
                     <li
                       className="list-group-item"
@@ -66,11 +91,7 @@ function FriendSidebar() {
                     >
                       <div>
                         <figure className="avatar">
-                          <img
-                            src="http://via.placeholder.com/128X128"
-                            className="rounded-circle"
-                            alt="image"
-                          />
+                          {p}
                         </figure>
                       </div>
                       <div className="users-list-body">
@@ -84,10 +105,14 @@ function FriendSidebar() {
                           <div className="action-toggle">
                             <div className="dropdown">
                               <a data-toggle="dropdown" href="#">
-                                <i data-feather="more-horizontal" />
+                                <MoreHorizontal />
                               </a>
                               <div className="dropdown-menu dropdown-menu-right">
-                                <a href="#" className="dropdown-item">
+                                <a 
+                                href="#" 
+                                onClick={() => NewChat(user.chat_uid)}
+                                className="dropdown-item"
+                                >
                                   New chat
                                 </a>
                                 <a
