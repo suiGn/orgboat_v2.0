@@ -76,7 +76,7 @@ function FriendSidebar() {
                   } else {
                     p = (
                       <img
-                        src={"/pphotoChat/" + chat_name}
+                        src={user.pphoto}
                         className="rounded-circle"
                         alt="image"
                       />

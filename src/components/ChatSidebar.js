@@ -153,7 +153,7 @@ function ChatSidebar(props, clicked) {
                   } else {
                     p = (
                       <img
-                        src={"/pphotoChat/" + chat_name}
+                        src={chat.pphoto}
                         className="rounded-circle"
                         alt="image"
                       />

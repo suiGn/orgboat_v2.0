@@ -4671,3 +4671,7 @@ body.dark nav.navigation ul li > a.active {
     transform: rotate(360deg);
   }
 }
+
+.custom-modal-text {
+  font-size: 20px;
+}

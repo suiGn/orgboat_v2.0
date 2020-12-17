@@ -2,6 +2,7 @@ const { io, orgboatDB, sessionStore, server } = require("../index");
 const { json } = require("sequelize");
 const uuid = require("node-uuid");
 const { formatLocalDate } = require("../middlewares/authentication");
+const routes = require('../routes');
 
 io.on("connection", function (socket) {
   //login in socket
@@ -233,6 +234,7 @@ io.on("connection", function (socket) {
     });
     //For search
     socket.on("SearchUserByEmailOrUsername", (data) => {
+      console.log(data);
       orgboatDB.query(
         `SELECT name,usrname,email,u_id FROM usrs WHERE email='${data.email}' or usrname='${data.usrname}'`,
         (err, rows) => {

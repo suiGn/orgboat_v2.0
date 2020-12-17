@@ -3,22 +3,35 @@ import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:5000";
 
 function AddContact(props){
-  const [email,setEmail] = useState('Search by Email or Username');
+  const [email,setEmail] = useState('');
+  const [findUsers,setfindUsers] = useState([]);
   function SearchUserByEmailOrUserName() {
-    console.log(email);
+    //console.log(email);
     const socket = socketIOClient(ENDPOINT);
     var input = email;
     setEmail('');
     socket.emit("SearchUserByEmailOrUsername", { email: input, usrname: input });
     socket.on("retrive SearchUserByEmailOrUsername", (data) => {
-      console.log(data);
-      // $("#searchusers-list").html("");
-      // data.users.forEach((user) => {
-      //   $("#searchusers-list").append(
-      //     `<li>${user.name}<button type="button" onclick="AddUserContact('${user.u_id}')" data-dismiss="modal">Add</button></li>`
-      //   );
-      // });
+      //console.log(data);
+      setfindUsers(data.users);
+      //console.log(findUsers);
     });
+  }
+
+  function AddUserContact(u_id) {
+    console.log(u_id);
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("AddContact", { u_id: u_id });
+    socket.on("retrive Addcontact", (mssg) => {
+      console.log(mssg);
+      socket.emit("init message", {
+        chat: mssg.chat,
+        message: mssg.message,
+      });
+    });
+    socket.on('charge new contact',()=>{
+      socket.emit("get chats");
+    })
   }
   // useEffect(() => {
   //   console.log(email);
@@ -41,20 +54,37 @@ function AddContact(props){
       </div>
       <div className="modal-body">
         {/*<div class="alert alert-info">Send invitations to Contact.</div>*/}
-        <form onSubmit={SearchUserByEmailOrUserName}>
+        <form >
           <div className="form-group">
-    <label htmlFor="emails" className="col-form-label" onChange={handleEmail}>{email}</label>
-            <input type="text" className="form-control" id="emails" />
+            <label htmlFor="emails" className="col-form-label" >Search by Email or Username</label>
+            <input type="text" className="form-control" id="emails" onChange={handleEmail}/>
           </div>
           <div>
         <ul className="list-group list-group-flush" id="searchusers-list" />
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-primary">
+        <button type="button" className="btn btn-primary" onClick={() => SearchUserByEmailOrUserName()}>
           Submit
         </button>
       </div>
-        </form>
+      <hr></hr>
+      <div>
+        {
+          findUsers && findUsers.length > 0 ? (
+            findUsers.map((userf, index) => {
+              return(
+                <li className="custom-modal-text"> 
+                  {userf.name}
+                  <button type="button" onClick={() => AddUserContact(userf.u_id)} data-dismiss="modal" className="btn btn-primary ml-5 mt-2">Add</button>
+                </li>
+              );
+            })
+          ) : (
+            <span></span>
+          )
+        }
+      </div>
+      </form>
       </div>
     </div>
   </div>

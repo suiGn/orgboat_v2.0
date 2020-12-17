@@ -357,7 +357,7 @@ exports.editProfile = function (req, res) {
 
 exports.savedbimage = function (req, res) {
   console.log(req.file);
-  var photo = req.file.path;
+  var photo = `uploads/${req.file.filename}`;
   var uidd = req.user[0].u_id;
   index.orgboatDB.query(
     "UPDATE usrs SET pphoto = ? WHERE u_id = ?",

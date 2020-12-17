@@ -23,7 +23,7 @@ function Profile(props, clicked) {
     } else {
       userPhoto = (
         <img
-          src={"/pphotoChat/" + data.name}
+          src={data.pphoto}
           class="rounded-circle"
           alt="image"
         ></img>

@@ -66,7 +66,7 @@ function ChatBodyMessage(props) {
       return (
         <figure>
           <img
-            src={"pphotoChat/" + name}
+            src={pphoto}
             className="rounded-circle"
             alt="image"
           />
