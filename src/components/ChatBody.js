@@ -7,15 +7,16 @@ import ReactDOM from "react-dom";
 import $ from "jquery";
 const ENDPOINT = "http://localhost:5000";
 
-function ChatBody({ my_uid, clicked }) {
+function ChatBody({ my_uid, clicked, setuserProfile }) {
   const [chatMessages, setChatMessages] = useState([]);
   let messagesArray;
   let currentPage = 0;
+
   const socket = socketIOClient(ENDPOINT);
   useEffect(() => {
     if (clicked != 0) {
       currentPage = currentPage + 1;
-      socket.emit("get messages", { id: clicked, page: currentPage });
+      socket.emit("get messages", { id: clicked.chat_uid, page: currentPage });
     }
     socket.on("retrieve messages", (response) => {
       // setChatMessages((chatMessages) => [...chatMessages, response.messages]);
@@ -32,17 +33,16 @@ function ChatBody({ my_uid, clicked }) {
   }, []);
 
   messagesArray = chatMessages;
-  // messages = response.chats;
-  // my_uid = response.my_uid;
-  console.log("messagesArray", messagesArray);
   return (
     <div className="chat">
-      {messagesArray && messagesArray.length > 0 && clicked ? (
+      {(messagesArray && messagesArray.length > 0 && clicked.chat_uid) ||
+      clicked.chat_uid ? (
         <ChatBodyMessage
           messages={messagesArray}
-          chat_uid={clicked}
+          clicked={clicked}
           my_uid={my_uid}
           page={currentPage}
+          setuserProfile={setuserProfile}
         />
       ) : (
         <ChatBodyNoMessage />

@@ -5,7 +5,7 @@ import { BrowserRouter as Redirect, Link } from "react-router-dom";
 import { User, MessageCircle, Star, Moon, Archive } from "react-feather";
 import blue_helm2 from "../Images/blue_helm2.png";
 import axios from "axios";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 const ENDPOINT = "http://localhost:5000";
 
 function Navigator(props) {
@@ -26,7 +26,6 @@ function Navigator(props) {
   function logoutServer() {
     axios.get("/logout").then((res) => {
       if (res.data.ok == true) {
-        console.log(res);
         //cookies.remove("SESSION_ID", {path: "/", domain: "localhost"});
         window.location.reload();
         //setLogout(res.ok);

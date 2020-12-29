@@ -16,15 +16,24 @@ const ENDPOINT = "http://localhost:5000";
 
 function ChatBodyMessage(props) {
   const [newMessage, setnewMessage] = useState([]);
-  let messages = [].concat(props.messages).reverse();
-
+  let messages;
+  let userData;
+  let dateSend;
+  if (props.messages && props.messages.length > 0) {
+    messages = [].concat(props.messages).reverse();
+    dateSend = new Date(messages[0].time);
+  }
+  props.clicked > 0 ? (userData = props.clicked) : (userData = []);
   let actualLabelDate = "";
   let message_user_uid;
-  let pphoto = "";
-  let name = "";
+  let pphoto =
+    my_uid != userData.message_user_uid ? (pphoto = userData.pphoto) : "";
+  let name = my_uid != userData.message_user_uid ? userData.name : "";
   let p;
-  let chat_uid = props.chat_uid;
+  let chat_uid = userData.chat_uid;
   let my_uid = props.my_uid;
+
+  // props.setNewChat([]);
 
   function timeformat(date) {
     var h = date.getHours();
@@ -49,10 +58,12 @@ function ChatBodyMessage(props) {
     return dateLabel;
   }
 
+  console.log("chat uid", userData);
+
   function getPhoto() {
-    if (my_uid != messages[0].message_user_uid) {
-      pphoto = messages[0].pphoto;
-      name = messages[0].name;
+    if (my_uid != userData.message_user_uid) {
+      pphoto = userData.pphoto;
+      name = userData.name;
     }
     if (pphoto == "") {
       return (
@@ -65,16 +76,11 @@ function ChatBodyMessage(props) {
     } else {
       return (
         <figure>
-          <img
-            src={pphoto}
-            className="rounded-circle"
-            alt="image"
-          />
+          <img src={pphoto} className="rounded-circle" alt="image" />
         </figure>
       );
     }
   }
-  let dateSend = new Date(messages[0].time);
 
   let yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
@@ -112,7 +118,7 @@ function ChatBodyMessage(props) {
       setnewMessage("");
     }
   }
-  function DeleteMessage(message){
+  function DeleteMessage(message) {
     const socket = socketIOClient(ENDPOINT);
     socket.emit("Delete message", { message: message });
     socket.on("retriveDeleteMessage", () => {
@@ -120,15 +126,24 @@ function ChatBodyMessage(props) {
       socket.emit("get messages", { id: chat_uid, page: props.currentPage });
       setnewMessage("");
     });
-  };
+  }
+
+  function profiledata(id) {
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("ViewProfile", { id: id });
+    socket.on("retrieve viewprofile", function (data) {
+      props.setuserProfile(data);
+    });
+  }
 
   return (
     <div>
       <div className="chat-header">
-        <div className="chat-header-user">{getPhoto()}
+        <div className="chat-header-user">
+          {getPhoto()}
           <div>
             <h5 id="chat-name">{name} </h5>
-            <small className="text-success">{/* <i>writing...</i>*/}</small>
+            {/* <small className="text-success">{" <i>writing...</i>"}</small> */}
           </div>
         </div>
         <div className="chat-header-action">
@@ -182,6 +197,7 @@ function ChatBodyMessage(props) {
                   href="#"
                   data-navigation-target="contact-information"
                   className="dropdown-item"
+                  onClick={() => profiledata(chat_uid)}
                 >
                   Profile
                 </a>
@@ -202,25 +218,27 @@ function ChatBodyMessage(props) {
       </div>
       <div className="chat-body">
         <div className="messages">
-          {messages.map((message, index) => {
-            console.log(message);
-            message_user_uid = message.message_user_uid || message.from;
-            dateSend = new Date(message.time);
-            let timeSend = timeformat(dateSend);
-            let out = my_uid == message_user_uid ? "outgoing-message" : "";
-            let ticks = my_uid == message_user_uid ? <Check /> : ""; // double checked
-            let usrname =
-              message.chat_type == 1 && my_uid != message_user_uid
-                ? message.name
-                : "";
-            return (
-              <div className="messages-container" key={index + 1}>
-                {getTodayLabel(getDateLabel(dateSend))}
-                <div className={"message-item " + out}>
-                  {usrname}
-                  <div className="message-content relative">
-                    {message.message}
-                    {/* <a
+          {messages && messages.length > 0
+            ? messages.map((message, index) => {
+                message_user_uid = message.message_user_uid || message.from;
+                dateSend = new Date(message.time);
+                let timeSend = timeformat(dateSend);
+                let out = my_uid == message_user_uid ? "outgoing-message" : "";
+                let ticks =
+                  my_uid == message_user_uid ? <Check size={12} /> : ""; // double checked
+                let usrname =
+                  message.chat_type == 1 && my_uid != message_user_uid
+                    ? message.name
+                    : "";
+                return (
+                  <div className="messages-container" key={index + 1}>
+                    {getTodayLabel(getDateLabel(dateSend))}
+                    <div className={"message-item " + out}>
+                      {usrname}
+                      <div className="message-content relative">
+                        <div className="message-holder">{message.message}</div>
+
+                        {/* <a
                       href="#"
                       className="btn btn-outline-light"
                       data-toggle="dropdown"
@@ -236,35 +254,41 @@ function ChatBodyMessage(props) {
                         Delete
                       </a>
                     </div> */}
-                    <div class="btn action-toggle action-dropdown-chat">
-                      <div class="dropdown dropdown-chat-message">
-                        <a
-                          className="text-light"
-                          data-toggle="dropdown"
-                          href="#"
-                        >
-                          <ChevronDown />
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-left">
-                          <a href="#" class="dropdown-item" onClick={() => DeleteMessage(message)}>
-                            Delete
-                          </a>
+                        <div class="btn action-toggle action-dropdown-chat">
+                          <div class="dropdown dropdown-chat-message">
+                            <a
+                              className="text-light"
+                              data-toggle="dropdown"
+                              href="#"
+                            >
+                              <ChevronDown />
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-left">
+                              <a
+                                href="#"
+                                class="dropdown-item"
+                                onClick={() => DeleteMessage(message)}
+                              >
+                                Delete
+                              </a>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="message-avatar flex-end relative custom-time-holder">
-                      <div className="custom-time">
-                        <div className="time">
-                          {timeSend} {ticks}
-                          {/* <Check /> */}
+                        {/* flex-end relative custom-time-holder */}
+                        <div className="message-avatar">
+                          <div className="custom-time">
+                            <div className="time">
+                              {timeSend} {ticks}
+                              {/* <Check /> */}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })
+            : ""}
         </div>
       </div>
       <div className="chat-footer">

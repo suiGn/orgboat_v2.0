@@ -13,12 +13,11 @@ const ENDPOINT = "http://localhost:5000/";
 
 function Workspace() {
   const [response, setResponse] = useState([]);
-  const [clicked, setClicked] = useState(0);
+  const [clicked, setClicked] = useState([]);
   const [userProfile, setuserProfile] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [showContact, setShowContact] = useState(false);
-
 
   let chats;
   let currentPage = 0;
@@ -41,8 +40,12 @@ function Workspace() {
 
   return (
     <div>
-      <EditProfile my_uid={my_uid} userProfile={userProfile} show={showEditProfile} />
-      <AddContact my_uid={my_uid} show={showContact}/>
+      <EditProfile
+        my_uid={my_uid}
+        userProfile={userProfile}
+        show={showEditProfile}
+      />
+      <AddContact my_uid={my_uid} show={showContact} />
       <div className="layout">
         <Navigator
           my_uid={my_uid}
@@ -55,16 +58,24 @@ function Workspace() {
               clicked={clicked}
               setClicked={setClicked}
               response={response}
+              setuserProfile={setuserProfile}
             />
             <ArchiveSidebar
               clicked={clicked}
               setClicked={setClicked}
               response={response}
             />
-            <FriendSidebar setContact={setShowContact} />
+            <FriendSidebar
+              setClicked={setClicked}
+              setContact={setShowContact}
+            />
             <FavoriteSidebar />
           </div>
-          <ChatBody my_uid={my_uid} clicked={clicked} />
+          <ChatBody
+            my_uid={my_uid}
+            clicked={clicked}
+            setuserProfile={setuserProfile}
+          />
           <Profile userProfile={userProfile} />
         </div>
       </div>

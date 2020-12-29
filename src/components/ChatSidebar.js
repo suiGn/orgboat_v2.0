@@ -57,7 +57,7 @@ function ChatSidebar(props, clicked) {
     socket.on("retrive delete chat", () => {
       socket.emit("get chats");
     });
-  };
+  }
 
   return (
     <div id="chats" className="sidebar active">
@@ -162,7 +162,7 @@ function ChatSidebar(props, clicked) {
                   return (
                     <li
                       className={
-                        clicked === chat.chat_uid && "is-active"
+                        clicked.chat_uid === chat.chat_uid && "is-active"
                           ? "list-group-item chat-conversation-select chat-is-active"
                           : "list-group-item chat-conversation-select"
                       }
@@ -172,7 +172,7 @@ function ChatSidebar(props, clicked) {
                       t={timeMessage.getTime()}
                       u={chat_with_usr}
                       onClick={() => {
-                        props.setClicked(chat.chat_uid);
+                        props.setClicked(chat);
                       }}
                     >
                       <div>

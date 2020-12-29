@@ -13,8 +13,6 @@ function EditProfile(props) {
   const [about, setAbout] = useState("");
   const [pphoto, setPphoto] = useState("");
   const [fileState, setFileState] = useState(null);
-
-  console.log(props);
   let profileInfo;
 
   useEffect(() => {
@@ -35,27 +33,26 @@ function EditProfile(props) {
     }
   }, [props.userProfile.usrprofile]);
 
-  function onFormSubmit(e){
+  function onFormSubmit(e) {
     e.preventDefault();
-    console.log(fileState);
     const formData = new FormData();
-    formData.append('myImage',fileState);
+    formData.append("myImage", fileState);
     const config = {
-        headers: {
-            'content-type': 'multipart/form-data'
-        }
+      headers: {
+        "content-type": "multipart/form-data",
+      },
     };
-    axios.post("/uploadpPhoto",formData,config)
-        .then((response) => {
-            //alert("The file is successfully uploaded");
-        }).catch((error) => {
-    });
+    axios
+      .post("/uploadpPhoto", formData, config)
+      .then((response) => {
+        //alert("The file is successfully uploaded");
+      })
+      .catch((error) => {});
   }
   function onChange(e) {
     setFileState(e.target.files[0]);
   }
 
-  console.log(profileInfo);
   function SaveProfile(e) {
     e.preventDefault();
     axios.post("/edProf", {
@@ -244,11 +241,7 @@ function EditProfile(props) {
               </div>
               <div class="tab-pane" id="profilePic" role="tabpanel">
                 <div className="form-group">
-                  <form
-                    id="uploadForm"
-                    method="post"
-                    onSubmit={onFormSubmit}
-                  >
+                  <form id="uploadForm" method="post" onSubmit={onFormSubmit}>
                     <label className="col-form-label">Avatar</label>
                     <div className="d-flex align-items-center">
                       <div>

@@ -4641,6 +4641,13 @@ body.dark nav.navigation ul li > a.active {
   position: absolute;
   bottom: 0;
   right: 0;
+  width: 80px;
+}
+
+.message-holder {
+  min-width: 130px;
+  max-width: 1000px;
+  width: auto;
 }
 
 /* Loader */

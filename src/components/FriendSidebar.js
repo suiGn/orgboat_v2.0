@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import { MoreHorizontal } from "react-feather";
 
-
 const ENDPOINT = "http://localhost:5000";
 
-function FriendSidebar() {
+function FriendSidebar(props) {
   const [contact, setContact] = useState([]);
   const socket = socketIOClient(ENDPOINT);
   useEffect(() => {
@@ -14,13 +13,13 @@ function FriendSidebar() {
       setContact(contacts);
     });
   }, []);
-  function NewChat(idchat){
-    console.log(idchat);
-    socket.emit("newChat", { chat_uid: idchat });
+  function NewChat(userData) {
+    props.setClicked(userData);
+    socket.emit("newChat", { chat_uid: userData.chat_uid });
     socket.on("retrive newchat", () => {
       socket.emit("get chats");
     });
-  };
+  }
   return (
     <div id="friends" className="sidebar">
       <header>
@@ -90,9 +89,7 @@ function FriendSidebar() {
                       data-navigation-target="chats"
                     >
                       <div>
-                        <figure className="avatar">
-                          {p}
-                        </figure>
+                        <figure className="avatar">{p}</figure>
                       </div>
                       <div className="users-list-body">
                         <div>
@@ -108,10 +105,10 @@ function FriendSidebar() {
                                 <MoreHorizontal />
                               </a>
                               <div className="dropdown-menu dropdown-menu-right">
-                                <a 
-                                href="#" 
-                                onClick={() => NewChat(user.chat_uid)}
-                                className="dropdown-item"
+                                <a
+                                  href="#"
+                                  onClick={() => NewChat(user)}
+                                  className="dropdown-item"
                                 >
                                   New chat
                                 </a>
