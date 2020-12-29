@@ -83,7 +83,7 @@ function FriendSidebar(props) {
                   }
                   return (
                     <li
-                      className="list-group-item"
+                      className="list-group-item chat-conversation-select"
                       i={user.chat_uid}
                       n={chat_name}
                       data-navigation-target="chats"
@@ -93,10 +93,14 @@ function FriendSidebar(props) {
                       </div>
                       <div className="users-list-body">
                         <div>
-                          <h5 i={user.chat_uid} n={chat_name}>
+                          <h5
+                            className="last-message-user"
+                            i={user.chat_uid}
+                            n={chat_name}
+                          >
                             {chat_name}
                           </h5>
-                          <p>{chat_name}</p>
+                          <p className="last-message-chat">{chat_name}</p>
                         </div>
                         <div className="users-list-action">
                           <div className="action-toggle">

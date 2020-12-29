@@ -23,7 +23,8 @@ function ChatBodyMessage(props) {
     messages = [].concat(props.messages).reverse();
     dateSend = new Date(messages[0].time);
   }
-  props.clicked > 0 ? (userData = props.clicked) : (userData = []);
+  props.clicked ? (userData = props.clicked) : (userData = []);
+  console.log(userData);
   let actualLabelDate = "";
   let message_user_uid;
   let pphoto =

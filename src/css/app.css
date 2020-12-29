@@ -4650,6 +4650,20 @@ body.dark nav.navigation ul li > a.active {
   width: auto;
 }
 
+.chat-conversation-select,
+.list-group-item {
+  padding: 10px 30px !important;
+}
+
+.last-message-chat,
+.last-message-user {
+  margin-top: 0px;
+}
+
+.message-avatar {
+  width: 200px;
+}
+
 /* Loader */
 .loader-container {
   width: 100%;
