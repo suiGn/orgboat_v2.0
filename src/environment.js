@@ -1,9 +1,9 @@
 export const development = {
-    ENDPOINT: 'http://localhost:5000/'
-  };
-  
-  export const production = {
-    ENDPOINT: 'http://localhost:5000/'
-  };
-  
-  export default development;
+  ENDPOINT: "https://orgboat.me/",
+};
+
+export const production = {
+  ENDPOINT: "https://orgboat.me/",
+};
+
+export default development;

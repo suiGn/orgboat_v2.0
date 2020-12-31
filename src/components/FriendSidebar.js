@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import { MoreHorizontal } from "react-feather";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://orgboat.me";
 
 function FriendSidebar(props) {
   const [contact, setContact] = useState([]);

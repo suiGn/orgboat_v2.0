@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import { X, Upload, FileText } from "react-feather";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://orgboat.me";
 
 function Profile(props, clicked) {
   let userPhoto;
@@ -22,11 +22,7 @@ function Profile(props, clicked) {
       );
     } else {
       userPhoto = (
-        <img
-          src={data.pphoto}
-          class="rounded-circle"
-          alt="image"
-        ></img>
+        <img src={data.pphoto} class="rounded-circle" alt="image"></img>
       );
     }
   }

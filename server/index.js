@@ -10,7 +10,7 @@ const express = require("express");
 const cookieSession = require("cookie-session");
 const path = require("path");
 const PORT = process.env.PORT || 5000;
-//const FRONT_END = process.env.URL_FRONT || "http://localhost:5000";
+//const FRONT_END = process.env.URL_FRONT || "https://orgboat.me";
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const config = require("./configs/config");
@@ -54,8 +54,6 @@ var orgboatDB = connection;
 exports.orgboatDB = connection;
 var sessionStore = new MySQLStore({} /* session store options */, connection);
 exports.sessionStore = sessionStore;
-
-
 
 const server = express()
   .use(cors())
@@ -120,18 +118,18 @@ const server = express()
   )
   .get("/lock-screen", routes.lockScreen)
   .post("/edProf", isLoggedIn, routes.editProfile)
-  .post("/uploadpPhoto",(req,res)=>{
+  .post("/uploadpPhoto", (req, res) => {
     //Multer
     const storage = multer.diskStorage({
       destination: "../build/uploads/",
-    filename: function(req, file, cb){
-      cb(null,"IMAGE-" + Date.now() + path.extname(file.originalname));
-    }
+      filename: function (req, file, cb) {
+        cb(null, "IMAGE-" + Date.now() + path.extname(file.originalname));
+      },
     });
     const upload = multer({ storage: storage }).single("myImage");
-    upload(req,res, (err)=>{
+    upload(req, res, (err) => {
       console.log("Request ---", req.body);
-      console.log("Request file ---", req.file);//Here you get file.
+      console.log("Request file ---", req.file); //Here you get file.
       if (err) {
         //console.log(err);
         res.redirect("/workspace");

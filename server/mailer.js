@@ -85,12 +85,12 @@ exports.rpwdm = function (req, res, next) {
             transporter.sendMail(mailOptions, function (error, info) {
               if (error) {
                 res.json({
-                  ok:false
+                  ok: false,
                 });
                 console.log(error);
               } else {
                 res.json({
-                  ok:true
+                  ok: true,
                 });
               }
             });
@@ -98,7 +98,7 @@ exports.rpwdm = function (req, res, next) {
         ); //closes Insert New Usr Into Table
       } else {
         res.json({
-          ok:false
+          ok: false,
         });
       }
     }
@@ -140,7 +140,7 @@ const verifyEmail = (req, res, email, uuid) => {
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                        <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top"><a href="http://localhost:5000/verMail?uuid=` +
+                                        valign="top"><a href="https://orgboat.me/verMail?uuid=` +
       uuid +
       `&em=` +
       email +

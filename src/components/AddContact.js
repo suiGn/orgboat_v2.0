@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://orgboat.me";
 
 function AddContact(props) {
   const [email, setEmail] = useState("");

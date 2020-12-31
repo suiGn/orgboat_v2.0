@@ -12,7 +12,7 @@ import {
   ChevronDown,
   Check,
 } from "react-feather";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://orgboat.me";
 
 function ChatBodyMessage(props) {
   const [newMessage, setnewMessage] = useState([]);

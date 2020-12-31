@@ -9,7 +9,7 @@ function Login(props) {
       style={{ display: props.load == false ? "none" : "block" }}
       className="bodylogin"
     >
-      <NavLogin login={'login'}/>
+      <NavLogin login={"login"} />
       <div className="hero-section centered">
         <div className="w-container">
           <div className="w-form">
@@ -19,7 +19,7 @@ function Login(props) {
               name="formLogin"
               data-name="loginForm"
               className="form-10"
-              action="http://localhost:5000/login"
+              action="https://orgboat.me/login"
               method="post"
             >
               <h1 className="fingertipsslogan login-head-form">LOG IN</h1>

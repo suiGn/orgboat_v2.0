@@ -6,7 +6,7 @@ import { User, MessageCircle, Star, Moon, Archive } from "react-feather";
 import blue_helm2 from "../Images/blue_helm2.png";
 import axios from "axios";
 import Cookies from "universal-cookie";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://orgboat.me";
 
 function Navigator(props) {
   const [logout, setLogout] = useState(false);
@@ -33,7 +33,7 @@ function Navigator(props) {
       }
     });
 
-    // fetch("http://localhost:5000/logout")
+    // fetch("https://orgboat.me/logout")
     //   .then((response) => {
     //     return response.json();
     //   })

@@ -3,7 +3,7 @@ import NavLogin from "./NavLogin";
 import light from "../Images/mesure_2.png";
 import lighthouse from "../Images/tour_measure1.png";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:5000/subscribe";
+const ENDPOINT = "https://orgboat.me/subscribe";
 
 function SignUp() {
   const [response, setResponse] = useState("");
@@ -18,7 +18,7 @@ function SignUp() {
   }, []);
   return (
     <div className="body-8">
-      <NavLogin login={'signup'}/>
+      <NavLogin login={"signup"} />
       <div className="sign-up-div-2">
         <h1 className="fingertipsslogan-2 login-head-form reg">SIGN UP</h1>
         <div className="w-form">
@@ -27,7 +27,7 @@ function SignUp() {
             name="subForm"
             data-name="Subscribe Form"
             className="form-register-2"
-            action="http://localhost:5000/subscribing"
+            action="https://orgboat.me/subscribing"
             method="post"
             onsubmit="return validateForm()"
           >

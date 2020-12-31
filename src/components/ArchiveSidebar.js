@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import { X, MoreHorizontal } from "react-feather";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://orgboat.me";
 
 function ArchiveSidebar(props, clicked) {
   const [unarchive, setUnarchive] = useState([]);

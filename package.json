@@ -44,5 +44,5 @@
   "devDependencies": {
     "webpack": "^4.42.0"
   },
-  "proxy": "http://localhost:5000/"
+  "proxy": "https://orgboat.me/"
 }
