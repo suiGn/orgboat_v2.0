@@ -1,13 +1,6 @@
-----------------------------------------------
-Avatar.
---------
-Agregar Contactos by email or username.
-View Profile.
-Delete chat.
-Archive chat.
-
-
-
-
-
-
+Sebas:
+    - Limpieza del server
+Karla:
+    - cambio de los sockets en el Front (Mensajes)
+Jose:
+    - redirect to workspace if have cookies
