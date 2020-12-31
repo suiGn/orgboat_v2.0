@@ -30,7 +30,8 @@ exports.home = function (req, res) {
 };
 
 exports.subscribe = function (req, res) {
-  res.render("pages/subscribe", { opt: " ", opt1: "Log In", opt2: "/" });
+  res.redirect('/');
+  //res.render("pages/subscribe", { opt: " ", opt1: "Log In", opt2: "/" });
 };
 exports.authGoogle = (req, res) => {
   var name = req.user.displayName;
@@ -103,6 +104,7 @@ exports.pwdRst = function (req, res) {
 exports.verMail = function (req, res) {
   var uuid = req.query.uuid;
   var email = req.query.em;
+  console.log('ver email');
   var verified = 1;
   index.orgboatDB.query(
     "SELECT * FROM usrs WHERE email = ?",
@@ -122,10 +124,12 @@ exports.verMail = function (req, res) {
                   opt1: "Something weird happened. Please try again.",
                 });
               } else {
-                res.render("pages/sec/response", {
-                  opt2: "Email Verified",
-                  opt1: "You can now login to your account.",
-                });
+                console.log("success");
+                res.redirect("/success");
+                // res.render("pages/sec/response", {
+                //   opt2: "Email Verified",
+                //   opt1: "You can now login to your account.",
+                // });
               }
             }
           );
@@ -250,13 +254,19 @@ exports.subscribing = function (req, res) {
                 [usrname],
                 (err, resp) => {
                   if (resp.length >= 1) {
-                    console.log("username exists");
-                    res.render("pages/subscribe", {
-                      opt: "Username Already Exists.",
-                      opt1: "Log In",
-                      opt2: "/",
-                    });
-                    return;
+                    try{
+                      console.log("username exists");
+                      res.render("pages/subscribe", {
+                        opt: "Username Already Exists.",
+                        opt1: "Log In",
+                        opt2: "/",
+                      });
+                      //throw err;
+                      return;
+                    }catch(e){
+                      console.log(e);
+                    }
+                    
                   } else {
                     console.log(resp);
                     index.orgboatDB.query(

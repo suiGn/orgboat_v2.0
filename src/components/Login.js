@@ -9,7 +9,7 @@ function Login(props) {
       style={{ display: props.load == false ? "none" : "block" }}
       className="bodylogin"
     >
-      <NavLogin />
+      <NavLogin login={'login'}/>
       <div className="hero-section centered">
         <div className="w-container">
           <div className="w-form">

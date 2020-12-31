@@ -19,12 +19,21 @@ export default class NavLogin extends React.Component{
     >
       <div className="w-container">
         <nav role="navigation" className="navigation-menu w-nav-menu">
-          <a
-            href="/signup"
-            className="navigation-link login w-nav-link"
-          >
-            Sign Up
-          </a>
+        {this.props.login == 'signup' ? (
+                    <a
+                    href="/"
+                    className="navigation-link login w-nav-link"
+                  >
+                    Login
+                  </a>
+                ) : (
+                  <a
+                    href="/signup"
+                    className="navigation-link login w-nav-link"
+                  >
+                    Sign Up
+                  </a>
+                )}
           <a
             href="#"
             className="navigation-link w-nav-link" 

@@ -18,7 +18,7 @@ function SignUp() {
   }, []);
   return (
     <div className="body-8">
-      <NavLogin />
+      <NavLogin login={'signup'}/>
       <div className="sign-up-div-2">
         <h1 className="fingertipsslogan-2 login-head-form reg">SIGN UP</h1>
         <div className="w-form">
@@ -84,9 +84,9 @@ function SignUp() {
               className="start-form-2 w-input"
               required
             />
-            <label className="form-label" id="labelUsername">
+            {/* <label className="form-label" id="labelUsername">
               &lt;%= opt %&gt;
-            </label>
+            </label> */}
             <div className="login-form-footer-2">
               By registering you are agreeing to our terms and conditions.
             </div>

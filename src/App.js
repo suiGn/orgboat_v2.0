@@ -4,6 +4,7 @@ import Login from "./components/Login.js";
 import Workspace from "./components/Workspace.js";
 import SignUp from "./components/SignUp.js";
 import ResetPass from "./components/reset-pass";
+import  successEmail from "./components/success-email"; 
 import {
   BrowserRouter as Router,
   Redirect,
@@ -64,6 +65,7 @@ function App() {
         <Route path="/signup" component={SignUp} />
         <Route path="/reset-pwd" component={ResetPass} />
         <Route path="/response" component={ResetPass} />
+        <Route path="/success" component={successEmail} />
       </Switch>
     </Router>
   );
