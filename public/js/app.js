@@ -57,7 +57,7 @@
               ).removeClass("action-toggle"));
         },
         theme: function () {
-          var socket = io.connect("https://orgboat.me/");
+          var socket = io.connect("https://www.orgboat.me/");
           socket.emit("theme");
           socket.on("retrive theme", function (theme) {
             if (theme.theme[0].theme === 0) {
@@ -76,7 +76,7 @@
         t.Started.init();
       }),
       $(document).on("click", ".dark-light-switcher", function () {
-        var socket = io.connect("https://orgboat.me/");
+        var socket = io.connect("https://www.orgboat.me/");
         socket.emit("change theme");
         socket.on("retrive change theme", function () {
           t.Started.theme();

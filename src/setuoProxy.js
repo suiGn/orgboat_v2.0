@@ -3,7 +3,7 @@ module.exports = function (app) {
   app.use(
     "/login",
     createProxyMiddleware({
-      target: "https://orgboat.me/",
+      target: "https://www.orgboat.me/",
       changeOrigin: true,
       secure: false,
     })

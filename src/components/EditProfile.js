@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import { User, Target, Edit2, Phone, X } from "react-feather";
 import axios from "axios";
-const ENDPOINT = "https://orgboat.me";
+const ENDPOINT = "https://www.orgboat.me";
 
 function EditProfile(props) {
   const socket = socketIOClient(ENDPOINT);

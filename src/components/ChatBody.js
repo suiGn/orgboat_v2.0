@@ -5,7 +5,7 @@ import ChatBodyMessage from "./ChatBodyMessage";
 import ChatSideBar from "./ChatSidebar";
 import ReactDOM from "react-dom";
 import $ from "jquery";
-const ENDPOINT = "https://orgboat.me";
+const ENDPOINT = "https://www.orgboat.me";
 
 function ChatBody({ my_uid, clicked, setuserProfile }) {
   const [chatMessages, setChatMessages] = useState([]);

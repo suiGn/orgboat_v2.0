@@ -12,7 +12,7 @@ test("responds to requests", (t) => {
   // Wait until the server is ready
   child.stdout.on("data", (_) => {
     // Make a request to our app
-    request("https://orgboat.me", (error, response, body) => {
+    request("https://www.orgboat.me", (error, response, body) => {
       // stop the server
       child.kill();
 

@@ -1,9 +1,9 @@
 export const development = {
-  ENDPOINT: "https://orgboat.me/",
+  ENDPOINT: "https://www.orgboat.me/",
 };
 
 export const production = {
-  ENDPOINT: "https://orgboat.me/",
+  ENDPOINT: "https://www.orgboat.me/",
 };
 
 export default development;

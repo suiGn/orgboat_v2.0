@@ -19,7 +19,7 @@ function Login(props) {
               name="formLogin"
               data-name="loginForm"
               className="form-10"
-              action="https://orgboat.me/login"
+              action="https://www.orgboat.me/login"
               method="post"
             >
               <h1 className="fingertipsslogan login-head-form">LOG IN</h1>

@@ -9,7 +9,7 @@ import ChatBody from "./ChatBody";
 import Profile from "./Profile.js";
 import EditProfile from "./EditProfile";
 import AddContact from "./AddContact";
-const ENDPOINT = "https://orgboat.me/";
+const ENDPOINT = "https://www.orgboat.me/";
 
 function Workspace() {
   const [response, setResponse] = useState([]);

@@ -10,7 +10,7 @@ const express = require("express");
 const cookieSession = require("cookie-session");
 const path = require("path");
 const PORT = process.env.PORT || 5000;
-//const FRONT_END = process.env.URL_FRONT || "https://orgboat.me";
+//const FRONT_END = process.env.URL_FRONT || "https://www.orgboat.me";
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const config = require("./configs/config");
