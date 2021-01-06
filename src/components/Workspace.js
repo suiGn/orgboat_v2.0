@@ -37,6 +37,8 @@ function Workspace() {
   }, [ENDPOINT]);
 
   let my_uid = response.my_uid;
+  let photo = response.photo;
+  let name = response.name;
 
   return (
     <div>
@@ -49,6 +51,8 @@ function Workspace() {
       <div className="layout">
         <Navigator
           my_uid={my_uid}
+          photo={photo}
+          name={name}
           setuserProfile={setuserProfile}
           setEditProfile={setShowEditProfile}
         />

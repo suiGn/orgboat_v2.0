@@ -22,6 +22,23 @@ function Navigator(props) {
       props.setuserProfile(data);
     });
   }
+  function getPhoto() {
+    if (props.photo == "") {
+      return (
+        <figure className="avatar">
+          <span className="avatar-title bg-info rounded-circle">
+            {props.name.substring(0, 1)}
+          </span>
+        </figure>
+      );
+    } else {
+      return (
+        <figure class="avatar">
+          <img src={props.photo} className="rounded-circle" alt="image" />
+        </figure>
+      );
+    }
+  }
 
   function logoutServer() {
     axios.get("/logout").then((res) => {
@@ -123,13 +140,14 @@ function Navigator(props) {
           </li>
           <li data-toggle="tooltip" title="User menu" data-placement="right">
             <a href="./login.html" data-toggle="dropdown">
-              <figure className="avatar">
+              {/* <figure className="avatar">
                 <img
                   src="http://via.placeholder.com/128X128"
                   className="rounded-circle"
                   alt="image"
                 />
-              </figure>
+              </figure> */}
+              {getPhoto()}
             </a>
             <div className="dropdown-menu">
               <a

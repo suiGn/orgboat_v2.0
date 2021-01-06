@@ -51,6 +51,8 @@ io.on("connection", function (socket) {
           //console.log(rows);
           io.to(user.u_id).emit("retrieve chats", {
             my_uid: user.u_id,
+            photo: user.pphoto,
+            name: user.name,
             chats: rows,
           });
         }

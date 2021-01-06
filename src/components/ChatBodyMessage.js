@@ -76,7 +76,7 @@ function ChatBodyMessage(props) {
       );
     } else {
       return (
-        <figure>
+        <figure class="avatar">
           <img src={pphoto} className="rounded-circle" alt="image" />
         </figure>
       );
