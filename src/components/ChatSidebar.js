@@ -4,11 +4,13 @@ import { Users, PlusCircle, X, MoreHorizontal } from "react-feather";
 
 const ENDPOINT = "http://localhost:5000";
 
-function ChatSidebar(props, clicked) {
-  // const [clicked, setClicked] = useState([]);
+function ChatSidebar(props) {
+  const [newChatMessage, setNewChatMessage] = useState([]);
   let chats;
   let my_uid;
-
+  let clicked;
+  console.log(props);
+  clicked = props.clicked;
   chats = props.response.chats;
   my_uid = props.response.my_uid;
 
@@ -58,6 +60,17 @@ function ChatSidebar(props, clicked) {
       socket.emit("get chats");
     });
   }
+
+  const socket = socketIOClient(ENDPOINT);
+
+  useEffect(() => {
+    socket.on("chat message", (response) => {
+      setNewChatMessage((chatMessages) => [response, ...chatMessages]);
+      socket.emit("get chats");
+    });
+  }, []);
+
+  console.log("clicked", clicked.chat_uid);
 
   return (
     <div id="chats" className="sidebar active">
@@ -110,6 +123,8 @@ function ChatSidebar(props, clicked) {
         <ul className="list-group list-group-flush">
           {chats &&
             chats.map((chat) => {
+              console.log(chat.chat_uid);
+              console.log(clicked != chat.chat_uid);
               if (
                 chat.chat_type == 0 &&
                 chat.archiveChat == 0 &&
@@ -189,7 +204,14 @@ function ChatSidebar(props, clicked) {
                         </div>
                         <div className="users-list-action">
                           <div
-                            className="new-message-count d-none"
+                            className={
+                              newChatMessage[0] &&
+                              newChatMessage[0].chat &&
+                              newChatMessage[0].chat === chat.chat_uid &&
+                              clicked.chat_uid != chat.chat_uid
+                                ? "new-message-count new-chat-message-alert"
+                                : "new-message-count d-none"
+                            }
                             i={chat.chat_uid}
                           ></div>
                           <small
@@ -298,7 +320,14 @@ function ChatSidebar(props, clicked) {
                           </div>
                           <div className="users-list-action">
                             <div
-                              className="new-message-count d-none"
+                              className={
+                                newChatMessage[0] &&
+                                newChatMessage[0].chat &&
+                                newChatMessage[0].chat === chat.chat_uid &&
+                                clicked.chat_uid != chat.chat_uid
+                                  ? "new-message-count new-chat-message-alert"
+                                  : "new-message-count d-none"
+                              }
                               i={chat.chat_uid}
                             >
                               <small

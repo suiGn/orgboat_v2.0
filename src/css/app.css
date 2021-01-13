@@ -4665,6 +4665,12 @@ body.dark nav.navigation ul li > a.active {
   margin-top: 10px;
 }
 
+.new-chat-message-alert {
+  height: 9px !important;
+  width: 9px !important;
+  margin-bottom: 12px;
+}
+
 /* Loader */
 .loader-container {
   width: 100%;
