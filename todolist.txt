@@ -1,0 +1,46 @@
+
+TODO:
+    - Migrar logos y estilos / para hoy karla
+    - Login
+        - SingIn / para hoy karla 
+        - Google Login / sebas manana 
+        - Nabvar - Front / para hoy karla
+        - reset password /  karla
+    - SingUp
+        - remplazar vista / hoy 
+        - Registrar en nodejs / sebas
+        - redirect to SingIn / karla
+        - agregar validacion de correo / karla
+    - Tiempo de vida Sockets / sebas
+    - Status Theme / karla
+    - Loader / karla
+    - Chats
+        - nadvar chats
+            - cargar de los chats
+            - Carga de fotos de los chats
+            - modificar dropdow de chats 
+            - find chat 
+        - Body Chats
+            - message
+                - dropdown
+                    - delete
+                    - favorite message
+            - nadvar send message
+                - send message
+                - send files
+                - send photo
+            - header chats
+                - menu and dropdown
+                - photo and name
+    - Profile
+        - Edit Profile
+        - Own Profile
+        - Chat Profile
+    - Archived chats
+    - Contact
+        - contacs
+            - cargar contactos
+            - dropdow
+        - search contactos
+            - add contacts
+    

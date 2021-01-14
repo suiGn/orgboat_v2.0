@@ -384,6 +384,26 @@ exports.savedbimage = function (req, res) {
   );
 };
 
+exports.savePhotoFile = (req, res)=>{
+  let url = req.file.destination;
+  let uidd = req.body.id;
+  let chat_id =  req.body.chatId;
+  index.orgboatDB.query(
+    `INSERT INTO messages (chat_uid,u_id,message) VALUES(chat_id,uidd,url)`,
+    (err,result) =>{
+      if(err){
+        res.json({
+          ok:false
+        });
+      }else{
+        res.json({
+          ok:true
+        });
+      }
+    }
+  )
+};
+
 exports.pphotourl = async function (req, res) {
   //console.log(req);
   var usrname = req;

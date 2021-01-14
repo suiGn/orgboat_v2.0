@@ -154,6 +154,35 @@ const server = express()
       const result = await routes.pphotourl(req.params.name);
       res.sendFile(path.join(__dirname, result));
     })();
+  })
+  .post('/file',(req, res) => {
+    //Multer
+    const storage = multer.diskStorage({
+      destination: "../build/chats/",
+    filename: function(req, file, cb){
+      cb(null,"file-" + Date.now() + path.extname(file.originalname));
+    }
+    });
+    const upload = multer({ storage: storage }).single("imageShare");
+    upload(req,res, (err)=>{
+      try{
+        //console.log("Request ---", req.body);
+        req.file.destination = req.file.destination+req.body.id+"/";
+        //console.log("Request file ---", req.file);//Here you get file.
+        routes.savePhotoFile(req,res);
+
+      }catch(e){
+        console.log(e);
+      }
+      // if (err) {
+      //   //console.log(err);
+      //   res.redirect("/workspace");
+      // }
+      // //console.log(req.file.path);
+      // routes.savedbimage(req);
+      // res.redirect("/workspace");
+      res.json({ok:true})
+    });
   });
 
 /** 			   o       o                                
