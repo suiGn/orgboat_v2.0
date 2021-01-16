@@ -1,18 +1,19 @@
 
 TODO:
-    - Migrar logos y estilos / para hoy karla
+    - Migrar logos y estilos / Ya
     - Login
         - SingIn / para hoy karla 
         - Google Login / sebas manana 
-        - Nabvar - Front / para hoy karla
-        - reset password /  karla
+        - Nabvar - Front / Pendiente
+        - reset password / hoy  karla
     - SingUp
         - remplazar vista / hoy 
         - Registrar en nodejs / sebas
-        - redirect to SingIn / karla
-        - agregar validacion de correo / karla
-    - Tiempo de vida Sockets / sebas
-    - Status Theme / karla
+        - redirect to SingIn / hoy karla
+        - agregar validacion de correo / ya ? karla
+    - Ajustar Colores del tema / Ya
+    - Tiempo de vida Sockets / sebas Tener un socket global
+    - Status Theme / tal vez hoy karla
     - Loader / karla
     - Chats
         - nadvar chats
