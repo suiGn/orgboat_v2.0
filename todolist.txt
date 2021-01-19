@@ -1,19 +1,20 @@
 
 TODO:
-    - Migrar logos y estilos / Ya
+    - Migrar logos y estilos / Terminado
     - Login
-        - SingIn / para hoy karla 
+        - SingIn / Terminado 
         - Google Login / sebas manana 
-        - Nabvar - Front / Pendiente
-        - reset password / hoy  karla
+        - Nabvar - Front / para hoy karla
+        - reset password /  Terminado - Testing
     - SingUp
-        - remplazar vista / hoy 
-        - Registrar en nodejs / sebas
+        - remplazar vista / hoy karla
+        - Registrar en nodejs / Listo
         - redirect to SingIn / hoy karla
-        - agregar validacion de correo / ya ? karla
-    - Ajustar Colores del tema / Ya
-    - Tiempo de vida Sockets / sebas Tener un socket global
-    - Status Theme / tal vez hoy karla
+        - agregar validacion de correo / hoy karla
+    - Ajustar colores / hoy karla
+    - Tiempo de vida Sockets / Tener un socket global / sebas
+    - Status Theme / si de tiempo revisar karla
+    - Logos de workspace / hoy karla
     - Loader / karla
     - Chats
         - nadvar chats
@@ -33,6 +34,7 @@ TODO:
             - header chats
                 - menu and dropdown
                 - photo and name
+    - Tiempo de cargar de cambio entre chats 
     - Profile
         - Edit Profile
         - Own Profile
@@ -44,4 +46,13 @@ TODO:
             - dropdow
         - search contactos
             - add contacts
-    
+
+
+
+TODO:
+
+Metas:
+    - En una semana terminar de pasar todo 
+    - Inicio de febrero , en lo de la video llamadas y el todolist
+    - a finales de febrero tener una version estable web
+    - en marzo karla empiece con movil
