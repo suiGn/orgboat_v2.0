@@ -8,7 +8,7 @@ io.on("connection", function (socket) {
   //login in socket
   try {
     var user = socket.request.session.passport.user;
-    console.log(user);
+    //console.log(user);
     if (user != null || user != undefined) {
       socket.join(user.u_id);
       console.log(
@@ -273,6 +273,7 @@ io.on("connection", function (socket) {
     });
     //Obtaine contacts
     socket.on("GetContacts", () => {
+      console.log("contacts");
       orgboatDB.query(
         `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, 
       m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat

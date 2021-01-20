@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from "react-redux"
 import * as FeatherIcon from 'react-feather'
 import 'react-perfect-scrollbar/dist/css/styles.css'
@@ -8,7 +8,10 @@ import FriendsDropdown from "./FriendsDropdown"
 import {mobileSidebarAction} from "../../../Store/Actions/mobileSidebarAction"
 import {friendLists} from "./Data"
 
-function Index() {
+
+
+function Index(props) {
+  
 
     useEffect(() => {
         inputRef.current.focus();

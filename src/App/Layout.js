@@ -9,12 +9,15 @@ import Chat from "./Partials/Chat"
 import {pageTourAction} from "../Store/Actions/pageTourAction"
 import {profileAction} from "../Store/Actions/profileAction";
 import DisconnectedModal from "./Modals/DisconnectedModal";
+import io from 'socket.io-client';
+const socket = io({
+  transports: ['websocket']
+});  
 
 function Layout() {
 
     const {pageTour} = useSelector(state => state);
 
-    const ui_id = "a8d79038-cdb7-47d6-b9f9-538c7651fb81";
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -65,9 +68,9 @@ function Layout() {
             />
             <div className="content">
                 <Navigation/>
-                <SidebarIndex/>
+                <SidebarIndex socket={socket}/>
                 <Chat/>
-                <Profile ui_id={ui_id}/>
+                <Profile/>
                 <TourModal/>
                 <DisconnectedModal/>
             </div>

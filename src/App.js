@@ -7,8 +7,8 @@ import LockScreen from "./Pages/LockScreen";
 import ResetPassword from "./Pages/ResetPassword";
 import PhoneCode from "./Pages/PhoneCode";
 import Layout from "./App/Layout";
-
 function App() {
+
   return (
     <Router>
       <Switch>
