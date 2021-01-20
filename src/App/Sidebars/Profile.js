@@ -7,6 +7,7 @@ import {profileAction} from "../../Store/Actions/profileAction"
 import {mobileProfileAction} from "../../Store/Actions/mobileProfileAction"
 import WomenAvatar5 from "../../assets/img/women_avatar5.jpg"
 import classnames from 'classnames'
+import io from 'socket.io-client';
 
 function Profile() {
 
@@ -18,7 +19,9 @@ function Profile() {
 
     const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
-    };  
+    };
+
+    const socket = io.connect('http://localhost:5000');    
     const user = {id: "a8d79038-cdb7-47d6-b9f9-538c7651fb81"};
     
 
@@ -26,7 +29,7 @@ function Profile() {
         e.preventDefault();
         dispatch(profileAction(false));
         dispatch(mobileProfileAction(false))
-        // socket.emit('ViewOwnProfile', user);
+        socket.emit('ViewOwnProfile', user);
     };
 
     return (

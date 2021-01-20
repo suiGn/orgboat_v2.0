@@ -168,10 +168,13 @@ io.on("connection", function (socket) {
     });
     // Show own profile
     socket.on("ViewOwnProfile", function (data) {
+      console.log(
+        `[Socket.io] - Entro`
+      );
       orgboatDB.query(
         `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
         function (err, rows) {
-          //console.log(rows);
+          console.log(rows);
           io.to(user.u_id).emit("retrieve viewownprofile", {
             usrprofile: rows,
           });
