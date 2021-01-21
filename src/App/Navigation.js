@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 // import { ReactComponent as Logo } from "../assets/icons/blue_helm.png";
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import {
@@ -58,6 +59,15 @@ function Navigation() {
   const profileActions = () => {
     dispatch(profileAction(true));
     dispatch(mobileProfileAction(true));
+  };
+
+  const logoutServer = () => {
+    axios.get("/logout").then((res) => {
+      if (res.data.ok == true) {
+        // window.location.reload();
+        window.location.href = "/sign-in";
+      }
+    });
   };
 
   const navigationItems = [
@@ -140,6 +150,7 @@ function Navigation() {
           <li className="scissors">
             <a
               href="#/"
+              title="Dark mode"
               onClick={(e) => darkSwitcherToggle(e)}
               className="dark-light-switcher"
               id="dark-switcher"
@@ -180,7 +191,8 @@ function Navigation() {
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem
-                  onClick={() => (window.location.href = "/sign-in")}
+                  // onClick={() => (window.location.href = "/sign-in")}
+                  onClick={logoutServer}
                 >
                   Logout
                 </DropdownItem>

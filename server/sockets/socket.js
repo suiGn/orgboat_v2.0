@@ -2,7 +2,7 @@ const { io, orgboatDB, sessionStore, server } = require("../index");
 const { json } = require("sequelize");
 const uuid = require("node-uuid");
 const { formatLocalDate } = require("../middlewares/authentication");
-const routes = require('../routes');
+const routes = require("../routes");
 
 io.on("connection", function (socket) {
   //login in socket
@@ -212,7 +212,7 @@ io.on("connection", function (socket) {
     });
     //Obtaine theme have a user
     socket.on("theme", function () {
-      try{
+      try {
         orgboatDB.query(
           `SELECT theme FROM usrs WHERE u_id='${user.u_id}'`,
           function (err, rows) {
@@ -221,7 +221,7 @@ io.on("connection", function (socket) {
             });
           }
         );
-      }catch(e){
+      } catch (e) {
         console.log(e);
       }
     });
@@ -433,14 +433,14 @@ io.on("connection", function (socket) {
       );
     });
     //Delete message
-    socket.on('Delete message',(message)=>{
+    socket.on("Delete message", (message) => {
       // if(message.u_id == user.u_id){
 
       // }
       console.log(message);
       orgboatDB.query(
         `UPDATE messages SET delete_message=1 WHERE message_id='${message.message.message_id}'`,
-        (err,data)=>{
+        (err, data) => {
           if (err) {
             return json({
               ok: false,
@@ -451,8 +451,8 @@ io.on("connection", function (socket) {
           }
           io.to(user.u_id).emit("retriveDeleteMessage");
         }
-      )
-    })
+      );
+    });
   } catch {
     console.log("problema");
   }

@@ -20,7 +20,7 @@ const mailer = require("./mailer");
 const multer = require("multer");
 const { CustomValidation } = require("express-validator/src/context-items");
 
-exports.home = function (req, res) {
+exports.home = function (req) {
   if (req.isAuthenticated()) {
     console.log("home");
     res.json({ ok: true });
@@ -30,7 +30,7 @@ exports.home = function (req, res) {
 };
 
 exports.subscribe = function (req, res) {
-  res.redirect('/');
+  res.redirect("/");
   //res.render("pages/subscribe", { opt: " ", opt1: "Log In", opt2: "/" });
 };
 exports.authGoogle = (req, res) => {
@@ -104,7 +104,7 @@ exports.pwdRst = function (req, res) {
 exports.verMail = function (req, res) {
   var uuid = req.query.uuid;
   var email = req.query.em;
-  console.log('ver email');
+  console.log("ver email");
   var verified = 1;
   index.orgboatDB.query(
     "SELECT * FROM usrs WHERE email = ?",
@@ -254,7 +254,7 @@ exports.subscribing = function (req, res) {
                 [usrname],
                 (err, resp) => {
                   if (resp.length >= 1) {
-                    try{
+                    try {
                       console.log("username exists");
                       res.render("pages/subscribe", {
                         opt: "Username Already Exists.",
@@ -263,10 +263,9 @@ exports.subscribing = function (req, res) {
                       });
                       //throw err;
                       return;
-                    }catch(e){
+                    } catch (e) {
                       console.log(e);
                     }
-                    
                   } else {
                     console.log(resp);
                     index.orgboatDB.query(
@@ -384,24 +383,24 @@ exports.savedbimage = function (req, res) {
   );
 };
 
-exports.savePhotoFile = (req, res)=>{
+exports.savePhotoFile = (req, res) => {
   let url = req.file.destination;
   let uidd = req.body.id;
-  let chat_id =  req.body.chatId;
+  let chat_id = req.body.chatId;
   index.orgboatDB.query(
     `INSERT INTO messages (chat_uid,u_id,message) VALUES(chat_id,uidd,url)`,
-    (err,result) =>{
-      if(err){
+    (err, result) => {
+      if (err) {
         res.json({
-          ok:false
+          ok: false,
         });
-      }else{
+      } else {
         res.json({
-          ok:true
+          ok: true,
         });
       }
     }
-  )
+  );
 };
 
 exports.pphotourl = async function (req, res) {
