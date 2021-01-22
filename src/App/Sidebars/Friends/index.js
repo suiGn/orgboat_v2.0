@@ -6,16 +6,16 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import AddFriendsModal from "../../Modals/AddFriendModal"
 import FriendsDropdown from "./FriendsDropdown"
 import {mobileSidebarAction} from "../../../Store/Actions/mobileSidebarAction"
-import {friendLists} from "./Data"
+// import {friendLists} from "./Data"
 
 
 
 function Index(props) {
-  
-
+    const [friendLists, setContact] = useState([]);
     useEffect(() => {
         inputRef.current.focus();
     });
+    let my_uid
 
     const inputRef = useRef();
 
@@ -25,6 +25,15 @@ function Index(props) {
         dispatch(mobileSidebarAction(false));
         document.body.classList.remove('navigation-open');
     };
+    useEffect(() => {
+        props.socket.on("retrive GetContacts", (contacts) => {
+            setContact(contacts);
+        });
+    });
+    useEffect(()=>{
+        props.socket.emit("GetContacts");
+    },[]);
+    
 
     return (
         <div className="sidebar active">
@@ -32,7 +41,7 @@ function Index(props) {
                 <span>Friends</span>
                 <ul className="list-inline">
                     <li className="list-inline-item">
-                        <AddFriendsModal/>
+                        <AddFriendsModal socket={props.socket}/>
                     </li>
                     <li className="list-inline-item d-xl-none d-inline">
                         <button onClick={mobileSidebarClose}
@@ -49,13 +58,38 @@ function Index(props) {
                 <PerfectScrollbar>
                     <ul className="list-group list-group-flush">
                         {
-                            friendLists.map((item, i) => {
+                            friendLists.chats && 
+                            friendLists.chats.map((item, i) => {
+                                let my_uid = friendLists.my_uid;
+                                if(my_uid == item.user_chat){
+                                    return ""
+                                }
+                                let chat_name = item.name;
+                                let p;
+                                let chat_initial = chat_name.substring(0, 1);
+                                if (item.pphoto === "") {
+                                    p = (
+                                    <span className="avatar-title bg-info rounded-circle">
+                                        {chat_initial}
+                                    </span>
+                                    );
+                                } else {
+                                    p = (
+                                    <img
+                                        src={item.pphoto}
+                                        className="rounded-circle"
+                                        alt="image"
+                                    />
+                                    );
+                                }
                                 return <li key={i} className="list-group-item">
-                                    {item.avatar}
+                                    <figure className="avatar">
+                                        {p}
+                                    </figure>
                                     <div className="users-list-body">
                                         <div>
                                             <h5>{item.name}</h5>
-                                            <p>{item.title}</p>
+                                            {/* <p>{item.title}</p> */}
                                         </div>
                                         <div className="users-list-action">
                                             <div className="action-toggle">

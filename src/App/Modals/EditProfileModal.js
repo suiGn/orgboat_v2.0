@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
     Modal,
     ModalBody,
@@ -22,14 +22,51 @@ import {
 import * as FeatherIcon from 'react-feather'
 import classnames from 'classnames'
 import ManAvatar4 from '../../assets/img/man_avatar4.jpg'
+import io from 'socket.io-client';
 
 function EditProfileModal(props) {
-
+    const user = {id: "a8d79038-cdb7-47d6-b9f9-538c7651fb81"};
     const [activeTab, setActiveTab] = useState('1');
-
+    var userData;
     const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
     };
+
+    const [name, setName] = useState("");
+    const [city, setCity] = useState("");
+    const [phone, setPhone] = useState("");
+    const [website, setWebSite] = useState("");
+    const [about, setAbout] = useState("");
+    const [pphoto, setPphoto] = useState("");
+
+    useEffect(() => { 
+        const socket = io.connect('http://localhost:5000');   
+        socket.emit('ViewOwnProfile', user); 
+        socket.on ('retrieve viewownprofile', function (data) {
+            userData = data.usrprofile[0];
+            setName(userData.name);
+            setCity(userData.city);
+            setPhone(userData.phone);
+            setWebSite(userData.website);
+            setAbout(userData.about);
+            setPphoto(userData.pphoto);
+        });
+    },[]);
+
+    function SaveProfile(e) {
+        e.preventDefault();
+        const socket = io.connect('http://localhost:5000');   
+        
+        userData = {
+            name: name,
+            phone: phone,
+            city: city,
+            about: about?about:"",
+            website:website,
+        }
+        console.log(userData)
+        socket.emit('SaveOwnProfile', userData);
+    }
 
     return (
         <div>
@@ -76,7 +113,7 @@ function EditProfileModal(props) {
                                 <FormGroup>
                                     <Label for="fullname">Fullname</Label>
                                     <InputGroup>
-                                        <Input type="text" name="fullname" id="fullname"/>
+                                        <Input type="text" name="fullname" id="fullname"  value={name}  onChange={(e) => setName(e.target.value)}/>
                                         <InputGroupAddon addonType="append">
                                             <Button color="light">
                                                 <FeatherIcon.User/>
@@ -98,7 +135,7 @@ function EditProfileModal(props) {
                                 <FormGroup>
                                     <Label for="city">City</Label>
                                     <InputGroup>
-                                        <Input type="text" name="city" id="city" placeholder="Ex: Columbia"/>
+                                        <Input type="text" name="city" id="city" placeholder="Ex: Columbia" value={city}  onChange={(e) => setCity(e.target.value)}/>
                                         <InputGroupAddon addonType="append">
                                             <Button color="light">
                                                 <FeatherIcon.Target/>
@@ -109,7 +146,7 @@ function EditProfileModal(props) {
                                 <FormGroup>
                                     <Label for="phone">Phone</Label>
                                     <InputGroup>
-                                        <Input type="text" name="phone" id="phone" placeholder="(555) 555 55 55"/>
+                                        <Input type="text" name="phone" id="phone" placeholder="(555) 555 55 55"  value={phone}  onChange={(e) => setPhone(e.target.value)}/>
                                         <InputGroupAddon addonType="append">
                                             <Button color="light">
                                                 <FeatherIcon.Phone/>
@@ -120,7 +157,7 @@ function EditProfileModal(props) {
                                 <FormGroup>
                                     <Label for="phone">Website</Label>
                                     <InputGroup>
-                                        <Input type="text" name="website" id="website" placeholder="https://"/>
+                                        <Input type="text" name="website" id="website" placeholder="https://"  value={website}  onChange={(e) => setWebSite(e.target.value)}/>
                                         <InputGroupAddon addonType="append">
                                             <Button color="light">
                                                 <FeatherIcon.Link/>
@@ -132,7 +169,7 @@ function EditProfileModal(props) {
                             <TabPane tabId="2">
                                 <FormGroup>
                                     <Label for="about">Write a few words that describe you</Label>
-                                    <Input type="textarea" name="about" id="about"/>
+                                    <Input type="textarea" name="about" id="about"  value={about}  onChange={(e) => setAbout(e.target.value)}/>
                                 </FormGroup>
                                 <FormGroup>
                                     <CustomInput type="checkbox" id="customCheckbox1" label="View profile" defaultChecked/>
@@ -224,7 +261,7 @@ function EditProfileModal(props) {
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="primary">Save</Button>
+                    <Button color="primary" onClick={(e) => SaveProfile(e)}>Save</Button>
                 </ModalFooter>
             </Modal>
         </div>

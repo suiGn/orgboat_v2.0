@@ -8,13 +8,8 @@ function ChatFooter(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         props.onSubmit({
-            name: 'Mirabelle Tow',
-            avatar: <figure className="avatar">
-                <img src={WomenAvatar5} className="rounded-circle" alt="avatar"/>
-            </figure>,
             text: props.inputMsg,
-            date: 'Now',
-            type: 'outgoing-message'
+            chat_uid:props.chat_uid
         })
     };
 

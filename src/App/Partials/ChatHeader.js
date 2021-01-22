@@ -10,7 +10,7 @@ import {profileAction} from "../../Store/Actions/profileAction"
 import {mobileProfileAction} from "../../Store/Actions/mobileProfileAction";
 import ManAvatar3 from "../../assets/img/man_avatar3.jpg";
 
-function ChatHeader() {
+function ChatHeader(props) {
 
     const dispatch = useDispatch();
 
@@ -24,15 +24,35 @@ function ChatHeader() {
         dispatch(profileAction(true));
         dispatch(mobileProfileAction(true))
     };
+    let p;
+    let chat_initial;
+    let chat_name;
+    if (props.data.pphoto === "") {
+        chat_name = props.data.name;
+        chat_initial = chat_name.substring(0, 1);
+        p = (
+            <span className="avatar-title bg-info rounded-circle">
+                {chat_initial}
+            </span>
+            );
+    } else {
+        p = (
+            <img
+                src={props.data.pphoto}
+                className="rounded-circle"
+                alt="image"
+            />
+        );
+    }
 
     return (
         <div className="chat-header">
             <div className="chat-header-user">
                 <figure className="avatar">
-                    <img src={ManAvatar3} className="rounded-circle" alt="avatar"/>
+                    {p}
                 </figure>
                 <div>
-                    <h5>Byrom Guittet</h5>
+                    <h5>{props.data.name}</h5>
                     <small className="text-success">
                         <i>writing...</i>
                     </small>

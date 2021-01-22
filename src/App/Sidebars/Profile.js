@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import {TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap'
 import * as FeatherIcon from 'react-feather'
@@ -9,28 +9,53 @@ import WomenAvatar5 from "../../assets/img/women_avatar5.jpg"
 import classnames from 'classnames'
 import io from 'socket.io-client';
 
-function Profile() {
-
+function Profile() { 
+    const user = {id: "a8d79038-cdb7-47d6-b9f9-538c7651fb81"};
     const dispatch = useDispatch();
-
     const {profileSidebar, mobileProfileSidebar} = useSelector(state => state);
 
-    const [activeTab, setActiveTab] = useState('1');
+    //const [activeTab, setActiveTab] = useState('1');
+    const [state, setState] = useState({
+        name: "",
+        phone:"",
+        city:"",
+        about:"",
+        pphoto:"",
+        usrname:"",
+        website:"",
+        activeTab: '1'
+    });
 
-    const toggle = tab => {
+    /*const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
-    };
-
-    const socket = io.connect('http://localhost:5000');    
-    const user = {id: "a8d79038-cdb7-47d6-b9f9-538c7651fb81"};
-    
+    };*/
 
     const profileActions = (e) => {
         e.preventDefault();
         dispatch(profileAction(false));
         dispatch(mobileProfileAction(false))
-        socket.emit('ViewOwnProfile', user);
     };
+
+    useEffect(() => { 
+            const socket = io.connect('http://localhost:5000');   
+            socket.emit('ViewOwnProfile', user);
+            var userData;     
+            socket.on ('retrieve viewownprofile', function (data) {
+                userData = data.usrprofile[0];
+                setState({ ...state, 
+                    name: userData.name,
+                    city: userData.city,
+                    phone:userData.phone,
+                    about:userData.about,
+                    pphoto:userData.pphoto,
+                    usrname:userData.usrname,
+                    website:userData.website});
+            });
+    },[]);
+
+    function addDefaultSrc(ev){
+        ev.target.src = WomenAvatar5
+    }
 
     return (
         <div className={`sidebar-group ${mobileProfileSidebar ? "mobile-open" : ""}`}>
@@ -51,18 +76,15 @@ function Profile() {
                         <div className="pl-4 pr-4">
                             <div className="text-center">
                                 <figure className="avatar avatar-xl mb-3">
-                                    <img src={WomenAvatar5} className="rounded-circle" alt="avatar"/>
+                                    <img onError={addDefaultSrc} src={state.pphoto} className="rounded-circle" alt="avatar"/>
                                 </figure>
-                                <h5 className="mb-1">Bruno Delgado</h5>
+                                <h5 className="mb-1">{state.name}</h5>
                                 <small className="text-muted font-italic">Last seen: Today</small>
 
                                 <Nav tabs className="justify-content-center mt-5">
                                     <NavItem>
                                         <NavLink
-                                            className={classnames({active: activeTab === '1'})}
-                                            onClick={() => {
-                                                toggle('1');
-                                            }}
+                                            className={classnames({active: state.activeTab === '1'})}
                                         >
                                             About
                                         </NavLink>
@@ -79,26 +101,21 @@ function Profile() {
                                         </NavItem>*/}
                                 </Nav>
                             </div>
-                            <TabContent activeTab={activeTab}>
+                            <TabContent activeTab={state.activeTab}>
                                 <TabPane tabId="1">
-                                    <p className="text-muted">Lorem ipsum is a pseudo-Latin text used in web design,
-                                        typography,
-                                        layout, and printing in place of English to emphasise design elements over
-                                        content.
-                                        It's also called placeholder (or filler) text. It's a convenient tool for
-                                        mock-ups.</p>
+                                    <p className="text-muted">{state.about}</p>
                                     <div className="mt-4 mb-4">
                                         <h6>Phone</h6>
-                                        <p className="text-muted">(555) 555 55 55</p>
+                                        <p className="text-muted">{state.phone}</p>
                                     </div>
                                     <div className="mt-4 mb-4">
                                         <h6>City</h6>
-                                        <p className="text-muted">Germany / Berlin</p>
+                                        <p className="text-muted">{state.city}</p>
                                     </div>
                                     <div className="mt-4 mb-4">
                                         <h6>Website</h6>
                                         <p>
-                                            <a href="foo">www.franshanscombe.com</a>
+                                            <a href="foo">{state.website}</a>
                                         </p>
                                     </div>
                                     <div className="mt-4 mb-4">

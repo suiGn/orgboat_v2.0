@@ -6,13 +6,17 @@ import {selectedChat} from "../Sidebars/Chats/Data"
 import PerfectScrollbar from "react-perfect-scrollbar"
 import UnselectedChat from '../../assets/img/unselected-chat.svg'
 
-function Chat() {
+function Chat(props) {
 
     const [inputMsg, setInputMsg] = useState('');
 
-    const [messages, setMessages] = useState(selectedChat);
+    const [newMessage, setMessages] = useState(selectedChat);
 
     const [scrollEl, setScrollEl] = useState();
+
+    const [messages, setChatMessages] = useState([]);
+
+    const {socket} = props;
 
     useEffect(() => {
         if (scrollEl) {
@@ -20,64 +24,98 @@ function Chat() {
         }
     }, [scrollEl]);
 
-    const handleSubmit = (newValue) => {
-        setMessages(prevState => {
-            return [
-                ...prevState,
-                newValue
-            ];
+    useEffect(()=>{
+        socket.on("retrieve messages",(data)=>{
+            setChatMessages(data.messages.reverse());
         });
+    });
+    useEffect(()=>{
+        socket.emit("get messages",{id:props.clicked.chat_uid,page: 1})
+    },[props.clicked]);
+    useEffect(()=>{
+        console.log(messages);
+    },[messages])
 
-        setTimeout(function () {
-            if (scrollEl) {
-                scrollEl.scrollTop = scrollEl.scrollHeight;
-            }
-        }, 200);
-
+    const handleSubmit = (newValue) => {
+        if (newMessage.length > 0) {
+            socket.emit("chat message", { chat: newValue.chat_uid, message: newValue.text });
+            socket.emit("get chats");
+            socket.emit("get messages", { id: newValue.chat_uid, page: 1 });
+        }
         setInputMsg("");
-
-        setTimeout(() => {
-
-            setMessages(prevState => {
-                return [
-                    ...prevState,
-                    {
-                        name: 'Byrom Guittet',
-                        avatar: <figure className="avatar">
-                            <img src={ManAvatar3} className="rounded-circle" alt="avatar"/>
-                        </figure>,
-                        text: 'I sent you all the files. Good luck with 😃',
-                        date: '2 seconds ago',
-                    }
-                ];
-            });
-
-            setTimeout(function () {
-                if (scrollEl) {
-                    scrollEl.scrollTop = scrollEl.scrollHeight;
-                }
-            }, 200)
-
-        }, 1000);
     };
 
     const handleChange = (newValue) => {
         setInputMsg(newValue);
     };
+    function timeformat(date) {
+        var h = date.getHours();
+        var m = date.getMinutes();
+        var x = h >= 12 ? "PM" : "AM";
+        h = h % 12;
+        h = h ? h : 12;
+        m = m < 10 ? "0" + m : m;
+        var mytime = h + ":" + m + " " + x;
+        return mytime;
+    }
+    
+    function getDateLabel(date) {
+        let dateLabelDate =
+          date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        let dateLabelMonth =
+          date.getMonth() + 1 < 10
+            ? "0" + (date.getMonth() + 1)
+            : date.getMonth() + 1;
+        let dateLabelYear = date.getFullYear();
+        let dateLabel = dateLabelDate + "/" + dateLabelMonth + "/" + dateLabelYear;
+        return dateLabel;
+    }
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    let yesterdayLabel = getDateLabel(yesterday);
+    let todayLabel = getDateLabel(new Date());
+    let actualLabelDate = "";
+
+    function getTodayLabel(dateLabel) {
+        if (dateLabel == yesterdayLabel) {
+        dateLabel = "Ayer";
+        } else if (dateLabel == todayLabel) {
+        dateLabel = "Hoy";
+        }
+
+        if (actualLabelDate == dateLabel) {
+        return "";
+        } else {
+        actualLabelDate = dateLabel;
+        return (
+            <div
+            className="message-item messages-divider sticky-top"
+            data-label={actualLabelDate}
+            ></div>
+        );
+        }
+    }
 
     const MessagesView = (props) => {
         const {message} = props;
-
+        let type;
+        let dateSend = new Date(message.time);
+        let timeSend = timeformat(dateSend);
+        if(message.message_user_uid == props.id){
+            type='undefine';
+        }else{
+            type='outgoing-message';
+        }
         if (message.type === 'divider') {
-            return <div className="message-item messages-divider sticky-top" data-label={message.text}></div>
+            return <div className="message-item messages-divider sticky-top" data-label={message.message}></div>
         } else {
-            return <div className={"message-item " + message.type}>
+            return <div className={"message-item " + type}>
                 <div className="message-avatar">
-                    {message.avatar}
+                    {/* {message.avatar} */}
                     <div>
                         <h5>{message.name}</h5>
                         <div className="time">
-                            {message.date}
+                            {message.time}
                             {message.type ? <i className="ti-double-check text-info"></i> : null}
                         </div>
                     </div>
@@ -88,7 +126,7 @@ function Chat() {
                         message.media
                         :
                         <div className="message-content">
-                            {message.text}
+                            {message.message}
                         </div>
                 }
             </div>
@@ -97,17 +135,17 @@ function Chat() {
 
     return (
         <div className="chat">
-            <ChatHeader/>
+            <ChatHeader data={props.clicked}/>
             <PerfectScrollbar containerRef={ref => setScrollEl(ref)}>
                 <div className="chat-body">
                     <div className="messages">
                         {
-                            messages.map((message, i) => <MessagesView message={message} key={i}/>)
+                            messages.map((message, i) => <MessagesView message={message} key={i} id={props.clicked.user_chat}/>)
                         }
                     </div>
                 </div>
             </PerfectScrollbar>
-            <ChatFooter onSubmit={handleSubmit} onChange={handleChange} inputMsg={inputMsg}/>
+            <ChatFooter onSubmit={handleSubmit} onChange={handleChange} inputMsg={inputMsg} chat_uid={props.clicked.chat_uid}/>
         </div>
     )
 }

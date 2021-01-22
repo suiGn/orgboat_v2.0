@@ -2,7 +2,7 @@ const { io, orgboatDB, sessionStore, server } = require("../index");
 const { json } = require("sequelize");
 const uuid = require("node-uuid");
 const { formatLocalDate } = require("../middlewares/authentication");
-const routes = require('../routes');
+const routes = require("../routes");
 
 io.on("connection", function (socket) {
   //login in socket
@@ -29,7 +29,7 @@ io.on("connection", function (socket) {
         `
 			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,
         m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
-        ,chats_users.delete_chat
+        ,chats_users.delete_chat, m.unread_messages as unread_messages
 			
 			from chats_users  
 
@@ -44,8 +44,8 @@ io.on("connection", function (socket) {
 						FROM messages z 
 						WHERE z.chat_uid = m.chat_uid
 					)
-			where chats_users.u_id = '${user.u_id}'
-			order by time desc;
+          where chats_users.u_id = '${user.u_id}' and chats_users.archiveChat = 0 and chats_users.delete_chat = 0
+          order by time desc;
 			`,
         function (err, rows) {
           //console.log(rows);
@@ -120,8 +120,8 @@ io.on("connection", function (socket) {
         }
       );
       timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
-      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
-                            values ('${chat}','${from}','${message}','${timeDB}',0)`);
+      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message,unread_messages) 
+                            values ('${chat}','${from}','${message}','${timeDB}',0,1)`);
     });
 
     //Client request the messages
@@ -168,9 +168,7 @@ io.on("connection", function (socket) {
     });
     // Show own profile
     socket.on("ViewOwnProfile", function (data) {
-      console.log(
-        `[Socket.io] - Entro`
-      );
+      console.log(`[Socket.io] - Entro ViewOwnProfile`);
       orgboatDB.query(
         `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
         function (err, rows) {
@@ -178,6 +176,16 @@ io.on("connection", function (socket) {
           io.to(user.u_id).emit("retrieve viewownprofile", {
             usrprofile: rows,
           });
+        }
+      );
+    });
+    // Save own profile
+    socket.on("SaveOwnProfile", function (data) {
+      console.log(`[Socket.io] - Entro SaveOwnProfile`);
+      orgboatDB.query(
+        `UPDATE usrname SET name='${data.name}',about='${data.about}',phone='${data.phone}',city='${data.city}',website='${data.website}' WHERE  u_id='${data.id}'`,
+        function (err, rows) {
+          io.to(user.u_id).emit("retrieve saveownprofile");
         }
       );
     });
@@ -213,7 +221,7 @@ io.on("connection", function (socket) {
     });
     //Obtaine theme have a user
     socket.on("theme", function () {
-      try{
+      try {
         orgboatDB.query(
           `SELECT theme FROM usrs WHERE u_id='${user.u_id}'`,
           function (err, rows) {
@@ -222,12 +230,13 @@ io.on("connection", function (socket) {
             });
           }
         );
-      }catch(e){
+      } catch (e) {
         console.log(e);
       }
     });
     //Change theme user
     socket.on("change theme", () => {
+      console.log("tema");
       orgboatDB.query(
         `UPDATE usrs SET theme = !theme WHERE u_id='${user.u_id}'`,
         (err, rows) => {
@@ -278,8 +287,8 @@ io.on("connection", function (socket) {
     socket.on("GetContacts", () => {
       console.log("contacts");
       orgboatDB.query(
-        `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, 
-      m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
+        `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,chats_users.archiveChat
+
     
     from chats_users  
 
@@ -287,15 +296,7 @@ io.on("connection", function (socket) {
     inner join usrs on usrs.u_id = chats2.u_id
 
     inner join chats on chats_users.chat_uid = chats.chat_uid 
-    left join messages m on m.chat_uid = chats.chat_uid 
-      and m.message_id = 
-        (
-          SELECT MAX(message_id) 
-          FROM messages z 
-          WHERE z.chat_uid = m.chat_uid
-        )
-    where chats_users.u_id = '${user.u_id}'
-    order by time desc;`,
+    where chats_users.u_id = '${user.u_id}'`,
         (err, chats) => {
           io.to(user.u_id).emit("retrive GetContacts", {
             my_uid: user.u_id,
@@ -435,14 +436,14 @@ io.on("connection", function (socket) {
       );
     });
     //Delete message
-    socket.on('Delete message',(message)=>{
+    socket.on("Delete message", (message) => {
       // if(message.u_id == user.u_id){
 
       // }
       console.log(message);
       orgboatDB.query(
         `UPDATE messages SET delete_message=1 WHERE message_id='${message.message.message_id}'`,
-        (err,data)=>{
+        (err, data) => {
           if (err) {
             return json({
               ok: false,
@@ -453,8 +454,8 @@ io.on("connection", function (socket) {
           }
           io.to(user.u_id).emit("retriveDeleteMessage");
         }
-      )
-    })
+      );
+    });
   } catch {
     console.log("problema");
   }

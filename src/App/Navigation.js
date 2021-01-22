@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { ReactComponent as Logo } from "../assets/icons/blue_helm.png";
-import { ReactComponent as Logo } from "../assets/logo.svg";
+import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
+// import { ReactComponent as Logo } from "../assets/logo.svg";
 import {
   Tooltip,
   Dropdown,
@@ -18,7 +18,7 @@ import { mobileSidebarAction } from "../Store/Actions/mobileSidebarAction";
 import WomenAvatar5 from "../assets/img/women_avatar5.jpg";
 import { mobileProfileAction } from "../Store/Actions/mobileProfileAction";
 
-function Navigation() {
+function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
 
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ function Navigation() {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const [darkSwitcherTooltipOpen, setDarkSwitcherTooltipOpen] = useState(false);
+  // const [darkSwitcherTooltipOpen, setDarkSwitcherTooltipOpen] = useState(false);
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -41,12 +41,13 @@ function Navigation() {
       return !prevState;
     });
 
-  const darkSwitcherTooltipToggle = () =>
-    setDarkSwitcherTooltipOpen(!darkSwitcherTooltipOpen);
-
+  const darkSwitcherTooltipToggle = () => {
+    props.setDarkSwitcherTooltipOpen(!props.darkSwitcherTooltipOpen);
+  };
   const darkSwitcherToggle = (e) => {
     e.preventDefault();
     document.body.classList.toggle("dark");
+    props.socket.emit("change theme");
   };
 
   const editModalToggle = () => setEditModalOpen(!editModalOpen);
@@ -148,7 +149,7 @@ function Navigation() {
             </a>
             <Tooltip
               placement="right"
-              isOpen={darkSwitcherTooltipOpen}
+              isOpen={props.darkSwitcherTooltipOpen}
               target="dark-switcher"
               toggle={darkSwitcherTooltipToggle}
             >
