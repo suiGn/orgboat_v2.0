@@ -181,9 +181,9 @@ io.on("connection", function (socket) {
     });
     // Save own profile
     socket.on("SaveOwnProfile", function (data) {
-      console.log(`[Socket.io] - Entro SaveOwnProfile`);
+      //console.log(`[Socket.io] - Entro SaveOwnProfile`);
       orgboatDB.query(
-        `UPDATE usrname SET name='${data.name}',about='${data.about}',phone='${data.phone}',city='${data.city}',website='${data.website}' WHERE  u_id='${data.id}'`,
+        `UPDATE usrs SET name='${data.name}',about='${data.about}',phone='${data.phone}',city='${data.city}',website='${data.website}' WHERE  u_id='${data.id}'`,
         function (err, rows) {
           io.to(user.u_id).emit("retrieve saveownprofile");
         }
