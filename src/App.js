@@ -18,9 +18,8 @@ import Layout from "./App/Layout";
 import io from "socket.io-client";
 const ENDPOINT = "http://localhost:5000/";
 const socket = io({
-  transports: ['websocket']
-});  
-
+  transports: ["websocket"],
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,7 +67,6 @@ function App() {
         },
       })
       .then((res) => {
-        console.log(res);
         if (res.data.ok) {
           UpdateTheme.then(() => {
             setLoaded(true);
@@ -87,20 +85,9 @@ function App() {
     socket.on("retrive theme", function (theme) {
       console.log(theme);
       if (theme.theme[0].theme === 0) {
-        // $("body").removeClass("dark");
         document.body.className = "";
-        // setDarkSwitcherTooltipOpen(false);
-
-        // document.getElementById("dark-switcher");
-        // console.log(document.classList("dark-light-switcher"));
-        // $(".dark-light-switcher").attr("title", "Dark mode");
       } else {
         document.body.className = "dark";
-        // setDarkSwitcherTooltipOpen(true);
-        // $("body").addClass("dark");
-        // document.body.classList.add("dark");
-        // $(".dark-light-switcher").attr("title", "Light mode");
-        console.log("mmmm");
       }
       resolve(true);
     });
