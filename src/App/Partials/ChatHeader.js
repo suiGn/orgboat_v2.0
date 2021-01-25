@@ -14,6 +14,8 @@ function ChatHeader(props) {
 
     const dispatch = useDispatch();
 
+    const {socket} =  props;
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -43,6 +45,12 @@ function ChatHeader(props) {
                 alt="image"
             />
         );
+    }
+    function ArchiveChat(chat_selected) {
+        socket.emit("archived chat", { chat: chat_selected });
+        socket.on("archived response", function () {
+          socket.emit("get chats");
+        });
     }
 
     return (
@@ -84,7 +92,7 @@ function ChatHeader(props) {
                             </DropdownToggle>
                             <DropdownMenu right>
                                 <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-                                <DropdownItem>Add to archive</DropdownItem>
+                                <DropdownItem onClick={() => ArchiveChat(props.chat_uid)}>Add to archive</DropdownItem>
                                 <DropdownItem>Delete</DropdownItem>
                                 <DropdownItem divider/>
                                 <DropdownItem>Block</DropdownItem>

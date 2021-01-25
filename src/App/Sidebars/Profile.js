@@ -9,9 +9,11 @@ import WomenAvatar5 from "../../assets/img/women_avatar5.jpg"
 import classnames from 'classnames'
 import io from 'socket.io-client';
 
-function Profile() { 
+function Profile(props) { 
     const user = {id: "a8d79038-cdb7-47d6-b9f9-538c7651fb81"};
+    const {socket} = props;
     const dispatch = useDispatch();
+    //console.log(profileAction.id);
     const {profileSidebar, mobileProfileSidebar} = useSelector(state => state);
 
     //const [activeTab, setActiveTab] = useState('1');
@@ -37,7 +39,6 @@ function Profile() {
     };
 
     useEffect(() => { 
-            const socket = io.connect('http://localhost:5000');   
             socket.emit('ViewOwnProfile', user);
             var userData;     
             socket.on ('retrieve viewownprofile', function (data) {

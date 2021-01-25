@@ -26,6 +26,7 @@ import io from 'socket.io-client';
 
 function EditProfileModal(props) {
     const user = {id: "a8d79038-cdb7-47d6-b9f9-538c7651fb81"};
+    const {socket} =  props;
     const [activeTab, setActiveTab] = useState('1');
     var userData;
     const toggle = tab => {
@@ -39,8 +40,7 @@ function EditProfileModal(props) {
     const [about, setAbout] = useState("");
     const [pphoto, setPphoto] = useState("");
 
-    useEffect(() => { 
-        const socket = io.connect('http://localhost:5000');   
+    useEffect(() => {   
         socket.emit('ViewOwnProfile', user); 
         socket.on ('retrieve viewownprofile', function (data) {
             userData = data.usrprofile[0];

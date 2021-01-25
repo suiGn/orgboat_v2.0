@@ -100,7 +100,7 @@ function Layout(props) {
         />
         <SidebarIndex socket={socket} setClicked ={setClicked}/>
         <Chat socket={socket} clicked={clicked}/>
-        <Profile />
+        <Profile socket={socket} />
         <TourModal />
         <DisconnectedModal />
       </div>

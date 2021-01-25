@@ -20,7 +20,7 @@ function Index(props) {
                     } else if (selectedSidebar === 'Favorites') {
                         return <FavoritesIndex/>
                     } else if (selectedSidebar === 'Archived') {
-                        return <ArchivedIndex/>
+                        return <ArchivedIndex socket={props.socket}/>
                     }
                 })()
             }

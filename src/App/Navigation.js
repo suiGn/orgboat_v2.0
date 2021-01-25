@@ -20,6 +20,15 @@ import { mobileProfileAction } from "../Store/Actions/mobileProfileAction";
 
 function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
+  let my_uid;
+  useEffect(()=>{
+    props.socket.on("my_uid response",(data)=>{
+      my_uid=data.id;
+    })
+  })
+  useEffect(()=>{
+    props.socket.emit("my_uid");
+  },[])
 
   const dispatch = useDispatch();
 
@@ -57,7 +66,7 @@ function Navigation(props) {
   const settingsModalToggle = () => setSettingsModalOpen(!settingsModalOpen);
 
   const profileActions = () => {
-    dispatch(profileAction(true));
+    dispatch(profileAction(true,my_uid));
     dispatch(mobileProfileAction(true));
   };
 
@@ -122,7 +131,7 @@ function Navigation(props) {
 
   return (
     <nav className="navigation">
-      <EditProfileModal modal={editModalOpen} toggle={editModalToggle} />
+      <EditProfileModal modal={editModalOpen} toggle={editModalToggle} socket={props.socket}/>
       <SettingsModal modal={settingsModalOpen} toggle={settingsModalToggle} />
       <div className="nav-group">
         <ul>

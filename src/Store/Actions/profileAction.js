@@ -1,4 +1,5 @@
-export const profileAction = (status) => ({
+export const profileAction = (status,id) => ({
     type: 'PROFILE',
-    status
+    status,
+    id
 });
