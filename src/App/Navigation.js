@@ -24,6 +24,7 @@ function Navigation(props) {
   useEffect(()=>{
     props.socket.on("my_uid response",(data)=>{
       my_uid=data.id;
+      setUserEdit({id:data.id});
     })
   })
   useEffect(()=>{
@@ -31,6 +32,8 @@ function Navigation(props) {
   },[])
 
   const dispatch = useDispatch();
+
+  const [userEdit, setUserEdit] = useState({});
 
   const [userMenuTooltipOpen, setUserMenuTooltipOpen] = useState(false);
 
@@ -131,7 +134,7 @@ function Navigation(props) {
 
   return (
     <nav className="navigation">
-      <EditProfileModal modal={editModalOpen} toggle={editModalToggle} socket={props.socket}/>
+      <EditProfileModal modal={editModalOpen} toggle={editModalToggle} socket={props.socket} userEdit={userEdit}/>
       <SettingsModal modal={settingsModalOpen} toggle={settingsModalToggle} />
       <div className="nav-group">
         <ul>

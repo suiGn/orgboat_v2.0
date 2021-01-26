@@ -7,13 +7,10 @@ import {profileAction} from "../../Store/Actions/profileAction"
 import {mobileProfileAction} from "../../Store/Actions/mobileProfileAction"
 import WomenAvatar5 from "../../assets/img/women_avatar5.jpg"
 import classnames from 'classnames'
-import io from 'socket.io-client';
 
 function Profile(props) { 
-    const user = {id: "a8d79038-cdb7-47d6-b9f9-538c7651fb81"};
     const {socket} = props;
     const dispatch = useDispatch();
-    //console.log(profileAction.id);
     const {profileSidebar, mobileProfileSidebar} = useSelector(state => state);
 
     //const [activeTab, setActiveTab] = useState('1');
@@ -32,27 +29,29 @@ function Profile(props) {
         if (activeTab !== tab) setActiveTab(tab);
     };*/
 
-    const profileActions = (e) => {
+    const profileActions = (e,data) => {
         e.preventDefault();
+        console.log(data)
         dispatch(profileAction(false));
         dispatch(mobileProfileAction(false))
     };
 
     useEffect(() => { 
-            socket.emit('ViewOwnProfile', user);
-            var userData;     
-            socket.on ('retrieve viewownprofile', function (data) {
-                userData = data.usrprofile[0];
-                setState({ ...state, 
-                    name: userData.name,
-                    city: userData.city,
-                    phone:userData.phone,
-                    about:userData.about,
-                    pphoto:userData.pphoto,
-                    usrname:userData.usrname,
-                    website:userData.website});
-            });
-    },[]);
+        console.log(props.user)
+        socket.emit('ViewOwnProfile', props.user);
+        var userData;     
+        socket.on ('retrieve viewownprofile', function (data) {
+            userData = data.usrprofile[0];
+            setState({ ...state, 
+                name: userData.name,
+                city: userData.city,
+                phone:userData.phone,
+                about:userData.about,
+                pphoto:userData.pphoto,
+                usrname:userData.usrname,
+                website:userData.website});
+        });
+    },[props.user]);
 
     function addDefaultSrc(ev){
         ev.target.src = WomenAvatar5

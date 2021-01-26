@@ -25,14 +25,12 @@ import ManAvatar4 from '../../assets/img/man_avatar4.jpg'
 import io from 'socket.io-client';
 
 function EditProfileModal(props) {
-    const user = {id: "a8d79038-cdb7-47d6-b9f9-538c7651fb81"};
     const {socket} =  props;
     const [activeTab, setActiveTab] = useState('1');
     var userData;
     const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
     };
-    
     const [name, setName] = useState("");
     const [city, setCity] = useState("");
     const [phone, setPhone] = useState("");
@@ -41,8 +39,8 @@ function EditProfileModal(props) {
     const [pphoto, setPphoto] = useState("");
 
     useEffect(() => {   
-        socket.emit('ViewOwnProfile', user); 
-        socket.on ('retrieve viewownprofile', function (data) {
+        socket.emit('ViewOwnProfile2', props.userEdit); 
+        socket.on ('retrieve viewownprofile2', function (data) {
             userData = data.usrprofile[0];
             setName(userData.name);
             setCity(userData.city);
@@ -51,21 +49,18 @@ function EditProfileModal(props) {
             setAbout(userData.about);
             setPphoto(userData.pphoto);
         });
-    },[]);
+    },[props.userEdit]);
 
     function SaveProfile(e) {
-        e.preventDefault();
-        const socket = io.connect('http://localhost:5000');   
-        
+        e.preventDefault();  
         userData = {
             name: name,
             phone: phone,
             city: city,
             about: about?about:"",
             website:website,
-            id: user.id
+            id: props.userEdit.id
         }
-        console.log(userData)
         socket.emit('SaveOwnProfile', userData);
         props.toggle();
     }

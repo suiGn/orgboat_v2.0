@@ -16,7 +16,7 @@ function Layout(props) {
   const [clicked, setClicked] = useState([]);
   const { pageTour } = useSelector((state) => state);
   const {socket} =  props
-
+  const [user, setUser] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,6 +30,12 @@ function Layout(props) {
     });
     // UpdateTheme();
   }, []);
+
+  useEffect(()=>{
+    props.socket.on("my_uid response",(data)=>{
+      setUser({id:data.id});
+    })
+  })
 
   // const UpdateTheme = () => {
   //   socket.emit("theme");
@@ -100,7 +106,7 @@ function Layout(props) {
         />
         <SidebarIndex socket={socket} setClicked ={setClicked}/>
         <Chat socket={socket} clicked={clicked}/>
-        <Profile socket={socket} />
+        <Profile socket={socket} user={user} />
         <TourModal />
         <DisconnectedModal />
       </div>
