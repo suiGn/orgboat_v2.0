@@ -42,12 +42,12 @@ function EditProfileModal(props) {
         socket.emit('ViewOwnProfile2', props.userEdit); 
         socket.on ('retrieve viewownprofile2', function (data) {
             userData = data.usrprofile[0];
-            setName(userData.name);
-            setCity(userData.city);
-            setPhone(userData.phone);
-            setWebSite(userData.website);
-            setAbout(userData.about);
-            setPphoto(userData.pphoto);
+            setName(userData?userData.name:"");
+            setCity(userData?userData.city:"");
+            setPhone(userData?userData.phone:"");
+            setWebSite(userData?userData.website:"");
+            setAbout(userData?userData.about:"");
+            setPphoto(userData?userData.pphoto:"");
         });
     },[props.userEdit]);
 

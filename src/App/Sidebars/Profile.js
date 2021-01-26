@@ -31,27 +31,25 @@ function Profile(props) {
 
     const profileActions = (e,data) => {
         e.preventDefault();
-        console.log(data)
         dispatch(profileAction(false));
         dispatch(mobileProfileAction(false))
     };
 
     useEffect(() => { 
-        console.log(props.user)
         socket.emit('ViewOwnProfile', props.user);
         var userData;     
         socket.on ('retrieve viewownprofile', function (data) {
             userData = data.usrprofile[0];
             setState({ ...state, 
-                name: userData.name,
-                city: userData.city,
-                phone:userData.phone,
-                about:userData.about,
-                pphoto:userData.pphoto,
-                usrname:userData.usrname,
-                website:userData.website});
+                name: userData?userData.name:"",
+                city: userData?userData.city:"",
+                phone:userData?userData.phone:"",
+                about:userData?userData.about:"",
+                pphoto:userData?userData.pphoto:"",
+                usrname:userData?userData.usrname:"",
+                website:userData?userData.website:""});
         });
-    },[props.user]);
+    },[props]);
 
     function addDefaultSrc(ev){
         ev.target.src = WomenAvatar5
