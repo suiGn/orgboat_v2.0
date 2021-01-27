@@ -84,7 +84,7 @@ function Index(props) {
                                         </div>
                                         <div className="users-list-action">
                                             <div className="action-toggle">
-                                                <ArchivedDropdown/>
+                                                <ArchivedDropdown setUser={props.setUser} id={chat.user_chat}/>
                                             </div>
                                         </div>
                                     </div>

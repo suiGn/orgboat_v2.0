@@ -23,6 +23,8 @@ import * as FeatherIcon from 'react-feather'
 import classnames from 'classnames'
 import ManAvatar4 from '../../assets/img/man_avatar4.jpg'
 import io from 'socket.io-client';
+import axios from "axios";
+
 
 function EditProfileModal(props) {
     const {socket} =  props;
@@ -37,6 +39,7 @@ function EditProfileModal(props) {
     const [website, setWebSite] = useState("");
     const [about, setAbout] = useState("");
     const [pphoto, setPphoto] = useState("");
+    const [fileState, setFileState] = useState(null);
 
     useEffect(() => {   
         socket.emit('ViewOwnProfile2', props.userEdit); 
@@ -52,7 +55,10 @@ function EditProfileModal(props) {
     },[props.userEdit]);
 
     function SaveProfile(e) {
-        e.preventDefault();  
+        e.preventDefault();
+        if(fileState){
+            onFormSubmit(e);
+        }  
         userData = {
             name: name,
             phone: phone,
@@ -63,6 +69,25 @@ function EditProfileModal(props) {
         }
         socket.emit('SaveOwnProfile', userData);
         props.toggle();
+    }
+    function onChangePhoto(e) {
+        setFileState(e.target.files[0]);
+    }
+    function onFormSubmit(e) {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("myImage", fileState);
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        };
+        axios
+          .post("/uploadpPhoto", formData, config)
+          .then((response) => {
+            //alert("The file is successfully uploaded");
+          })
+          .catch((error) => {});
     }
 
     return (
@@ -103,6 +128,16 @@ function EditProfileModal(props) {
                                 Social Links
                             </NavLink>
                         </NavItem>
+                        <NavItem>
+                            <NavLink
+                                className={classnames({active: activeTab === '4'})}
+                                onClick={() => {
+                                    toggle('4');
+                                }}
+                            >
+                                Avatar
+                            </NavLink>
+                        </NavItem>
                     </Nav>
                     <Form>
                         <TabContent activeTab={activeTab}>
@@ -117,17 +152,6 @@ function EditProfileModal(props) {
                                             </Button>
                                         </InputGroupAddon>
                                     </InputGroup>
-                                </FormGroup>
-                                <FormGroup>
-                                    <Label for="avatar">Avatar</Label>
-                                    <div className="d-flex align-items-center">
-                                        <div>
-                                            <figure className="avatar mr-3 item-rtl">
-                                                <img src={ManAvatar4} className="rounded-circle" alt="avatar"/>
-                                            </figure>
-                                        </div>
-                                        <CustomInput type="file" id="exampleCustomFileBrowser" name="customFile"/>
-                                    </div>
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="city">City</Label>
@@ -161,6 +185,19 @@ function EditProfileModal(props) {
                                             </Button>
                                         </InputGroupAddon>
                                     </InputGroup>
+                                </FormGroup>
+                            </TabPane>
+                            <TabPane tabId="4">
+                                <FormGroup>
+                                    <Label for="avatar">Avatar</Label>
+                                    <div className="d-flex align-items-center">
+                                        <div>
+                                            <figure className="avatar mr-3 item-rtl">
+                                                <img src={pphoto} className="rounded-circle" alt="avatar"/>
+                                            </figure>
+                                        </div>
+                                        <CustomInput type="file" id="customFile" name="customFile" onChange={onChangePhoto}/>
+                                    </div>
                                 </FormGroup>
                             </TabPane>
                             <TabPane tabId="2">
