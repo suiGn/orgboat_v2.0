@@ -133,12 +133,12 @@ function Chat(props) {
 
     return (
         <div className="chat">
-            <ChatHeader data={props.clicked} socket={socket} chat_uid={props.clicked.chat_uid}/>
+            <ChatHeader data={props.clicked} socket={socket} chat_uid={props.clicked.chat_uid} id={props.clicked.user_chat} setUser={props.setUser}/>
             <PerfectScrollbar containerRef={ref => setScrollEl(ref)}>
                 <div className="chat-body">
                     <div className="messages">
                         {
-                            messages.map((message, i) => <MessagesView message={message} key={i} id={props.clicked.user_chat}/>)
+                            messages.map((message, i) => <MessagesView message={message} key={i} id={props.clicked.user_chat} setUser={props.setUser}/>)
                         }
                     </div>
                 </div>

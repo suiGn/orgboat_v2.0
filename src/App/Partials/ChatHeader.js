@@ -23,6 +23,7 @@ function ChatHeader(props) {
     const mobileMenuBtn = () => document.body.classList.toggle('navigation-open');
 
     const profileActions = () => {
+        props.setUser({id:props.id});
         dispatch(profileAction(true));
         dispatch(mobileProfileAction(true))
     };

@@ -16,8 +16,9 @@ function Layout(props) {
   const [clicked, setClicked] = useState([]);
   const { pageTour } = useSelector((state) => state);
   const {socket} =  props
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState("");
   const dispatch = useDispatch();
+  const [my_uid,setMy_Id]= useState("");
 
   useEffect(() => {
     document.querySelector("*").addEventListener("click", (e) => {
@@ -33,9 +34,12 @@ function Layout(props) {
 
   useEffect(()=>{
     props.socket.on("my_uid response",(data)=>{
-      setUser({id:data.id});
+      setMy_Id({id:data.id});
     })
   })
+  useEffect(()=>{
+    console.log(user);
+  },[user])
 
   // const UpdateTheme = () => {
   //   socket.emit("theme");
@@ -103,9 +107,11 @@ function Layout(props) {
           darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
           setDarkSwitcherTooltipOpen={props.setDarkSwitcherTooltipOpen}
           socket={props.socket}
+          setUser={setUser}
+          my_uid={my_uid}
         />
-        <SidebarIndex socket={socket} setClicked ={setClicked} user={user}/>
-        <Chat socket={socket} clicked={clicked}/>
+        <SidebarIndex socket={socket} setClicked ={setClicked} setUser={setUser} my_uid={my_uid}/>
+        <Chat socket={socket} clicked={clicked} setUser={setUser}/>
         <Profile socket={socket} user={user} />
         <TourModal />
         <DisconnectedModal />

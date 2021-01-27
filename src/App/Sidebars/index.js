@@ -14,11 +14,11 @@ function Index(props) {
             {
                 (() => {
                     if (selectedSidebar === 'Chats') {
-                        return <ChatsIndex socket={props.socket} setClicked ={props.setClicked}/>
+                        return <ChatsIndex socket={props.socket} setClicked ={props.setClicked} setUser={props.setUser}/>
                     } else if (selectedSidebar === 'Friends') {
                         return <FriendsIndex socket={props.socket}/>
                     } else if (selectedSidebar === 'Favorites') {
-                        return <FavoritesIndex socket={props.socket} user={props.user} />
+                        return <FavoritesIndex socket={props.socket} my_uid={props.my_uid} />
                     } else if (selectedSidebar === 'Archived') {
                         return <ArchivedIndex socket={props.socket}/>
                     }

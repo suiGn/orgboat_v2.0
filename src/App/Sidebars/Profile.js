@@ -49,7 +49,7 @@ function Profile(props) {
                 usrname:userData?userData.usrname:"",
                 website:userData?userData.website:""});
         });
-    },[props]);
+    },[props.user]);
 
     function addDefaultSrc(ev){
         ev.target.src = WomenAvatar5

@@ -1,21 +1,48 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 // import { ReactComponent as Logo } from "../assets/logo.svg";
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:5000/subscribe";
 
 function SignUp() {
   const [response, setResponse] = useState("");
+  const [username,setUsername] =  useState("");
+  const [fullname,setFullname] =  useState("");
+  const [email,setEmail] =  useState("");
+  const [pwrd,setPwrd] =  useState("");
+  const [pwrd2,setPwrd2] =  useState("");
   useEffect(() => document.body.classList.add("form-membership"), []);
-  useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("subData", (data) => {
-      setResponse(data);
+
+  const subscribing = event => {
+    event.preventDefault();
+    const user = {
+      subName:fullname,
+      subEmail:email,
+      subUsername:username,
+      subPwd:pwrd,
+      subRtPwd:pwrd2
+    }
+    axios.post("/subscribing",user).then((res) => {
+        console.log(res);
     });
-    socket.emit("subscribingData", (data, value) => {
-      JSON.stringify({ value: value, code: data });
-    });
-  }, []);
+
+  }
+  const handleChangeName = event => {
+    setUsername(event.target.value);
+  }
+  const handleChangeFullname = event => {
+    setFullname(event.target.value);
+  }
+  const handleChangeEmail = event => {
+    setEmail(event.target.value);
+  }
+
+  const handleChangePwd = event => {
+    setPwrd(event.target.value);
+  }
+  const handleChangePwd2 = event => {
+    setPwrd2(event.target.value);
+  }
 
   return (
     <div className="form-wrapper">
@@ -24,10 +51,10 @@ function SignUp() {
       </div>
       <h5>Create account</h5>
       <form
-        action="http://localhost:5000/subscribing"
+        action="/subscribing"
         method="post"
         name="subForm"
-        onsubmit="return validateForm()"
+        // onsubmit={subscribing}
       >
         <div className="form-group">
           <input
@@ -36,7 +63,7 @@ function SignUp() {
             className="form-control"
             placeholder="Firstname"
             maxLength={21}
-            onchange="validData('vName', this.value)"
+            onChange={handleChangeFullname}
             required
             autoFocus
           />
@@ -48,7 +75,7 @@ function SignUp() {
             name="subUsername"
             placeholder="Username"
             required
-            onchange="validData('vUser', this.value)"
+            onChange={handleChangeName}
           />
         </div>
         <div className="form-group">
@@ -56,7 +83,7 @@ function SignUp() {
             type="email"
             name="subEmail"
             maxLength={34}
-            onchange="validData('vEmail', this.value)"
+            onChange={handleChangeEmail}
             className="form-control"
             placeholder="Email"
             required
@@ -68,6 +95,18 @@ function SignUp() {
             name="subPwd"
             className="form-control"
             placeholder="Password"
+            onChange={handleChangePwd}
+            maxLength={21}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            name="subRtPwd"
+            className="form-control"
+            onChange={handleChangePwd2}
+            placeholder="Re-type Password"
             maxLength={21}
             required
           />

@@ -171,6 +171,9 @@ io.on("connection", function (socket) {
     });
     // Show own profile
     socket.on("ViewOwnProfile", function (data) {
+      if(!data){
+        return;
+      }
       orgboatDB.query(
         `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
         function (err, rows) {
@@ -405,25 +408,6 @@ io.on("connection", function (socket) {
           });
         }
       );
-      /*orgboatDB.query(
-        `SELECT chat_uid FROM chats_users WHERE u_id='${data.id}'`,
-        function (err, rows) {
-          var chat_uids = ""
-          rows.forEach((data)=>{
-            chat_uids +=("'"+ data.chat_uid + "',");
-          })
-          chat_uids = chat_uids.replace(/,\s*$/, "");
-          orgboatDB.query(
-            `SELECT * FROM messages WHERE messages.unread_messages=1 and messages.chat_uid in (${chat_uids})`,
-            function (err, chats) {
-              console.log(chats)
-              io.to(user.u_id).emit("retrieve getfavorites", {
-                favorites: chats,
-              });
-            }
-          )
-        }
-      );*/
     });
     //Add Favorite
     socket.on("AddFavorite", (chat) => {

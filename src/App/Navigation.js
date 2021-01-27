@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
+import axios from "axios";
 // import { ReactComponent as Logo } from "../assets/logo.svg";
 import {
   Tooltip,
@@ -69,7 +70,8 @@ function Navigation(props) {
   const settingsModalToggle = () => setSettingsModalOpen(!settingsModalOpen);
 
   const profileActions = () => {
-    dispatch(profileAction(true,my_uid));
+    props.setUser(props.my_uid);
+    dispatch(profileAction(true));
     dispatch(mobileProfileAction(true));
   };
 
@@ -93,6 +95,15 @@ function Navigation(props) {
       icon: <FeatherIcon.Archive />,
     },
   ];
+  function logoutServer() {
+    axios.get("/logout").then((res) => {
+      if (res.data.ok == true) {
+        window.location.reload();
+
+      }
+    });
+
+  }
 
   const NavigationItemView = (props) => {
     const { item, tooltipName } = props;
@@ -193,7 +204,7 @@ function Navigation(props) {
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem
-                  onClick={() => (window.location.href = "/sign-in")}
+                  onClick={logoutServer}
                 >
                   Logout
                 </DropdownItem>

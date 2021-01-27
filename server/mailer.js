@@ -140,7 +140,7 @@ const verifyEmail = (req, res, email, uuid) => {
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                        <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top"><a href="https://www.orgboat.me/verMail?uuid=` +
+                                        valign="top"><a href="http://localhost:5000/verMail?uuid=` +
       uuid +
       `&em=` +
       email +
@@ -158,15 +158,21 @@ const verifyEmail = (req, res, email, uuid) => {
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      res.render("pages/sec/response", {
-        opt1: "Please try again.",
-        opt2: "Error",
-      });
+      // res.render("pages/sec/response", {
+      //   opt1: "Please try again.",
+      //   opt2: "Error",
+      // });
+      // res.redirect(`/sign-in`);
+      console.log(error);
+      res.json({
+        ok:false
+      })
     } else {
-      res.render("pages/sec/response", {
-        opt1: "Please check your inbox to verify your email.",
-        opt2: "Sent Successfully",
-      });
+      res.redirect(`/sign-in`);
+      // res.render("pages/sec/response", {
+      //   opt1: "Please check your inbox to verify your email.",
+      //   opt2: "Sent Successfully",
+      // });
     }
   });
 };
