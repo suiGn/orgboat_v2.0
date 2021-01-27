@@ -1,106 +1,107 @@
-
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from "react";
 import moment from "moment";
-import ChatHeader from "./ChatHeader"
-import ChatFooter from "./ChatFooter"
-import ManAvatar3 from "../../assets/img/man_avatar3.jpg"
-import {selectedChat} from "../Sidebars/Chats/Data"
-import PerfectScrollbar from "react-perfect-scrollbar"
+import ChatHeader from "./ChatHeader";
+import ChatFooter from "./ChatFooter";
+import ManAvatar3 from "../../assets/img/man_avatar3.jpg";
+import { selectedChat } from "../Sidebars/Chats/Data";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import ChatsMessageDropdown from "../Sidebars/Chats/ChatsMessageDropdown.js";
-import UnselectedChat from '../../assets/img/unselected-chat.svg'
+import UnselectedChat from "../../assets/img/unselected-chat.svg";
 
 function Chat(props) {
+  const [inputMsg, setInputMsg] = useState("");
 
-    const [inputMsg, setInputMsg] = useState('');
+  const [newMessage, setMessages] = useState(selectedChat);
 
-    const [newMessage, setMessages] = useState(selectedChat);
+  const [scrollEl, setScrollEl] = useState();
 
-    const [scrollEl, setScrollEl] = useState();
-
-    const [messages, setChatMessages] = useState([]);
+  const [messages, setChatMessages] = useState([]);
 
   let dateSend;
 
   if (messages && messages.length > 0) {
     dateSend = new Date(messages[0].time);
   }
-    const {socket} = props;
+  const { socket } = props;
 
-    useEffect(() => {
-        if (scrollEl) {
-            scrollEl.scrollTop = scrollEl.scrollHeight;
-        }
-    }, [scrollEl]);
+  useEffect(() => {
+    if (scrollEl) {
+      scrollEl.scrollTop = scrollEl.scrollHeight;
+    }
+  }, [scrollEl]);
 
-    useEffect(()=>{
-        socket.on("retrieve messages",(data)=>{
-            setChatMessages(data.messages.reverse());
-            scrollEl.scrollTop = scrollEl.scrollHeight;
-        });
+  useEffect(() => {
+    socket.on("retrieve messages", (data) => {
+      setChatMessages(data.messages.reverse());
+      scrollEl.scrollTop = scrollEl.scrollHeight;
     });
-    useEffect(()=>{
-        socket.emit("get messages",{id:props.clicked.chat_uid,page: 1})
-    },[props.clicked]);
+  });
+  useEffect(() => {
+    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1 });
+  }, [props.clicked]);
 
-    const handleSubmit = (newValue) => {
-        if (newMessage.length > 0) {
-            socket.emit("chat message", { chat: newValue.chat_uid, message: newValue.text });
-            socket.emit("get chats");
-            socket.emit("get messages", { id: newValue.chat_uid, page: 1 });
-        }
-        setInputMsg("");
-    };
-
-    const handleChange = (newValue) => {
-        setInputMsg(newValue);
-    };
-    function timeformat(date) {
-        var h = date.getHours();
-        var m = date.getMinutes();
-        var x = h >= 12 ? "PM" : "AM";
-        h = h % 12;
-        h = h ? h : 12;
-        m = m < 10 ? "0" + m : m;
-        var mytime = h + ":" + m + " " + x;
-        return mytime;
+  const handleSubmit = (newValue) => {
+    if (newMessage.length > 0) {
+      socket.emit("chat message", {
+        chat: newValue.chat_uid,
+        message: newValue.text,
+      });
+      socket.emit("get chats");
+      socket.emit("get messages", { id: newValue.chat_uid, page: 1 });
     }
-    
-    function getDateLabel(date) {
-        let dateLabelDate =
-          date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-        let dateLabelMonth =
-          date.getMonth() + 1 < 10
-            ? "0" + (date.getMonth() + 1)
-            : date.getMonth() + 1;
-        let dateLabelYear = date.getFullYear();
-        let dateLabel = dateLabelDate + "/" + dateLabelMonth + "/" + dateLabelYear;
-        return dateLabel;
-    }
-    let yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    let yesterdayLabel = getDateLabel(yesterday);
-    let todayLabel = getDateLabel(new Date());
-    let actualLabelDate = "";
+    setInputMsg("");
+  };
 
-    function getTodayLabel(dateLabel) {
-        if (dateLabel == yesterdayLabel) {
-        dateLabel = "Ayer";
-        } else if (dateLabel == todayLabel) {
-        dateLabel = "Hoy";
-        }
+  const handleChange = (newValue) => {
+    setInputMsg(newValue);
+  };
+  function timeformat(date) {
+    var h = date.getHours();
+    var m = date.getMinutes();
+    var x = h >= 12 ? "PM" : "AM";
+    h = h % 12;
+    h = h ? h : 12;
+    m = m < 10 ? "0" + m : m;
+    var mytime = h + ":" + m + " " + x;
+    return mytime;
+  }
 
-        if (actualLabelDate == dateLabel) {
-        return "";
-        } else {
-        actualLabelDate = dateLabel;
-        return (
-            <div
-            className="message-item messages-divider sticky-top"
-            data-label={actualLabelDate}
-            ></div>
-        );
-        }
+  function getDateLabel(date) {
+    let dateLabelDate =
+      date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    let dateLabelMonth =
+      date.getMonth() + 1 < 10
+        ? "0" + (date.getMonth() + 1)
+        : date.getMonth() + 1;
+    let dateLabelYear = date.getFullYear();
+    let dateLabel = dateLabelDate + "/" + dateLabelMonth + "/" + dateLabelYear;
+    return dateLabel;
+  }
+  let yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  let yesterdayLabel = getDateLabel(yesterday);
+  let todayLabel = getDateLabel(new Date());
+  let actualLabelDate = "";
+
+  function getTodayLabel(dateLabel) {
+    if (dateLabel == yesterdayLabel) {
+      dateLabel = "Ayer";
+    } else if (dateLabel == todayLabel) {
+      dateLabel = "Hoy";
     }
+
+    if (actualLabelDate == dateLabel) {
+      return "";
+    } else {
+      actualLabelDate = dateLabel;
+      return (
+        <div
+          className="message-item messages-divider sticky-top"
+          data-label={actualLabelDate}
+        ></div>
+      );
+    }
+  }
 
   const MessagesView = (props) => {
     const { message } = props;
@@ -184,7 +185,9 @@ function Chat(props) {
             ))}
           </div>
         </div>
-    )
+      </PerfectScrollbar>
+    </div>
+  );
 }
 
-export default Chat
+export default Chat;
