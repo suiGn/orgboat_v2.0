@@ -104,7 +104,7 @@ function Layout(props) {
           setDarkSwitcherTooltipOpen={props.setDarkSwitcherTooltipOpen}
           socket={props.socket}
         />
-        <SidebarIndex socket={socket} setClicked ={setClicked}/>
+        <SidebarIndex socket={socket} setClicked ={setClicked} user={user}/>
         <Chat socket={socket} clicked={clicked}/>
         <Profile socket={socket} user={user} />
         <TourModal />

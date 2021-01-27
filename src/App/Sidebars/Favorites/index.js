@@ -1,17 +1,22 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {useDispatch} from "react-redux"
 import 'react-perfect-scrollbar/dist/css/styles.css'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import FavoritesDropdown from "./FavoritesDropdown"
-import {favoriteChats} from "./Data"
+//import {favoriteChats} from "./Data"
 import {mobileSidebarAction} from "../../../Store/Actions/mobileSidebarAction"
 import * as FeatherIcon from "react-feather"
 
-function Index() {
-
+function Index(props) {
+    const {socket} =  props
+    const [favoriteChats, setfavoriteChats] = useState([]);
     useEffect(() => {
         inputRef.current.focus();
-    });
+        socket.emit('GetFavorites', props.user);
+        socket.on ('retrieve getfavorites', function (data) {
+            setfavoriteChats(data.favorites)
+        });
+    },[props]);
 
     const inputRef = useRef();
 
@@ -47,7 +52,7 @@ function Index() {
                                     <div className="users-list-body">
                                         <div>
                                             <h5>{item.name}</h5>
-                                            {item.text}
+                                            {item.message}
                                         </div>
                                         <div className="users-list-action">
                                             <div className="action-toggle">

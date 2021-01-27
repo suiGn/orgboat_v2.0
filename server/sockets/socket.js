@@ -163,7 +163,6 @@ io.on("connection", function (socket) {
           user.u_id +
           "');",
         function (err, rows) {
-          //console.log(rows);
           io.to(user.u_id).emit("retrieve viewprofile", {
             usrprofile: rows,
           });
@@ -196,7 +195,6 @@ io.on("connection", function (socket) {
       orgboatDB.query(
         `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
         function (err, rows) {
-          //console.log(rows);
           io.to(user.u_id).emit("retrieve viewownprofile2", {
             usrprofile: rows,
           });
@@ -394,7 +392,39 @@ io.on("connection", function (socket) {
         }
       );
     });
-
+    //Get Favorites
+    socket.on("GetFavorites", function (data) {
+      orgboatDB.query(
+        `SELECT distinct messages.message, messages.time, usrs.name FROM messages 
+        inner join usrs on messages.u_id = usrs.u_id
+        inner join chats_users on messages.u_id = chats_users.u_id
+        WHERE chats_users.u_id='${data.id}' and messages.unread_messages=1`,
+        function (err, rows) {
+          io.to(user.u_id).emit("retrieve getfavorites", {
+            favorites: rows,
+          });
+        }
+      );
+      /*orgboatDB.query(
+        `SELECT chat_uid FROM chats_users WHERE u_id='${data.id}'`,
+        function (err, rows) {
+          var chat_uids = ""
+          rows.forEach((data)=>{
+            chat_uids +=("'"+ data.chat_uid + "',");
+          })
+          chat_uids = chat_uids.replace(/,\s*$/, "");
+          orgboatDB.query(
+            `SELECT * FROM messages WHERE messages.unread_messages=1 and messages.chat_uid in (${chat_uids})`,
+            function (err, chats) {
+              console.log(chats)
+              io.to(user.u_id).emit("retrieve getfavorites", {
+                favorites: chats,
+              });
+            }
+          )
+        }
+      );*/
+    });
     //Add Favorite
     socket.on("AddFavorite", (chat) => {
       orgboatDB.query(

@@ -18,7 +18,7 @@ function Index(props) {
                     } else if (selectedSidebar === 'Friends') {
                         return <FriendsIndex socket={props.socket}/>
                     } else if (selectedSidebar === 'Favorites') {
-                        return <FavoritesIndex/>
+                        return <FavoritesIndex socket={props.socket} user={props.user} />
                     } else if (selectedSidebar === 'Archived') {
                         return <ArchivedIndex socket={props.socket}/>
                     }
