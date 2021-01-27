@@ -1,17 +1,25 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import ArchivedDropdown from "./ArchivedDropdown"
 import {useDispatch} from "react-redux"
-import {archivedChats} from "./Data"
+// import {archivedChats} from "./Data"
 import {mobileSidebarAction} from "../../../Store/Actions/mobileSidebarAction"
 import * as FeatherIcon from "react-feather"
 
-function Index() {
-
+function Index(props) {
+    const {socket} =  props
+    const [archivedChats,setArchivedChats] = useState([]);
+    
     useEffect(() => {
         inputRef.current.focus();
+        socket.on("retrieve chats archived",(data)=>{
+            setArchivedChats(data);
+        });
     });
+    useEffect(()=>{
+        socket.emit("get chats archived");
+    },[]);
 
     const dispatch = useDispatch();
 
@@ -42,9 +50,33 @@ function Index() {
                 <PerfectScrollbar>
                     <ul className="list-group list-group-flush">
                         {
-                            archivedChats.map((chat, i) => {
+                            archivedChats.chats &&
+                            archivedChats.chats.map((chat, i) => {
+                                if(chat.user_chat == archivedChats.my_uid){
+                                    return ""
+                                }
+                                let chat_name = chat.name;
+                                let p;
+                                let chat_initial = chat_name.substring(0, 1);
+                                if (chat.pphoto === "") {
+                                    p = (
+                                    <span className="avatar-title bg-info rounded-circle">
+                                        {chat_initial}
+                                    </span>
+                                    );
+                                } else {
+                                    p = (
+                                    <img
+                                        src={chat.pphoto}
+                                        className="rounded-circle"
+                                        alt="image"
+                                    />
+                                    );
+                                }
                                 return <li key={i} className="list-group-item">
-                                    {chat.avatar}
+                                    <figure className="avatar">
+                                        {p}
+                                    </figure>
                                     <div className="users-list-body">
                                         <div>
                                             <h5>{chat.name}</h5>
@@ -52,7 +84,7 @@ function Index() {
                                         </div>
                                         <div className="users-list-action">
                                             <div className="action-toggle">
-                                                <ArchivedDropdown/>
+                                                <ArchivedDropdown setUser={props.setUser} id={chat.user_chat}/>
                                             </div>
                                         </div>
                                     </div>

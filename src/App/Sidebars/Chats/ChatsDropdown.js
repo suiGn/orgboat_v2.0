@@ -5,7 +5,7 @@ import {profileAction} from "../../../Store/Actions/profileAction";
 import {mobileProfileAction} from "../../../Store/Actions/mobileProfileAction";
 import {useDispatch} from "react-redux";
 
-const ChatsDropdown = () => {
+const ChatsDropdown = (props) => {
 
     const dispatch = useDispatch();
 
@@ -14,6 +14,7 @@ const ChatsDropdown = () => {
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
     const profileActions = () => {
+        props.setUser({id:props.id});
         dispatch(profileAction(true));
         dispatch(mobileProfileAction(true))
     };

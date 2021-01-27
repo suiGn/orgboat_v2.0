@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
+import axios from "axios";
 // import { ReactComponent as Logo } from "../assets/logo.svg";
 import {
   Tooltip,
@@ -20,8 +21,20 @@ import { mobileProfileAction } from "../Store/Actions/mobileProfileAction";
 
 function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
+  let my_uid;
+  useEffect(()=>{
+    props.socket.on("my_uid response",(data)=>{
+      my_uid=data.id;
+      setUserEdit({id:data.id});
+    })
+  })
+  useEffect(()=>{
+    props.socket.emit("my_uid");
+  },[])
 
   const dispatch = useDispatch();
+
+  const [userEdit, setUserEdit] = useState({});
 
   const [userMenuTooltipOpen, setUserMenuTooltipOpen] = useState(false);
 
@@ -57,6 +70,7 @@ function Navigation(props) {
   const settingsModalToggle = () => setSettingsModalOpen(!settingsModalOpen);
 
   const profileActions = () => {
+    props.setUser(props.my_uid);
     dispatch(profileAction(true));
     dispatch(mobileProfileAction(true));
   };
@@ -81,6 +95,15 @@ function Navigation(props) {
       icon: <FeatherIcon.Archive />,
     },
   ];
+  function logoutServer() {
+    axios.get("/logout").then((res) => {
+      if (res.data.ok == true) {
+        window.location.reload();
+
+      }
+    });
+
+  }
 
   const NavigationItemView = (props) => {
     const { item, tooltipName } = props;
@@ -122,7 +145,7 @@ function Navigation(props) {
 
   return (
     <nav className="navigation">
-      <EditProfileModal modal={editModalOpen} toggle={editModalToggle} />
+      <EditProfileModal modal={editModalOpen} toggle={editModalToggle} socket={props.socket} userEdit={userEdit}/>
       <SettingsModal modal={settingsModalOpen} toggle={settingsModalToggle} />
       <div className="nav-group">
         <ul>
@@ -181,7 +204,7 @@ function Navigation(props) {
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem
-                  onClick={() => (window.location.href = "/sign-in")}
+                  onClick={logoutServer}
                 >
                   Logout
                 </DropdownItem>

@@ -44,7 +44,6 @@ function App() {
   const [darkSwitcherTooltipOpen, setDarkSwitcherTooltipOpen] = useState(false);
   const classes = useStyles();
   useEffect(() => {
-    console.log("mounted");
     CheckIfLogged();
     // (async () => {
     //   const response = await fetch("/logged");
@@ -58,12 +57,10 @@ function App() {
     axios
       .get("/logged", {
         onDownloadProgress: (progressEvent) => {
-          console.log(progressEvent);
           const total = parseFloat(progressEvent.total);
           const current = progressEvent.loaded;
 
           setProgress(Math.floor((current / total) * 100));
-          console.log("completed: ", progress);
         },
       })
       .then((res) => {
@@ -78,12 +75,10 @@ function App() {
         setloggedIn(res.data.ok);
       });
   };
-  console.log(loggedIn);
 
   const UpdateTheme = new Promise((resolve, reject) => {
     socket.emit("theme");
     socket.on("retrive theme", function (theme) {
-      console.log(theme);
       if (theme.theme[0].theme === 0) {
         document.body.className = "";
       } else {

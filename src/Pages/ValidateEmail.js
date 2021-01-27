@@ -29,7 +29,7 @@ function ValidateEmail() {
             Re-send Verification Link.
           </a>
           <br />
-          <a href="/logout">Log Out.</a>
+          <a href="/sign-in">Sign In.</a>
         </div>
       </div>
     </div>

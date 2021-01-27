@@ -20,7 +20,11 @@ io.on("connection", function (socket) {
       socket.join(guest);
       exports.guest = guest;
     }
-
+    socket.on("my_uid",()=>{
+      io.to(user.u_id).emit("my_uid response", {
+        id: user.u_id,
+      });
+    });
     //Transmit the messages from one user to another
     socket.on("get chats", function (msg) {
       console.log(`[Socket.io] - User ${user.usrname} asked for chats`);
@@ -60,11 +64,11 @@ io.on("connection", function (socket) {
     //find archived chats
     socket.on("get chats archived", function (msg) {
       console.log(`[Socket.io] - User ${user.usrname} asked for chats`);
-      //console.log(user.pphoto);
       orgboatDB.query(
         `
-			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, 
-				m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
+        select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,
+        m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
+        ,chats_users.delete_chat, m.unread_messages as unread_messages
 			
 			from chats_users  
 
@@ -79,8 +83,8 @@ io.on("connection", function (socket) {
 						FROM messages z 
 						WHERE z.chat_uid = m.chat_uid
 					)
-			where chats_users.u_id = '${user.u_id}'
-			order by time desc;
+          where chats_users.u_id = '${user.u_id}' and chats_users.archiveChat = 1 and chats_users.delete_chat = 0
+          order by time desc;
 			`,
         function (err, rows) {
           //console.log(rows);
@@ -159,7 +163,6 @@ io.on("connection", function (socket) {
           user.u_id +
           "');",
         function (err, rows) {
-          //console.log(rows);
           io.to(user.u_id).emit("retrieve viewprofile", {
             usrprofile: rows,
           });
@@ -168,11 +171,12 @@ io.on("connection", function (socket) {
     });
     // Show own profile
     socket.on("ViewOwnProfile", function (data) {
-      console.log(`[Socket.io] - Entro ViewOwnProfile`);
+      if(!data){
+        return;
+      }
       orgboatDB.query(
         `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
         function (err, rows) {
-          console.log(rows);
           io.to(user.u_id).emit("retrieve viewownprofile", {
             usrprofile: rows,
           });
@@ -181,9 +185,9 @@ io.on("connection", function (socket) {
     });
     // Save own profile
     socket.on("SaveOwnProfile", function (data) {
-      console.log(`[Socket.io] - Entro SaveOwnProfile`);
+      //console.log(`[Socket.io] - Entro SaveOwnProfile`);
       orgboatDB.query(
-        `UPDATE usrname SET name='${data.name}',about='${data.about}',phone='${data.phone}',city='${data.city}',website='${data.website}' WHERE  u_id='${data.id}'`,
+        `UPDATE usrs SET name='${data.name}',about='${data.about}',phone='${data.phone}',city='${data.city}',website='${data.website}' WHERE  u_id='${data.id}'`,
         function (err, rows) {
           io.to(user.u_id).emit("retrieve saveownprofile");
         }
@@ -194,7 +198,6 @@ io.on("connection", function (socket) {
       orgboatDB.query(
         `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
         function (err, rows) {
-          //console.log(rows);
           io.to(user.u_id).emit("retrieve viewownprofile2", {
             usrprofile: rows,
           });
@@ -392,7 +395,20 @@ io.on("connection", function (socket) {
         }
       );
     });
-
+    //Get Favorites
+    socket.on("GetFavorites", function (data) {
+      orgboatDB.query(
+        `SELECT distinct messages.message, messages.time, usrs.name FROM messages 
+        inner join usrs on messages.u_id = usrs.u_id
+        inner join chats_users on messages.u_id = chats_users.u_id
+        WHERE chats_users.u_id='${data.id}' and messages.unread_messages=1`,
+        function (err, rows) {
+          io.to(user.u_id).emit("retrieve getfavorites", {
+            favorites: rows,
+          });
+        }
+      );
+    });
     //Add Favorite
     socket.on("AddFavorite", (chat) => {
       orgboatDB.query(

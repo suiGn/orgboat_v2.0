@@ -122,7 +122,7 @@ function Index(props) {
                         {chat.unread_messages ? <div className="new-message-count">{chat.unread_messages}</div> : ''}
                         <small className={chat.unread_messages ? 'text-primary' : 'text-muted'}>{timeLabel}</small>
                         <div className="action-toggle">
-                            <ChatsDropdown/>
+                            <ChatsDropdown setUser={props.setUser} id={chat.user_chat}/>
                         </div>
                     </div>
                 </div>
@@ -168,7 +168,7 @@ function Index(props) {
                     <ul className="list-group list-group-flush">
                         {
                             chatLists.chats &&
-                            chatLists.chats.map((chat, i) => <ChatListView chat={chat} key={i} setClicked={props.setClicked}/>)
+                            chatLists.chats.map((chat, i) => <ChatListView chat={chat} key={i} setClicked={props.setClicked} setUser={props.setUser}/>)
                         }
                     </ul>
                 </PerfectScrollbar>
