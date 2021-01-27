@@ -123,6 +123,29 @@ body.dark .dropdown-menu .dropdown-divider {
   border-color: #384054;
 }
 
+.dropdown-chat-message {
+  display: none;
+  transition: all 0.5s ease-in-out;
+}
+
+.action-dropdown-chat {
+  height: 30px !important;
+  width: 50px !important;
+  position: absolute;
+  right: 0;
+  top: 8px;
+  z-index: 3;
+}
+
+.action-dropdown-chat:hover .dropdown-chat-message {
+  display: block;
+  background-color: #2121248f !important;
+}
+
+.position-relative {
+  position: relative;
+}
+
 @media (max-width: 1200px) {
   body.navigation-open:after {
     content: "";

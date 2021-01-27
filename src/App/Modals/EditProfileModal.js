@@ -66,7 +66,6 @@ function EditProfileModal(props) {
     };
     console.log(userData);
     socket.emit("SaveOwnProfile", userData);
-    props.toggle();
   }
 
   return (

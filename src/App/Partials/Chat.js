@@ -5,6 +5,9 @@ import ManAvatar3 from "../../assets/img/man_avatar3.jpg";
 import { selectedChat } from "../Sidebars/Chats/Data";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import UnselectedChat from "../../assets/img/unselected-chat.svg";
+import { ChevronDown } from "react-feather";
+import ChatsMessageDropdown from "../Sidebars/Chats/ChatsMessageDropdown.js";
+import moment from "moment";
 
 function Chat(props) {
   const [inputMsg, setInputMsg] = useState("");
@@ -17,11 +20,11 @@ function Chat(props) {
 
   const { socket } = props;
 
-  //   let dateSend;
+  let dateSend;
 
-  //   if (messages && messages.length > 0) {
-  //     dateSend = new Date(messages[0].time);
-  //   }
+  if (messages && messages.length > 0) {
+    dateSend = new Date(messages[0].time);
+  }
 
   useEffect(() => {
     if (scrollEl) {
@@ -120,6 +123,7 @@ function Chat(props) {
     const { message } = props;
     // dateSend = new Date(message.time);
     // let timeSend = timeformat(dateSend);
+    // let messageDate = new Date(message.time);
     let type;
     if (message.message_user_uid == props.id) {
       type = "undefine";
@@ -141,7 +145,7 @@ function Chat(props) {
             <div>
               <h5>{message.name}</h5>
               <div className="time">
-                {message.time}
+                {moment(message.time).format("DD-MM-YYYY")}
                 {message.type ? (
                   <i className="ti-double-check text-info"></i>
                 ) : null}
@@ -151,7 +155,28 @@ function Chat(props) {
           {message.media ? (
             message.media
           ) : (
-            <div className="message-content">{message.message}</div>
+            <div className="message-content position-relative">
+              {message.message}{" "}
+              <div className="action-toggle action-dropdown-chat">
+                <ChatsMessageDropdown />
+              </div>
+              {/* <div class="btn action-toggle action-dropdown-chat">
+                <div class="dropdown dropdown-chat-message">
+                  <a className="text-light" data-toggle="dropdown" href="#">
+                    <ChevronDown />
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-left">
+                    <a
+                      href="#"
+                      class="dropdown-item"
+                      // onClick={() => DeleteMessage(message)}
+                    >
+                      Delete
+                    </a>
+                  </div>
+                </div>
+              </div> */}
+            </div>
           )}
         </div>
       );
@@ -164,13 +189,15 @@ function Chat(props) {
       <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
         <div className="chat-body">
           <div className="messages">
-            {/* {getTodayLabel(getDateLabel(dateSend))}; */}
             {messages.map((message, i) => (
-              <MessagesView
-                message={message}
-                key={i}
-                id={props.clicked.user_chat}
-              />
+              <div className="messages-container">
+                {getTodayLabel(getDateLabel(dateSend))}
+                <MessagesView
+                  message={message}
+                  key={i}
+                  id={props.clicked.user_chat}
+                />
+              </div>
             ))}
           </div>
         </div>
