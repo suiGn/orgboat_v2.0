@@ -18,6 +18,7 @@ function Index(props) {
     useEffect(() => {
         inputRef.current.focus();
         socket.on("retrieve chats",(data)=>{
+            //TODO: acualizar la lista de unread_messages
             setChatList(data);
             setfavoriteFriendFiltered(data.chats);
         });

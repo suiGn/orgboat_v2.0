@@ -134,6 +134,20 @@ io.on("connection", function (socket) {
       console.log(
         `[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, page:${msg.page}`
       );
+      orgboatDB.query(
+        `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${msg.id}'`,
+        (err,data)=>{
+          if (err) {
+            return json({
+              ok: false,
+              err: {
+                message: "error al actualizar messages",
+              },
+            });
+          }
+        }
+      );
+      
       //initMsg
       orgboatDB.query(
         `
