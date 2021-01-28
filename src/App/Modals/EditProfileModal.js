@@ -128,16 +128,6 @@ function EditProfileModal(props) {
                                 Social Links
                             </NavLink>
                         </NavItem>
-                        <NavItem>
-                            <NavLink
-                                className={classnames({active: activeTab === '4'})}
-                                onClick={() => {
-                                    toggle('4');
-                                }}
-                            >
-                                Avatar
-                            </NavLink>
-                        </NavItem>
                     </Nav>
                     <Form>
                         <TabContent activeTab={activeTab}>
@@ -152,6 +142,17 @@ function EditProfileModal(props) {
                                             </Button>
                                         </InputGroupAddon>
                                     </InputGroup>
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="avatar">Avatar</Label>
+                                    <div className="d-flex align-items-center">
+                                        <div>
+                                            <figure className="avatar mr-3 item-rtl">
+                                                <img src={pphoto} className="rounded-circle" alt="avatar"/>
+                                            </figure>
+                                        </div>
+                                        <CustomInput type="file" id="customFile" name="customFile" onChange={onChangePhoto}/>
+                                    </div>
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="city">City</Label>
@@ -185,19 +186,6 @@ function EditProfileModal(props) {
                                             </Button>
                                         </InputGroupAddon>
                                     </InputGroup>
-                                </FormGroup>
-                            </TabPane>
-                            <TabPane tabId="4">
-                                <FormGroup>
-                                    <Label for="avatar">Avatar</Label>
-                                    <div className="d-flex align-items-center">
-                                        <div>
-                                            <figure className="avatar mr-3 item-rtl">
-                                                <img src={pphoto} className="rounded-circle" alt="avatar"/>
-                                            </figure>
-                                        </div>
-                                        <CustomInput type="file" id="customFile" name="customFile" onChange={onChangePhoto}/>
-                                    </div>
                                 </FormGroup>
                             </TabPane>
                             <TabPane tabId="2">

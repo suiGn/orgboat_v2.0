@@ -3,6 +3,7 @@ const { json } = require("sequelize");
 const uuid = require("node-uuid");
 const { formatLocalDate } = require("../middlewares/authentication");
 const routes = require("../routes");
+const { use } = require("passport");
 
 io.on("connection", function (socket) {
   //login in socket
@@ -471,6 +472,24 @@ io.on("connection", function (socket) {
           io.to(user.u_id).emit("retriveDeleteMessage");
         }
       );
+    });
+
+    socket.on("update notification",(data)=>{
+      //console.log(`UPDATE messages SET unread_messages WHERE u_id!='${user.u_id}' and chat_uid='${data.id}'`);
+        orgboatDB.query(
+          `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${data.id}'`,
+          (err,data)=>{
+            if (err) {
+              return json({
+                ok: false,
+                err: {
+                  message: "error al actualizar messages",
+                },
+              });
+            }
+            io.to(user.u_id).emit("retrive update notification");
+          }
+        );
     });
   } catch {
     console.log("problema");

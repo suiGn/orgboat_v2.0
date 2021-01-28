@@ -8,6 +8,7 @@ import * as FeatherIcon from 'react-feather'
 const ArchivedDropdown = (props) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dispatch = useDispatch();
+    const {socket} =  props;
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
@@ -16,6 +17,15 @@ const ArchivedDropdown = (props) => {
         dispatch(profileAction(true));
         dispatch(mobileProfileAction(true))
     };
+    function Unarchive(chat_selected) {
+        console.log(chat_selected);
+        socket.emit("Unarchive chat", { chat: chat_selected });
+        socket.on("Unarchive response", function (data) {
+          socket.emit("get chats");
+          // ChatArchive();
+          // setUnarchive
+        });
+    }
 
     return (
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -23,7 +33,7 @@ const ArchivedDropdown = (props) => {
                 <FeatherIcon.MoreHorizontal/>
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem>New chat</DropdownItem>
+                <DropdownItem onClick={() => Unarchive(props.chat_id)} >Unarchived</DropdownItem>
                 <DropdownItem onClick={profileActions}>Profile</DropdownItem>
                 <DropdownItem divider/>
                 <DropdownItem>Block</DropdownItem>

@@ -13,10 +13,13 @@ import {mobileSidebarAction} from "../../../Store/Actions/mobileSidebarAction";
 function Index(props) {
     const {socket} =  props
     const[chatLists,setChatList] =  useState([]);
+    const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
+    const [searchFavorite, setSearchFavorite] = useState("");
     useEffect(() => {
         inputRef.current.focus();
         socket.on("retrieve chats",(data)=>{
             setChatList(data);
+            setfavoriteFriendFiltered(data.chats);
         });
     });
     useEffect(()=>{
@@ -130,6 +133,13 @@ function Index(props) {
         }
         return ""
     };
+    function searchChat(wordToSearch){
+        setSearchFavorite(wordToSearch);
+        var resultFavorits = chatLists.filter((val) => {
+            return val.message.toLowerCase().includes(wordToSearch.toLowerCase());
+        });
+        setfavoriteFriendFiltered(resultFavorits);
+    }
 
     return (
         <div className="sidebar active">
@@ -161,7 +171,7 @@ function Index(props) {
                 </ul>
             </header>
             <form>
-                <input type="text" className="form-control" placeholder="Search chats" ref={inputRef}/>
+                <input type="text" className="form-control" placeholder="Search chats" ref={inputRef} value={searchFavorite}  onChange={(e) => searchChat(e.target.value)}/>
             </form>
             <div className="sidebar-body">
                 <PerfectScrollbar>

@@ -35,9 +35,18 @@ function Chat(props) {
       setChatMessages(data.messages.reverse());
       scrollEl.scrollTop = scrollEl.scrollHeight;
     });
+    socket.on("chat message",(data)=>{
+      //console.log(data);
+      socket.emit("get chats");
+      socket.emit("get messages", { id: data.chat, page: 1 });
+    });
+    socket.on("retrive update notification",(data)=>{
+      socket.emit("get chats");
+    });
   });
   useEffect(() => {
     socket.emit("get messages", { id: props.clicked.chat_uid, page: 1 });
+    //socket.emit("update notification",{id: props.clicked.chat_uid});
   }, [props.clicked]);
 
   const handleSubmit = (newValue) => {
@@ -169,23 +178,20 @@ function Chat(props) {
 
   return (
     <div className="chat">
-      <ChatHeader data={props.clicked} />
+      <ChatHeader data={props.clicked} socket={socket} chat_uid={props.clicked.chat_uid} id={props.clicked.user_chat} setUser={props.setUser}/>
       <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
         <div className="chat-body">
           <div className="messages">
             {messages.map((message, i) => (
               <div className="messages-container">
                 {getTodayLabel(getDateLabel(dateSend))}
-                <MessagesView
-                  message={message}
-                  key={i}
-                  id={props.clicked.user_chat}
-                />
+                <MessagesView message={message} key={i} id={props.clicked.user_chat} setUser={props.setUser}/>
               </div>
             ))}
           </div>
         </div>
       </PerfectScrollbar>
+      <ChatFooter onSubmit={handleSubmit} onChange={handleChange} inputMsg={inputMsg} chat_uid={props.clicked.chat_uid}/>
     </div>
   );
 }
