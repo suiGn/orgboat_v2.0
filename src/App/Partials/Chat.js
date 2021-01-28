@@ -33,9 +33,12 @@ function Chat(props) {
   useEffect(() => {
     socket.on("retrieve messages", (data) => {
       setChatMessages(data.messages.reverse());
-      scrollEl.scrollTop = scrollEl.scrollHeight;
     });
+    if (props.clicked && scrollEl) {
+      scrollEl.scrollTop = scrollEl.scrollHeight;
+    }
   });
+
   useEffect(() => {
     socket.emit("get messages", { id: props.clicked.chat_uid, page: 1 });
   }, [props.clicked]);
@@ -105,9 +108,6 @@ function Chat(props) {
 
   const MessagesView = (props) => {
     const { message } = props;
-    // dateSend = new Date(message.time);
-    // let timeSend = timeformat(dateSend);
-    // let messageDate = new Date(message.time);
     let type;
     if (message.message_user_uid == props.id) {
       type = "undefine";
@@ -144,22 +144,6 @@ function Chat(props) {
               <div className="action-toggle action-dropdown-chat">
                 <ChatsMessageDropdown />
               </div>
-              {/* <div class="btn action-toggle action-dropdown-chat">
-                <div class="dropdown dropdown-chat-message">
-                  <a className="text-light" data-toggle="dropdown" href="#">
-                    <ChevronDown />
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-left">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      // onClick={() => DeleteMessage(message)}
-                    >
-                      Delete
-                    </a>
-                  </div>
-                </div>
-              </div> */}
             </div>
           )}
         </div>
@@ -169,7 +153,7 @@ function Chat(props) {
 
   return (
     <div className="chat">
-      <ChatHeader data={props.clicked} />
+      <ChatHeader props={props} />
       <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
         <div className="chat-body">
           <div className="messages">
@@ -186,6 +170,12 @@ function Chat(props) {
           </div>
         </div>
       </PerfectScrollbar>
+      <ChatFooter
+        onSubmit={handleSubmit}
+        onChange={handleChange}
+        inputMsg={inputMsg}
+        chat_uid={props.clicked.chat_uid}
+      />
     </div>
   );
 }
