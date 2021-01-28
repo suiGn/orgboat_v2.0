@@ -34,6 +34,7 @@ function Chat(props) {
     socket.on("retrieve messages", (data) => {
       setChatMessages(data.messages.reverse());
       scrollEl.scrollTop = scrollEl.scrollHeight;
+      socket.emit("get chats");
     });
     socket.on("chat message",(data)=>{
       //console.log(data);
