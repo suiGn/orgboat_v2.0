@@ -125,7 +125,7 @@ exports.verMail = function (req, res) {
                 });
               } else {
                 console.log("success");
-                res.redirect("/success");
+                res.redirect("/verify-email");
                 // res.render("pages/sec/response", {
                 //   opt2: "Email Verified",
                 //   opt1: "You can now login to your account.",
@@ -234,18 +234,24 @@ exports.subscribing = function (req, res) {
               email.length <= 3 ||
               pwd.length <= 4
             ) {
-              res.render("pages/subscribe", {
-                opt: "Too short.",
-                opt1: "Log In",
-                opt2: "/",
-              });
-              returnl;
+              // res.render("pages/subscribe", {
+              //   opt: "Too short.",
+              //   opt1: "Log In",
+              //   opt2: "/",
+              // });
+              res.json({
+                ok:false
+              })
+              return;
             } else if (pwd != rtPwd) {
-              res.render("pages/subscribe", {
-                opt: "Password does not match.",
-                opt1: "Log In",
-                opt2: "/",
-              });
+              // res.render("pages/subscribe", {
+              //   opt: "Password does not match.",
+              //   opt1: "Log In",
+              //   opt2: "/",
+              // });
+              res.json({
+                ok:false
+              })
               return;
             } else {
               //Verifies if the user already exists
@@ -256,11 +262,14 @@ exports.subscribing = function (req, res) {
                   if (resp.length >= 1) {
                     try{
                       console.log("username exists");
-                      res.render("pages/subscribe", {
-                        opt: "Username Already Exists.",
-                        opt1: "Log In",
-                        opt2: "/",
-                      });
+                      // res.render("pages/subscribe", {
+                      //   opt: "Username Already Exists.",
+                      //   opt1: "Log In",
+                      //   opt2: "/",
+                      // });
+                      res.json({
+                        ok:false
+                      })
                       //throw err;
                       return;
                     }catch(e){
@@ -279,11 +288,14 @@ exports.subscribing = function (req, res) {
                         }
                         if (resp.length >= 1) {
                           console.log("Email exists");
-                          res.render("pages/subscribe", {
-                            opt: "Email Already Exists.",
-                            opt1: "Log In",
-                            opt2: "/",
-                          });
+                          // res.render("pages/subscribe", {
+                          //   opt: "Email Already Exists.",
+                          //   opt1: "Log In",
+                          //   opt2: "/",
+                          // });
+                          res.json({
+                            ok:false
+                          })
                           return;
                         } else {
                           //STORES DATA
@@ -305,7 +317,8 @@ exports.subscribing = function (req, res) {
                               }
                               console.log("New user saved!");
                               console.log(clName + usrname + email);
-                              //mailer.verifyEmail(email, uuid_numbr);
+                              mailer.verifyEmail(email, uuid_numbr);
+                              
                             }
                           ); //closes Insert New Usr Into Table
                         } //else
@@ -317,11 +330,14 @@ exports.subscribing = function (req, res) {
             } // Pwd do not match
             mailer.verifyEmail(req, res, email, uuid_numbr);
           } else {
-            res.render("pages/subscribe", {
-              opt: "Oops! Something went wrong while submitting the form.",
-              opt1: "Log In",
-              opt2: "/",
-            });
+            // res.render("pages/subscribe", {
+            //   opt: "Oops! Something went wrong while submitting the form.",
+            //   opt1: "Log In",
+            //   opt2: "/",
+            // });
+            res.json({
+              ok:"Oops! Something went wrong while submitting the form."
+            })
           }
         }
       });

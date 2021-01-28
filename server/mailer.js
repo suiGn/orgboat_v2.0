@@ -158,15 +158,21 @@ const verifyEmail = (req, res, email, uuid) => {
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      res.render("pages/sec/response", {
-        opt1: "Please try again.",
-        opt2: "Error",
-      });
+      // res.render("pages/sec/response", {
+      //   opt1: "Please try again.",
+      //   opt2: "Error",
+      // });
+      // res.redirect(`/sign-in`);
+      console.log(error);
+      res.json({
+        ok:false
+      })
     } else {
-      res.render("pages/sec/response", {
-        opt1: "Please check your inbox to verify your email.",
-        opt2: "Sent Successfully",
-      });
+      res.redirect(`/sign-in`);
+      // res.render("pages/sec/response", {
+      //   opt1: "Please check your inbox to verify your email.",
+      //   opt2: "Sent Successfully",
+      // });
     }
   });
 };

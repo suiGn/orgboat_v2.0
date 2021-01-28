@@ -170,7 +170,7 @@ var passportSocketIo = require("passport.socketio");
 const { json } = require("sequelize");
 require("./configs/config");
 //Move Socket in file socket.js
-io.set("origins", "*:*");
+
 //With Socket.io >= 1.0
 io.use(
   passportSocketIo.authorize({
