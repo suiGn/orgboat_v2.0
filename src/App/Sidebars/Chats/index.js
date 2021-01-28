@@ -13,7 +13,7 @@ import {mobileSidebarAction} from "../../../Store/Actions/mobileSidebarAction";
 function Index(props) {
     const {socket} =  props
     const[chatLists,setChatList] =  useState([]);
-    const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
+    const [favoriteChatFiltered, setfavoriteFriendFiltered] = useState([]);
     const [searchFavorite, setSearchFavorite] = useState("");
     useEffect(() => {
         inputRef.current.focus();
@@ -134,10 +134,11 @@ function Index(props) {
         }
         return ""
     };
+    
     function searchChat(wordToSearch){
         setSearchFavorite(wordToSearch);
-        var resultFavorits = chatLists.filter((val) => {
-            return val.message.toLowerCase().includes(wordToSearch.toLowerCase());
+        var resultFavorits = chatLists.chats.filter((val) => {
+            return val.name.toLowerCase().includes(wordToSearch.toLowerCase());
         });
         setfavoriteFriendFiltered(resultFavorits);
     }
@@ -179,7 +180,7 @@ function Index(props) {
                     <ul className="list-group list-group-flush">
                         {
                             chatLists.chats &&
-                            chatLists.chats.map((chat, i) => <ChatListView chat={chat} key={i} setClicked={props.setClicked} setUser={props.setUser}/>)
+                            favoriteChatFiltered.map((chat, i) => <ChatListView chat={chat} key={i} setClicked={props.setClicked} setUser={props.setUser}/>)
                         }
                     </ul>
                 </PerfectScrollbar>
