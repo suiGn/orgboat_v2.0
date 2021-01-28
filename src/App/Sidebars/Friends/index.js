@@ -12,6 +12,8 @@ import {mobileSidebarAction} from "../../../Store/Actions/mobileSidebarAction"
 
 function Index(props) {
     const [friendLists, setContact] = useState([]);
+    const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
+    const [searchFavorite, setSearchFavorite] = useState("");
     useEffect(() => {
         inputRef.current.focus();
     });
@@ -28,12 +30,20 @@ function Index(props) {
     useEffect(() => {
         props.socket.on("retrive GetContacts", (contacts) => {
             setContact(contacts);
+            setfavoriteFriendFiltered(contacts.chats);
         });
     });
     useEffect(()=>{
         props.socket.emit("GetContacts");
     },[]);
     
+    function searchFav(wordToSearch){
+        setSearchFavorite(wordToSearch);
+        var resultFavorits = friendLists.chats.filter((val) => {
+            return val.name.toLowerCase().includes(wordToSearch.toLowerCase());
+          });
+          setfavoriteFriendFiltered(resultFavorits);
+    }
 
     return (
         <div className="sidebar active">
@@ -52,14 +62,14 @@ function Index(props) {
                 </ul>
             </header>
             <form>
-                <input type="text" className="form-control" placeholder="Search friends" ref={inputRef}/>
+                <input type="text" className="form-control" placeholder="Search friends" ref={inputRef}  value={searchFavorite}  onChange={(e) => searchFav(e.target.value)}/>
             </form>
             <div className="sidebar-body">
                 <PerfectScrollbar>
                     <ul className="list-group list-group-flush">
                         {
                             friendLists.chats && 
-                            friendLists.chats.map((item, i) => {
+                            favoriteFriendFiltered.map((item, i) => {
                                 let my_uid = friendLists.my_uid;
                                 if(my_uid == item.user_chat){
                                     return ""

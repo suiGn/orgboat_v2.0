@@ -12,7 +12,6 @@ function Index(props) {
     const [favoriteChatsFiltered, setfavoriteChatsFiltered] = useState([]);
     const [searchFavorite, setSearchFavorite] = useState("");
     useEffect(() => {
-        console.log(props)
         inputRef.current.focus();
         socket.emit('GetFavorites', props.my_uid);
         socket.on ('retrieve getfavorites', function (data) {
