@@ -23,8 +23,6 @@ const ChatsMessageDropdown = (props) => {
     dispatch(mobileProfileAction(true));
   };
 
-  console.log(props.message)
-
   function AddFavorite(message_id) {
     socket.emit("FavoriteMessage", { id: message_id });
   }
