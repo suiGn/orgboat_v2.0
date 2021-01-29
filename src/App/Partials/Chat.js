@@ -33,18 +33,20 @@ function Chat(props) {
   useEffect(() => {
     socket.on("retrieve messages", (data) => {
       setChatMessages(data.messages.reverse());
-      scrollEl.scrollTop = scrollEl.scrollHeight;
       socket.emit("get chats");
     });
-    socket.on("chat message",(data)=>{
-      //console.log(data);
+    socket.on("chat message", (data) => {
       socket.emit("get chats");
       socket.emit("get messages", { id: data.chat, page: 1 });
     });
-    socket.on("retrive update notification",(data)=>{
+    socket.on("retrive update notification", (data) => {
       socket.emit("get chats");
     });
+    if (props.clicked && scrollEl) {
+      scrollEl.scrollTop = scrollEl.scrollHeight;
+    }
   });
+
   useEffect(() => {
     socket.emit("get messages", { id: props.clicked.chat_uid, page: 1 });
     //socket.emit("update notification",{id: props.clicked.chat_uid});
@@ -115,9 +117,6 @@ function Chat(props) {
 
   const MessagesView = (props) => {
     const { message } = props;
-    // dateSend = new Date(message.time);
-    // let timeSend = timeformat(dateSend);
-    // let messageDate = new Date(message.time);
     let type;
     if (message.message_user_uid == props.id) {
       type = "undefine";
@@ -154,22 +153,6 @@ function Chat(props) {
               <div className="action-toggle action-dropdown-chat">
                 <ChatsMessageDropdown message={message} prop_id={props.id} socket={socket}/>
               </div>
-              {/* <div class="btn action-toggle action-dropdown-chat">
-                <div class="dropdown dropdown-chat-message">
-                  <a className="text-light" data-toggle="dropdown" href="#">
-                    <ChevronDown />
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-left">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      // onClick={() => DeleteMessage(message)}
-                    >
-                      Delete
-                    </a>
-                  </div>
-                </div>
-              </div> */}
             </div>
           )}
         </div>
@@ -179,20 +162,38 @@ function Chat(props) {
 
   return (
     <div className="chat">
-      <ChatHeader data={props.clicked} socket={socket} chat_uid={props.clicked.chat_uid} id={props.clicked.user_chat} setUser={props.setUser}/>
+      <ChatHeader
+        data={props.clicked}
+        socket={socket}
+        chat_uid={props.clicked.chat_uid}
+        id={props.clicked.user_chat}
+        setUser={props.setUser}
+      />
       <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
         <div className="chat-body">
           <div className="messages">
             {messages.map((message, i) => (
               <div className="messages-container">
                 {getTodayLabel(getDateLabel(dateSend))}
-                <MessagesView message={message} key={i} id={props.clicked.user_chat} setUser={props.setUser}/>
+                <MessagesView
+                  message={message}
+                  key={i}
+                  id={props.clicked.user_chat}
+                  setUser={props.setUser}
+                />
               </div>
             ))}
           </div>
         </div>
       </PerfectScrollbar>
-      <ChatFooter onSubmit={handleSubmit} onChange={handleChange} inputMsg={inputMsg} chat_uid={props.clicked.chat_uid}/>
+      <ChatFooter
+        onSubmit={handleSubmit}
+        onChange={handleChange}
+        inputMsg={inputMsg}
+        setInputMsg={setInputMsg}
+        chat_uid={props.clicked.chat_uid}
+        darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+      />
     </div>
   );
 }
