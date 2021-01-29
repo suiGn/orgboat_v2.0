@@ -33,6 +33,14 @@ function Chat(props) {
   useEffect(() => {
     socket.on("retrieve messages", (data) => {
       setChatMessages(data.messages.reverse());
+      socket.emit("get chats");
+    });
+    socket.on("chat message", (data) => {
+      socket.emit("get chats");
+      socket.emit("get messages", { id: data.chat, page: 1 });
+    });
+    socket.on("retrive update notification", (data) => {
+      socket.emit("get chats");
     });
     if (props.clicked && scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
@@ -41,6 +49,7 @@ function Chat(props) {
 
   useEffect(() => {
     socket.emit("get messages", { id: props.clicked.chat_uid, page: 1 });
+    //socket.emit("update notification",{id: props.clicked.chat_uid});
   }, [props.clicked]);
 
   const handleSubmit = (newValue) => {
@@ -153,7 +162,13 @@ function Chat(props) {
 
   return (
     <div className="chat">
-      <ChatHeader props={props} />
+      <ChatHeader
+        data={props.clicked}
+        socket={socket}
+        chat_uid={props.clicked.chat_uid}
+        id={props.clicked.user_chat}
+        setUser={props.setUser}
+      />
       <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
         <div className="chat-body">
           <div className="messages">
@@ -164,6 +179,7 @@ function Chat(props) {
                   message={message}
                   key={i}
                   id={props.clicked.user_chat}
+                  setUser={props.setUser}
                 />
               </div>
             ))}
@@ -174,7 +190,9 @@ function Chat(props) {
         onSubmit={handleSubmit}
         onChange={handleChange}
         inputMsg={inputMsg}
+        setInputMsg={setInputMsg}
         chat_uid={props.clicked.chat_uid}
+        darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
       />
     </div>
   );

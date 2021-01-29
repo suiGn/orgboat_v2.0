@@ -336,7 +336,7 @@ exports.subscribing = function (req, res) {
             //   opt2: "/",
             // });
             res.json({
-              ok:false
+              ok:"Oops! Something went wrong while submitting the form."
             })
           }
         }

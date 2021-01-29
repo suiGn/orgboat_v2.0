@@ -22,15 +22,34 @@ import { mobileProfileAction } from "../Store/Actions/mobileProfileAction";
 function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
   let my_uid;
-  useEffect(()=>{
-    props.socket.on("my_uid response",(data)=>{
-      my_uid=data.id;
-      setUserEdit({id:data.id});
-    })
-  })
-  useEffect(()=>{
+
+  // Foto de perfil
+  let p;
+  let chat_initial;
+  let chat_name;
+  if (props.data.pphoto === "") {
+    chat_name = props.data.name;
+    chat_initial = chat_name.substring(0, 1);
+    p = (
+      <span className="avatar-title bg-info rounded-circle">
+        {chat_initial}
+      </span>
+    );
+  } else {
+    p = <img src={props.data.pphoto} className="rounded-circle" alt="image" />;
+  }
+
+  //
+
+  useEffect(() => {
+    props.socket.on("my_uid response", (data) => {
+      my_uid = data.id;
+      setUserEdit({ id: data.id });
+    });
+  });
+  useEffect(() => {
     props.socket.emit("my_uid");
-  },[])
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -60,6 +79,7 @@ function Navigation(props) {
   const darkSwitcherToggle = (e) => {
     e.preventDefault();
     document.body.classList.toggle("dark");
+    darkSwitcherTooltipToggle();
     props.socket.emit("change theme");
   };
 
@@ -99,10 +119,8 @@ function Navigation(props) {
     axios.get("/logout").then((res) => {
       if (res.data.ok == true) {
         window.location.reload();
-
       }
     });
-
   }
 
   const NavigationItemView = (props) => {
@@ -145,7 +163,12 @@ function Navigation(props) {
 
   return (
     <nav className="navigation">
-      <EditProfileModal modal={editModalOpen} toggle={editModalToggle} socket={props.socket} userEdit={userEdit}/>
+      <EditProfileModal
+        modal={editModalOpen}
+        toggle={editModalToggle}
+        socket={props.socket}
+        userEdit={userEdit}
+      />
       <SettingsModal modal={settingsModalOpen} toggle={settingsModalToggle} />
       <div className="nav-group">
         <ul>
@@ -174,7 +197,7 @@ function Navigation(props) {
               placement="right"
               isOpen={props.darkSwitcherTooltipOpen}
               target="dark-switcher"
-              toggle={darkSwitcherTooltipToggle}
+              // toggle={darkSwitcherTooltipToggle}
             >
               Dark mode
             </Tooltip>
@@ -187,11 +210,12 @@ function Navigation(props) {
                 aria-expanded={dropdownOpen}
               >
                 <figure className="avatar">
-                  <img
+                  {/* <img
                     src={WomenAvatar5}
                     className="rounded-circle"
                     alt="avatar"
-                  />
+                  /> */}
+                  {p}
                 </figure>
               </DropdownToggle>
               <DropdownMenu>
@@ -203,11 +227,7 @@ function Navigation(props) {
                   Settings
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem
-                  onClick={logoutServer}
-                >
-                  Logout
-                </DropdownItem>
+                <DropdownItem onClick={logoutServer}>Logout</DropdownItem>
               </DropdownMenu>
             </Dropdown>
             <Tooltip

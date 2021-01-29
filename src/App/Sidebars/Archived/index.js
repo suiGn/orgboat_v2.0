@@ -52,6 +52,7 @@ function Index(props) {
                         {
                             archivedChats.chats &&
                             archivedChats.chats.map((chat, i) => {
+                                
                                 if(chat.user_chat == archivedChats.my_uid){
                                     return ""
                                 }
@@ -84,7 +85,7 @@ function Index(props) {
                                         </div>
                                         <div className="users-list-action">
                                             <div className="action-toggle">
-                                                <ArchivedDropdown setUser={props.setUser} id={chat.user_chat}/>
+                                                <ArchivedDropdown setUser={props.setUser} socket={socket} id={chat.user_chat} chat_id={chat.chat_uid}/>
                                             </div>
                                         </div>
                                     </div>

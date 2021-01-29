@@ -3,6 +3,7 @@ const { json } = require("sequelize");
 const uuid = require("node-uuid");
 const { formatLocalDate } = require("../middlewares/authentication");
 const routes = require("../routes");
+const { use } = require("passport");
 
 io.on("connection", function (socket) {
   //login in socket
@@ -133,6 +134,20 @@ io.on("connection", function (socket) {
       console.log(
         `[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, page:${msg.page}`
       );
+      orgboatDB.query(
+        `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${msg.id}'`,
+        (err,data)=>{
+          if (err) {
+            return json({
+              ok: false,
+              err: {
+                message: "error al actualizar messages",
+              },
+            });
+          }
+        }
+      );
+      
       //initMsg
       orgboatDB.query(
         `
@@ -401,7 +416,7 @@ io.on("connection", function (socket) {
         `SELECT distinct messages.message, messages.time, usrs.name FROM messages 
         inner join usrs on messages.u_id = usrs.u_id
         inner join chats_users on messages.u_id = chats_users.u_id
-        WHERE chats_users.u_id='${data.id}' and messages.unread_messages=1`,
+        WHERE chats_users.u_id='${data.id}' and messages.favorite=0`,
         function (err, rows) {
           io.to(user.u_id).emit("retrieve getfavorites", {
             favorites: rows,
@@ -471,6 +486,24 @@ io.on("connection", function (socket) {
           io.to(user.u_id).emit("retriveDeleteMessage");
         }
       );
+    });
+
+    socket.on("update notification",(data)=>{
+      //console.log(`UPDATE messages SET unread_messages WHERE u_id!='${user.u_id}' and chat_uid='${data.id}'`);
+        orgboatDB.query(
+          `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${data.id}'`,
+          (err,data)=>{
+            if (err) {
+              return json({
+                ok: false,
+                err: {
+                  message: "error al actualizar messages",
+                },
+              });
+            }
+            io.to(user.u_id).emit("retrive update notification");
+          }
+        );
     });
   } catch {
     console.log("problema");

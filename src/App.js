@@ -43,14 +43,9 @@ function App() {
   const [loaded, setLoaded] = useState(false);
   const [darkSwitcherTooltipOpen, setDarkSwitcherTooltipOpen] = useState(false);
   const classes = useStyles();
+
   useEffect(() => {
     CheckIfLogged();
-    // (async () => {
-    //   const response = await fetch("/logged");
-    //   const data = await response.json();
-    //   setloggedIn(data.ok);
-    //   console.log(data.ok);
-    // })();
   }, []);
 
   const CheckIfLogged = () => {
@@ -65,9 +60,7 @@ function App() {
       })
       .then((res) => {
         if (res.data.ok) {
-          UpdateTheme.then(() => {
-            setLoaded(true);
-          });
+          UpdateTheme();
         } else {
           setLoaded(true);
         }
@@ -76,17 +69,19 @@ function App() {
       });
   };
 
-  const UpdateTheme = new Promise((resolve, reject) => {
+  const UpdateTheme = () => {
     socket.emit("theme");
     socket.on("retrive theme", function (theme) {
       if (theme.theme[0].theme === 0) {
         document.body.className = "";
+        setDarkSwitcherTooltipOpen(true);
       } else {
         document.body.className = "dark";
+        setDarkSwitcherTooltipOpen(false);
       }
-      resolve(true);
     });
-  });
+    setLoaded(true);
+  };
 
   if (!loaded) {
     return (
