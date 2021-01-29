@@ -42,10 +42,10 @@ const ChatsMessageDropdown = (props) => {
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem>Delete</DropdownItem>
-        {(props.message.message_user_uid == props.prop_id && props.message.favorite)?
+        {(props.message.message_user_uid == props.prop_id && !props.message.favorite)?
           <DropdownItem onClick={() => AddFavorite(props.message.message_id)}>Favorite</DropdownItem>:""
         }
-        {(props.message.message_user_uid == props.prop_id && !props.message.favorite)?
+        {(props.message.message_user_uid == props.prop_id && props.message.favorite)?
           <DropdownItem onClick={() => RemoveFavorite(props.message.message_id)}>Remove Favorite</DropdownItem>:""
         }
       </DropdownMenu>
