@@ -146,8 +146,8 @@ function Index(props) {
   };
   function searchChat(wordToSearch) {
     setSearchFavorite(wordToSearch);
-    var resultFavorits = chatLists.filter((val) => {
-      return val.message.toLowerCase().includes(wordToSearch.toLowerCase());
+    var resultFavorits = chatLists.chats.filter((val) => {
+      return val.name.toLowerCase().includes(wordToSearch.toLowerCase());
     });
     setfavoriteFriendFiltered(resultFavorits);
   }
@@ -158,7 +158,7 @@ function Index(props) {
         <span>Chats</span>
         <ul className="list-inline">
           <li className="list-inline-item">
-            <AddGroupModal />
+            <AddGroupModal socket={socket} chatLists={chatLists}/>
           </li>
           <li className="list-inline-item">
             <button
@@ -201,7 +201,7 @@ function Index(props) {
         <PerfectScrollbar>
           <ul className="list-group list-group-flush">
             {chatLists.chats &&
-              chatLists.chats.map((chat, i) => (
+              favoriteFriendFiltered.map((chat, i) => (
                 <ChatListView
                   chat={chat}
                   key={i}
