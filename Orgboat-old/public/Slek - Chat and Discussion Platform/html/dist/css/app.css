@@ -1468,7 +1468,7 @@ a.btn:hover[href="#previous"] {
 .btn.btn-facebook {
   background: #3b5998;
   border-color: #3b5998;
-  color: white;
+  color: white !important;
 }
 
 .btn.btn-facebook:not(:disabled):not(.disabled):hover,
