@@ -11,7 +11,8 @@ import {
     Label,
     Input,
     InputGroup,
-    InputGroupAddon
+    InputGroupAddon,
+    CustomInput
 } from 'reactstrap';
 
 import ManAvatar1 from "../../assets/img/man_avatar1.jpg"
@@ -20,14 +21,22 @@ import WomenAvatar4 from "../../assets/img/women_avatar4.jpg"
 // Feather icon
 import * as FeatherIcon from 'react-feather';
 import { func } from 'prop-types';
+import {
+    Dropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
+  } from "reactstrap";
 
 function AddGroupModal(props) {
 
     const { socket } = props;
 
-    const my_uid = props.chatLists.my_uid;
+    const [my_uid, setUid] = useState([]);
 
     const [addFriends, setAddFriends] = useState([]);
+
+    const [chooseFriend, setChooseFriend] = useState([]);
 
     const [modal, setModal] = useState(false);
 
@@ -40,6 +49,10 @@ function AddGroupModal(props) {
     const [tooltipOpen2, setTooltipOpen2] = useState(false);
 
     const tooltipToggle2 = () => setTooltipOpen2(!tooltipOpen2);
+
+    const [modalFriend, setModalFriend] = useState(false);
+
+    const modalToggleFriend = () => setModalFriend(!modalFriend);
 
     const AvatarTooltip = (props) => {
 
@@ -55,20 +68,67 @@ function AddGroupModal(props) {
             {props.name}
         </Tooltip>
     };
-    
-    function GetFriends(e){
-        e.preventDefault();
-        setAddFriends(props.chatLists.chats)
-        console.log(props.chatLists.chats)
-    }
 
     function AddGroup(){
         setModal(!modal)
     }
 
+    function AddNewFriends(){
+        //setAddFriends(props.chatLists.chats)
+        setModalFriend(!modalFriend)
+    }
+
+    function ModifyList(status,item){
+        if(status){
+            var newFriends = addFriends;
+            newFriends.push(item)
+            setAddFriends(newFriends)
+        }else{
+            console.log(item);
+            var newFriends = addFriends;
+            newFriends.filter((val) => {
+                return !val.user_chat.includes(item.user_chat);
+            });
+            setAddFriends(newFriends)
+        }
+    }
+
     useEffect(() => {  
-        //setAddFriends(props.chatLists.chats); 
-    },[]);
+        if(props.chatLists.length!=0)
+        {
+            setUid(props.chatLists.my_uid);
+            setChooseFriend(props.chatLists.chats); 
+        }
+    },[props.chatLists]);
+
+    const ModalAddFriend = (props) => {
+        return(
+            <div>
+                <Modal className="modal-dialog-zoom" isOpen={modalFriend} toggle={modalToggleFriend} centered>
+                    <ModalHeader toggle={modalToggleFriend}>
+                        <FeatherIcon.UserPlus className="mr-2"/> Add Friends
+                    </ModalHeader>
+                    <ModalBody>
+                        <FormGroup>
+                        {
+                            chooseFriend.map((item, i) => {
+                                return (
+                                <div>
+                                    <CustomInput type="checkbox" id={"customCheckbox"+i} label={item.name} onChange={(e) => ModifyList(e.target.checked,item)}/>
+                                </div>
+                                )
+                            })
+                        }
+                        </FormGroup>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={() => AddNewFriends()}>Submit</Button>
+                        <hr></hr>
+                    </ModalFooter>
+                </Modal>
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -122,7 +182,7 @@ function AddGroupModal(props) {
                                         )
                                     })
                                 }
-                                <a  onClick={(e) => GetFriends(e)}href="#/" title="Add friends" id="Tooltip-Avatar6">
+                                <a  onClick={modalToggleFriend} href="#/" title="Add friends" id="Tooltip-Avatar6">
                                     <figure className="avatar">
                                         <span className="avatar-title bg-primary rounded-circle">
                                             <FeatherIcon.Plus/>
@@ -142,6 +202,7 @@ function AddGroupModal(props) {
                     <Button color="primary" onClick={(e) => AddGroup(e)}>Add</Button>
                 </ModalFooter>
             </Modal>
+            <ModalAddFriend/>
         </div>
     )
 }
