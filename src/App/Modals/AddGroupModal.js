@@ -84,12 +84,11 @@ function AddGroupModal(props) {
             newFriends.push(item)
             setAddFriends(newFriends)
         }else{
-            console.log(item);
             var newFriends = addFriends;
-            newFriends.filter((val) => {
-                return !val.user_chat.includes(item.user_chat);
+            var removedFriend=  newFriends.filter((val) => {
+                return !val.user_chat.includes(item.user_chat)
             });
-            setAddFriends(newFriends)
+            setAddFriends(removedFriend)
         }
     }
 
