@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
   secure: false,
   // here it goes
-  tls: { rejectUnauthorized: false },
+  tls: { rejectUnauthorized: false, secureProtocol: "TLSv1_method" },
 });
 
 exports.rpwdm = function (req, res, next) {
@@ -163,11 +163,12 @@ const verifyEmail = (req, res, email, uuid) => {
       //   opt2: "Error",
       // });
       // res.redirect(`/sign-in`);
-      console.log(error);
-      res.json({
-        ok:false
-      })
+      console.log(error, "Error//////////////////");
+      // res.json({
+      //   ok:false
+      // })
     } else {
+      console.log("Se hizo con exito");
       res.redirect(`/sign-in`);
       // res.render("pages/sec/response", {
       //   opt1: "Please check your inbox to verify your email.",

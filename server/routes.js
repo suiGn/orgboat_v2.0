@@ -30,7 +30,7 @@ exports.home = function (req, res) {
 };
 
 exports.subscribe = function (req, res) {
-  res.redirect('/');
+  res.redirect("/");
   //res.render("pages/subscribe", { opt: " ", opt1: "Log In", opt2: "/" });
 };
 exports.authGoogle = (req, res) => {
@@ -104,7 +104,7 @@ exports.pwdRst = function (req, res) {
 exports.verMail = function (req, res) {
   var uuid = req.query.uuid;
   var email = req.query.em;
-  console.log('ver email');
+  console.log("ver email");
   var verified = 1;
   index.orgboatDB.query(
     "SELECT * FROM usrs WHERE email = ?",
@@ -240,8 +240,8 @@ exports.subscribing = function (req, res) {
               //   opt2: "/",
               // });
               res.json({
-                ok:false
-              })
+                ok: false,
+              });
               return;
             } else if (pwd != rtPwd) {
               // res.render("pages/subscribe", {
@@ -250,8 +250,8 @@ exports.subscribing = function (req, res) {
               //   opt2: "/",
               // });
               res.json({
-                ok:false
-              })
+                ok: false,
+              });
               return;
             } else {
               //Verifies if the user already exists
@@ -260,22 +260,10 @@ exports.subscribing = function (req, res) {
                 [usrname],
                 (err, resp) => {
                   if (resp.length >= 1) {
-                    try{
-                      console.log("username exists");
-                      // res.render("pages/subscribe", {
-                      //   opt: "Username Already Exists.",
-                      //   opt1: "Log In",
-                      //   opt2: "/",
-                      // });
-                      res.json({
-                        ok:false
-                      })
-                      //throw err;
-                      return;
-                    }catch(e){
-                      console.log(e);
-                    }
-                    
+                    res.json({
+                      err: "El nombre de usuario ya existe",
+                    });
+                    return;
                   } else {
                     console.log(resp);
                     index.orgboatDB.query(
@@ -294,8 +282,8 @@ exports.subscribing = function (req, res) {
                           //   opt2: "/",
                           // });
                           res.json({
-                            ok:false
-                          })
+                            err: "El correo electrónico ya existe",
+                          });
                           return;
                         } else {
                           //STORES DATA
@@ -314,11 +302,14 @@ exports.subscribing = function (req, res) {
                             (error, results) => {
                               if (error) {
                                 throw error;
+                              } else {
+                                res.json({
+                                  ok: "Nuevo usuario guardado con éxito",
+                                });
                               }
                               console.log("New user saved!");
                               console.log(clName + usrname + email);
-                              mailer.verifyEmail(email, uuid_numbr);
-                              
+                              mailer.verifyEmail(req, res, email, uuid_numbr);
                             }
                           ); //closes Insert New Usr Into Table
                         } //else
@@ -328,7 +319,7 @@ exports.subscribing = function (req, res) {
                 }
               ); //closes the vault first query - username
             } // Pwd do not match
-            mailer.verifyEmail(req, res, email, uuid_numbr);
+            // mailer.verifyEmail(req, res, email, uuid_numbr);
           } else {
             // res.render("pages/subscribe", {
             //   opt: "Oops! Something went wrong while submitting the form.",
@@ -336,8 +327,8 @@ exports.subscribing = function (req, res) {
             //   opt2: "/",
             // });
             res.json({
-              ok:"Oops! Something went wrong while submitting the form."
-            })
+              ok: "Oops! Something went wrong while submitting the form.",
+            });
           }
         }
       });
