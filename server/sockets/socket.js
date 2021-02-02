@@ -151,7 +151,7 @@ io.on("connection", function (socket) {
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message 
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.favorite
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit 10;
@@ -413,14 +413,24 @@ io.on("connection", function (socket) {
     //Get Favorites
     socket.on("GetFavorites", function (data) {
       orgboatDB.query(
-        `SELECT distinct messages.message, messages.time, usrs.name FROM messages 
-        inner join usrs on messages.u_id = usrs.u_id
-        inner join chats_users on messages.u_id = chats_users.u_id
-        WHERE chats_users.u_id='${data.id}' and messages.favorite=0`,
+        `SELECT chat_uid FROM chats_users WHERE u_id='${data.id}'`,
         function (err, rows) {
-          io.to(user.u_id).emit("retrieve getfavorites", {
-            favorites: rows,
-          });
+          var chat_uids = ""
+          rows.forEach((data)=>{
+            chat_uids +=("'"+ data.chat_uid + "',");
+          })
+          chat_uids = chat_uids.replace(/,\s*$/, "");
+          orgboatDB.query(
+            `SELECT distinct messages.message, messages.time, usrs.name FROM messages
+            inner join usrs on messages.u_id = usrs.u_id
+            inner join chats_users on messages.u_id = chats_users.u_id
+            WHERE messages.favorite=1 and messages.chat_uid in (${chat_uids})`,
+            function (err, chats) {
+              io.to(user.u_id).emit("retrieve getfavorites", {
+                favorites: chats,
+              });
+            }
+          )
         }
       );
     });
@@ -504,6 +514,24 @@ io.on("connection", function (socket) {
             io.to(user.u_id).emit("retrive update notification");
           }
         );
+    });
+    //favoriteMessage
+    socket.on("FavoriteMessage", function (data) {
+      orgboatDB.query(
+        `UPDATE messages SET favorite=1 WHERE message_id='${data.id}'`,
+        function (err, rows) {
+          io.to(user.u_id).emit("retrieve favoriteMessage");
+        }
+      );
+    });
+    //removeFavorite
+    socket.on("RemoveFavorite", function (data) {
+      orgboatDB.query(
+        `UPDATE messages SET favorite=0 WHERE message_id='${data.id}'`,
+        function (err, rows) {
+          io.to(user.u_id).emit("retrieve removeFavorite");
+        }
+      );
     });
   } catch {
     console.log("problema");

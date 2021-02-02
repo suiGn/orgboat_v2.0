@@ -10,11 +10,13 @@ import * as FeatherIcon from "react-feather"
 function Index(props) {
     const {socket} =  props
     const [archivedChats,setArchivedChats] = useState([]);
-    
+    const [favoritearchivedChatsFiltered, setArchivedChatsFiltered] = useState([]);
+    const [searchArchivedChats, setSearchArchivedChats] = useState("");
     useEffect(() => {
         inputRef.current.focus();
         socket.on("retrieve chats archived",(data)=>{
             setArchivedChats(data);
+            setArchivedChatsFiltered(data.chats);
         });
     });
     useEffect(()=>{
@@ -30,6 +32,14 @@ function Index(props) {
         document.body.classList.remove('navigation-open');
     };
 
+    function searchFav(wordToSearch){
+        setSearchArchivedChats(wordToSearch);
+        var resultFavorits = archivedChats.chats.filter((val) => {
+            return val.name.toLowerCase().includes(wordToSearch.toLowerCase());
+          });
+          setArchivedChatsFiltered(resultFavorits);
+    }
+
     return (
         <div className="sidebar active">
             <header>
@@ -44,14 +54,14 @@ function Index(props) {
                 </ul>
             </header>
             <form>
-                <input type="text" className="form-control" placeholder="Search archived" ref={inputRef}/>
+                <input type="text" className="form-control" placeholder="Search archived" ref={inputRef}  value={searchArchivedChats}  onChange={(e) => searchFav(e.target.value)}/>
             </form>
             <div className="sidebar-body">
                 <PerfectScrollbar>
                     <ul className="list-group list-group-flush">
                         {
                             archivedChats.chats &&
-                            archivedChats.chats.map((chat, i) => {
+                            favoritearchivedChatsFiltered.map((chat, i) => {
                                 
                                 if(chat.user_chat == archivedChats.my_uid){
                                     return ""
