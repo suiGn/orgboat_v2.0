@@ -87,6 +87,9 @@ function AddGroupModal(props) {
         console.log(groupData);
         setFriends([]);
         setAddFriends([])
+        chooseFriend.forEach(function(friend) {
+            friend.checked = false;
+        });
         setModal(!modal);
     }
 
