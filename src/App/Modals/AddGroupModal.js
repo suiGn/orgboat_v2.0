@@ -32,9 +32,15 @@ function AddGroupModal(props) {
 
     const { socket } = props;
 
-    const [my_uid, setUid] = useState([]);
+    const [my_uid, setUid] = useState("");
+
+    const [groupName, setGroupName] = useState("");
+
+    const [description, setDescription] = useState("");
 
     const [addFriends, setAddFriends] = useState([]);
+
+    const [friends, setFriends] = useState([]);
 
     const [chooseFriend, setChooseFriend] = useState([]);
 
@@ -69,21 +75,32 @@ function AddGroupModal(props) {
         </Tooltip>
     };
 
-    function AddGroup(){
-        setModal(!modal)
+    function AddGroup(e){
+        e.preventDefault();
+        var groupData
+        groupData = {
+            groupName: groupName,
+            description: description,
+            addFriends: addFriends,
+            id: my_uid
+        }
+        console.log(groupData);
+        setModal(!modal);
     }
 
     function AddNewFriends(){
-        //setAddFriends(props.chatLists.chats)
-        setModalFriend(!modalFriend)
+        setFriends(addFriends);
+        setModalFriend(!modalFriend);
     }
 
     function ModifyList(status,item){
         if(status){
             var newFriends = addFriends;
+            item.checked = true;
             newFriends.push(item)
             setAddFriends(newFriends)
         }else{
+            item.checked = false;
             var newFriends = addFriends;
             var removedFriend=  newFriends.filter((val) => {
                 return !val.user_chat.includes(item.user_chat)
@@ -94,11 +111,14 @@ function AddGroupModal(props) {
 
     useEffect(() => {  
         if(props.chatLists.length!=0)
-        {
+        {   
+            var chats = props.chatLists.chats.filter((val) => {
+                return !val.user_chat.includes(props.chatLists.my_uid)
+            });
             setUid(props.chatLists.my_uid);
-            setChooseFriend(props.chatLists.chats); 
+            setChooseFriend(chats); 
         }
-    },[props.chatLists]);
+    },[props]);
 
     const ModalAddFriend = (props) => {
         return(
@@ -113,7 +133,10 @@ function AddGroupModal(props) {
                             chooseFriend.map((item, i) => {
                                 return (
                                 <div>
-                                    <CustomInput type="checkbox" id={"customCheckbox"+i} label={item.name} onChange={(e) => ModifyList(e.target.checked,item)}/>
+                                    {
+                                        item.checked?<CustomInput type="checkbox" id={"customCheckbox"+i} label={item.name} onChange={(e) => ModifyList(e.target.checked,item)} defaultChecked/>:
+                                        <CustomInput type="checkbox" id={"customCheckbox"+i} label={item.name} onChange={(e) => ModifyList(e.target.checked,item)}/>
+                                    }
                                 </div>
                                 )
                             })
@@ -150,7 +173,7 @@ function AddGroupModal(props) {
                         <FormGroup>
                             <Label for="group_name">Group name</Label>
                             <InputGroup>
-                                <Input type="text" name="group_name" id="group_name"/>
+                                <Input type="text" name="group_name" id="group_name"  value={groupName}  onChange={(e) => setGroupName(e.target.value)}/>
                                 <InputGroupAddon addonType="append">
                                     <Button color="light" id="Tooltip-Smile">
                                         <FeatherIcon.Smile/>
@@ -169,7 +192,7 @@ function AddGroupModal(props) {
                             <p>The group members</p>
                             <div className="avatar-group">
                                 {
-                                    addFriends.map((item, i) => {
+                                    friends.map((item, i) => {
                                         return (
                                         <div>
                                             <AvatarTooltip name={item.name} id={i}/>
@@ -193,7 +216,7 @@ function AddGroupModal(props) {
                         </FormGroup>
                         <FormGroup>
                             <Label for="description">Invitation message</Label>
-                            <Input type="textarea" name="description" id="description"/>
+                            <Input type="textarea" name="description" id="description" value={description}  onChange={(e) => setDescription(e.target.value)}/>
                         </FormGroup>
                     </Form>
                 </ModalBody>
