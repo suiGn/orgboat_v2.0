@@ -85,6 +85,8 @@ function AddGroupModal(props) {
             id: my_uid
         }
         console.log(groupData);
+        setFriends([]);
+        setAddFriends([])
         setModal(!modal);
     }
 
