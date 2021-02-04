@@ -24,6 +24,7 @@ io.on("connection", function (socket) {
     socket.on("my_uid",()=>{
       io.to(user.u_id).emit("my_uid response", {
         id: user.u_id,
+        user: user
       });
     });
     //Transmit the messages from one user to another
@@ -286,6 +287,9 @@ io.on("connection", function (socket) {
           orgboatDB.query(
             `INSERT  INTO chats (chat_uid,chat_name,chat_type) VALUES ('${uuid_numbr}','Chat1:1',${chat_type})`
           );
+          data.ids.forEach(element => {
+            
+          });
           orgboatDB.query(
             `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${data.u_id}',${chat_type})`
           );
