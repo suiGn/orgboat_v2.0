@@ -84,9 +84,18 @@ function AddGroupModal(props) {
             addFriends: addFriends,
             id: my_uid
         }
-        console.log(groupData);
+        socket.emit("AddGrupo", groupData);
+        socket.on("retrive addgrupo", (mssg) => {
+            socket.emit("chat message", {
+                chat:  mssg.chat,
+                message: mssg.message,
+              });
+              socket.emit("get chats");
+        });
         setFriends([]);
-        setAddFriends([])
+        setAddFriends([]);
+        setGroupName("");
+        setDescription("");
         chooseFriend.forEach(function(friend) {
             friend.checked = false;
         });
