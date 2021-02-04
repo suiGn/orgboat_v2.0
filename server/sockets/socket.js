@@ -533,6 +533,28 @@ io.on("connection", function (socket) {
         }
       );
     });
+    //addGrupo
+    socket.on("AddGrupo",function(info){
+      var uuid_numbr = uuid.v4();
+      var chat_type = 1;
+      orgboatDB.query(
+        `INSERT  INTO chats (chat_uid,chat_name,chat_type) VALUES ('${uuid_numbr}','${info.groupName}',${chat_type})`
+      );
+      info.addFriends.forEach(function(friend){
+        orgboatDB.query(
+          `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${friend.user_chat}',${chat_type})`
+        );
+      })
+      orgboatDB.query(
+        `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${info.id}',${chat_type})`,
+        (err, data) => {
+          io.to(user.u_id).emit("retrive addgrupo", {
+            chat: uuid_numbr,
+            message: info.description,
+          });
+        }
+      );
+    });
   } catch {
     console.log("problema");
   }
