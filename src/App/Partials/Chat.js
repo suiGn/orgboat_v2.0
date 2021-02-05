@@ -33,7 +33,7 @@ function Chat(props) {
   useEffect(() => {
     socket.on("retrieve messages", (data) => {
       setChatMessages(data.messages.reverse());
-      socket.emit("get chats");
+      // socket.emit("get chats");
     });
     socket.on("chat message", (data) => {
       socket.emit("get chats");

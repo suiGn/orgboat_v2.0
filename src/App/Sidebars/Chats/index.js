@@ -16,11 +16,11 @@ function Index(props) {
   const [chatLists, setChatList] = useState([]);
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
-  console.log("Se compila");
+  const [one,setIOne] = useState("");
+  console.log("Corre")
   useEffect(() => {
     socket.on("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages
-      console.log(data)
       var chats = data.chats.filter((chats)=>{
         return chats.chat_type == 0;
       })
@@ -37,11 +37,7 @@ function Index(props) {
       setChatList(data);
       setfavoriteFriendFiltered(chats);
     });
-<<<<<<< HEAD
-  }, [ENDPOINT]);
-=======
-  },[]);
->>>>>>> 3ccf657eee61a774620dd448954a85951541c9ad
+  },one);
   useEffect(() => {
     socket.emit("get chats");
     // inputRef.current.focus();
@@ -162,6 +158,7 @@ function Index(props) {
     }
     return "";
   };
+
   function searchChat(wordToSearch) {
     setSearchFavorite(wordToSearch);
     var resultFavorits = chatLists.chats.filter((val) => {
@@ -233,5 +230,4 @@ function Index(props) {
     </div>
   );
 }
-
 export default Index;
