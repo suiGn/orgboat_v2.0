@@ -21,23 +21,26 @@ import { mobileProfileAction } from "../Store/Actions/mobileProfileAction";
 
 function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
+  const [user, setUser] = useState([]);
   let my_uid;
+  let p;
+  if(user){
+    let chat_initial;
+    let chat_name;
+    if (user.pphoto === "") {
+      chat_name = user.name;
+      chat_initial = chat_name.substring(0, 1);
+      p = (
+        <span className="avatar-title bg-info rounded-circle">
+          {chat_initial}
+        </span>
+      );
+    } else {
+      p = <img src={user.pphoto} className="rounded-circle" alt="image" />;
+    }
+  }
 
   // Foto de perfil
-  let p;
-  let chat_initial;
-  let chat_name;
-  if (props.data.pphoto === "") {
-    chat_name = props.data.name;
-    chat_initial = chat_name.substring(0, 1);
-    p = (
-      <span className="avatar-title bg-info rounded-circle">
-        {chat_initial}
-      </span>
-    );
-  } else {
-    p = <img src={props.data.pphoto} className="rounded-circle" alt="image" />;
-  }
 
   //
 
@@ -45,6 +48,7 @@ function Navigation(props) {
     props.socket.on("my_uid response", (data) => {
       my_uid = data.id;
       setUserEdit({ id: data.id });
+      setUser(data.user)
     });
   });
   useEffect(() => {

@@ -24,6 +24,7 @@ io.on("connection", function (socket) {
     socket.on("my_uid",()=>{
       io.to(user.u_id).emit("my_uid response", {
         id: user.u_id,
+        user: user
       });
     });
     //Transmit the messages from one user to another
@@ -32,7 +33,7 @@ io.on("connection", function (socket) {
       //console.log(user.pphoto);
       orgboatDB.query(
         `
-			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,
+			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, chats.chat_name,
         m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
         ,chats_users.delete_chat, m.unread_messages as unread_messages
 			
@@ -530,6 +531,29 @@ io.on("connection", function (socket) {
         `UPDATE messages SET favorite=0 WHERE message_id='${data.id}'`,
         function (err, rows) {
           io.to(user.u_id).emit("retrieve removeFavorite");
+        }
+      );
+    });
+    //addGrupo
+    socket.on("AddGrupo",function(info){
+      var uuid_numbr = uuid.v4();
+      var chat_type = 1;
+      orgboatDB.query(
+        `INSERT  INTO chats (chat_uid,chat_name,chat_type) VALUES ('${uuid_numbr}','${info.groupName}',${chat_type})`
+      );
+      chat_type=0;
+      info.addFriends.forEach(function(friend){
+        orgboatDB.query(
+          `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${friend.user_chat}',${chat_type})`
+        );
+      })
+      orgboatDB.query(
+        `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${info.id}',${chat_type})`,
+        (err, data) => {
+          io.to(user.u_id).emit("retrive addgrupo", {
+            chat: uuid_numbr,
+            message: info.description,
+          });
         }
       );
     });
