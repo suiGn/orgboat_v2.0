@@ -36,7 +36,7 @@ function Index(props) {
       setChatList(data);
       setfavoriteFriendFiltered(chats);
     });
-  });
+  },[]);
   useEffect(() => {
     socket.emit("get chats");
   }, []);
