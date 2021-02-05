@@ -59,8 +59,12 @@ function SignUp() {
         <Logo />
       </div>
       <h5>Create account</h5>
-      <div class="text-block-43">{response.err}</div>
-      <div class="text-block-43">{response.ok}</div>
+      {response.err ? (
+        <div class="text-error">{response.err}</div>
+      ) : (
+        <div class="text-success ">{response.ok}</div>
+      )}
+
       <form
         // action="/subscribing"
         // method="post"

@@ -9,22 +9,24 @@ import ChatsDropdown from "./ChatsDropdown";
 import { sidebarAction } from "../../../Store/Actions/sidebarAction";
 // import {chatLists} from "./Data";
 import { mobileSidebarAction } from "../../../Store/Actions/mobileSidebarAction";
+const ENDPOINT = "http://localhost:5000/";
 
 function Index(props) {
   const { socket } = props;
   const [chatLists, setChatList] = useState([]);
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
+  console.log("Se compila");
   useEffect(() => {
-    inputRef.current.focus();
     socket.on("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages
       setChatList(data);
       setfavoriteFriendFiltered(data.chats);
     });
-  });
+  }, [ENDPOINT]);
   useEffect(() => {
     socket.emit("get chats");
+    // inputRef.current.focus();
   }, []);
 
   const dispatch = useDispatch();
@@ -92,8 +94,6 @@ function Index(props) {
       } else {
         timeLabel = getDateLabel(timeMessage);
       }
-      //var pphotoUser = new File([""], chat.pphoto);
-      //var p = "";
       if (chat.pphoto === "") {
         p = (
           <span className="avatar-title bg-info rounded-circle">
@@ -158,7 +158,7 @@ function Index(props) {
         <span>Chats</span>
         <ul className="list-inline">
           <li className="list-inline-item">
-            <AddGroupModal socket={socket} chatLists={chatLists}/>
+            <AddGroupModal socket={socket} chatLists={chatLists} />
           </li>
           <li className="list-inline-item">
             <button

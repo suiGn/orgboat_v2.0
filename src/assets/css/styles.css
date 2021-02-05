@@ -61,11 +61,16 @@ body.dark .btn.btn-light {
   color: rgba(255, 255, 255, 0.75);
 }
 
-.text-block-43 {
-  margin-top: -18px;
-  margin-bottom: 15px;
+.text-error {
   color: #cf404d;
-  font-size: 14px;
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+.text-success {
+  color: #28a745;
+  font-size: 16px;
+  margin: 20px 0;
 }
 
 body.dark nav.navigation ul li > a.active {
@@ -121,6 +126,10 @@ body.dark .list-group-item {
 
 body.dark .dropdown-menu .dropdown-divider {
   border-color: #384054;
+}
+
+.logo svg {
+  height: 100px;
 }
 
 .dropdown-chat-message {

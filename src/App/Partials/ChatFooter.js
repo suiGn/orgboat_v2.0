@@ -67,7 +67,7 @@ function ChatFooter(props) {
           <Button color="light" className="d-sm-none d-block">
             <FeatherIcon.Mic />
           </Button>
-          <Button color="primary">
+          <Button type="submit" color="primary">
             <FeatherIcon.Send />
           </Button>
         </div>
