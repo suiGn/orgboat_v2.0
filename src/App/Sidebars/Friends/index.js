@@ -29,8 +29,12 @@ function Index(props) {
     };
     useEffect(() => {
         props.socket.on("retrive GetContacts", (contacts) => {
+            var chats = contacts.chats.filter((chats)=>{
+                return chats.chat_type == 0;
+              })
+            contacts.chats = chats;
             setContact(contacts);
-            setfavoriteFriendFiltered(contacts.chats);
+            setfavoriteFriendFiltered(chats);
         });
     });
     useEffect(()=>{

@@ -40,7 +40,7 @@ function Index(props) {
   useEffect(() => {
     socket.emit("get chats");
     // inputRef.current.focus();
-  }, []);
+  }, [one]);
 
   const dispatch = useDispatch();
 
