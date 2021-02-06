@@ -32,6 +32,11 @@ const ChatsMessageDropdown = (props) => {
     socket.emit("RemoveFavorite", { id: message_id });
     socket.emit("get messages", { id: props.chat_id, page: 1 });
   }
+
+  function DeleteMessage(message_id){
+    socket.emit("Delete message", { id: message_id });
+    socket.emit("get messages", { id: props.chat_id, page: 1 });
+  }
  
   return (
     <Dropdown
@@ -43,7 +48,7 @@ const ChatsMessageDropdown = (props) => {
         <FeatherIcon.ChevronDown />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem>Delete</DropdownItem>
+        <DropdownItem onClick={() => DeleteMessage(props.message.message_id)}>Delete</DropdownItem>
         {
           (props.message.chat_type == 1)?
           (props.message.message_user_uid != props.prop_id && !props.message.favorite)?
