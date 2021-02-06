@@ -17,7 +17,6 @@ function Index(props) {
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one,setIOne] = useState("");
-  console.log("Corre")
   useEffect(() => {
     socket.on("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages

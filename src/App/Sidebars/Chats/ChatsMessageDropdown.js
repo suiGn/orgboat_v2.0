@@ -25,10 +25,12 @@ const ChatsMessageDropdown = (props) => {
 
   function AddFavorite(message_id) {
     socket.emit("FavoriteMessage", { id: message_id });
+   socket.emit("get messages", { id: props.chat_id, page: 1 });
   }
 
   function RemoveFavorite(message_id) {
     socket.emit("RemoveFavorite", { id: message_id });
+    socket.emit("get messages", { id: props.chat_id, page: 1 });
   }
  
   return (
@@ -42,10 +44,19 @@ const ChatsMessageDropdown = (props) => {
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem>Delete</DropdownItem>
-        {(props.message.message_user_uid == props.prop_id && !props.message.favorite)?
+        {
+          (props.message.chat_type == 1)?
+          (props.message.message_user_uid != props.prop_id && !props.message.favorite)?
+          <DropdownItem onClick={() => AddFavorite(props.message.message_id)}>Favorite</DropdownItem>:""
+          :
+          (props.message.message_user_uid == props.prop_id && !props.message.favorite)?
           <DropdownItem onClick={() => AddFavorite(props.message.message_id)}>Favorite</DropdownItem>:""
         }
-        {(props.message.message_user_uid == props.prop_id && props.message.favorite)?
+        { (props.message.chat_type == 1)?
+          (props.message.message_user_uid != props.prop_id && props.message.favorite)?
+          <DropdownItem onClick={() => RemoveFavorite(props.message.message_id)}>Remove Favorite</DropdownItem>:""
+          :
+          (props.message.message_user_uid == props.prop_id && props.message.favorite)?
           <DropdownItem onClick={() => RemoveFavorite(props.message.message_id)}>Remove Favorite</DropdownItem>:""
         }
       </DropdownMenu>
