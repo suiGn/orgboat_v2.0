@@ -18,10 +18,6 @@ const ChatsMessageDropdown = (props) => {
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const profileActions = () => {
-    dispatch(profileAction(true));
-    dispatch(mobileProfileAction(true));
-  };
 
   function AddFavorite(message_id) {
     socket.emit("FavoriteMessage", { id: message_id });
@@ -46,8 +42,13 @@ const ChatsMessageDropdown = (props) => {
   }
 
   const DeleteMChat = (message_id)=>{
-    socket.emit("Delete message", { id: message_id, user_id: props.my_uid.id });
+    if(props.prop_id!=props.my_uid.id){
+      socket.emit("Delete message", { id: message_id, to: true });
+    }else{
+      socket.emit("Delete message", { id: message_id, to: false});
+    }
     socket.emit("get messages", { id: props.chat_id, page: 1 });
+   
   }
 
 

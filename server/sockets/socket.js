@@ -479,11 +479,9 @@ io.on("connection", function (socket) {
     });
     //Delete message
     socket.on("Delete message", (message) => {
-      console.log(message.user_id)
-      console.log(user.u_id)
-      if(message.user_id == user.u_id){
+      if(message.to){
         orgboatDB.query(
-          `UPDATE messages SET delete_message=1 WHERE message_id='${message.id}'`,
+          `UPDATE messages SET delete_message_to=1 WHERE message_id='${message.id}'`,
           (err, data) => {
             if (err) {
               return json({
@@ -498,7 +496,7 @@ io.on("connection", function (socket) {
         );
       }else{
         orgboatDB.query(
-          `UPDATE messages SET delete_message_to=1 WHERE message_id='${message.id}'`,
+          `UPDATE messages SET delete_message=1 WHERE message_id='${message.id}'`,
           (err, data) => {
             if (err) {
               return json({
