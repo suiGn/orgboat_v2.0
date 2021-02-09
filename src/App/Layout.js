@@ -101,6 +101,7 @@ function Layout(props) {
           socket={socket}
           clicked={clicked}
           setUser={setUser}
+          my_uid={my_uid}
         />
         <Profile socket={socket} user={user} />
         <TourModal />

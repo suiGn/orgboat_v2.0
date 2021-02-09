@@ -159,7 +159,7 @@ function Chat(props) {
             <div className="message-content position-relative">
               {message.message}{" "}
               <div className="action-toggle action-dropdown-chat">
-                <ChatsMessageDropdown message={message} prop_id={props.id} chat_id={props.chat_id} socket={socket}/>
+                <ChatsMessageDropdown message={message} prop_id={props.id} my_uid={props.my_uid} chat_id={props.chat_id} socket={socket}/>
               </div>
             </div>
           )}
@@ -187,6 +187,7 @@ function Chat(props) {
                   message={message}
                   key={i}
                   id={props.clicked.user_chat}
+                  my_uid={props.my_uid}
                   setUser={props.setUser}
                   chat_id={props.clicked.chat_uid}
                 />
