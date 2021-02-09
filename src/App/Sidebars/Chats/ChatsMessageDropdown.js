@@ -42,7 +42,7 @@ const ChatsMessageDropdown = (props) => {
   }
 
   const DeleteMChat = (message_id)=>{
-    if(props.prop_id!=props.my_uid.id){
+    if(props.message.message_user_uid!=props.my_uid.id){
       socket.emit("Delete message", { id: message_id, to: true });
     }else{
       socket.emit("Delete message", { id: message_id, to: false});
