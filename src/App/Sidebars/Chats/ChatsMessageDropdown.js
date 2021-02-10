@@ -10,18 +10,38 @@ import { profileAction } from "../../../Store/Actions/profileAction";
 import { mobileProfileAction } from "../../../Store/Actions/mobileProfileAction";
 import { useDispatch } from "react-redux";
 
-const ChatsMessageDropdown = () => {
+const ChatsMessageDropdown = (props) => {
   const dispatch = useDispatch();
+  const { socket } = props;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const profileActions = () => {
-    dispatch(profileAction(true));
-    dispatch(mobileProfileAction(true));
-  };
 
+  function AddFavorite(message_id) {
+    socket.emit("FavoriteMessage", { id: message_id });
+   socket.emit("get messages", { id: props.chat_id, page: 1 });
+  }
+
+  function RemoveFavorite(message_id) {
+    socket.emit("RemoveFavorite", { id: message_id });
+    socket.emit("get messages", { id: props.chat_id, page: 1 });
+  }
+
+  function DeleteMessage(message_id){
+    if(props.message.message_user_uid!=props.my_uid.id){
+      socket.emit("Delete message", { id: message_id, to: true });
+    }else{
+      socket.emit("Delete message", { id: message_id, to: false});
+    }
+    socket.emit("get messages", { id: props.chat_id, page: 1 });
+  }
+
+ 
+
+
+ 
   return (
     <Dropdown
       isOpen={dropdownOpen}
@@ -32,7 +52,22 @@ const ChatsMessageDropdown = () => {
         <FeatherIcon.ChevronDown />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem>Delete</DropdownItem>
+        <DropdownItem onClick={() => DeleteMessage(props.message.message_id)}>Delete</DropdownItem>
+        {
+          (props.message.chat_type == 1)?
+          (props.message.message_user_uid != props.prop_id && !props.message.favorite)?
+          <DropdownItem onClick={() => AddFavorite(props.message.message_id)}>Favorite</DropdownItem>:""
+          :
+          (props.message.message_user_uid == props.prop_id && !props.message.favorite)?
+          <DropdownItem onClick={() => AddFavorite(props.message.message_id)}>Favorite</DropdownItem>:""
+        }
+        { (props.message.chat_type == 1)?
+          (props.message.message_user_uid != props.prop_id && props.message.favorite)?
+          <DropdownItem onClick={() => RemoveFavorite(props.message.message_id)}>Remove Favorite</DropdownItem>:""
+          :
+          (props.message.message_user_uid == props.prop_id && props.message.favorite)?
+          <DropdownItem onClick={() => RemoveFavorite(props.message.message_id)}>Remove Favorite</DropdownItem>:""
+        }
       </DropdownMenu>
     </Dropdown>
   );

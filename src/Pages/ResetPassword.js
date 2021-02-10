@@ -30,7 +30,6 @@ function ResetPassword() {
       console.log(data.ok);
       if (data.ok) {
         setMesage("Please check your inbox to reset your password");
-        console.log(msg);
         //return(<Response mgs="Please check your inbox to reset your password" msg2 ="Sent Successfully"/>)
       } else {
         //return(<Response mgs="Please try again." msg2 ="Error"/>)

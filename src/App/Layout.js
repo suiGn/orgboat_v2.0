@@ -6,19 +6,20 @@ import SidebarIndex from "./Sidebars/index";
 import Navigation from "./Navigation";
 import Profile from "./Sidebars/Profile";
 import Chat from "./Partials/Chat";
+import ChatN from "./Partials/ChatNoMessage";
 import { pageTourAction } from "../Store/Actions/pageTourAction";
 import { profileAction } from "../Store/Actions/profileAction";
 import DisconnectedModal from "./Modals/DisconnectedModal";
 // import socketIOClient from "socket.io-client";
-// const ENDPOINT = "https://www.orgboat.me/";
+// const ENDPOINT = "http://localhost:5000/";
 
 function Layout(props) {
   const [clicked, setClicked] = useState([]);
   const { pageTour } = useSelector((state) => state);
-  const {socket} =  props
+  const { socket } = props;
   const [user, setUser] = useState("");
   const dispatch = useDispatch();
-  const [my_uid,setMy_Id]= useState("");
+  const [my_uid, setMy_Id] = useState("");
 
   useEffect(() => {
     document.querySelector("*").addEventListener("click", (e) => {
@@ -29,39 +30,14 @@ function Layout(props) {
         document.body.classList.remove("navigation-open");
       }
     });
-    // UpdateTheme();
+    console.log(clicked);
   }, []);
 
-  useEffect(()=>{
-    props.socket.on("my_uid response",(data)=>{
-      setMy_Id({id:data.id});
-    })
-  })
-  useEffect(()=>{
-    console.log(user);
-  },[user])
-
-  // const UpdateTheme = () => {
-  //   socket.emit("theme");
-  //   socket.on("retrive theme", function (theme) {
-  //     console.log(theme);
-  //     if (theme.theme[0].theme === 0) {
-  //       // $("body").removeClass("dark");
-  //       document.body.className = "";
-  //       setDarkSwitcherTooltipOpen(false);
-  //       // document.getElementById("dark-switcher");
-  //       // console.log(document.classList("dark-light-switcher"));
-  //       // $(".dark-light-switcher").attr("title", "Dark mode");
-  //     } else {
-  //       document.body.className = "dark";
-  //       setDarkSwitcherTooltipOpen(true);
-  //       // $("body").addClass("dark");
-  //       // document.body.classList.add("dark");
-  //       // $(".dark-light-switcher").attr("title", "Light mode");
-  //       console.log("mmmm");
-  //     }
-  //   });
-  // };
+  useEffect(() => {
+    props.socket.on("my_uid response", (data) => {
+      setMy_Id({ id: data.id });
+    });
+  });
 
   const tourSteps = [
     {
@@ -109,9 +85,26 @@ function Layout(props) {
           socket={props.socket}
           setUser={setUser}
           my_uid={my_uid}
+          data={clicked}
         />
-        <SidebarIndex socket={socket} setClicked ={setClicked} setUser={setUser} my_uid={my_uid}/>
-        <Chat socket={socket} clicked={clicked} setUser={setUser}/>
+        <SidebarIndex
+          socket={socket}
+          setClicked={setClicked}
+          setUser={setUser}
+          my_uid={my_uid}
+        />
+        {clicked.name ? (
+          <Chat
+            darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+            socket={socket}
+            clicked={clicked}
+            setUser={setUser}
+            my_uid={my_uid}
+          />
+        ) : (
+          <ChatN />
+        )}
+
         <Profile socket={socket} user={user} />
         <TourModal />
         <DisconnectedModal />

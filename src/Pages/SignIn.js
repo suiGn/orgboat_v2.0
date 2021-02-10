@@ -12,8 +12,8 @@ function SignIn(props) {
         <Logo />
       </div>
       <h5>Sign in</h5>
-      <div class="text-block-43">{props.isBadLogin}</div>
-      <form action="https://www.orgboat.me/login" method="post">
+      <div class="text-error">{props.isBadLogin}</div>
+      <form action="http://localhost:5000/login" method="post">
         <div className="form-group">
           <input
             type="text"

@@ -6,43 +6,52 @@ import socketIOClient from "socket.io-client";
 
 function SignUp() {
   const [response, setResponse] = useState("");
-  const [username,setUsername] =  useState("");
-  const [fullname,setFullname] =  useState("");
-  const [email,setEmail] =  useState("");
-  const [pwrd,setPwrd] =  useState("");
-  const [pwrd2,setPwrd2] =  useState("");
+  const [username, setUsername] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [pwrd, setPwrd] = useState("");
+  const [pwrd2, setPwrd2] = useState("");
   useEffect(() => document.body.classList.add("form-membership"), []);
-
-  const subscribing = event => {
+  console.log("sign up");
+  const subscribing = (event) => {
     event.preventDefault();
     const user = {
-      subName:fullname,
-      subEmail:email,
-      subUsername:username,
-      subPwd:pwrd,
-      subRtPwd:pwrd2
-    }
-    axios.post("/subscribing",user).then((res) => {
-        console.log(res);
+      subName: fullname,
+      subEmail: email,
+      subUsername: username,
+      subPwd: pwrd,
+      subRtPwd: pwrd2,
+    };
+    axios.post("/subscribing", user).then((res) => {
+      console.log(res);
+      setResponse(res.data);
     });
-
-  }
-  const handleChangeName = event => {
+  };
+  const handleChangeName = (event) => {
     setUsername(event.target.value);
-  }
-  const handleChangeFullname = event => {
+  };
+  const handleChangeFullname = (event) => {
     setFullname(event.target.value);
-  }
-  const handleChangeEmail = event => {
+  };
+  const handleChangeEmail = (event) => {
     setEmail(event.target.value);
-  }
+  };
 
-  const handleChangePwd = event => {
+  const handleChangePwd = (event) => {
     setPwrd(event.target.value);
-  }
-  const handleChangePwd2 = event => {
-    setPwrd2(event.target.value);
-  }
+  };
+  const handleChangePwd2 = (event) => {
+    if (pwrd === event.target.value) {
+      event.target.setCustomValidity("");
+      setPwrd2(event.target.value);
+    } else {
+      event.target.setCustomValidity(
+        "La contraseña puesta no concuerda con la puesta anteriormente"
+      );
+    }
+  };
+
+  console.log(response);
 
   return (
     <div className="form-wrapper">
@@ -50,11 +59,17 @@ function SignUp() {
         <Logo />
       </div>
       <h5>Create account</h5>
+      {response.err ? (
+        <div class="text-error">{response.err}</div>
+      ) : (
+        <div class="text-success ">{response.ok}</div>
+      )}
+
       <form
-        action="/subscribing"
-        method="post"
+        // action="/subscribing"
+        // method="post"
         name="subForm"
-        // onsubmit={subscribing}
+        onSubmit={subscribing}
       >
         <div className="form-group">
           <input
@@ -63,6 +78,7 @@ function SignUp() {
             className="form-control"
             placeholder="Firstname"
             maxLength={21}
+            minlength={3}
             onChange={handleChangeFullname}
             required
             autoFocus
@@ -74,6 +90,7 @@ function SignUp() {
             className="form-control"
             name="subUsername"
             placeholder="Username"
+            minlength={3}
             required
             onChange={handleChangeName}
           />
@@ -84,6 +101,7 @@ function SignUp() {
             name="subEmail"
             maxLength={34}
             onChange={handleChangeEmail}
+            minlength={3}
             className="form-control"
             placeholder="Email"
             required
@@ -93,6 +111,7 @@ function SignUp() {
           <input
             type="password"
             name="subPwd"
+            minlength={4}
             className="form-control"
             placeholder="Password"
             onChange={handleChangePwd}

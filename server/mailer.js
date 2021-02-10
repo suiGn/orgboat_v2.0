@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
   secure: false,
   // here it goes
-  tls: { rejectUnauthorized: false },
+  tls: { rejectUnauthorized: false, secureProtocol: "TLSv1_method" },
 });
 
 exports.rpwdm = function (req, res, next) {
@@ -140,7 +140,7 @@ const verifyEmail = (req, res, email, uuid) => {
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                        <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top"><a href="https://www.orgboat.me/verMail?uuid=` +
+                                        valign="top"><a href="http://localhost:5000/verMail?uuid=` +
       uuid +
       `&em=` +
       email +
@@ -163,11 +163,12 @@ const verifyEmail = (req, res, email, uuid) => {
       //   opt2: "Error",
       // });
       // res.redirect(`/sign-in`);
-      console.log(error);
-      res.json({
-        ok:false
-      })
+      console.log(error, "Error//////////////////");
+      // res.json({
+      //   ok:false
+      // })
     } else {
+      console.log("Se hizo con exito");
       res.redirect(`/sign-in`);
       // res.render("pages/sec/response", {
       //   opt1: "Please check your inbox to verify your email.",
