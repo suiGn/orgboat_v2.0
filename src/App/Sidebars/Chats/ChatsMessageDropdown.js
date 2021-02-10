@@ -30,26 +30,15 @@ const ChatsMessageDropdown = (props) => {
   }
 
   function DeleteMessage(message_id){
-    props.message.chat_type == 1? DeleteMGrupo(message_id):DeleteMChat(message_id)
-    //socket.emit("Delete message", { id: message_id });
-    //socket.emit("get messages", { id: props.chat_id, page: 1 });
-  }
-
-  const DeleteMGrupo = (message_id)=>{
-    (props.message.message_user_uid == props.prop_id)?
-    console.log("es mio"):
-    console.log("no es mio")
-  }
-
-  const DeleteMChat = (message_id)=>{
     if(props.message.message_user_uid!=props.my_uid.id){
       socket.emit("Delete message", { id: message_id, to: true });
     }else{
       socket.emit("Delete message", { id: message_id, to: false});
     }
     socket.emit("get messages", { id: props.chat_id, page: 1 });
-   
   }
+
+ 
 
 
  
