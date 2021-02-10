@@ -27,6 +27,7 @@ function ResetPassword() {
       const response = await fetch("/rstpwd", requestOptions);
       const data = await response.json();
       setOk(data.ok);
+      console.log(data.ok);
       if (data.ok) {
         setMesage("Please check your inbox to reset your password");
         //return(<Response mgs="Please check your inbox to reset your password" msg2 ="Sent Successfully"/>)
