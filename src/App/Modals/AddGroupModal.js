@@ -127,7 +127,7 @@ function AddGroupModal(props) {
         if(props.chatLists.length!=0)
         {   
             var chats = props.chatLists.chats.filter((val) => {
-                return !val.user_chat.includes(props.chatLists.my_uid)
+                return (!val.user_chat.includes(props.chatLists.my_uid)&&val.chat_type!=1)
             });
             setUid(props.chatLists.my_uid);
             setChooseFriend(chats); 

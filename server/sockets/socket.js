@@ -479,24 +479,38 @@ io.on("connection", function (socket) {
     });
     //Delete message
     socket.on("Delete message", (message) => {
-      // if(message.u_id == user.u_id){
-
-      // }
-      console.log(message);
-      orgboatDB.query(
-        `UPDATE messages SET delete_message=1 WHERE message_id='${message.message.message_id}'`,
-        (err, data) => {
-          if (err) {
-            return json({
-              ok: false,
-              err: {
-                message: "error al eliminar chat",
-              },
-            });
+      if(message.to){
+        orgboatDB.query(
+          `UPDATE messages SET delete_message_to=1 WHERE message_id='${message.id}'`,
+          (err, data) => {
+            if (err) {
+              return json({
+                ok: false,
+                err: {
+                  message: "error al eliminar chat",
+                },
+              });
+            }
+            io.to(user.u_id).emit("retriveDeleteMessage");
           }
-          io.to(user.u_id).emit("retriveDeleteMessage");
-        }
-      );
+        );
+      }else{
+        orgboatDB.query(
+          `UPDATE messages SET delete_message=1 WHERE message_id='${message.id}'`,
+          (err, data) => {
+            if (err) {
+              return json({
+                ok: false,
+                err: {
+                  message: "error al eliminar chat",
+                },
+              });
+            }
+            io.to(user.u_id).emit("retriveDeleteMessage");
+          }
+        );
+      }
+      
     });
 
     socket.on("update notification",(data)=>{
