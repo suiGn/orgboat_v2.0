@@ -6,6 +6,7 @@ import SidebarIndex from "./Sidebars/index";
 import Navigation from "./Navigation";
 import Profile from "./Sidebars/Profile";
 import Chat from "./Partials/Chat";
+import ChatN from "./Partials/ChatNoMessage";
 import { pageTourAction } from "../Store/Actions/pageTourAction";
 import { profileAction } from "../Store/Actions/profileAction";
 import DisconnectedModal from "./Modals/DisconnectedModal";
@@ -29,7 +30,7 @@ function Layout(props) {
         document.body.classList.remove("navigation-open");
       }
     });
-    // UpdateTheme();
+    console.log(clicked);
   }, []);
 
   useEffect(() => {
@@ -37,10 +38,6 @@ function Layout(props) {
       setMy_Id({ id: data.id });
     });
   });
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   const tourSteps = [
     {
@@ -96,13 +93,18 @@ function Layout(props) {
           setUser={setUser}
           my_uid={my_uid}
         />
-        <Chat
-          darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
-          socket={socket}
-          clicked={clicked}
-          setUser={setUser}
-          my_uid={my_uid}
-        />
+        {clicked.name ? (
+          <Chat
+            darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+            socket={socket}
+            clicked={clicked}
+            setUser={setUser}
+            my_uid={my_uid}
+          />
+        ) : (
+          <ChatN />
+        )}
+
         <Profile socket={socket} user={user} />
         <TourModal />
         <DisconnectedModal />
