@@ -422,7 +422,7 @@ io.on("connection", function (socket) {
           })
           chat_uids = chat_uids.replace(/,\s*$/, "");
           orgboatDB.query(
-            `SELECT distinct messages.message, messages.time, usrs.name FROM messages
+            `SELECT distinct messages.message, messages.time, usrs.name, message_id FROM messages
             inner join usrs on messages.u_id = usrs.u_id
             inner join chats_users on messages.u_id = chats_users.u_id
             WHERE messages.favorite=1 and messages.chat_uid in (${chat_uids})`,

@@ -2,21 +2,23 @@ import React, {useState} from 'react'
 import {Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import * as FeatherIcon from 'react-feather'
 
-const FavoritesDropdown = () => {
+const FavoritesDropdown = (props) => {
+    const {socket} =  props
     const [dropdownOpen, setDropdownOpen] = useState(false);
-
     const toggle = () => setDropdownOpen(prevState => !prevState);
+    
 
+    function RemoveFavorite() {
+        socket.emit("RemoveFavorite", { id: props.message.message_id });
+        socket.emit('GetFavorites', props.my_uid);
+      }
     return (
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle tag="span">
                 <FeatherIcon.MoreHorizontal/>
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem>New chat</DropdownItem>
-                <DropdownItem>Profile</DropdownItem>
-                <DropdownItem divider/>
-                <DropdownItem>Block</DropdownItem>
+                <DropdownItem onClick={() => RemoveFavorite()}>Remove favorite</DropdownItem>
             </DropdownMenu>
         </Dropdown>
     )

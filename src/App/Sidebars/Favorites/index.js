@@ -14,11 +14,14 @@ function Index(props) {
     useEffect(() => {
         inputRef.current.focus();
         socket.emit('GetFavorites', props.my_uid);
+    },props);
+
+    useEffect(() => {
         socket.on ('retrieve getfavorites', function (data) {
             setfavoriteChats(data.favorites)
             setfavoriteChatsFiltered(data.favorites)
         });
-    },[props]);
+    });
 
     const inputRef = useRef();
 
@@ -65,7 +68,7 @@ function Index(props) {
                                         </div>
                                         <div className="users-list-action">
                                             <div className="action-toggle">
-                                                <FavoritesDropdown/>
+                                                <FavoritesDropdown message={item} socket={socket} my_uid={props.my_uid}/>
                                             </div>
                                         </div>
                                     </div>
