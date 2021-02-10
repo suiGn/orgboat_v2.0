@@ -16,32 +16,33 @@ function Index(props) {
   const [chatLists, setChatList] = useState([]);
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
-  const [one,setIOne] = useState("");
-  console.log("Corre")
+  const [one, setIOne] = useState("");
+  console.log("Corre");
   useEffect(() => {
     socket.on("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages
-      var chats = data.chats.filter((chats)=>{
+      var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;
-      })
+      });
 
-      var grupos = data.chats.filter((grupos)=>{
-        return (grupos.chat_type == 1 && grupos.user_chat == data.my_uid);
-      })
+      var grupos = data.chats.filter((grupos) => {
+        return grupos.chat_type == 1 && grupos.user_chat == data.my_uid;
+      });
 
-      grupos.forEach((info)=>{
-        info.name = info.chat_name
-      })
-      
-      chats.push.apply(chats,grupos)
+      grupos.forEach((info) => {
+        info.name = info.chat_name;
+      });
+
+      chats.push.apply(chats, grupos);
       setChatList(data);
       setfavoriteFriendFiltered(chats);
     });
-  },one);
+    console.log("se recibe el mensaje");
+  }, one);
   useEffect(() => {
     socket.emit("get chats");
     // inputRef.current.focus();
-  }, []);
+  }, [one]);
 
   const dispatch = useDispatch();
 
@@ -85,7 +86,7 @@ function Index(props) {
     let chat_name;
     let p;
     let chat_with_usr = chat.user_chat;
-    if (chat.chat_type==1||(my_uid != chat.user_chat)) {
+    if (chat.chat_type == 1 || my_uid != chat.user_chat) {
       chat_name = chat.name;
       chat_initial = chat_name.substring(0, 1);
       let timeMessage = new Date(chat.last_message_time);
