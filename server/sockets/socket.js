@@ -425,7 +425,7 @@ io.on("connection", function (socket) {
             `SELECT distinct messages.message, messages.time, usrs.name, message_id FROM messages
             inner join usrs on messages.u_id = usrs.u_id
             inner join chats_users on messages.u_id = chats_users.u_id
-            WHERE messages.favorite=1 and messages.chat_uid in (${chat_uids})`,
+            WHERE messages.favorite=1 and messages.chat_uid in (${chat_uids}) and messages.u_id!='${data.id}'`,
             function (err, chats) {
               io.to(user.u_id).emit("retrieve getfavorites", {
                 favorites: chats,

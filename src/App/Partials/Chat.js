@@ -44,6 +44,8 @@ function Chat(props) {
           }
         });
         setChatMessages(messages.reverse());
+      }else{
+        setChatMessages([]);
       }
       // socket.emit("get chats");
     });
