@@ -4,12 +4,13 @@ const uuid = require("node-uuid");
 
 // create reusable transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
-  host: "smtp.fatcow.com",
-  port: 587,
+  // host: "smtp.fatcow.com",
+  service: "gmail",
+  // port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: "noreply@orgboat.info", // generated ethereal user
-    pass: "Orwell1984", // generated ethereal password
+    user: "cleaker6@gmail.com", // generated ethereal user
+    pass: "8p&6%gPYqFsf", // generated ethereal password
   },
   secure: false,
   // here it goes
@@ -19,10 +20,12 @@ const transporter = nodemailer.createTransport({
 exports.rpwdm = function (req, res, next) {
   var email = req.body.rstEmail;
   var uuid_numbr = uuid.v4();
+  console.log(req.body.rstEmail);
   index.orgboatDB.query(
     "SELECT email FROM usrs WHERE email = ?",
     [email],
     (err, resp) => {
+      console.log(resp);
       if (resp.length >= 1) {
         index.orgboatDB.query(
           "UPDATE usrs SET Random = ? WHERE email = ?",
@@ -33,9 +36,9 @@ exports.rpwdm = function (req, res, next) {
             }
             transporter;
             var mailOptions = {
-              from: "noreply@orgboat.info", //replace with your email
+              from: "noreply@cleaker.info", //replace with your email
               to: email, //replace with your email
-              subject: `Orgboat : Reset Password:`,
+              subject: `Cleaker : Reset Password:`,
               html:
                 `<div class="col-md-12">
 			 <table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #eaf0f7; margin: 0;" bgcolor="#eaf0f7">
@@ -67,7 +70,7 @@ exports.rpwdm = function (req, res, next) {
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			                                     <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-			                                         valign="top"><a href="https://orgboat.herokuapp.com/pwdRst?uuid=` +
+			                                         valign="top"><a href="http://localhost:5000/pwdRst?uuid=` +
                 uuid_numbr +
                 `&em=` +
                 email +
@@ -87,7 +90,7 @@ exports.rpwdm = function (req, res, next) {
                 res.json({
                   ok: false,
                 });
-                console.log(error);
+                console.log("send mail", error);
               } else {
                 res.json({
                   ok: true,
@@ -108,9 +111,9 @@ exports.rpwdm = function (req, res, next) {
 const verifyEmail = (req, res, email, uuid) => {
   transporter;
   var mailOptions = {
-    from: "noreply@orgboat.info", //replace with your email
+    from: "noreply@cleaker.info", //replace with your email
     to: email, //replace with your email
-    subject: `Orgboat : Verify Email:`,
+    subject: `Cleaker : Verify Email:`,
     html:
       `<div class="col-md-12">
 <table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #eaf0f7; margin: 0;" bgcolor="#eaf0f7">

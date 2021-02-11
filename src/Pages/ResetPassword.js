@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { ReactComponent as Logo } from "../assets/logo.svg";
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
+import axios from "axios";
 
 function ResetPassword() {
   useEffect(() => document.body.classList.add("form-membership"), []);
@@ -12,30 +13,42 @@ function ResetPassword() {
   function handleChange(e) {
     setMail(e.target.value);
   }
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   setSubmit(true);
+  //   if (!rstEmail) {
+  //     return;
+  //   }
+  //   const requestOptions = {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ rstEmail }),
+  //   };
+  //   (async () => {
+  //     const response = await fetch("/rstpwd", requestOptions);
+  //     const data = await response.json();
+  //     setOk(data.ok);
+  //     console.log(data.ok);
+  //     if (data.ok) {
+  //       setMesage("Please check your inbox to reset your password");
+  //       //return(<Response mgs="Please check your inbox to reset your password" msg2 ="Sent Successfully"/>)
+  //     } else {
+  //       //return(<Response mgs="Please try again." msg2 ="Error"/>)
+  //     }
+  //   })();
+  // }
+
   function handleSubmit(e) {
     e.preventDefault();
-    setSubmit(true);
-    if (!rstEmail) {
-      return;
-    }
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rstEmail }),
+    const body = {
+      rstEmail: rstEmail,
     };
-    (async () => {
-      const response = await fetch("/rstpwd", requestOptions);
-      const data = await response.json();
-      setOk(data.ok);
-      console.log(data.ok);
-      if (data.ok) {
-        setMesage("Please check your inbox to reset your password");
-        //return(<Response mgs="Please check your inbox to reset your password" msg2 ="Sent Successfully"/>)
-      } else {
-        //return(<Response mgs="Please try again." msg2 ="Error"/>)
-      }
-    })();
+    console.log(rstEmail);
+    axios.post("/rstpwd", body).then((res) => {
+      console.log(res);
+    });
   }
+
   return (
     <div className="form-wrapper">
       <div className="logo">
