@@ -32,7 +32,21 @@ function Chat(props) {
 
   useEffect(() => {
     socket.on("retrieve messages", (data) => {
-      setChatMessages(data.messages.reverse());
+      if(data.messages.length != 0){
+        var messages = []
+        data.messages.forEach(element => {
+          if(element.delete_message_to == 1){
+              if( element.message_user_uid == props.my_uid.id){
+                messages.push(element)
+              }
+          }else{
+            messages.push(element)
+          }
+        });
+        setChatMessages(messages.reverse());
+      }else{
+        setChatMessages([]);
+      }
       // socket.emit("get chats");
     });
     socket.on("chat message", (data) => {
