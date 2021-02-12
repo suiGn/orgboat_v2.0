@@ -97,7 +97,7 @@ const server = express()
     }
   )
   .get("/subscribe", routes.subscribe)
-  .get("/verMail", routes.verMail)
+  .post("/verMail", routes.verMail)
   .get("/resnd", routes.rsnvMail)
   .post("/subscribing", routes.subscribing)
   .get("/reset-pwd", routes.resetPass) // Reset Password request

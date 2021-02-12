@@ -18,8 +18,10 @@ function Index(props) {
 
     useEffect(() => {
         socket.on ('retrieve getfavorites', function (data) {
-            setfavoriteChats(data.favorites)
-            setfavoriteChatsFiltered(data.favorites)
+            if(data.length>0){
+                setfavoriteChats(data.favorites)
+                setfavoriteChatsFiltered(data.favorites)
+            }
         });
     });
 
