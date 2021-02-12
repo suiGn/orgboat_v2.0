@@ -42,16 +42,18 @@ function Profile(props) {
     var userData;
     socket.on("retrieve viewownprofile", function (data) {
       userData = data.usrprofile[0];
-      setState({
-        ...state,
-        name: userData.name!="null" ? userData.name : "",
-        city: userData.city!="null" ? userData.city : "",
-        phone: userData.phone!="null" ? userData.phone : "",
-        about: userData.about!="null" ? userData.about : "",
-        pphoto: userData.pphoto !="null" ? userData.pphoto : "",
-        usrname: userData.usrname!="null" ? userData.usrname : "",
-        website: userData.website!="null" ? userData.website : "",
-      });
+      if(userData){
+        setState({
+          ...state,
+          name: userData.name!="null" ? userData.name : "",
+          city: userData.city!="null" ? userData.city : "",
+          phone: userData.phone!="null" ? userData.phone : "",
+          about: userData.about!="null" ? userData.about : "",
+          pphoto: userData.pphoto !="null" ? userData.pphoto : "",
+          usrname: userData.usrname!="null" ? userData.usrname : "",
+          website: userData.website!="null" ? userData.website : "",
+        });
+      }
     });
   }, [props.user]);
 
