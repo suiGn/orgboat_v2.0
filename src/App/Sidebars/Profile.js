@@ -44,13 +44,13 @@ function Profile(props) {
       userData = data.usrprofile[0];
       setState({
         ...state,
-        name: userData ? userData.name : "",
-        city: userData ? userData.city : "",
-        phone: userData ? userData.phone : "",
-        about: userData ? userData.about : "",
-        pphoto: userData ? userData.pphoto : "",
-        usrname: userData ? userData.usrname : "",
-        website: userData ? userData.website : "",
+        name: userData.name!="null" ? userData.name : "",
+        city: userData.city!="null" ? userData.city : "",
+        phone: userData.phone!="null" ? userData.phone : "",
+        about: userData.about!="null" ? userData.about : "",
+        pphoto: userData.pphoto !="null" ? userData.pphoto : "",
+        usrname: userData.usrname!="null" ? userData.usrname : "",
+        website: userData.website!="null" ? userData.website : "",
       });
     });
   }, [props.user]);
