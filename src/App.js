@@ -71,7 +71,7 @@ function App() {
 
   const UpdateTheme = () => {
     socket.emit("theme");
-    socket.on("retrive theme", function (theme) {
+    socket.once("retrive theme", function (theme) {
       if (theme.theme[0].theme === 0) {
         document.body.className = "";
         setDarkSwitcherTooltipOpen(true);

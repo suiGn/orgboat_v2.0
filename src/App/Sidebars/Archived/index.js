@@ -14,7 +14,7 @@ function Index(props) {
     const [searchArchivedChats, setSearchArchivedChats] = useState("");
     useEffect(() => {
         inputRef.current.focus();
-        socket.on("retrieve chats archived",(data)=>{
+        socket.once("retrieve chats archived",(data)=>{
             setArchivedChats(data);
             setArchivedChatsFiltered(data.chats);
         });

@@ -86,7 +86,7 @@ function AddGroupModal(props) {
                 id: my_uid
             }
             socket.emit("AddGrupo", groupData);
-            socket.on("retrive addgrupo", (mssg) => {
+            socket.once("retrive addgrupo", (mssg) => {
                 socket.emit("chat message", {
                     chat:  mssg.chat,
                     message: mssg.message,

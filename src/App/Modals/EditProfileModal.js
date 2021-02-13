@@ -43,7 +43,7 @@ function EditProfileModal(props) {
 
     useEffect(() => {   
         socket.emit('ViewOwnProfile2', props.userEdit); 
-        socket.on ('retrieve viewownprofile2', function (data) {
+        socket.once('retrieve viewownprofile2', function (data) {
             userData = data.usrprofile[0];
             if(userData){
                 setName(userData.name!="null"?userData.name:"");
@@ -70,7 +70,7 @@ function EditProfileModal(props) {
             id: props.userEdit.id
         }
         socket.emit('SaveOwnProfile', userData);
-        socket.on("retrieve saveownprofile", function (data) {
+        socket.once("retrieve saveownprofile", function (data) {
             socket.emit("ViewOwnProfile", {id:data.u_id});
         })
         props.toggle();
