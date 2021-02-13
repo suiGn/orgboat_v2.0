@@ -205,7 +205,9 @@ io.on("connection", function (socket) {
       orgboatDB.query(
         `UPDATE usrs SET name='${data.name}',about='${data.about}',phone='${data.phone}',city='${data.city}',website='${data.website}' WHERE  u_id='${data.id}'`,
         function (err, rows) {
-          io.to(user.u_id).emit("retrieve saveownprofile");
+          io.to(user.u_id).emit("retrieve saveownprofile", {
+            u_id: data.id,
+          });
         }
       );
     });

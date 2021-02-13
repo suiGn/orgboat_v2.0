@@ -70,6 +70,9 @@ function EditProfileModal(props) {
             id: props.userEdit.id
         }
         socket.emit('SaveOwnProfile', userData);
+        socket.on("retrieve saveownprofile", function (data) {
+            socket.emit("ViewOwnProfile", {id:data.u_id});
+        })
         props.toggle();
     }
     function onChangePhoto(e) {
