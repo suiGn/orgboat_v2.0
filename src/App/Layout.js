@@ -37,7 +37,7 @@ function Layout(props) {
     props.socket.on("my_uid response", (data) => {
       setMy_Id({ id: data.id });
     });
-  });
+  },[my_uid]);
 
   const tourSteps = [
     {

@@ -1,45 +1,67 @@
 import React, { useEffect, useState } from "react";
 // import { ReactComponent as Logo } from "../assets/logo.svg";
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
+import axios from "axios";
 
 function ValidateEmail() {
-  useEffect(() => document.body.classList.add("form-membership"), []);
+  const [opt1, setOpt1] = useState("");
+  const [opt2, setOpt2] = useState("");
+  const [validateMail, setValidateMail] = useState(0);
+  useEffect(() => {
+    const url = require("url").parse(window.location.href, true);
+    let em = url.query.em ? url.query.em : "";
+    let uuid = url.query.uuid ? url.query.uuid : "";
+    if (em != "" && uuid != "") {
+      setOpt1("Verifying Email.");
+      setOpt2("Please wait.");
+      let user = {
+        em: em,
+        uuid: uuid,
+      };
+      axios.post("/verMail", user).then((res) => {
+        setOpt1(res.data.opt1);
+        setOpt2(res.data.opt2);
+        setValidateMail(1);
+      });
+    } else {
+      setOpt1("Email Verification Required.");
+      setOpt2("Please check your email to verify it.");
+      setValidateMail(2);
+    }
+    document.body.classList.add("form-membership");
+  }, []);
+
   return (
     <div>
-      <div className="form-wrapper">
-        <div className="logo">
-          <Logo />
+      {
+        <div className="form-wrapper">
+          <div className="logo">
+            <Logo />
+          </div>
+          <h5>{opt1}</h5>
+          <p>{opt2}</p>
+          {validateMail == 0 ? (
+            <div className="form-group"></div>
+          ) : validateMail == 1 ? (
+            <div className="form-group">
+              <br />
+              <a href="/sign-in" className="btn btn-outline-light btn-sm">
+                Sign in!
+              </a>
+            </div>
+          ) : (
+            <div className="form-group">
+              <a href={"/resnd?uuid=" + uuid + "&em=" + em + ""}>
+                Re-send Verification Link.
+              </a>
+              <br />
+              <a href="/sign-in" className="btn btn-outline-light btn-sm">
+                Sign in!
+              </a>
+            </div>
+          )}
         </div>
-        <h5>Email Verification Required.</h5>
-        <p className="text-muted">Please check your email to verify it.</p>
-        <a href="/sign-up" className="btn btn-sm btn-outline-light mr-1">
-          Re-send Verification Link.
-        </a>
-        or
-        <a href="/sign-in" className="btn btn-sm btn-outline-light ml-1">
-          Login!
-        </a>
-        {/* <p
-          style={{
-            fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
-            boxSizing: "border-box",
-            fontSize: 14,
-            verticalAlign: "top",
-            margin: 0,
-            padding: "10px 10px",
-          }}
-          valign="top"
-        >
-          Please check your email to verify it.
-        </p>
-        <div className="form-group">
-          <a href="/resnd?uuid=<%=usr.u_id%>&em=<%=usr.email%>">
-            Re-send Verification Link.
-          </a>
-          <br />
-          <a href="/sign-in">Sign In.</a>
-        </div> */}
-      </div>
+      }
     </div>
   );
 }
