@@ -20,6 +20,9 @@ function Index(props) {
   useEffect(() => {
     socket.on("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages
+      if(data.chats.length>0){
+        console.log(data.chats[0].user_chat)
+      }
       var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;
       });
