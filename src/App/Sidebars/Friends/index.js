@@ -28,7 +28,7 @@ function Index(props) {
         document.body.classList.remove('navigation-open');
     };
     useEffect(() => {
-        props.socket.on("retrive GetContacts", (contacts) => {
+        props.socket.once("retrive GetContacts", (contacts) => {
             var chats = contacts.chats.filter((chats)=>{
                 return chats.chat_type == 0;
               })

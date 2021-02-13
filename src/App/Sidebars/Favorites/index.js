@@ -18,7 +18,7 @@ function Index(props) {
     },props);
 
     useEffect(() => {
-        socket.on ('retrieve getfavorites', function (data) {
+        socket.once('retrieve getfavorites', function (data) {
             if(data.favorites){
                 setfavoriteChats(data.favorites)
                 setfavoriteChatsFiltered(data.favorites)

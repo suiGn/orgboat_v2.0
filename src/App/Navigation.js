@@ -45,7 +45,7 @@ function Navigation(props) {
   //
 
   useEffect(() => {
-    props.socket.on("my_uid response", (data) => {
+    props.socket.once("my_uid response", (data) => {
       my_uid = data.id;
       setUserEdit({ id: data.id });
       setUser(data.user)
