@@ -18,11 +18,8 @@ function Index(props) {
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
   useEffect(() => {
-    socket.on("retrieve chats", (data) => {
+    socket.once("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages
-      if(data.chats.length>0){
-        console.log(data.chats[0].user_chat)
-      }
       var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;
       });
@@ -39,7 +36,6 @@ function Index(props) {
       setChatList(data);
       setfavoriteFriendFiltered(chats);
     });
-    console.log("se recibe el mensaje");
   }, one);
   useEffect(() => {
     socket.emit("get chats");

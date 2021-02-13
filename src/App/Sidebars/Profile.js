@@ -40,7 +40,7 @@ function Profile(props) {
 
   useEffect(() => {
     var userData;
-    socket.on("retrieve viewownprofile", function (data) {
+    socket.once("retrieve viewownprofile", function (data) {
       userData = data.usrprofile[0];
       if(userData){
         let nameD= userData.name!="null" ? userData.name : "";
