@@ -158,6 +158,7 @@ exports.changePass = function (req, res) {
   var rtpass = req.body.rtpass;
   var reset = "0";
   var saltRounds = 10;
+  console.log(req.body);
   bcrypt.genSalt(saltRounds, function (err, salt) {
     if (err) {
       throw err;
@@ -173,15 +174,21 @@ exports.changePass = function (req, res) {
               [Pwd, email, random, reset],
               (error, results) => {
                 if (error) {
-                  res.render("pages/sec/response", {
-                    opt2: "Error",
-                    opt1: "Something weird happened. Please try again.",
+                  res.json({
+                    err: "Something weird happened. Please try again.",
                   });
+                  // res.render("pages/sec/response", {
+                  //   opt2: "Error",
+                  //   opt1: "Something weird happened. Please try again.",
+                  // });
                 } else {
-                  res.render("pages/sec/response", {
-                    opt2: "Password Changed",
-                    opt1: "Please login with your new password.",
+                  res.json({
+                    ok: "Password Changed.",
                   });
+                  // res.render("pages/sec/response", {
+                  //   opt2: "Password Changed",
+                  //   opt1: "Please login with your new password.",
+                  // });
                 }
               }
             );

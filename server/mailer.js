@@ -88,12 +88,12 @@ exports.rpwdm = function (req, res, next) {
             transporter.sendMail(mailOptions, function (error, info) {
               if (error) {
                 res.json({
-                  ok: false,
+                  err: error,
                 });
                 console.log("send mail", error);
               } else {
                 res.json({
-                  ok: true,
+                  ok: "Se envio el correo con éxito",
                 });
               }
             });
@@ -101,7 +101,7 @@ exports.rpwdm = function (req, res, next) {
         ); //closes Insert New Usr Into Table
       } else {
         res.json({
-          ok: false,
+          err: "No existe usuario",
         });
       }
     }

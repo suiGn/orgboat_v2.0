@@ -6,10 +6,7 @@ import axios from "axios";
 function ResetPassword() {
   useEffect(() => document.body.classList.add("form-membership"), []);
   const [rstEmail, setMail] = useState("");
-  const [submit, setSubmit] = useState(false);
-  const [ok, setOk] = useState(false);
-  const [msg, setMesage] = useState("");
-  const [msg2, setMsg2] = useState("");
+  const [response, setResponse] = useState("");
   function handleChange(e) {
     setMail(e.target.value);
   }
@@ -46,6 +43,7 @@ function ResetPassword() {
     console.log(rstEmail);
     axios.post("/rstpwd", body).then((res) => {
       console.log(res);
+      setResponse(res.data);
     });
   }
 
@@ -55,12 +53,17 @@ function ResetPassword() {
         <Logo />
       </div>
       <h5>Reset password</h5>
+      {response.err ? (
+        <div class="text-error">{response.err}</div>
+      ) : (
+        <div class="text-success ">{response.ok}</div>
+      )}
       <form name="reset" onSubmit={handleSubmit}>
         <div className="form-group">
           <input
-            type="text"
+            type="email"
             className="form-control"
-            placeholder="Username or email"
+            placeholder="Email"
             required
             autoFocus
             name="rstEmail"

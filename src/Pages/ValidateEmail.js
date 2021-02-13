@@ -11,7 +11,15 @@ function ValidateEmail() {
           <Logo />
         </div>
         <h5>Email Verification Required.</h5>
-        <p
+        <p className="text-muted">Please check your email to verify it.</p>
+        <a href="/sign-up" className="btn btn-sm btn-outline-light mr-1">
+          Re-send Verification Link.
+        </a>
+        or
+        <a href="/sign-in" className="btn btn-sm btn-outline-light ml-1">
+          Login!
+        </a>
+        {/* <p
           style={{
             fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
             boxSizing: "border-box",
@@ -30,7 +38,7 @@ function ValidateEmail() {
           </a>
           <br />
           <a href="/sign-in">Sign In.</a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

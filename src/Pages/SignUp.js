@@ -123,6 +123,7 @@ function SignUp() {
           <input
             type="password"
             name="subRtPwd"
+            minlength={4}
             className="form-control"
             onChange={handleChangePwd2}
             placeholder="Re-type Password"
