@@ -43,14 +43,16 @@ function EditProfileModal(props) {
 
     useEffect(() => {   
         socket.emit('ViewOwnProfile2', props.userEdit); 
-        socket.on ('retrieve viewownprofile2', function (data) {
+        socket.once('retrieve viewownprofile2', function (data) {
             userData = data.usrprofile[0];
-            setName(userData?userData.name:"");
-            setCity(userData?userData.city:"");
-            setPhone(userData?userData.phone:"");
-            setWebSite(userData?userData.website:"");
-            setAbout(userData?userData.about:"");
-            setPphoto(userData?userData.pphoto:"");
+            if(userData){
+                setName(userData.name!="null"?userData.name:"");
+                setCity(userData.city!="null"?userData.city:"");
+                setPhone(userData.phone!="null"?userData.phone:"");
+                setWebSite(userData.website!="null"?userData.website:"");
+                setAbout(userData.about!="null"?userData.about:"");
+                setPphoto(userData.pphoto!="null"?userData.pphoto:"");
+            }
         });
     },[props.userEdit]);
 
@@ -68,6 +70,9 @@ function EditProfileModal(props) {
             id: props.userEdit.id
         }
         socket.emit('SaveOwnProfile', userData);
+        socket.once("retrieve saveownprofile", function (data) {
+            socket.emit("ViewOwnProfile", {id:data.u_id});
+        })
         props.toggle();
     }
     function onChangePhoto(e) {

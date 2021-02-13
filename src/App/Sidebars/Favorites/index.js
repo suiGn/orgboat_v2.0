@@ -11,14 +11,21 @@ function Index(props) {
     const [favoriteChats, setfavoriteChats] = useState([]);
     const [favoriteChatsFiltered, setfavoriteChatsFiltered] = useState([]);
     const [searchFavorite, setSearchFavorite] = useState("");
+    const [one, setIOne] = useState("");
+
     useEffect(() => {
         inputRef.current.focus();
         socket.emit('GetFavorites', props.my_uid);
-        socket.on ('retrieve getfavorites', function (data) {
-            setfavoriteChats(data.favorites)
-            setfavoriteChatsFiltered(data.favorites)
+    },props);
+
+    useEffect(() => {
+        socket.on('retrieve getfavorites', function (data) {
+            if(data.favorites){
+                setfavoriteChats(data.favorites)
+                setfavoriteChatsFiltered(data.favorites)
+            }
         });
-    },[props]);
+    },one)
 
     const inputRef = useRef();
 
@@ -65,7 +72,7 @@ function Index(props) {
                                         </div>
                                         <div className="users-list-action">
                                             <div className="action-toggle">
-                                                <FavoritesDropdown/>
+                                                <FavoritesDropdown message={item} socket={socket} my_uid={props.my_uid}/>
                                             </div>
                                         </div>
                                     </div>

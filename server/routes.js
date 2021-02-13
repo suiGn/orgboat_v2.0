@@ -102,15 +102,13 @@ exports.pwdRst = function (req, res) {
 };
 
 exports.verMail = function (req, res) {
-  var uuid = req.query.uuid;
-  var email = req.query.em;
-  console.log("ver email");
+  var uuid = req.body.uuid;
+  var email = req.body.em;
   var verified = 1;
   index.orgboatDB.query(
     "SELECT * FROM usrs WHERE email = ?",
     [email],
     (err, resp) => {
-      console.log(resp);
       if (resp.length >= 1) {
         var usr = resp[0];
         if (usr.u_id === uuid) {
@@ -119,24 +117,22 @@ exports.verMail = function (req, res) {
             [verified, email],
             (error, results) => {
               if (error) {
-                res.render("pages/sec/response", {
-                  opt2: "Error",
-                  opt1: "Something weird happened. Please try again.",
+                res.json({
+                  opt1: "Error",
+                  opt2: "Something weird happened. Please try again.",
                 });
               } else {
-                console.log("success");
-                res.redirect("/verify-email");
-                // res.render("pages/sec/response", {
-                //   opt2: "Email Verified",
-                //   opt1: "You can now login to your account.",
-                // });
+                res.json({
+                  opt1: "Email verified Successfully",
+                  opt2: "You can now login to your account.",
+                });
               }
             }
           );
         } else {
-          res.render("pages/sec/response", {
-            opt2: "Error",
-            opt1: "Something weird happened. Please try again.",
+          res.json({
+            opt1: "Error",
+            opt2: "Something weird happened. Please try again.",
           });
         }
       }
@@ -158,6 +154,7 @@ exports.changePass = function (req, res) {
   var rtpass = req.body.rtpass;
   var reset = "0";
   var saltRounds = 10;
+  console.log(req.body);
   bcrypt.genSalt(saltRounds, function (err, salt) {
     if (err) {
       throw err;
@@ -173,15 +170,21 @@ exports.changePass = function (req, res) {
               [Pwd, email, random, reset],
               (error, results) => {
                 if (error) {
-                  res.render("pages/sec/response", {
-                    opt2: "Error",
-                    opt1: "Something weird happened. Please try again.",
+                  res.json({
+                    err: "Something weird happened. Please try again.",
                   });
+                  // res.render("pages/sec/response", {
+                  //   opt2: "Error",
+                  //   opt1: "Something weird happened. Please try again.",
+                  // });
                 } else {
-                  res.render("pages/sec/response", {
-                    opt2: "Password Changed",
-                    opt1: "Please login with your new password.",
+                  res.json({
+                    ok: "Password Changed.",
                   });
+                  // res.render("pages/sec/response", {
+                  //   opt2: "Password Changed",
+                  //   opt1: "Please login with your new password.",
+                  // });
                 }
               }
             );
@@ -309,6 +312,7 @@ exports.subscribing = function (req, res) {
                               }
                               console.log("New user saved!");
                               console.log(clName + usrname + email);
+                              console.log(uuid_numbr);
                               mailer.verifyEmail(req, res, email, uuid_numbr);
                             }
                           ); //closes Insert New Usr Into Table

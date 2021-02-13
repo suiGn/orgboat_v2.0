@@ -13,6 +13,7 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import LockScreen from "./Pages/LockScreen";
 import ResetPassword from "./Pages/ResetPassword";
+import NewPassword from "./Pages/NewPassword";
 import PhoneCode from "./Pages/PhoneCode";
 import Layout from "./App/Layout";
 import io from "socket.io-client";
@@ -71,7 +72,7 @@ function App() {
 
   const UpdateTheme = () => {
     socket.emit("theme");
-    socket.on("retrive theme", function (theme) {
+    socket.once("retrive theme", function (theme) {
       if (theme.theme[0].theme === 0) {
         document.body.className = "";
         setDarkSwitcherTooltipOpen(true);
@@ -125,6 +126,7 @@ function App() {
         <Route path="/sign-up" component={SignUp} />
         <Route path="/lock-screen" component={LockScreen} />
         <Route path="/reset-password" component={ResetPassword} />
+        <Route path="/pwdRst" component={NewPassword} />
         <Route path="/phone-code" component={PhoneCode} />
         <Route render={() => <h2>404 not found</h2>} />
       </Switch>

@@ -77,29 +77,31 @@ function AddGroupModal(props) {
 
     function AddGroup(e){
         e.preventDefault();
-        var groupData
-        groupData = {
-            groupName: groupName,
-            description: description,
-            addFriends: addFriends,
-            id: my_uid
+        if(groupName!=""&addFriends.length>0){
+            var groupData
+            groupData = {
+                groupName: groupName,
+                description: description,
+                addFriends: addFriends,
+                id: my_uid
+            }
+            socket.emit("AddGrupo", groupData);
+            socket.once("retrive addgrupo", (mssg) => {
+                socket.emit("chat message", {
+                    chat:  mssg.chat,
+                    message: mssg.message,
+                });
+                socket.emit("get chats");
+            });
+            setFriends([]);
+            setAddFriends([]);
+            setGroupName("");
+            setDescription("");
+            chooseFriend.forEach(function(friend) {
+                friend.checked = false;
+            });
+            setModal(!modal);
         }
-        socket.emit("AddGrupo", groupData);
-        socket.on("retrive addgrupo", (mssg) => {
-            socket.emit("chat message", {
-                chat:  mssg.chat,
-                message: mssg.message,
-              });
-              socket.emit("get chats");
-        });
-        setFriends([]);
-        setAddFriends([]);
-        setGroupName("");
-        setDescription("");
-        chooseFriend.forEach(function(friend) {
-            friend.checked = false;
-        });
-        setModal(!modal);
     }
 
     function AddNewFriends(){

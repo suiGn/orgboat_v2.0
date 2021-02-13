@@ -35,8 +35,8 @@ function Index(props) {
       chats.push.apply(chats, grupos);
       setChatList(data);
       setfavoriteFriendFiltered(chats);
+      console.log("chats");
     });
-    console.log("se recibe el mensaje");
   }, one);
   useEffect(() => {
     socket.emit("get chats");

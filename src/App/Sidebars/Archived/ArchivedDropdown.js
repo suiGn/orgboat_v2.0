@@ -24,7 +24,7 @@ const ArchivedDropdown = (props) => {
   };
   function Unarchive(chat_selected) {
     socket.emit("Unarchive chat", { chat: chat_selected });
-    socket.on("Unarchive response", function (data) {
+    socket.once("Unarchive response", function (data) {
       socket.emit("get chats");
       // ChatArchive();
       // setUnarchive

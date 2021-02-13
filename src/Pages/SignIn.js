@@ -75,7 +75,7 @@ function SignIn(props) {
             </a>
           </li>
           <li className="list-inline-item">
-            <a href="/" className="btn btn-floating btn-google">
+            <a href="/auth/google" className="btn btn-floating btn-google">
               <i className="fa fa-google"></i>
             </a>
           </li>

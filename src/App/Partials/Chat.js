@@ -31,7 +31,7 @@ function Chat(props) {
   }, [scrollEl]);
 
   useEffect(() => {
-    socket.on("retrieve messages", (data) => {
+    socket.once("retrieve messages", (data) => {
       if(data.messages.length != 0){
         var messages = []
         data.messages.forEach(element => {
@@ -44,14 +44,16 @@ function Chat(props) {
           }
         });
         setChatMessages(messages.reverse());
+      }else{
+        setChatMessages([]);
       }
       // socket.emit("get chats");
     });
-    socket.on("chat message", (data) => {
+    socket.once("chat message", (data) => {
       socket.emit("get chats");
       socket.emit("get messages", { id: data.chat, page: 1 });
     });
-    socket.on("retrive update notification", (data) => {
+    socket.once("retrive update notification", (data) => {
       socket.emit("get chats");
     });
     if (props.clicked && scrollEl) {

@@ -45,7 +45,7 @@ function ChatHeader(props) {
   }
   function ArchiveChat(chat_selected) {
     socket.emit("archived chat", { chat: chat_selected });
-    socket.on("archived response", function () {
+    socket.once("archived response", function () {
       socket.emit("get chats");
     });
   }

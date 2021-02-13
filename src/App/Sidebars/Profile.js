@@ -11,22 +11,19 @@ import classnames from "classnames";
 function Profile(props) {
   const { socket } = props;
   const dispatch = useDispatch();
+  
   const { profileSidebar, mobileProfileSidebar } = useSelector(
     (state) => state
   );
 
   //const [activeTab, setActiveTab] = useState('1');
-  const [state, setState] = useState({
-    name: "",
-    phone: "",
-    city: "",
-    about: "",
-    pphoto: "",
-    usrname: "",
-    website: "",
-    activeTab: "1",
-  });
-
+  const [name, setName] = useState("");
+  const [city, setCity] = useState("");
+  const [phone, setPhone] = useState("");
+  const [website, setWebSite] = useState("");
+  const [about, setAbout] = useState("");
+  const [pphoto, setPphoto] = useState("");
+  const [activeTab, setActiveTab] = useState("1");
   /*const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
     };*/
@@ -39,21 +36,28 @@ function Profile(props) {
 
   useEffect(() => {
     socket.emit("ViewOwnProfile", props.user);
-    var userData;
-    socket.on("retrieve viewownprofile", function (data) {
-      userData = data.usrprofile[0];
-      setState({
-        ...state,
-        name: userData ? userData.name : "",
-        city: userData ? userData.city : "",
-        phone: userData ? userData.phone : "",
-        about: userData ? userData.about : "",
-        pphoto: userData ? userData.pphoto : "",
-        usrname: userData ? userData.usrname : "",
-        website: userData ? userData.website : "",
-      });
-    });
   }, [props.user]);
+
+  useEffect(() => {
+    var userData;
+    socket.once("retrieve viewownprofile", function (data) {
+      userData = data.usrprofile[0];
+      if(userData){
+        let nameD= userData.name!="null" ? userData.name : "";
+        let cityD= userData.city!="null" ? userData.city : "";
+        let phoneD= userData.phone!="null" ? userData.phone : "";
+        let aboutD= userData.about!="null" ? userData.about : "";
+        let pphotoD=userData.pphoto !="null" ? userData.pphoto : "";
+        let websiteD= userData.website!="null" ? userData.website : "";
+        setName(nameD);
+        setCity(cityD);
+        setPhone(phoneD);
+        setWebSite(websiteD);
+        setAbout(aboutD);
+        setPphoto(pphotoD);
+      }
+    });
+  },[name])
 
   function addDefaultSrc(ev) {
     ev.target.src = WomenAvatar5;
@@ -85,12 +89,12 @@ function Profile(props) {
                 <figure className="avatar avatar-xl mb-3">
                   <img
                     onError={addDefaultSrc}
-                    src={state.pphoto}
+                    src={pphoto}
                     className="rounded-circle"
                     alt="avatar"
                   />
                 </figure>
-                <h5 className="mb-1">{state.name}</h5>
+                <h5 className="mb-1">{name}</h5>
                 <small className="text-muted font-italic">
                   Last seen: Today
                 </small>
@@ -99,7 +103,7 @@ function Profile(props) {
                   <NavItem>
                     <NavLink
                       className={classnames({
-                        active: state.activeTab === "1",
+                        active: activeTab === "1",
                       })}
                     >
                       About
@@ -117,21 +121,21 @@ function Profile(props) {
                                         </NavItem>*/}
                 </Nav>
               </div>
-              <TabContent activeTab={state.activeTab}>
+              <TabContent activeTab={activeTab}>
                 <TabPane tabId="1">
-                  <p className="text-muted">{state.about}</p>
+                  <p className="text-muted">{about}</p>
                   <div className="mt-4 mb-4">
                     <h6>Phone</h6>
-                    <p className="text-muted">{state.phone}</p>
+                    <p className="text-muted">{phone}</p>
                   </div>
                   <div className="mt-4 mb-4">
                     <h6>City</h6>
-                    <p className="text-muted">{state.city}</p>
+                    <p className="text-muted">{city}</p>
                   </div>
                   <div className="mt-4 mb-4">
                     <h6>Website</h6>
                     <p>
-                      <a href="foo">{state.website}</a>
+                      <a href="foo">{website}</a>
                     </p>
                   </div>
                   <div className="mt-4 mb-4">
