@@ -57,7 +57,7 @@ function Profile(props) {
         setPphoto(pphotoD);
       }
     });
-  },[pphoto])
+  },[name])
 
   function addDefaultSrc(ev) {
     ev.target.src = WomenAvatar5;
