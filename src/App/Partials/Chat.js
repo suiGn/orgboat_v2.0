@@ -32,19 +32,19 @@ function Chat(props) {
 
   useEffect(() => {
     socket.once("retrieve messages", (data) => {
-      if(data.messages.length != 0){
-        var messages = []
-        data.messages.forEach(element => {
-          if(element.delete_message_to == 1){
-              if( element.message_user_uid == props.my_uid.id){
-                messages.push(element)
-              }
-          }else{
-            messages.push(element)
+      if (data.messages.length != 0) {
+        var messages = [];
+        data.messages.forEach((element) => {
+          if (element.delete_message_to == 1) {
+            if (element.message_user_uid == props.my_uid.id) {
+              messages.push(element);
+            }
+          } else {
+            messages.push(element);
           }
         });
         setChatMessages(messages.reverse());
-      }else{
+      } else {
         setChatMessages([]);
       }
       // socket.emit("get chats");
@@ -132,13 +132,13 @@ function Chat(props) {
   const MessagesView = (props) => {
     const { message } = props;
     let type;
-    if(message.chat_type == 1){
+    if (message.chat_type == 1) {
       if (message.message_user_uid == props.id) {
         type = "outgoing-message";
       } else {
         type = "undefined";
       }
-    }else{
+    } else {
       if (message.message_user_uid == props.id) {
         type = "undefine";
       } else {
@@ -171,9 +171,15 @@ function Chat(props) {
             message.media
           ) : (
             <div className="message-content position-relative">
-              {message.message}{" "}
+              {message.message}
               <div className="action-toggle action-dropdown-chat">
-                <ChatsMessageDropdown message={message} prop_id={props.id} my_uid={props.my_uid} chat_id={props.chat_id} socket={socket}/>
+                <ChatsMessageDropdown
+                  message={message}
+                  prop_id={props.id}
+                  my_uid={props.my_uid}
+                  chat_id={props.chat_id}
+                  socket={socket}
+                />
               </div>
             </div>
           )}

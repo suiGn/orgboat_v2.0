@@ -24,7 +24,7 @@ function Navigation(props) {
   const [user, setUser] = useState([]);
   let my_uid;
   let p;
-  if(user){
+  if (user) {
     let chat_initial;
     let chat_name;
     if (user.pphoto === "") {
@@ -48,7 +48,7 @@ function Navigation(props) {
     props.socket.once("my_uid response", (data) => {
       my_uid = data.id;
       setUserEdit({ id: data.id });
-      setUser(data.user)
+      setUser(data.user);
     });
   });
   useEffect(() => {
@@ -227,9 +227,9 @@ function Navigation(props) {
                   Edit profile
                 </DropdownItem>
                 <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-                <DropdownItem onClick={settingsModalToggle}>
+                {/* <DropdownItem onClick={settingsModalToggle}>
                   Settings
-                </DropdownItem>
+                </DropdownItem> */}
                 <DropdownItem divider />
                 <DropdownItem onClick={logoutServer}>Logout</DropdownItem>
               </DropdownMenu>

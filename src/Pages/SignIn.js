@@ -30,8 +30,9 @@ function SignIn(props) {
             placeholder="Password"
           />
         </div>
-        <div className="form-group d-flex justify-content-between">
-          <div className="custom-control custom-checkbox">
+        {/* <div className="form-group d-flex justify-content-between"> */}
+        <div className="form-group d-flex justify-content-end">
+          {/* <div className="custom-control custom-checkbox">
             <input
               type="checkbox"
               className="custom-control-input"
@@ -41,7 +42,7 @@ function SignIn(props) {
             <label className="custom-control-label" htmlFor="customCheck1">
               Remember me
             </label>
-          </div>
+          </div> */}
           <a href="/reset-password">Reset password</a>
         </div>
         <button
@@ -52,7 +53,7 @@ function SignIn(props) {
           Sign in
         </button>
         <hr />
-        <p className="text-muted">Login with your social media account.</p>
+        {/* <p className="text-muted">Login with your social media account.</p>
         <ul className="list-inline">
           <li className="list-inline-item">
             <a href="/" className="btn btn-floating btn-facebook">
@@ -90,7 +91,7 @@ function SignIn(props) {
             </a>
           </li>
         </ul>
-        <hr />
+        <hr /> */}
         <p className="text-muted">Don't have an account?</p>
         <a href="/sign-up" className="btn btn-outline-light btn-sm">
           Register now!

@@ -42,7 +42,7 @@ function ChatFooter(props) {
   return (
     <div className="chat-footer">
       <form onSubmit={handleSubmit}>
-        <div className="position-relative">
+        {/* <div className="position-relative">
           <Button
             onClick={EmojiMenuOpen}
             color="light"
@@ -62,7 +62,7 @@ function ChatFooter(props) {
               set="apple"
             />
           </span>
-        </div>
+        </div> */}
         <Input
           type="text"
           className="form-control"
@@ -72,12 +72,12 @@ function ChatFooter(props) {
           onKeyDown={onKeyDown}
         />
         <div className="form-buttons">
-          <Button color="light">
+          {/* <Button color="light">
             <FeatherIcon.Paperclip />
           </Button>
           <Button color="light" className="d-sm-none d-block">
             <FeatherIcon.Mic />
-          </Button>
+          </Button> */}
           <Button type="submit" color="primary">
             <FeatherIcon.Send />
           </Button>

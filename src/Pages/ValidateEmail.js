@@ -7,10 +7,10 @@ function ValidateEmail() {
   const [opt1, setOpt1] = useState("");
   const [opt2, setOpt2] = useState("");
   const [validateMail, setValidateMail] = useState(0);
+  const url = require("url").parse(window.location.href, true);
+  let em = url.query.em ? url.query.em : "";
+  let uuid = url.query.uuid ? url.query.uuid : "";
   useEffect(() => {
-    const url = require("url").parse(window.location.href, true);
-    let em = url.query.em ? url.query.em : "";
-    let uuid = url.query.uuid ? url.query.uuid : "";
     if (em != "" && uuid != "") {
       setOpt1("Verifying Email.");
       setOpt2("Please wait.");
