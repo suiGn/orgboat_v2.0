@@ -11,7 +11,6 @@ function Index(props) {
     const [favoriteChats, setfavoriteChats] = useState([]);
     const [favoriteChatsFiltered, setfavoriteChatsFiltered] = useState([]);
     const [searchFavorite, setSearchFavorite] = useState("");
-    const [one, setIOne] = useState("");
 
     useEffect(() => {
         inputRef.current.focus();
@@ -19,13 +18,13 @@ function Index(props) {
     },props);
 
     useEffect(() => {
-        socket.on('retrieve getfavorites', function (data) {
+        socket.once('retrieve getfavorites', function (data) {
             if(data.favorites){
                 setfavoriteChats(data.favorites)
                 setfavoriteChatsFiltered(data.favorites)
             }
         });
-    },one)
+    })
 
     const inputRef = useRef();
 

@@ -18,7 +18,7 @@ function Index(props) {
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
   useEffect(() => {
-    socket.on("retrieve chats", (data) => {
+    socket.once("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages
       var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;
@@ -35,7 +35,6 @@ function Index(props) {
       chats.push.apply(chats, grupos);
       setChatList(data);
       setfavoriteFriendFiltered(chats);
-      console.log("chats");
     });
   }, one);
   useEffect(() => {
@@ -130,7 +129,7 @@ function Index(props) {
           <div className="users-list-body">
             <div i={chat.chat_uid}>
               <h5
-                className={chat.unread_messages ? "text-primary" : ""}
+                // className={chat.unread_messages ? "text-primary" : ""}
                 i={chat.chat_uid}
               >
                 {chat.name}
@@ -138,13 +137,14 @@ function Index(props) {
               {chat.last_message_message}
             </div>
             <div className="users-list-action">
-              {chat.unread_messages ? (
+              {/* {chat.unread_messages ? (
                 <div className="new-message-count">{chat.unread_messages}</div>
               ) : (
                 ""
-              )}
+              )} */}
               <small
-                className={chat.unread_messages ? "text-primary" : "text-muted"}
+                // className={chat.unread_messages ? "text-primary" : "text-muted"}
+                className="text-muted"
               >
                 {timeLabel}
               </small>

@@ -14,7 +14,6 @@ function Index(props) {
     const [friendLists, setContact] = useState([]);
     const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
     const [searchFavorite, setSearchFavorite] = useState("");
-    const [one, setIOne] = useState("");
     useEffect(() => {
         inputRef.current.focus();
     });
@@ -29,7 +28,7 @@ function Index(props) {
         document.body.classList.remove('navigation-open');
     };
     useEffect(() => {
-        props.socket.on("retrive GetContacts", (contacts) => {
+        props.socket.once("retrive GetContacts", (contacts) => {
             var chats = contacts.chats.filter((chats)=>{
                 return chats.chat_type == 0;
               })
@@ -37,10 +36,10 @@ function Index(props) {
             setContact(contacts);
             setfavoriteFriendFiltered(chats);
         });
-    },one);
+    });
     useEffect(()=>{
         props.socket.emit("GetContacts");
-    },[one]);
+    },[]);
     
     function searchFav(wordToSearch){
         setSearchFavorite(wordToSearch);

@@ -56,9 +56,9 @@ function ChatHeader(props) {
         <figure className="avatar">{p}</figure>
         <div>
           <h5>{props.data.name}</h5>
-          <small className="text-success">
+          {/* <small className="text-success">
             <i>writing...</i>
-          </small>
+          </small> */}
         </div>
       </div>
       <div className="chat-header-action">
@@ -71,12 +71,12 @@ function ChatHeader(props) {
               <FeatherIcon.Menu />
             </button>
           </li>
-          <li className="list-inline-item">
+          {/* <li className="list-inline-item">
             <VoiceCallModal />
           </li>
           <li className="list-inline-item">
             <VideoCallModal />
-          </li>
+          </li> */}
           <li
             className="list-inline-item"
             data-toggle="tooltip"
@@ -98,8 +98,8 @@ function ChatHeader(props) {
                   Add to archive
                 </DropdownItem>
                 <DropdownItem>Delete</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Block</DropdownItem>
+                {/* <DropdownItem divider />
+                <DropdownItem>Block</DropdownItem> */}
               </DropdownMenu>
             </Dropdown>
           </li>

@@ -157,7 +157,8 @@ body.dark .dropdown-menu .dropdown-divider {
 
 .emoji-picker {
   position: absolute;
-  bottom: 0;
+  bottom: 38px;
+  left: 0;
 }
 
 .hidden {
@@ -194,5 +195,11 @@ body.dark .dropdown-menu .dropdown-divider {
     left: 0;
     z-index: 1021;
     transition: all.2s ease-in-out;
+  }
+}
+
+@media (max-width: 400px) {
+  .emoji-mart {
+    width: 300px !important;
   }
 }
