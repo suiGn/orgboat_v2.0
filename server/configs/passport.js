@@ -121,7 +121,7 @@ module.exports = function (passport) {
       function (req, usrname, password, done) {
         // callback with email and password from our form
         index.orgboatDB.query(
-          `SELECT * FROM usrs WHERE usrname = '${usrname}' OR email = '${usrname}'`,
+          `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}') AND verified = 1`,
           (err, resp) => {
             if (resp.length == 0) {
               return done(err);
