@@ -24,10 +24,10 @@ const FriendsDropdown = (props) => {
                 <FeatherIcon.MoreHorizontal/>
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem>New chat</DropdownItem>
+                {/*<DropdownItem>New chat</DropdownItem>*/}
                 <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-                <DropdownItem divider/>
-                <DropdownItem>Block</DropdownItem>
+                {/*<DropdownItem divider/>
+                {/*<DropdownItem>Block</DropdownItem>*/}
             </DropdownMenu>
         </Dropdown>
     )

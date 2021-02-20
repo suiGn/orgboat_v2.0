@@ -267,13 +267,28 @@ io.on("connection", function (socket) {
     });
     //For search
     socket.on("SearchUserByEmailOrUsername", (data) => {
-      console.log(data);
+      data.my_uid
       orgboatDB.query(
         `SELECT name,usrname,email,u_id FROM usrs WHERE email='${data.email}' or usrname='${data.usrname}'`,
         (err, rows) => {
-          io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
-            users: rows,
-          });
+          if(rows.length>0){
+            routes.validateExistChat(rows[0].u_id, data.my_uid).then((result) => {
+              if (result === false) {
+                io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+                  users: rows,
+                });
+              }else{
+                io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+                  users: [],
+                });
+              }
+            })
+          }
+          else{
+            io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+              users: [],
+            });
+          }
         }
       );
     });
