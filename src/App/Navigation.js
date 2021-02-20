@@ -31,14 +31,13 @@ function Navigation(props) {
 
   useEffect(() => {
     props.socket.once("my_uid response", (data) => {
-      my_uid = data.id;
-      setUserEdit({ id: data.id });
-      setUser(data.user);
-      console.log(data.user)
+      my_uid = data.user[0].u_id;
+      setUserEdit({ id: data.user[0].u_id });
+      setUser(data.user[0].u_id)
       let chat_initial;
       let chat_name;
-      if (data.user.pphoto === "") {
-        chat_name = data.user.name;
+      if (data.user[0].pphoto === "") {
+        chat_name = data.user[0].name;
         chat_initial = chat_name.substring(0, 1);
         setP(
           <span className="avatar-title bg-info rounded-circle">
@@ -46,7 +45,7 @@ function Navigation(props) {
           </span>
         );
       } else {
-        setP(<img src={data.user.pphoto} className="rounded-circle" alt="image" />)
+        setP(<img src={data.user[0].pphoto} className="rounded-circle" alt="image" />)
       }
     });
   });
@@ -93,7 +92,7 @@ function Navigation(props) {
   const settingsModalToggle = () => setSettingsModalOpen(!settingsModalOpen);
 
   const profileActions = () => {
-    props.setUser(props.my_uid);
+    props.setUser(userEdit);
     dispatch(profileAction(true));
     dispatch(mobileProfileAction(true));
   };

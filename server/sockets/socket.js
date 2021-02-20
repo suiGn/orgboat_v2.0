@@ -22,10 +22,14 @@ io.on("connection", function (socket) {
       exports.guest = guest;
     }
     socket.on("my_uid",()=>{
-      io.to(user.u_id).emit("my_uid response", {
-        id: user.u_id,
-        user: user
-      });
+      orgboatDB.query(
+        `select u_id, pphoto, name from usrs where u_id='${user.u_id}'`,
+        function (err, rows) {
+          io.to(user.u_id).emit("my_uid response", {
+            user: rows
+          });
+        }
+      );
     });
     //Transmit the messages from one user to another
     socket.on("get chats", function (msg) {
