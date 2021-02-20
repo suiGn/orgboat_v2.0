@@ -40,7 +40,7 @@ function Profile(props) {
 
   useEffect(() => {
     var userData;
-    socket.once("retrieve viewownprofile", function (data) {
+    socket.on("retrieve viewownprofile", function (data) {
       userData = data.usrprofile[0];
       if(userData){
         let nameD= userData.name!="null" ? userData.name : "";
@@ -138,7 +138,7 @@ function Profile(props) {
                       <a href="foo">{website}</a>
                     </p>
                   </div>
-                  <div className="mt-4 mb-4">
+                  {/*<div className="mt-4 mb-4">
                     <h6 className="mb-3">Social media accounts</h6>
                     <ul className="list-inline social-links">
                       <li className="list-inline-item">
@@ -271,7 +271,7 @@ function Profile(props) {
                         </label>
                       </div>
                     </div>
-                  </div>
+                                      </div>*/}
                 </TabPane>
                 <TabPane tabId="2">
                   <h6 className="mb-3 d-flex align-items-center justify-content-between">
