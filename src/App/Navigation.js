@@ -63,7 +63,10 @@ function Navigation(props) {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // const [darkSwitcherTooltipOpen, setDarkSwitcherTooltipOpen] = useState(false);
+  const [
+    darkSwitcherTooltipTextOpen,
+    setDarkSwitcherTooltipTextOpen,
+  ] = useState(false);
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -76,6 +79,10 @@ function Navigation(props) {
       setUserMenuTooltipOpen(false);
       return !prevState;
     });
+
+  const darkSwitcherTooltipTextToggler = () => {
+    setDarkSwitcherTooltipTextOpen(!darkSwitcherTooltipTextOpen);
+  };
 
   const darkSwitcherTooltipToggle = () => {
     props.setDarkSwitcherTooltipOpen(!props.darkSwitcherTooltipOpen);
@@ -199,9 +206,9 @@ function Navigation(props) {
             </a>
             <Tooltip
               placement="right"
-              isOpen={props.darkSwitcherTooltipOpen}
+              isOpen={darkSwitcherTooltipTextOpen}
               target="dark-switcher"
-              // toggle={darkSwitcherTooltipToggle}
+              toggle={darkSwitcherTooltipTextToggler}
             >
               Dark mode
             </Tooltip>

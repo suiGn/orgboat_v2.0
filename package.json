@@ -20,6 +20,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
+    "react-toastify": "^7.0.3",
     "reactour": "^1.18.0",
     "reactstrap": "^8.5.1",
     "redux": "^4.0.5",
