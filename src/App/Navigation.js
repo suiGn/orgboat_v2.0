@@ -23,22 +23,7 @@ function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
   const [user, setUser] = useState([]);
   let my_uid;
-  let p;
-  if (user) {
-    let chat_initial;
-    let chat_name;
-    if (user.pphoto === "") {
-      chat_name = user.name;
-      chat_initial = chat_name.substring(0, 1);
-      p = (
-        <span className="avatar-title bg-info rounded-circle">
-          {chat_initial}
-        </span>
-      );
-    } else {
-      p = <img src={user.pphoto} className="rounded-circle" alt="image" />;
-    }
-  }
+  const [p, setP] = useState("");
 
   // Foto de perfil
 
@@ -49,6 +34,20 @@ function Navigation(props) {
       my_uid = data.id;
       setUserEdit({ id: data.id });
       setUser(data.user);
+      console.log(data.user)
+      let chat_initial;
+      let chat_name;
+      if (data.user.pphoto === "") {
+        chat_name = data.user.name;
+        chat_initial = chat_name.substring(0, 1);
+        setP(
+          <span className="avatar-title bg-info rounded-circle">
+            {chat_initial}
+          </span>
+        );
+      } else {
+        setP(<img src={data.user.pphoto} className="rounded-circle" alt="image" />)
+      }
     });
   });
   useEffect(() => {
@@ -214,11 +213,6 @@ function Navigation(props) {
                 aria-expanded={dropdownOpen}
               >
                 <figure className="avatar">
-                  {/* <img
-                    src={WomenAvatar5}
-                    className="rounded-circle"
-                    alt="avatar"
-                  /> */}
                   {p}
                 </figure>
               </DropdownToggle>
