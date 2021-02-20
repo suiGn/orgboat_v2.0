@@ -81,7 +81,7 @@ function Index(props) {
                                 let chat_name = item.name;
                                 let p;
                                 let chat_initial = chat_name.substring(0, 1);
-                                if (item.pphoto === "") {
+                                if (item.pphoto === "" ||item.pphoto === null) {
                                     p = (
                                     <span className="avatar-title bg-info rounded-circle">
                                         {chat_initial}

@@ -314,6 +314,11 @@ io.on("connection", function (socket) {
           orgboatDB.query(
             `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${user.u_id}',${chat_type})`,
             (err, data) => {
+              time = new Date();
+              timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
+              //console.log(msg);
+              orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
+                                    values ('${uuid_numbr}','${user.u_id}','${message}','${timeDB}',0)`);
               io.to(user.u_id).emit("retrive Addcontact", {
                 chat: uuid_numbr,
                 message,
@@ -346,16 +351,16 @@ io.on("connection", function (socket) {
       );
     });
     //Init Message
-    socket.on("init message", (msg) => {
-      chat = msg.chat;
-      message = msg.message;
-      from = user.u_id;
-      time = new Date();
-      timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
-      console.log(msg);
-      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
-                            values ('${chat}','${from}','${message}','${timeDB}',0)`);
-    });
+    // socket.on("init message", (msg) => {
+    //   chat = msg.chat;
+    //   message = msg.message;
+    //   from = user.u_id;
+    //   time = new Date();
+    //   timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
+    //   console.log(msg);
+    //   orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
+    //                         values ('${chat}','${from}','${message}','${timeDB}',0)`);
+    // });
     //Delete Chat
     socket.on("Delete Chat", (chatid) => {
       orgboatDB.query(

@@ -46,10 +46,10 @@ function AddFriendModal(props) {
   function AddUserContact(u_id) {
     props.socket.emit("AddContact", { u_id: u_id });
     props.socket.once("retrive Addcontact", (mssg) => {
-      props.socket.emit("init message", {
-        chat: mssg.chat,
-        message: mssg.message,
-      });
+      // props.socket.emit("init message", {
+      //   chat: mssg.chat,
+      //   message: mssg.message,
+      // });
       props.socket.emit("GetContacts");
       modalToggle();
       setfindUsers([]);

@@ -36,7 +36,7 @@ function Navigation(props) {
       setUser(data.user[0].u_id)
       let chat_initial;
       let chat_name;
-      if (data.user[0].pphoto === "") {
+      if (data.user[0].pphoto === "" || data.user[0].pphoto === null) {
         chat_name = data.user[0].name;
         chat_initial = chat_name.substring(0, 1);
         setP(

@@ -107,7 +107,7 @@ function Index(props) {
       } else {
         timeLabel = getDateLabel(timeMessage);
       }
-      if (chat.pphoto === "") {
+      if (chat.pphoto === "" || chat.pphoto === null) {
         p = (
           <span className="avatar-title bg-info rounded-circle">
             {chat_initial}
