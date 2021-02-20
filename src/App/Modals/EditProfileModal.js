@@ -43,7 +43,7 @@ function EditProfileModal(props) {
 
     useEffect(() => {   
         socket.emit('ViewOwnProfile2', props.userEdit); 
-        socket.once('retrieve viewownprofile2', function (data) {
+        socket.on('retrieve viewownprofile2', function (data) {
             userData = data.usrprofile[0];
             if(userData){
                 setName(userData.name!="null"?userData.name:"");
@@ -61,19 +61,21 @@ function EditProfileModal(props) {
         if(fileState){
             onFormSubmit(e);
         }  
-        userData = {
-            name: name,
-            phone: phone,
-            city: city,
-            about: about?about:"",
-            website:website,
-            id: props.userEdit.id
+        if(name!=""){
+            userData = {
+                name: name,
+                phone: phone,
+                city: city,
+                about: about?about:"",
+                website:website,
+                id: props.userEdit.id
+            }
+            socket.emit('SaveOwnProfile', userData);
+            socket.once("retrieve saveownprofile", function (data) {
+                socket.emit("ViewOwnProfile", {id:data.u_id});
+            })
+            props.toggle();
         }
-        socket.emit('SaveOwnProfile', userData);
-        socket.once("retrieve saveownprofile", function (data) {
-            socket.emit("ViewOwnProfile", {id:data.u_id});
-        })
-        props.toggle();
     }
     function onChangePhoto(e) {
         setFileState(e.target.files[0]);
@@ -93,6 +95,10 @@ function EditProfileModal(props) {
             //alert("The file is successfully uploaded");
           })
           .catch((error) => {});
+    }
+
+    function PreventSubmit(e){
+        e.preventDefault();
     }
 
     return (
@@ -123,7 +129,7 @@ function EditProfileModal(props) {
                                 About
                             </NavLink>
                         </NavItem>
-                        <NavItem>
+                        {/*<NavItem>
                             <NavLink
                                 className={classnames({active: activeTab === '3'})}
                                 onClick={() => {
@@ -132,17 +138,17 @@ function EditProfileModal(props) {
                             >
                                 Social Links
                             </NavLink>
-                        </NavItem>
+                            </NavItem>*/}
                     </Nav>
                     <Form>
                         <TabContent activeTab={activeTab}>
                             <TabPane tabId="1">
                                 <FormGroup>
-                                    <Label for="fullname">Fullname</Label>
+                                    <Label for="fullname">Full Name</Label>
                                     <InputGroup>
                                         <Input type="text" name="fullname" id="fullname"  value={name}  onChange={(e) => setName(e.target.value)}/>
                                         <InputGroupAddon addonType="append">
-                                            <Button color="light">
+                                            <Button onClick={(e) => PreventSubmit(e)} color="light">
                                                 <FeatherIcon.User/>
                                             </Button>
                                         </InputGroupAddon>
@@ -164,7 +170,7 @@ function EditProfileModal(props) {
                                     <InputGroup>
                                         <Input type="text" name="city" id="city" placeholder="Ex: Columbia" value={city}  onChange={(e) => setCity(e.target.value)}/>
                                         <InputGroupAddon addonType="append">
-                                            <Button color="light">
+                                            <Button onClick={(e) => PreventSubmit(e)} color="light">
                                                 <FeatherIcon.Target/>
                                             </Button>
                                         </InputGroupAddon>
@@ -175,7 +181,7 @@ function EditProfileModal(props) {
                                     <InputGroup>
                                         <Input type="text" name="phone" id="phone" placeholder="(555) 555 55 55"  value={phone}  onChange={(e) => setPhone(e.target.value)}/>
                                         <InputGroupAddon addonType="append">
-                                            <Button color="light">
+                                            <Button onClick={(e) => PreventSubmit(e)} color="light">
                                                 <FeatherIcon.Phone/>
                                             </Button>
                                         </InputGroupAddon>
@@ -186,7 +192,7 @@ function EditProfileModal(props) {
                                     <InputGroup>
                                         <Input type="text" name="website" id="website" placeholder="https://"  value={website}  onChange={(e) => setWebSite(e.target.value)}/>
                                         <InputGroupAddon addonType="append">
-                                            <Button color="light">
+                                            <Button  onClick={(e) => PreventSubmit(e)} color="light">
                                                 <FeatherIcon.Link/>
                                             </Button>
                                         </InputGroupAddon>
@@ -197,9 +203,6 @@ function EditProfileModal(props) {
                                 <FormGroup>
                                     <Label for="about">Write a few words that describe you</Label>
                                     <Input type="textarea" name="about" id="about"  value={about}  onChange={(e) => setAbout(e.target.value)}/>
-                                </FormGroup>
-                                <FormGroup>
-                                    <CustomInput type="checkbox" id="customCheckbox1" label="View profile" defaultChecked/>
                                 </FormGroup>
                             </TabPane>
                             <TabPane tabId="3">

@@ -23,22 +23,7 @@ function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
   const [user, setUser] = useState([]);
   let my_uid;
-  let p;
-  if (user) {
-    let chat_initial;
-    let chat_name;
-    if (user.pphoto === "") {
-      chat_name = user.name;
-      chat_initial = chat_name.substring(0, 1);
-      p = (
-        <span className="avatar-title bg-info rounded-circle">
-          {chat_initial}
-        </span>
-      );
-    } else {
-      p = <img src={user.pphoto} className="rounded-circle" alt="image" />;
-    }
-  }
+  const [p, setP] = useState("");
 
   // Foto de perfil
 
@@ -46,9 +31,22 @@ function Navigation(props) {
 
   useEffect(() => {
     props.socket.once("my_uid response", (data) => {
-      my_uid = data.id;
-      setUserEdit({ id: data.id });
-      setUser(data.user);
+      my_uid = data.user[0].u_id;
+      setUserEdit({ id: data.user[0].u_id });
+      setUser(data.user[0].u_id)
+      let chat_initial;
+      let chat_name;
+      if (data.user[0].pphoto === "" || data.user[0].pphoto === null) {
+        chat_name = data.user[0].name;
+        chat_initial = chat_name.substring(0, 1);
+        setP(
+          <span className="avatar-title bg-info rounded-circle">
+            {chat_initial}
+          </span>
+        );
+      } else {
+        setP(<img src={data.user[0].pphoto} className="rounded-circle" alt="image" />)
+      }
     });
   });
   useEffect(() => {
@@ -94,7 +92,7 @@ function Navigation(props) {
   const settingsModalToggle = () => setSettingsModalOpen(!settingsModalOpen);
 
   const profileActions = () => {
-    props.setUser(props.my_uid);
+    props.setUser(userEdit);
     dispatch(profileAction(true));
     dispatch(mobileProfileAction(true));
   };
@@ -214,11 +212,6 @@ function Navigation(props) {
                 aria-expanded={dropdownOpen}
               >
                 <figure className="avatar">
-                  {/* <img
-                    src={WomenAvatar5}
-                    className="rounded-circle"
-                    alt="avatar"
-                  /> */}
                   {p}
                 </figure>
               </DropdownToggle>

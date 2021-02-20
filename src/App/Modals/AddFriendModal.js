@@ -34,6 +34,7 @@ function AddFriendModal(props) {
     props.socket.emit("SearchUserByEmailOrUsername", {
       email: input,
       usrname: input,
+      my_uid: props.my_uid.id
     });
     props.socket.once("retrive SearchUserByEmailOrUsername", (data) => {
       setfindUsers(data.users);
@@ -45,13 +46,13 @@ function AddFriendModal(props) {
   function AddUserContact(u_id) {
     props.socket.emit("AddContact", { u_id: u_id });
     props.socket.once("retrive Addcontact", (mssg) => {
-      props.socket.emit("init message", {
-        chat: mssg.chat,
-        message: mssg.message,
-      });
-    });
-    props.socket.once("charge new contact", () => {
-      props.socket.emit("get chats");
+      // props.socket.emit("init message", {
+      //   chat: mssg.chat,
+      //   message: mssg.message,
+      // });
+      props.socket.emit("GetContacts");
+      modalToggle();
+      setfindUsers([]);
     });
   }
 

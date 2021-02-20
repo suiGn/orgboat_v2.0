@@ -13,7 +13,7 @@ function SignIn(props) {
       </div>
       <h5>Sign in</h5>
       <div class="text-error">{props.isBadLogin}</div>
-      <form action="https://www.orgboat.me/login" method="post">
+      <form action="http://localhost:5000/login" method="post">
         <div className="form-group">
           <input
             type="text"

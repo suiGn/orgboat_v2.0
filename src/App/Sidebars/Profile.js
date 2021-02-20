@@ -24,6 +24,7 @@ function Profile(props) {
   const [about, setAbout] = useState("");
   const [pphoto, setPphoto] = useState("");
   const [activeTab, setActiveTab] = useState("1");
+  const [p, setP] = useState("");
   /*const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
     };*/
@@ -40,7 +41,7 @@ function Profile(props) {
 
   useEffect(() => {
     var userData;
-    socket.once("retrieve viewownprofile", function (data) {
+    socket.on("retrieve viewownprofile", function (data) {
       userData = data.usrprofile[0];
       if(userData){
         let nameD= userData.name!="null" ? userData.name : "";
@@ -49,6 +50,19 @@ function Profile(props) {
         let aboutD= userData.about!="null" ? userData.about : "";
         let pphotoD=userData.pphoto !="null" ? userData.pphoto : "";
         let websiteD= userData.website!="null" ? userData.website : "";
+        let chat_initial;
+        let chat_name;
+        if (pphotoD === "" || pphotoD === null) {
+          chat_name = nameD;
+          chat_initial = chat_name.substring(0, 1);
+          setP(
+            <span className="avatar-title bg-info rounded-circle">
+              {chat_initial}
+            </span>
+          );
+        } else {
+          setP(<img src={pphotoD} className="rounded-circle" alt="image" />)
+        }
         setName(nameD);
         setCity(cityD);
         setPhone(phoneD);
@@ -87,12 +101,13 @@ function Profile(props) {
             <div className="pl-4 pr-4">
               <div className="text-center">
                 <figure className="avatar avatar-xl mb-3">
-                  <img
+                  {/* <img
                     onError={addDefaultSrc}
                     src={pphoto}
                     className="rounded-circle"
                     alt="avatar"
-                  />
+                  /> */}
+                  {p}
                 </figure>
                 <h5 className="mb-1">{name}</h5>
                 <small className="text-muted font-italic">
@@ -138,7 +153,7 @@ function Profile(props) {
                       <a href="foo">{website}</a>
                     </p>
                   </div>
-                  <div className="mt-4 mb-4">
+                  {/*<div className="mt-4 mb-4">
                     <h6 className="mb-3">Social media accounts</h6>
                     <ul className="list-inline social-links">
                       <li className="list-inline-item">
@@ -271,7 +286,7 @@ function Profile(props) {
                         </label>
                       </div>
                     </div>
-                  </div>
+                                      </div>*/}
                 </TabPane>
                 <TabPane tabId="2">
                   <h6 className="mb-3 d-flex align-items-center justify-content-between">

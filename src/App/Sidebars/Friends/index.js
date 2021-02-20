@@ -28,7 +28,7 @@ function Index(props) {
         document.body.classList.remove('navigation-open');
     };
     useEffect(() => {
-        props.socket.once("retrive GetContacts", (contacts) => {
+        props.socket.on("retrive GetContacts", (contacts) => {
             var chats = contacts.chats.filter((chats)=>{
                 return chats.chat_type == 0;
               })
@@ -55,7 +55,7 @@ function Index(props) {
                 <span>Friends</span>
                 <ul className="list-inline">
                     <li className="list-inline-item">
-                        <AddFriendsModal socket={props.socket}/>
+                        <AddFriendsModal socket={props.socket}  my_uid={props.my_uid}/>
                     </li>
                     <li className="list-inline-item d-xl-none d-inline">
                         <button onClick={mobileSidebarClose}
@@ -81,7 +81,7 @@ function Index(props) {
                                 let chat_name = item.name;
                                 let p;
                                 let chat_initial = chat_name.substring(0, 1);
-                                if (item.pphoto === "") {
+                                if (item.pphoto === "" ||item.pphoto === null) {
                                     p = (
                                     <span className="avatar-title bg-info rounded-circle">
                                         {chat_initial}

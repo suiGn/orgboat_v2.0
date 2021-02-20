@@ -9,7 +9,7 @@ import ChatsDropdown from "./ChatsDropdown";
 import { sidebarAction } from "../../../Store/Actions/sidebarAction";
 // import {chatLists} from "./Data";
 import { mobileSidebarAction } from "../../../Store/Actions/mobileSidebarAction";
-const ENDPOINT = "https://www.orgboat.me/";
+const ENDPOINT = "http://localhost:5000/";
 
 function Index(props) {
   const { socket } = props;
@@ -107,7 +107,7 @@ function Index(props) {
       } else {
         timeLabel = getDateLabel(timeMessage);
       }
-      if (chat.pphoto === "") {
+      if (chat.pphoto === "" || chat.pphoto === null) {
         p = (
           <span className="avatar-title bg-info rounded-circle">
             {chat_initial}

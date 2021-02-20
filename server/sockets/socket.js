@@ -22,10 +22,14 @@ io.on("connection", function (socket) {
       exports.guest = guest;
     }
     socket.on("my_uid",()=>{
-      io.to(user.u_id).emit("my_uid response", {
-        id: user.u_id,
-        user: user
-      });
+      orgboatDB.query(
+        `select u_id, pphoto, name from usrs where u_id='${user.u_id}'`,
+        function (err, rows) {
+          io.to(user.u_id).emit("my_uid response", {
+            user: rows
+          });
+        }
+      );
     });
     //Transmit the messages from one user to another
     socket.on("get chats", function (msg) {
@@ -267,13 +271,28 @@ io.on("connection", function (socket) {
     });
     //For search
     socket.on("SearchUserByEmailOrUsername", (data) => {
-      console.log(data);
+      data.my_uid
       orgboatDB.query(
         `SELECT name,usrname,email,u_id FROM usrs WHERE email='${data.email}' or usrname='${data.usrname}'`,
         (err, rows) => {
-          io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
-            users: rows,
-          });
+          if(rows.length>0){
+            routes.validateExistChat(rows[0].u_id, data.my_uid).then((result) => {
+              if (result === false) {
+                io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+                  users: rows,
+                });
+              }else{
+                io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+                  users: [],
+                });
+              }
+            })
+          }
+          else{
+            io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+              users: [],
+            });
+          }
         }
       );
     });
@@ -295,6 +314,11 @@ io.on("connection", function (socket) {
           orgboatDB.query(
             `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${user.u_id}',${chat_type})`,
             (err, data) => {
+              time = new Date();
+              timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
+              //console.log(msg);
+              orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
+                                    values ('${uuid_numbr}','${user.u_id}','${message}','${timeDB}',0)`);
               io.to(user.u_id).emit("retrive Addcontact", {
                 chat: uuid_numbr,
                 message,
@@ -327,16 +351,16 @@ io.on("connection", function (socket) {
       );
     });
     //Init Message
-    socket.on("init message", (msg) => {
-      chat = msg.chat;
-      message = msg.message;
-      from = user.u_id;
-      time = new Date();
-      timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
-      console.log(msg);
-      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
-                            values ('${chat}','${from}','${message}','${timeDB}',0)`);
-    });
+    // socket.on("init message", (msg) => {
+    //   chat = msg.chat;
+    //   message = msg.message;
+    //   from = user.u_id;
+    //   time = new Date();
+    //   timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
+    //   console.log(msg);
+    //   orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
+    //                         values ('${chat}','${from}','${message}','${timeDB}',0)`);
+    // });
     //Delete Chat
     socket.on("Delete Chat", (chatid) => {
       orgboatDB.query(
