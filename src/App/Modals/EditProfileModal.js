@@ -95,38 +95,9 @@ function EditProfileModal(props) {
       })
       .catch((error) => {});
   }
-  userData = {
-    name: name,
-    phone: phone,
-    city: city,
-    about: about ? about : "",
-    website: website,
-    id: props.userEdit.id,
-  };
-  socket.emit("SaveOwnProfile", userData);
-  socket.once("retrieve saveownprofile", function (data) {
-    socket.emit("ViewOwnProfile", { id: data.u_id });
-  });
-  props.toggle();
 
-  function onChangePhoto(e) {
-    setFileState(e.target.files[0]);
-  }
-  function onFormSubmit(e) {
+  function PreventSubmit(e) {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("myImage", fileState);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    axios
-      .post("/uploadpPhoto", formData, config)
-      .then((response) => {
-        //alert("The file is successfully uploaded");
-      })
-      .catch((error) => {});
   }
 
   return (
@@ -162,22 +133,22 @@ function EditProfileModal(props) {
                 About
               </NavLink>
             </NavItem>
-            {/* <NavItem>
-              <NavLink
-                className={classnames({ active: activeTab === "3" })}
-                onClick={() => {
-                  toggle("3");
-                }}
-              >
-                Social Links
-              </NavLink>
-            </NavItem> */}
+            {/*<NavItem>
+                            <NavLink
+                                className={classnames({active: activeTab === '3'})}
+                                onClick={() => {
+                                    toggle('3');
+                                }}
+                            >
+                                Social Links
+                            </NavLink>
+                            </NavItem>*/}
           </Nav>
           <Form>
             <TabContent activeTab={activeTab}>
               <TabPane tabId="1">
                 <FormGroup>
-                  <Label for="fullname">Fullname</Label>
+                  <Label for="fullname">Full Name</Label>
                   <InputGroup>
                     <Input
                       type="text"
@@ -187,9 +158,9 @@ function EditProfileModal(props) {
                       onChange={(e) => setName(e.target.value)}
                     />
                     <InputGroupAddon addonType="append">
-                      <div class="btn btn-light" color="light">
+                      <Button onClick={(e) => PreventSubmit(e)} color="light">
                         <FeatherIcon.User />
-                      </div>
+                      </Button>
                     </InputGroupAddon>
                   </InputGroup>
                 </FormGroup>
@@ -225,9 +196,9 @@ function EditProfileModal(props) {
                       onChange={(e) => setCity(e.target.value)}
                     />
                     <InputGroupAddon addonType="append">
-                      <div class="btn btn-light" color="light">
+                      <Button onClick={(e) => PreventSubmit(e)} color="light">
                         <FeatherIcon.Target />
-                      </div>
+                      </Button>
                     </InputGroupAddon>
                   </InputGroup>
                 </FormGroup>
@@ -243,9 +214,9 @@ function EditProfileModal(props) {
                       onChange={(e) => setPhone(e.target.value)}
                     />
                     <InputGroupAddon addonType="append">
-                      <div class="btn btn-light" color="light">
+                      <Button onClick={(e) => PreventSubmit(e)} color="light">
                         <FeatherIcon.Phone />
-                      </div>
+                      </Button>
                     </InputGroupAddon>
                   </InputGroup>
                 </FormGroup>
@@ -261,9 +232,9 @@ function EditProfileModal(props) {
                       onChange={(e) => setWebSite(e.target.value)}
                     />
                     <InputGroupAddon addonType="append">
-                      <div class="btn btn-light" color="light">
+                      <Button onClick={(e) => PreventSubmit(e)} color="light">
                         <FeatherIcon.Link />
-                      </div>
+                      </Button>
                     </InputGroupAddon>
                   </InputGroup>
                 </FormGroup>
@@ -279,16 +250,8 @@ function EditProfileModal(props) {
                     onChange={(e) => setAbout(e.target.value)}
                   />
                 </FormGroup>
-                {/* <FormGroup>
-                  <CustomInput
-                    type="checkbox"
-                    id="customCheckbox1"
-                    label="View profile"
-                    defaultChecked
-                  />
-                </FormGroup> */}
               </TabPane>
-              {/* <TabPane tabId="3">
+              <TabPane tabId="3">
                 <FormGroup>
                   <InputGroup>
                     <Input
@@ -409,7 +372,7 @@ function EditProfileModal(props) {
                     </InputGroupAddon>
                   </InputGroup>
                 </FormGroup>
-              </TabPane> */}
+              </TabPane>
             </TabContent>
           </Form>
         </ModalBody>
@@ -422,4 +385,5 @@ function EditProfileModal(props) {
     </div>
   );
 }
+
 export default EditProfileModal;

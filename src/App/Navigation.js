@@ -33,7 +33,7 @@ function Navigation(props) {
     props.socket.once("my_uid response", (data) => {
       my_uid = data.user[0].u_id;
       setUserEdit({ id: data.user[0].u_id });
-      setUser(data.user[0].u_id)
+      setUser(data.user[0].u_id);
       let chat_initial;
       let chat_name;
       if (data.user[0].pphoto === "" || data.user[0].pphoto === null) {
@@ -45,7 +45,13 @@ function Navigation(props) {
           </span>
         );
       } else {
-        setP(<img src={data.user[0].pphoto} className="rounded-circle" alt="image" />)
+        setP(
+          <img
+            src={data.user[0].pphoto}
+            className="rounded-circle"
+            alt="image"
+          />
+        );
       }
     });
   });
@@ -60,6 +66,8 @@ function Navigation(props) {
   const [userMenuTooltipOpen, setUserMenuTooltipOpen] = useState(false);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  // const [darkSwitcherTooltipOpen, setDarkSwitcherTooltipOpen] = useState(false);
 
   const [
     darkSwitcherTooltipTextOpen,
@@ -218,9 +226,7 @@ function Navigation(props) {
                 data-toggle="dropdown"
                 aria-expanded={dropdownOpen}
               >
-                <figure className="avatar">
-                  {p}
-                </figure>
+                <figure className="avatar">{p}</figure>
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={editModalToggle}>
