@@ -40,75 +40,75 @@ function EditProfileModal(props) {
   const [pphoto, setPphoto] = useState("");
   const [fileState, setFileState] = useState(null);
 
-    useEffect(() => {   
-        socket.emit('ViewOwnProfile2', props.userEdit); 
-        socket.on('retrieve viewownprofile2', function (data) {
-            userData = data.usrprofile[0];
-            if(userData){
-                setName(userData.name!="null"?userData.name:"");
-                setCity(userData.city!="null"?userData.city:"");
-                setPhone(userData.phone!="null"?userData.phone:"");
-                setWebSite(userData.website!="null"?userData.website:"");
-                setAbout(userData.about!="null"?userData.about:"");
-                setPphoto(userData.pphoto!="null"?userData.pphoto:"");
-            }
-        });
-    },[props.userEdit]);
-
-    function SaveProfile(e) {
-        e.preventDefault();
-        if(fileState){
-            onFormSubmit(e);
-        }  
-        if(name!=""){
-            userData = {
-                name: name,
-                phone: phone,
-                city: city,
-                about: about?about:"",
-                website:website,
-                id: props.userEdit.id
-            }
-            socket.emit('SaveOwnProfile', userData);
-            socket.once("retrieve saveownprofile", function (data) {
-                socket.emit("ViewOwnProfile", {id:data.u_id});
-            })
-            props.toggle();
-        }
-    }
-    function onChangePhoto(e) {
-        setFileState(e.target.files[0]);
-    }
-    function onFormSubmit(e) {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("myImage", fileState);
-        const config = {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        };
-        axios
-          .post("/uploadpPhoto", formData, config)
-          .then((response) => {
-            //alert("The file is successfully uploaded");
-          })
-          .catch((error) => {});
-    }
-    userData = {
-      name: name,
-      phone: phone,
-      city: city,
-      about: about ? about : "",
-      website: website,
-      id: props.userEdit.id,
-    };
-    socket.emit("SaveOwnProfile", userData);
-    socket.once("retrieve saveownprofile", function (data) {
-      socket.emit("ViewOwnProfile", { id: data.u_id });
+  useEffect(() => {
+    socket.emit("ViewOwnProfile2", props.userEdit);
+    socket.on("retrieve viewownprofile2", function (data) {
+      userData = data.usrprofile[0];
+      if (userData) {
+        setName(userData.name != "null" ? userData.name : "");
+        setCity(userData.city != "null" ? userData.city : "");
+        setPhone(userData.phone != "null" ? userData.phone : "");
+        setWebSite(userData.website != "null" ? userData.website : "");
+        setAbout(userData.about != "null" ? userData.about : "");
+        setPphoto(userData.pphoto != "null" ? userData.pphoto : "");
+      }
     });
-    props.toggle();
+  }, [props.userEdit]);
+
+  function SaveProfile(e) {
+    e.preventDefault();
+    if (fileState) {
+      onFormSubmit(e);
+    }
+    if (name != "") {
+      userData = {
+        name: name,
+        phone: phone,
+        city: city,
+        about: about ? about : "",
+        website: website,
+        id: props.userEdit.id,
+      };
+      socket.emit("SaveOwnProfile", userData);
+      socket.once("retrieve saveownprofile", function (data) {
+        socket.emit("ViewOwnProfile", { id: data.u_id });
+      });
+      props.toggle();
+    }
   }
+  function onChangePhoto(e) {
+    setFileState(e.target.files[0]);
+  }
+  function onFormSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("myImage", fileState);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post("/uploadpPhoto", formData, config)
+      .then((response) => {
+        //alert("The file is successfully uploaded");
+      })
+      .catch((error) => {});
+  }
+  userData = {
+    name: name,
+    phone: phone,
+    city: city,
+    about: about ? about : "",
+    website: website,
+    id: props.userEdit.id,
+  };
+  socket.emit("SaveOwnProfile", userData);
+  socket.once("retrieve saveownprofile", function (data) {
+    socket.emit("ViewOwnProfile", { id: data.u_id });
+  });
+  props.toggle();
+
   function onChangePhoto(e) {
     setFileState(e.target.files[0]);
   }
@@ -422,5 +422,4 @@ function EditProfileModal(props) {
     </div>
   );
 }
-
 export default EditProfileModal;
