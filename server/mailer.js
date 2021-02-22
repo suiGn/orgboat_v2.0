@@ -70,7 +70,7 @@ exports.rpwdm = function (req, res, next) {
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			                                     <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-			                                         valign="top"><a href="http://localhost:5000/pwdRst?uuid=` +
+			                                         valign="top"><a href="https://www.orgboat.me/pwdRst?uuid=` +
                 uuid_numbr +
                 `&em=` +
                 email +
@@ -143,7 +143,7 @@ const verifyEmail = (req, res, email, uuid) => {
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                        <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top"><a href="http://localhost:5000/verify-email?uuid=` +
+                                        valign="top"><a href="https://www.orgboat.me/verify-email?uuid=` +
       uuid +
       `&em=` +
       email +
