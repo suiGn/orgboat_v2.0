@@ -30,7 +30,7 @@ const emailRegex = (email) => {
 exports.emailRegex = emailRegex;
 //USERNAME REGEX
 const usrnmRegex = (usrname) => {
-  var re = /^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
+  var re = /^(?=[a-zA-Z0-9._]{4,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
   return re.test(usrname);
 };
 exports.usrnmRegex = usrnmRegex;
