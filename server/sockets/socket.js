@@ -4,6 +4,7 @@ const uuid = require("node-uuid");
 const { formatLocalDate } = require("../middlewares/authentication");
 const routes = require("../routes");
 const { use } = require("passport");
+const {logger} = require('../logs/log');
 
 io.on("connection", function (socket) {
   //login in socket
@@ -15,6 +16,7 @@ io.on("connection", function (socket) {
       console.log(
         `[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`
       );
+      logger.info(`[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`)
       //console.log(user);
     } else {
       var guest = uuid.v4();
