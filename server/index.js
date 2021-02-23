@@ -21,20 +21,26 @@ const fs = require("fs");
 const routes = require("./routes");
 const method = require("./methods");
 const mailer = require("./mailer");
-const multer = require("multer");
+const multer = require("multer"); 
 var unicorn = "🍺🦄🍺";
 var uuid = require("node-uuid");
 var nodemailer = require("nodemailer");
 var cookieParser = require("cookie-parser");
 var passport = require("passport");
 var cors = require("cors");
+
+
 const buildPath = path.join(__dirname, "..", "build");
+
+//middlewares
 const {
   isLoggedIn,
   sessionMiddleware,
   onAuthorizeFail,
   onAuthorizeSuccess,
 } = require("./middlewares/authentication");
+const {logger} = require('./logs/log');
+
 //const cookieSession = require('cookie-session');
 var flash = require("connect-flash");
 require("./configs/passport")(passport); //pass passport for configuration
@@ -66,7 +72,6 @@ const server = express()
   .use(passport.session())
   .use(flash()) // use connect-flash for flash messages stored in session
   .use(express.static(buildPath))
-
   //.set("views", path.join(__dirname, "views"))
   // passport.authenticate middleware is used here to authenticate the request
   //.set("view engine", "ejs")
@@ -74,7 +79,7 @@ const server = express()
   // process the login form
   .get("/logged", routes.home)
   .get("/logout", (req, res) => {
-    console.log("LogOut");
+    logger.info("LogOut");
     req.logout();
     res.json({
       ok: true,
@@ -85,15 +90,15 @@ const server = express()
     res.sendFile(path.join(__dirname, "..", "build", "index.html"));
   })
   .post(
-    "/login",
-    passport.authenticate("local-login", {
-      successRedirect: "/workspace", // redirect to the secure profile section
-      failureRedirect: "/badLogin", // redirect back to the signup page if there is an error
-      failureFlash: true, // allow flash messages
-    }),
-    function (req, res) {
-      console.log("Inicio Session");
-      res.redirect(`/workspace`);
+    '/login', function(req, res, next) {
+    passport.authenticate('local-login', function(err, user, info) {
+        if (err) { return res.redirect('/badLogin');  }
+        if (!user) { return res.redirect('/notverify-email'); }
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          return res.redirect('/workspace');
+        });
+      })(req, res, next);
     }
   )
   .get("/subscribe", routes.subscribe)

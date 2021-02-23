@@ -124,6 +124,7 @@ module.exports = function (passport) {
           `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}') AND verified = 1`,
           (err, resp) => {
             if (resp.length == 0) {
+              console.log(resp);
               return done(err);
             } else {
               // selects return an array, so access the first in the array
@@ -134,7 +135,7 @@ module.exports = function (passport) {
                 if (err) {
                   return done(err);
                 } else if (!isMatch) {
-                  return done(err);
+                  return done(true);
                 } else {
                   //console.log(true)
                   return done(null, usr);

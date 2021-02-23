@@ -166,10 +166,12 @@ exports.changePass = function (req, res) {
         } else {
           var Pwd = hash;
           if (password == rtpass) {
+            console.log(Pwd);
             index.orgboatDB.query(
               "UPDATE usrs SET password = ?, random = ? WHERE email = ? AND random = ?",
-              [Pwd, email, random, reset],
+              [Pwd, random, email,random],
               (error, results) => {
+                console.log(results);
                 if (error) {
                   res.json({
                     err: "Something weird happened. Please try again.",
