@@ -40,6 +40,7 @@ function EditProfileModal(props) {
     const [about, setAbout] = useState("");
     const [pphoto, setPphoto] = useState("");
     const [fileState, setFileState] = useState(null);
+    const [p, setP] = useState("");
 
     useEffect(() => {   
         socket.emit('ViewOwnProfile2', props.userEdit); 
@@ -52,6 +53,19 @@ function EditProfileModal(props) {
                 setWebSite(userData.website!="null"?userData.website:"");
                 setAbout(userData.about!="null"?userData.about:"");
                 setPphoto(userData.pphoto!="null"?userData.pphoto:"");
+                let chat_initial;
+                let chat_name;
+                if (pphoto === "" || pphoto === null) {
+                chat_name = name;
+                chat_initial = chat_name.substring(0, 1);
+                    setP(
+                        <span className="avatar-title bg-info rounded-circle">
+                        {chat_initial}
+                        </span>
+                    );
+                } else {
+                    setP(<img src={pphoto} className="rounded-circle" alt="image" />)
+                }
             }
         });
     },[props.userEdit]);
@@ -159,7 +173,8 @@ function EditProfileModal(props) {
                                     <div className="d-flex align-items-center">
                                         <div>
                                             <figure className="avatar mr-3 item-rtl">
-                                                <img src={pphoto} className="rounded-circle" alt="avatar"/>
+                                                {/* <img src={pphoto} className="rounded-circle" alt="avatar"/> */}
+                                                {p}
                                             </figure>
                                         </div>
                                         <CustomInput type="file" id="customFile" name="customFile" onChange={onChangePhoto}/>
