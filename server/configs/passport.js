@@ -135,7 +135,7 @@ module.exports = function (passport) {
                 if (err) {
                   return done(err);
                 } else if (!isMatch) {
-                  return done(err);
+                  return done(true);
                 } else {
                   //console.log(true)
                   return done(null, usr);
