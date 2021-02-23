@@ -86,6 +86,17 @@ const server = express()
     });
     // res.redirect("/");
   })
+  .get(
+    "/auth/google",
+    passport.authenticate("google", {
+      scope: ["profile", "email"], // Used to specify the required data
+    })
+  )
+  .get(
+    "/auth/google/callback",
+    passport.authenticate("google"),
+    routes.authGoogle
+  )
   .get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "build", "index.html"));
   })
@@ -110,17 +121,6 @@ const server = express()
   .get("/pwdRst", routes.pwdRst) //Change Password
   .post("/resetPwd", routes.changePass) // Post Change Password
   //Passport
-  .get(
-    "/auth/google",
-    passport.authenticate("google", {
-      scope: ["profile", "email"], // Used to specify the required data
-    })
-  )
-  .get(
-    "/auth/google/callback",
-    passport.authenticate("google"),
-    routes.authGoogle
-  )
   .get("/lock-screen", routes.lockScreen)
   .post("/edProf", isLoggedIn, routes.editProfile)
   .post("/uploadpPhoto", (req, res) => {
