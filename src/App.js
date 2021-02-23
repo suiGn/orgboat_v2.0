@@ -62,6 +62,7 @@ function App() {
       .then((res) => {
         if (res.data.ok) {
           UpdateTheme();
+          console.log(res.data);
         } else {
           setLoaded(true);
         }
@@ -120,6 +121,12 @@ function App() {
           path="/badLogin"
           render={(props) => (
             <SignIn isBadLogin={"Invalid Username or Password"} />
+          )}
+        />
+        <Route
+          path="/notverify-email"
+          render={(props) => (
+            <SignIn isBadLogin={"Email not validate"} />
           )}
         />
         <Route path="/verify-email" component={ValidateEmail} />

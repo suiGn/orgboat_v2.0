@@ -1,11 +1,19 @@
 import React, { useEffect } from "react";
+import log from 'loglevel';
 // import {ReactComponent as Logo} from '../assets/logo.svg'
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
 import "../assets/css/styles.css";
 
+const customJSON = log => ({
+  msg: log.message,
+  level: log.level.label,
+  stacktrace: log.stacktrace
+});
+ 
+
 function SignIn(props) {
   useEffect(() => document.body.classList.add("form-membership"), []);
-
+  log.enableAll();
   return (
     <div className="form-wrapper">
       <div className="logo">

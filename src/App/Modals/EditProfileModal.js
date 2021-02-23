@@ -1,30 +1,29 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 import {
-    Modal,
-    ModalBody,
-    TabContent,
-    TabPane,
-    Nav,
-    NavItem,
-    NavLink,
-    ModalFooter,
-    Button,
-    Form,
-    FormGroup,
-    Label,
-    ModalHeader,
-    Input,
-    InputGroupAddon,
-    InputGroup,
-    InputGroupText,
-    CustomInput
-} from 'reactstrap'
-import * as FeatherIcon from 'react-feather'
-import classnames from 'classnames'
-import ManAvatar4 from '../../assets/img/man_avatar4.jpg'
-import io from 'socket.io-client';
+  Modal,
+  ModalBody,
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+  ModalFooter,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  ModalHeader,
+  Input,
+  InputGroupAddon,
+  InputGroup,
+  InputGroupText,
+  CustomInput,
+} from "reactstrap";
+import * as FeatherIcon from "react-feather";
+import classnames from "classnames";
+import ManAvatar4 from "../../assets/img/man_avatar4.jpg";
+import io from "socket.io-client";
 import axios from "axios";
-
 
 function EditProfileModal(props) {
     const {socket} =  props;
@@ -40,6 +39,7 @@ function EditProfileModal(props) {
     const [about, setAbout] = useState("");
     const [pphoto, setPphoto] = useState("");
     const [fileState, setFileState] = useState(null);
+    const [p, setP] = useState("");
 
     useEffect(() => {   
         socket.emit('ViewOwnProfile2', props.userEdit); 
@@ -52,84 +52,102 @@ function EditProfileModal(props) {
                 setWebSite(userData.website!="null"?userData.website:"");
                 setAbout(userData.about!="null"?userData.about:"");
                 setPphoto(userData.pphoto!="null"?userData.pphoto:"");
+                let chat_initial;
+                let chat_name;
+                if (pphoto === "" || pphoto === null) {
+                chat_name = name;
+                chat_initial = chat_name.substring(0, 1);
+                    setP(
+                        <span className="avatar-title bg-info rounded-circle">
+                        {chat_initial}
+                        </span>
+                    );
+                } else {
+                    setP(<img src={pphoto} className="rounded-circle" alt="image" />)
+                }
             }
         });
     },[props.userEdit]);
 
-    function SaveProfile(e) {
-        e.preventDefault();
-        if(fileState){
-            onFormSubmit(e);
-        }  
-        if(name!=""){
-            userData = {
-                name: name,
-                phone: phone,
-                city: city,
-                about: about?about:"",
-                website:website,
-                id: props.userEdit.id
-            }
-            socket.emit('SaveOwnProfile', userData);
-            socket.once("retrieve saveownprofile", function (data) {
-                socket.emit("ViewOwnProfile", {id:data.u_id});
-            })
-            props.toggle();
-        }
+  function SaveProfile(e) {
+    e.preventDefault();
+    if (fileState) {
+      onFormSubmit(e);
     }
-    function onChangePhoto(e) {
-        setFileState(e.target.files[0]);
+    if (name != "") {
+      userData = {
+        name: name,
+        phone: phone,
+        city: city,
+        about: about ? about : "",
+        website: website,
+        id: props.userEdit.id,
+      };
+      socket.emit("SaveOwnProfile", userData);
+      socket.once("retrieve saveownprofile", function (data) {
+        socket.emit("ViewOwnProfile", { id: data.u_id });
+      });
+      props.toggle();
     }
-    function onFormSubmit(e) {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("myImage", fileState);
-        const config = {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        };
-        axios
-          .post("/uploadpPhoto", formData, config)
-          .then((response) => {
-            //alert("The file is successfully uploaded");
-          })
-          .catch((error) => {});
-    }
+  }
+  function onChangePhoto(e) {
+    setFileState(e.target.files[0]);
+  }
+  function onFormSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("myImage", fileState);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post("/uploadpPhoto", formData, config)
+      .then((response) => {
+        //alert("The file is successfully uploaded");
+      })
+      .catch((error) => {});
+  }
 
-    function PreventSubmit(e){
-        e.preventDefault();
-    }
+  function PreventSubmit(e) {
+    e.preventDefault();
+  }
 
-    return (
-        <div>
-            <Modal isOpen={props.modal} toggle={props.toggle} centered className="modal-dialog-zoom">
-                <ModalHeader toggle={props.toggle}>
-                    <FeatherIcon.Edit2 className="mr-2"/> Edit Profile
-                </ModalHeader>
-                <ModalBody>
-                    <Nav tabs>
-                        <NavItem>
-                            <NavLink
-                                className={classnames({active: activeTab === '1'})}
-                                onClick={() => {
-                                    toggle('1');
-                                }}
-                            >
-                                Personal
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink
-                                className={classnames({active: activeTab === '2'})}
-                                onClick={() => {
-                                    toggle('2');
-                                }}
-                            >
-                                About
-                            </NavLink>
-                        </NavItem>
-                        {/*<NavItem>
+  return (
+    <div>
+      <Modal
+        isOpen={props.modal}
+        toggle={props.toggle}
+        centered
+        className="modal-dialog-zoom"
+      >
+        <ModalHeader toggle={props.toggle}>
+          <FeatherIcon.Edit2 className="mr-2" /> Edit Profile
+        </ModalHeader>
+        <ModalBody>
+          <Nav tabs>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTab === "1" })}
+                onClick={() => {
+                  toggle("1");
+                }}
+              >
+                Personal
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTab === "2" })}
+                onClick={() => {
+                  toggle("2");
+                }}
+              >
+                About
+              </NavLink>
+            </NavItem>
+            {/*<NavItem>
                             <NavLink
                                 className={classnames({active: activeTab === '3'})}
                                 onClick={() => {
@@ -159,7 +177,8 @@ function EditProfileModal(props) {
                                     <div className="d-flex align-items-center">
                                         <div>
                                             <figure className="avatar mr-3 item-rtl">
-                                                <img src={pphoto} className="rounded-circle" alt="avatar"/>
+                                                {/* <img src={pphoto} className="rounded-circle" alt="avatar"/> */}
+                                                {p}
                                             </figure>
                                         </div>
                                         <CustomInput type="file" id="customFile" name="customFile" onChange={onChangePhoto}/>
@@ -298,4 +317,4 @@ function EditProfileModal(props) {
     )
 }
 
-export default EditProfileModal
+export default EditProfileModal;
