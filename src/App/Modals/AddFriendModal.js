@@ -13,6 +13,9 @@ import {
   Input,
 } from "reactstrap";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // Feather icon
 import * as FeatherIcon from "react-feather";
 
@@ -22,6 +25,8 @@ function AddFriendModal(props) {
   const modalToggle = () => setModal(!modal);
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const [showSubmit, setShowSubmit] = useState(false);
 
   const tooltipToggle = () => setTooltipOpen(!tooltipOpen);
 
@@ -39,9 +44,11 @@ function AddFriendModal(props) {
     props.socket.once("retrive SearchUserByEmailOrUsername", (data) => {
       setfindUsers(data.users);
     });
+    setShowSubmit(false);
   }
   function handleEmail(e) {
     setEmail(e.target.value);
+    setShowSubmit(true);
   }
   function AddUserContact(u_id) {
     props.socket.emit("AddContact", { u_id: u_id });
@@ -54,7 +61,19 @@ function AddFriendModal(props) {
       modalToggle();
       setfindUsers([]);
     });
+    notify();
   }
+
+  const notify = () =>
+    toast.success("Usuario agregado con exito", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   return (
     <div>
@@ -73,12 +92,14 @@ function AddFriendModal(props) {
       >
         Add Friend
       </Tooltip>
+
       <Modal
         className="modal-dialog-zoom"
         isOpen={modal}
         toggle={modalToggle}
         centered
       >
+        <ToastContainer />
         <ModalHeader toggle={modalToggle}>
           <FeatherIcon.UserPlus className="mr-2" /> Add Friends
         </ModalHeader>
@@ -122,9 +143,22 @@ function AddFriendModal(props) {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={SearchUserByEmailOrUserName}>
+          {showSubmit ? (
+            <Button color="primary" onClick={SearchUserByEmailOrUserName}>
+              Submit
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              disabled
+              onClick={SearchUserByEmailOrUserName}
+            >
+              Submit
+            </Button>
+          )}
+          {/* <Button color="primary" onClick={SearchUserByEmailOrUserName}>
             Submit
-          </Button>
+          </Button> */}
         </ModalFooter>
       </Modal>
     </div>

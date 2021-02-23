@@ -62,6 +62,7 @@ function App() {
       .then((res) => {
         if (res.data.ok) {
           UpdateTheme();
+          console.log(res.data);
         } else {
           setLoaded(true);
         }

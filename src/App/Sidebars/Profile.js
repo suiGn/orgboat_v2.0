@@ -11,7 +11,7 @@ import classnames from "classnames";
 function Profile(props) {
   const { socket } = props;
   const dispatch = useDispatch();
-  
+
   const { profileSidebar, mobileProfileSidebar } = useSelector(
     (state) => state
   );
@@ -43,13 +43,13 @@ function Profile(props) {
     var userData;
     socket.on("retrieve viewownprofile", function (data) {
       userData = data.usrprofile[0];
-      if(userData){
-        let nameD= userData.name!="null" ? userData.name : "";
-        let cityD= userData.city!="null" ? userData.city : "";
-        let phoneD= userData.phone!="null" ? userData.phone : "";
-        let aboutD= userData.about!="null" ? userData.about : "";
-        let pphotoD=userData.pphoto !="null" ? userData.pphoto : "";
-        let websiteD= userData.website!="null" ? userData.website : "";
+      if (userData) {
+        let nameD = userData.name != "null" ? userData.name : "";
+        let cityD = userData.city != "null" ? userData.city : "";
+        let phoneD = userData.phone != "null" ? userData.phone : "";
+        let aboutD = userData.about != "null" ? userData.about : "";
+        let pphotoD = userData.pphoto != "null" ? userData.pphoto : "";
+        let websiteD = userData.website != "null" ? userData.website : "";
         let chat_initial;
         let chat_name;
         if (pphotoD === "" || pphotoD === null) {
@@ -61,7 +61,7 @@ function Profile(props) {
             </span>
           );
         } else {
-          setP(<img src={pphotoD} className="rounded-circle" alt="image" />)
+          setP(<img src={pphotoD} className="rounded-circle" alt="image" />);
         }
         setName(nameD);
         setCity(cityD);
@@ -71,7 +71,7 @@ function Profile(props) {
         setPphoto(pphotoD);
       }
     });
-  },[name])
+  }, [name]);
 
   function addDefaultSrc(ev) {
     ev.target.src = WomenAvatar5;
@@ -286,7 +286,7 @@ function Profile(props) {
                         </label>
                       </div>
                     </div>
-                                      </div>*/}
+                  </div> */}
                 </TabPane>
                 <TabPane tabId="2">
                   <h6 className="mb-3 d-flex align-items-center justify-content-between">

@@ -41,8 +41,8 @@ const ArchivedDropdown = (props) => {
           Unarchived
         </DropdownItem>
         <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-        <DropdownItem divider />
-        <DropdownItem>Block</DropdownItem>
+        {/* <DropdownItem divider />
+        <DropdownItem>Block</DropdownItem> */}
       </DropdownMenu>
     </Dropdown>
   );
