@@ -97,9 +97,9 @@ module.exports = function (passport) {
     new GoogleStrategy(
       {
         clientID:
-          "1054555069073-3tb02eakofr767al4p8er2na71iu50g4.apps.googleusercontent.com",
-        clientSecret: "NRVI5oFf2eRxOxJ6x-oehRsX",
-        callbackURL: "https://orgboat.herokuapp.com/auth/google/callback",
+          "607767999750-f6d55nj3fpip31ovh1ml6n4p1sq499i3.apps.googleusercontent.com",
+        clientSecret: "k0y5AVknuSUpBNMXndAmAVHZ",
+        callbackURL: "/auth/google/callback",
       },
       (accessToken, refreshToken, profile, done) => {
         done(null, profile); // passes the profile data to serializeUser

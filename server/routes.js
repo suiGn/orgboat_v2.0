@@ -34,6 +34,7 @@ exports.subscribe = function (req, res) {
   //res.render("pages/subscribe", { opt: " ", opt1: "Log In", opt2: "/" });
 };
 exports.authGoogle = (req, res) => {
+  console.log(req)
   var name = req.user.displayName;
   var usrname = req.user.emails[0].value;
   var email = usrname;
