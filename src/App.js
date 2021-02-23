@@ -123,6 +123,12 @@ function App() {
             <SignIn isBadLogin={"Invalid Username or Password"} />
           )}
         />
+        <Route
+          path="/notverify-email"
+          render={(props) => (
+            <SignIn isBadLogin={"Email not validate"} />
+          )}
+        />
         <Route path="/verify-email" component={ValidateEmail} />
         <Route path="/sign-up" component={SignUp} />
         <Route path="/lock-screen" component={LockScreen} />

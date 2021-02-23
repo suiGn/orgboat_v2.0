@@ -85,15 +85,15 @@ const server = express()
     res.sendFile(path.join(__dirname, "..", "build", "index.html"));
   })
   .post(
-    "/login",
-    passport.authenticate("local-login", {
-      successRedirect: "/workspace", // redirect to the secure profile section
-      failureRedirect: "/badLogin", // redirect back to the signup page if there is an error
-      failureFlash: true, // allow flash messages
-    }),
-    function (req, res) {
-      console.log("Inicio Session");
-      res.redirect(`/workspace`);
+    '/login', function(req, res, next) {
+    passport.authenticate('local-login', function(err, user, info) {
+        if (err) { return res.redirect('/badLogin');  }
+        if (!user) { return res.redirect('/notverify-email'); }
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          return res.redirect('/workspace');
+        });
+      })(req, res, next);
     }
   )
   .get("/subscribe", routes.subscribe)
