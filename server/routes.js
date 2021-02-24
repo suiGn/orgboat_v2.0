@@ -59,14 +59,14 @@ exports.authGoogle = (req, res) => {
             [name, usrname, email, 1, dt, uuid_numbr, dt, u_type, profile_pic],
             (error, results) => {
               if (error) {
-                res.redirect("/");
+                res.redirect("https://www.orgboat.me");
                 throw error;
               }
               console.log("New user saved!");
             }
           );
         }
-        res.redirect("/");
+        res.redirect("https://www.orgboat.me");
       }
     }
   );
