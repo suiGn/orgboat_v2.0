@@ -99,7 +99,7 @@ module.exports = function (passport) {
         clientID:
           "607767999750-f6d55nj3fpip31ovh1ml6n4p1sq499i3.apps.googleusercontent.com",
         clientSecret: "k0y5AVknuSUpBNMXndAmAVHZ",
-        callbackURL: "https://www.orgboat.me/auth/google/callback",
+        callbackURL: "/auth/google/callback",
       },
       (accessToken, refreshToken, profile, done) => {
         done(null, profile); // passes the profile data to serializeUser
