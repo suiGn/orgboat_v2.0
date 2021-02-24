@@ -17,7 +17,7 @@ import NewPassword from "./Pages/NewPassword";
 import PhoneCode from "./Pages/PhoneCode";
 import Layout from "./App/Layout";
 import io from "socket.io-client";
-const ENDPOINT = "http://localhost:5000/";
+const ENDPOINT = "https://www.orgboat.me/";
 const socket = io({
   transports: ["websocket"],
 });
