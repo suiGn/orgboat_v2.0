@@ -21,20 +21,26 @@ const fs = require("fs");
 const routes = require("./routes");
 const method = require("./methods");
 const mailer = require("./mailer");
-const multer = require("multer");
+const multer = require("multer"); 
 var unicorn = "🍺🦄🍺";
 var uuid = require("node-uuid");
 var nodemailer = require("nodemailer");
 var cookieParser = require("cookie-parser");
 var passport = require("passport");
 var cors = require("cors");
+
+
 const buildPath = path.join(__dirname, "..", "build");
+
+//middlewares
 const {
   isLoggedIn,
   sessionMiddleware,
   onAuthorizeFail,
   onAuthorizeSuccess,
 } = require("./middlewares/authentication");
+const {logger} = require('./logs/log');
+
 //const cookieSession = require('cookie-session');
 var flash = require("connect-flash");
 require("./configs/passport")(passport); //pass passport for configuration
@@ -66,7 +72,6 @@ const server = express()
   .use(passport.session())
   .use(flash()) // use connect-flash for flash messages stored in session
   .use(express.static(buildPath))
-
   //.set("views", path.join(__dirname, "views"))
   // passport.authenticate middleware is used here to authenticate the request
   //.set("view engine", "ejs")
@@ -74,13 +79,24 @@ const server = express()
   // process the login form
   .get("/logged", routes.home)
   .get("/logout", (req, res) => {
-    console.log("LogOut");
+    logger.info("LogOut");
     req.logout();
     res.json({
       ok: true,
     });
     // res.redirect("/");
   })
+  .get(
+    "/auth/google",
+    passport.authenticate("google", {
+      scope: ["profile", "email"], // Used to specify the required data
+    })
+  )
+  .get(
+    "/auth/google/callback",
+    passport.authenticate("google"),
+    routes.authGoogle
+  )
   .get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "build", "index.html"));
   })
@@ -105,17 +121,6 @@ const server = express()
   .get("/pwdRst", routes.pwdRst) //Change Password
   .post("/resetPwd", routes.changePass) // Post Change Password
   //Passport
-  .get(
-    "/auth/google",
-    passport.authenticate("google", {
-      scope: ["profile", "email"], // Used to specify the required data
-    })
-  )
-  .get(
-    "/auth/google/callback",
-    passport.authenticate("google"),
-    routes.authGoogle
-  )
   .get("/lock-screen", routes.lockScreen)
   .post("/edProf", isLoggedIn, routes.editProfile)
   .post("/uploadpPhoto", (req, res) => {

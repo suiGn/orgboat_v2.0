@@ -245,16 +245,29 @@ function AddGroupModal(props) {
               <p>The group members</p>
               <div className="avatar-group">
                 {friends.map((item, i) => {
+                  let p;
+                  let chat_name = item.name;
+                  let chat_initial = chat_name.substring(0, 1);
+                  if(item.pphoto == "" || item.pphoto == null){
+                    p = (
+                      <span className="avatar-title bg-info rounded-circle">
+                        {chat_initial}
+                      </span>
+                    );
+                  }else{
+                    p = <img src={item.pphoto} className="rounded-circle" alt="avatar" />;
+                  }
                   return (
                     <div>
                       <AvatarTooltip name={item.name} id={i} />
 
                       <figure className="avatar" id={"Tooltip-Avatar" + i}>
-                        <img
+                        {/* <img
                           src={item.pphoto}
                           className="rounded-circle"
                           alt="avatar"
-                        />
+                        /> */}
+                        {p}
                       </figure>
                     </div>
                   );

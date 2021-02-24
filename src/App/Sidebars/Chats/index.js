@@ -9,7 +9,7 @@ import ChatsDropdown from "./ChatsDropdown";
 import { sidebarAction } from "../../../Store/Actions/sidebarAction";
 // import {chatLists} from "./Data";
 import { mobileSidebarAction } from "../../../Store/Actions/mobileSidebarAction";
-const ENDPOINT = "https://www.orgboat.me/";
+const ENDPOINT = "http://localhost:5000/";
 
 function Index(props) {
   const { socket } = props;
@@ -18,7 +18,7 @@ function Index(props) {
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
   useEffect(() => {
-    socket.once("retrieve chats", (data) => {
+    socket.on("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages
       var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;

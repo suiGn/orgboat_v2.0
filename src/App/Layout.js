@@ -11,7 +11,7 @@ import { pageTourAction } from "../Store/Actions/pageTourAction";
 import { profileAction } from "../Store/Actions/profileAction";
 import DisconnectedModal from "./Modals/DisconnectedModal";
 // import socketIOClient from "socket.io-client";
-// const ENDPOINT = "https://www.orgboat.me/";
+// const ENDPOINT = "http://localhost:5000/";
 
 function Layout(props) {
   const [clicked, setClicked] = useState([]);
@@ -35,7 +35,7 @@ function Layout(props) {
 
   useEffect(() => {
     props.socket.once("my_uid response", (data) => {
-      setMy_Id({ id: data.id });
+      setMy_Id({ id: data.user[0].u_id });
     });
   },[my_uid]);
 

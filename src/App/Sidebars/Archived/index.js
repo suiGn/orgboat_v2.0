@@ -12,16 +12,18 @@ function Index(props) {
     const [archivedChats,setArchivedChats] = useState([]);
     const [favoritearchivedChatsFiltered, setArchivedChatsFiltered] = useState([]);
     const [searchArchivedChats, setSearchArchivedChats] = useState("");
+    const [one, setIOne] = useState("");
     useEffect(() => {
         inputRef.current.focus();
         socket.once("retrieve chats archived",(data)=>{
             setArchivedChats(data);
             setArchivedChatsFiltered(data.chats);
+            //socket.emit("get chats archived");
         });
-    });
+    },one);
     useEffect(()=>{
         socket.emit("get chats archived");
-    },[]);
+    },[one]);
 
     const dispatch = useDispatch();
 
