@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 const ChatsMessageDropdown = (props) => {
   const dispatch = useDispatch();
   const { socket } = props;
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
@@ -21,12 +20,14 @@ const ChatsMessageDropdown = (props) => {
 
   function AddFavorite(message_id) {
     socket.emit("FavoriteMessage", { id: message_id });
-   socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit('GetFavorites', props.my_uid);
   }
 
   function RemoveFavorite(message_id) {
     socket.emit("RemoveFavorite", { id: message_id });
     socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit('GetFavorites', props.my_uid);
   }
 
   function DeleteMessage(message_id){
