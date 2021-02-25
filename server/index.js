@@ -21,14 +21,13 @@ const fs = require("fs");
 const routes = require("./routes");
 const method = require("./methods");
 const mailer = require("./mailer");
-const multer = require("multer"); 
+const multer = require("multer");
 var unicorn = "🍺🦄🍺";
 var uuid = require("node-uuid");
 var nodemailer = require("nodemailer");
 var cookieParser = require("cookie-parser");
 var passport = require("passport");
 var cors = require("cors");
-
 
 const buildPath = path.join(__dirname, "..", "build");
 
@@ -39,7 +38,7 @@ const {
   onAuthorizeFail,
   onAuthorizeSuccess,
 } = require("./middlewares/authentication");
-const {logger} = require('./logs/log');
+const { logger } = require("./logs/log");
 
 //const cookieSession = require('cookie-session');
 var flash = require("connect-flash");
@@ -89,21 +88,28 @@ const server = express()
   .get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "build", "index.html"));
   })
-  .post(
-    '/login', function(req, res, next) {
-    passport.authenticate('local-login', function(err, user, info) {
-        if (err) { return res.redirect('/badLogin');  }
-        if (!user) { return res.redirect('/notverify-email'); }
-        req.logIn(user, function(err) {
-          if (err) { return next(err); }
-          return res.redirect('/workspace');
-        });
-      })(req, res, next);
-    }
-  )
+  .post("/login", function (req, res, next) {
+    passport.authenticate("local-login", function (err, user, info) {
+      if (user && user.verified === 0) {
+        let em = user.email;
+        let uuid = user.u_id;
+        return res.redirect("/notverify-email?em=" + em + "&uuid=" + uuid);
+      } else if (err) {
+        return res.redirect("/badLogin");
+      }
+      req.logIn(user, function (err) {
+        console.log("Entro a user coso este");
+        console.log(err);
+        if (err) {
+          return next(err);
+        }
+        return res.redirect("/workspace");
+      });
+    })(req, res, next);
+  })
   .get("/subscribe", routes.subscribe)
   .post("/verMail", routes.verMail)
-  .get("/resnd", routes.rsnvMail)
+  .post("/resnd", routes.rsnvMail)
   .post("/subscribing", routes.subscribing)
   .get("/reset-pwd", routes.resetPass) // Reset Password request
   .post("/rstpwd", mailer.rpwdm) //Send Reset Pwd Password
