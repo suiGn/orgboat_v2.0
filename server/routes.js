@@ -34,6 +34,7 @@ exports.subscribe = function (req, res) {
   //res.render("pages/subscribe", { opt: " ", opt1: "Log In", opt2: "/" });
 };
 exports.authGoogle = (req, res) => {
+  console.log(req)
   var name = req.user.displayName;
   var usrname = req.user.emails[0].value;
   var email = usrname;
@@ -58,14 +59,14 @@ exports.authGoogle = (req, res) => {
             [name, usrname, email, 1, dt, uuid_numbr, dt, u_type, profile_pic],
             (error, results) => {
               if (error) {
-                res.redirect("/");
+                res.redirect("https://www.orgboat.me");
                 throw error;
               }
               console.log("New user saved!");
             }
           );
         }
-        res.redirect("/");
+        res.redirect("https://www.orgboat.me");
       }
     }
   );

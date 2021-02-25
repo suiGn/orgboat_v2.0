@@ -17,6 +17,7 @@
 {"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
 {"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
 {"message":"[Socket.io] - Connected user: undefined, u_id: undefined","level":"info"}
+<<<<<<< HEAD
 {"message":"[Socket.io] - Connected user: undefined, u_id: undefined","level":"info"}
 {"message":"[Socket.io] - Connected user: undefined, u_id: undefined","level":"info"}
 {"message":"[Socket.io] - Connected user: undefined, u_id: undefined","level":"info"}
@@ -27,3 +28,38 @@
 {"message":"[Socket.io] - Connected user: karlarob, u_id: e2077616-de43-4c6d-b77b-7b19ff08969a","level":"info"}
 {"message":"[Socket.io] - Connected user: karlarob, u_id: e2077616-de43-4c6d-b77b-7b19ff08969a","level":"info"}
 {"message":"LogOut","level":"info"}
+=======
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"LogOut","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"LogOut","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"LogOut","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"LogOut","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"LogOut","level":"info"}
+{"message":"[Socket.io] - Connected user: reynacat.rc@gmail.com, u_id: 6fd616c3-7ac8-4e00-9208-9aae1c04ce99","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: reynacat.rc@gmail.com, u_id: 6fd616c3-7ac8-4e00-9208-9aae1c04ce99","level":"info"}
+{"message":"[Socket.io] - Connected user: reynacat.rc@gmail.com, u_id: 6fd616c3-7ac8-4e00-9208-9aae1c04ce99","level":"info"}
+{"message":"[Socket.io] - Connected user: reynacat.rc@gmail.com, u_id: 6fd616c3-7ac8-4e00-9208-9aae1c04ce99","level":"info"}
+{"message":"[Socket.io] - Connected user: reynacat.rc@gmail.com, u_id: 6fd616c3-7ac8-4e00-9208-9aae1c04ce99","level":"info"}
+>>>>>>> ff21b01da70bcb54fd6e5bf5e487ed346546c011

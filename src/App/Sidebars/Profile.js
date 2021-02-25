@@ -150,7 +150,7 @@ function Profile(props) {
                   <div className="mt-4 mb-4">
                     <h6>Website</h6>
                     <p>
-                      <a href="foo">{website}</a>
+                      <a href="foo" className="text-muted">{website}</a>
                     </p>
                   </div>
                   {/*<div className="mt-4 mb-4">

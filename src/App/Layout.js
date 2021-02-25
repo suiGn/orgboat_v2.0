@@ -35,7 +35,7 @@ function Layout(props) {
 
   useEffect(() => {
     props.socket.once("my_uid response", (data) => {
-      setMy_Id({ id: data.id });
+      setMy_Id({ id: data.user[0].u_id });
     });
   },[my_uid]);
 

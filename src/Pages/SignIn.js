@@ -1,10 +1,17 @@
 import React, { useEffect } from "react";
+import axios from "axios";
 // import {ReactComponent as Logo} from '../assets/logo.svg'
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
 import "../assets/css/styles.css";
 
 function SignIn(props) {
   useEffect(() => document.body.classList.add("form-membership"), []);
+
+  function GoogleAuth(){
+    axios.get("/auth/google").then((res) => {
+      console.log(res)
+    });
+  }
 
   return (
     <div className="form-wrapper">
@@ -13,7 +20,7 @@ function SignIn(props) {
       </div>
       <h5>Sign in</h5>
       <div class="text-error">{props.isBadLogin}</div>
-      <form action="http://localhost:5000/login" method="post">
+      <form action="/login" method="post">
         <div className="form-group">
           <input
             type="text"
@@ -52,6 +59,15 @@ function SignIn(props) {
         >
           Sign in
         </button>
+        <hr />
+        <p className="text-muted">Login with your social media account.</p>
+          <ul className="list-inline">
+            <li className="list-inline-item">
+              <a href="/auth/google" className="btn btn-floating btn-google">
+                <i className="fa fa-google"></i>
+              </a>
+            </li>
+          </ul>
         <hr />
         {/* <p className="text-muted">Login with your social media account.</p>
         <ul className="list-inline">

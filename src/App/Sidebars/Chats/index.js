@@ -18,7 +18,7 @@ function Index(props) {
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
   useEffect(() => {
-    socket.once("retrieve chats", (data) => {
+    socket.on("retrieve chats", (data) => {
       //TODO: acualizar la lista de unread_messages
       var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;

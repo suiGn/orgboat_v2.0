@@ -1,7 +1,7 @@
 const index = require("./index");
 const nodemailer = require("nodemailer");
 const uuid = require("node-uuid");
-
+require("./configs/config");
 // create reusable transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
   // host: "smtp.fatcow.com",
@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
   // port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: "cleaker6@gmail.com", // generated ethereal user
-    pass: "8p&6%gPYqFsf", // generated ethereal password
+    user: AUTHUSER, // generated ethereal user
+    pass: AUTHPASS, // generated ethereal password
   },
   secure: false,
   // here it goes
@@ -70,7 +70,7 @@ exports.rpwdm = function (req, res, next) {
 			                                 </tr>
 			                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
 			                                     <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-			                                         valign="top"><a href="http://localhost:5000/pwdRst?uuid=` +
+			                                         valign="top"><a href="` +urlMAIL+`/pwdRst?uuid=` +
                 uuid_numbr +
                 `&em=` +
                 email +
@@ -143,7 +143,7 @@ const verifyEmail = (req, res, email, uuid) => {
                        </tr>
                        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                        <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top"><a href="http://localhost:5000/verify-email?uuid=` +
+                                        valign="top"><a href="`+urlMAIL+`/verify-email?uuid=` +
       uuid +
       `&em=` +
       email +

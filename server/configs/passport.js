@@ -20,6 +20,7 @@ const uuid = require("node-uuid");
 // Strategy config
 const GoogleStrategy = require("passport-google-oauth20");
 const index = require("./../index");
+require("../configs/config");
 module.exports = function (passport) {
   // =========================================================================
   // == passport session setup ===============================================
@@ -96,10 +97,9 @@ module.exports = function (passport) {
   passport.use(
     new GoogleStrategy(
       {
-        clientID:
-          "1054555069073-3tb02eakofr767al4p8er2na71iu50g4.apps.googleusercontent.com",
-        clientSecret: "NRVI5oFf2eRxOxJ6x-oehRsX",
-        callbackURL: "https://orgboat.herokuapp.com/auth/google/callback",
+        clientID: CLIENTID,
+        clientSecret: CLIENTSECRET,
+        callbackURL: CALLBACKURL,
       },
       (accessToken, refreshToken, profile, done) => {
         done(null, profile); // passes the profile data to serializeUser

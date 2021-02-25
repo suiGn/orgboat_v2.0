@@ -158,7 +158,7 @@ io.on("connection", function (socket) {
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit 10;
@@ -450,10 +450,19 @@ io.on("connection", function (socket) {
           })
           chat_uids = chat_uids.replace(/,\s*$/, "");
           orgboatDB.query(
-            `SELECT distinct messages.message, messages.time, usrs.name, message_id FROM messages
+            `SELECT 
+            distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
             inner join usrs on messages.u_id = usrs.u_id
             inner join chats_users on messages.u_id = chats_users.u_id
-            WHERE messages.favorite=1 and messages.chat_uid in (${chat_uids}) and messages.u_id!='${data.id}'`,
+            WHERE messages.favorite=1 and messages.chat_uid in (${chat_uids}) 
+            and messages.u_id!='${data.id}'
+            UNION 
+            SELECT 
+            distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+            inner join usrs on messages.u_id = usrs.u_id
+            inner join chats_users on messages.u_id = chats_users.u_id
+            WHERE messages.favorite_to=1 and messages.chat_uid in (${chat_uids}) 
+            and messages.u_id ='${data.id}'`,
             function (err, chats) {
               io.to(user.u_id).emit("retrieve getfavorites", {
                 favorites: chats,
@@ -567,10 +576,28 @@ io.on("connection", function (socket) {
         }
       );
     });
+    //favoriteMessage_to
+    socket.on("FavoriteMessage_to", function (data) {
+      orgboatDB.query(
+        `UPDATE messages SET favorite_to=1 WHERE message_id='${data.id}'`,
+        function (err, rows) {
+          io.to(user.u_id).emit("retrieve favoriteMessage");
+        }
+      );
+    });
     //removeFavorite
     socket.on("RemoveFavorite", function (data) {
       orgboatDB.query(
         `UPDATE messages SET favorite=0 WHERE message_id='${data.id}'`,
+        function (err, rows) {
+          io.to(user.u_id).emit("retrieve removeFavorite");
+        }
+      );
+    });
+    //removeFavorite
+    socket.on("RemoveFavorite_to", function (data) {
+      orgboatDB.query(
+        `UPDATE messages SET favorite_to=0 WHERE message_id='${data.id}'`,
         function (err, rows) {
           io.to(user.u_id).emit("retrieve removeFavorite");
         }
