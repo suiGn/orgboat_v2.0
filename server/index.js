@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 5000;
 //const FRONT_END = process.env.URL_FRONT || "https://www.orgboat.me";
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const config = require("./configs/config");
 const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 const bodyParser = require("body-parser");
@@ -46,14 +45,15 @@ var flash = require("connect-flash");
 require("./configs/passport")(passport); //pass passport for configuration
 var Sequelize = require("sequelize");
 var session = require("express-session");
+require('./configs/config');
 var mysql = require("mysql");
 var MySQLStore = require("express-mysql-session")(session);
 let options = {
-  host: "y0nkiij6humroewt.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-  port: "3306",
-  user: "zwe4df04sf0pb5h8",
-  password: "wel73mofval4ua95",
-  database: "v0mgbm8nfthxqwz1",
+  host: DB_HOST,
+  port: DB_PORT,
+  user: DB_USER,
+  password: DB_PASS,
+  database: DB_DATABASE,
 };
 var connection = mysql.createConnection(options); // or mysql.createPool(options);
 var orgboatDB = connection;
