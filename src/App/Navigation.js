@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
 import axios from "axios";
+import * as winston from "winston";
+import BrowserConsole from 'winston-transport-browserconsole';
 // import { ReactComponent as Logo } from "../assets/logo.svg";
 import {
   Tooltip,
@@ -24,13 +26,30 @@ function Navigation(props) {
   const [user, setUser] = useState([]);
   let my_uid;
   const [p, setP] = useState("");
-
+  const level = "debug";
+  winston.configure({
+    transports: [
+        new BrowserConsole(
+            {
+                format: winston.format.simple(),
+                level,
+                filename: 'logs.log'
+            },
+        )
+        // Uncomment to compare with default Console transport
+        // new winston.transports.Console({
+        //     format: winston.format.simple(),
+        //     level,
+        // }),
+    ],
+  });
   // Foto de perfil
 
   //
 
   useEffect(() => {
     props.socket.once("my_uid response", (data) => {
+      winston.info("INFO ", {a: 1, b: "two"});
       my_uid = data.user[0].u_id;
       setUserEdit({ id: data.user[0].u_id });
       setUser(data.user[0].u_id);

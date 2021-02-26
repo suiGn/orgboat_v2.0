@@ -32,7 +32,7 @@ function ChatHeader(props) {
   let p;
   let chat_initial;
   let chat_name;
-  if (props.data.pphoto === "") {
+  if (props.data.pphoto === "" || props.data.pphoto === null) {
     chat_name = props.data.name;
     chat_initial = chat_name.substring(0, 1);
     p = (
