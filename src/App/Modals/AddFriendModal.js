@@ -48,15 +48,12 @@ function AddFriendModal(props) {
   }
   function handleEmail(e) {
     setEmail(e.target.value);
-    setShowSubmit(true);
+    if(e.target.value!="")
+      setShowSubmit(true);
   }
   function AddUserContact(u_id) {
     props.socket.emit("AddContact", { u_id: u_id });
     props.socket.once("retrive Addcontact", (mssg) => {
-      // props.socket.emit("init message", {
-      //   chat: mssg.chat,
-      //   message: mssg.message,
-      // });
       props.socket.emit("GetContacts");
       modalToggle();
       setfindUsers([]);
@@ -105,8 +102,6 @@ function AddFriendModal(props) {
         </ModalHeader>
         <ModalBody>
           <p>Send invitations to friends.</p>
-          <Form>
-            <FormGroup>
               <Label for="email">Email addresses</Label>
               <Input
                 type="text"
@@ -114,12 +109,6 @@ function AddFriendModal(props) {
                 id="email"
                 onChange={handleEmail}
               />
-            </FormGroup>
-            {/* <FormGroup>
-                            <Label for="message">Invitation message</Label>
-                            <Input type="textarea" name="message" id="message"/>
-                        </FormGroup> */}
-          </Form>
           <div>
             {findUsers && findUsers.length > 0 ? (
               findUsers.map((userf, index) => {
@@ -145,7 +134,7 @@ function AddFriendModal(props) {
         <ModalFooter>
           {showSubmit ? (
             <Button color="primary" onClick={SearchUserByEmailOrUserName}>
-              Submit
+              Search
             </Button>
           ) : (
             <Button
@@ -153,12 +142,9 @@ function AddFriendModal(props) {
               disabled
               onClick={SearchUserByEmailOrUserName}
             >
-              Submit
+              Search
             </Button>
           )}
-          {/* <Button color="primary" onClick={SearchUserByEmailOrUserName}>
-            Submit
-          </Button> */}
         </ModalFooter>
       </Modal>
     </div>

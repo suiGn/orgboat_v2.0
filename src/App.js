@@ -9,6 +9,7 @@ import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ValidateEmail from "./Pages/ValidateEmail";
+import NotValidateEmail from "./Pages/NotValidateEmail";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import LockScreen from "./Pages/LockScreen";
@@ -17,7 +18,7 @@ import NewPassword from "./Pages/NewPassword";
 import PhoneCode from "./Pages/PhoneCode";
 import Layout from "./App/Layout";
 import io from "socket.io-client";
-const ENDPOINT = "https://www.orgboat.me/";
+const ENDPOINT = "http://localhost:5000/";
 const socket = io({
   transports: ["websocket"],
 });
@@ -62,7 +63,6 @@ function App() {
       .then((res) => {
         if (res.data.ok) {
           UpdateTheme();
-          console.log(res.data);
         } else {
           setLoaded(true);
         }
@@ -125,9 +125,7 @@ function App() {
         />
         <Route
           path="/notverify-email"
-          render={(props) => (
-            <SignIn isBadLogin={"Email not validate"} />
-          )}
+          render={(props) => <NotValidateEmail />}
         />
         <Route path="/verify-email" component={ValidateEmail} />
         <Route path="/sign-up" component={SignUp} />

@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 5000;
 //const FRONT_END = process.env.URL_FRONT || "https://www.orgboat.me";
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const config = require("./configs/config");
 const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 const bodyParser = require("body-parser");
@@ -21,14 +20,13 @@ const fs = require("fs");
 const routes = require("./routes");
 const method = require("./methods");
 const mailer = require("./mailer");
-const multer = require("multer"); 
+const multer = require("multer");
 var unicorn = "🍺🦄🍺";
 var uuid = require("node-uuid");
 var nodemailer = require("nodemailer");
 var cookieParser = require("cookie-parser");
 var passport = require("passport");
 var cors = require("cors");
-
 
 const buildPath = path.join(__dirname, "..", "build");
 
@@ -39,21 +37,22 @@ const {
   onAuthorizeFail,
   onAuthorizeSuccess,
 } = require("./middlewares/authentication");
-const {logger} = require('./logs/log');
+const { logger } = require("./logs/log");
 
 //const cookieSession = require('cookie-session');
 var flash = require("connect-flash");
 require("./configs/passport")(passport); //pass passport for configuration
 var Sequelize = require("sequelize");
 var session = require("express-session");
+require('./configs/config');
 var mysql = require("mysql");
 var MySQLStore = require("express-mysql-session")(session);
 let options = {
-  host: "y0nkiij6humroewt.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-  port: "3306",
-  user: "zwe4df04sf0pb5h8",
-  password: "wel73mofval4ua95",
-  database: "v0mgbm8nfthxqwz1",
+  host: DB_HOST,
+  port: DB_PORT,
+  user: DB_USER,
+  password: DB_PASS,
+  database: DB_DATABASE,
 };
 var connection = mysql.createConnection(options); // or mysql.createPool(options);
 var orgboatDB = connection;
@@ -100,21 +99,28 @@ const server = express()
   .get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "build", "index.html"));
   })
-  .post(
-    '/login', function(req, res, next) {
-    passport.authenticate('local-login', function(err, user, info) {
-        if (err) { return res.redirect('/badLogin');  }
-        if (!user) { return res.redirect('/notverify-email'); }
-        req.logIn(user, function(err) {
-          if (err) { return next(err); }
-          return res.redirect('/workspace');
-        });
-      })(req, res, next);
-    }
-  )
+  .post("/login", function (req, res, next) {
+    passport.authenticate("local-login", function (err, user, info) {
+      if (user && user.verified === 0) {
+        let em = user.email;
+        let uuid = user.u_id;
+        return res.redirect("/notverify-email?em=" + em + "&uuid=" + uuid);
+      } else if (err) {
+        return res.redirect("/badLogin");
+      }
+      req.logIn(user, function (err) {
+        console.log("Entro a user coso este");
+        console.log(err);
+        if (err) {
+          return next(err);
+        }
+        return res.redirect("/workspace");
+      });
+    })(req, res, next);
+  })
   .get("/subscribe", routes.subscribe)
   .post("/verMail", routes.verMail)
-  .get("/resnd", routes.rsnvMail)
+  .post("/resnd", routes.rsnvMail)
   .post("/subscribing", routes.subscribing)
   .get("/reset-pwd", routes.resetPass) // Reset Password request
   .post("/rstpwd", mailer.rpwdm) //Send Reset Pwd Password

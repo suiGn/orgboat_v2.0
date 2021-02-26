@@ -18,9 +18,8 @@ function Index(props) {
         socket.once("retrieve chats archived",(data)=>{
             setArchivedChats(data);
             setArchivedChatsFiltered(data.chats);
-            //socket.emit("get chats archived");
         });
-    },one);
+    });
     useEffect(()=>{
         socket.emit("get chats archived");
     },[one]);

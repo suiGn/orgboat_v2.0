@@ -20,6 +20,7 @@ const uuid = require("node-uuid");
 // Strategy config
 const GoogleStrategy = require("passport-google-oauth20");
 const index = require("./../index");
+require("../configs/config");
 module.exports = function (passport) {
   // =========================================================================
   // == passport session setup ===============================================
@@ -96,10 +97,9 @@ module.exports = function (passport) {
   passport.use(
     new GoogleStrategy(
       {
-        clientID:
-          "310233674297-v9uequ8u9f39n7ciui2pu300o1oks7n4.apps.googleusercontent.com",
-        clientSecret: "wQ6Vgt5EJJq4Xnsa8G_7dvSW",
-        callbackURL: "/auth/google/callback",
+        clientID: CLIENTID,
+        clientSecret: CLIENTSECRET,
+        callbackURL: CALLBACKURL,
       },
       (accessToken, refreshToken, profile, done) => {
         done(null, profile); // passes the profile data to serializeUser
@@ -121,11 +121,11 @@ module.exports = function (passport) {
       function (req, usrname, password, done) {
         // callback with email and password from our form
         index.orgboatDB.query(
-          `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}') AND verified = 1`,
+          // `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}') AND verified = 0`,
+          `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}')`,
           (err, resp) => {
-            if (resp.length == 0) {
-              console.log(resp);
-              return done(err);
+            if (resp[0].verified === 0) {
+              return done(null, resp[0]);
             } else {
               // selects return an array, so access the first in the array
               var usr = resp[0];
