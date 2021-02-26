@@ -27,6 +27,9 @@ function ResetPassword() {
     if (pwrd === event.target.value) {
       event.target.setCustomValidity("");
       setPwrd2(event.target.value);
+      setTimeout(function () {
+        history.push("sign-in");
+      }, 3000);
     } else {
       event.target.setCustomValidity(
         "La contraseña puesta no concuerda con la puesta anteriormente"

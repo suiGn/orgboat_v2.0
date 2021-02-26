@@ -142,8 +142,10 @@ exports.verMail = function (req, res) {
 };
 
 exports.rsnvMail = function (req, res) {
+  console.log("entro?");
   var uuid = req.query.uuid;
   var email = req.query.em;
+  console.log(req.query);
   mailer.verifyEmail(req, res, email, uuid);
   //console.log(req.user[0]);
 };
@@ -169,7 +171,7 @@ exports.changePass = function (req, res) {
             console.log(Pwd);
             index.orgboatDB.query(
               "UPDATE usrs SET password = ?, random = ? WHERE email = ? AND random = ?",
-              [Pwd, random, email,random],
+              [Pwd, random, email, random],
               (error, results) => {
                 console.log(results);
                 if (error) {

@@ -121,11 +121,11 @@ module.exports = function (passport) {
       function (req, usrname, password, done) {
         // callback with email and password from our form
         index.orgboatDB.query(
-          `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}') AND verified = 1`,
+          // `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}') AND verified = 0`,
+          `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}')`,
           (err, resp) => {
-            if (resp.length == 0) {
-              console.log(resp);
-              return done(err);
+            if (resp[0].verified === 0) {
+              return done(null, resp[0]);
             } else {
               // selects return an array, so access the first in the array
               var usr = resp[0];
