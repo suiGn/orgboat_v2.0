@@ -36,7 +36,6 @@ io.on("connection", function (socket) {
     //Transmit the messages from one user to another
     socket.on("get chats", function (msg) {
       console.log(`[Socket.io] - User ${user.usrname} asked for chats`);
-      //console.log(user.pphoto);
       orgboatDB.query(
         `
 			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, chats.chat_name,
@@ -59,12 +58,22 @@ io.on("connection", function (socket) {
           where chats_users.u_id = '${user.u_id}' and chats_users.archiveChat = 0 and chats_users.delete_chat = 0
           order by time desc;
 			`,
-        function (err, rows) {
-          //console.log(rows);
+        (err, rows) => {
+         /* rows.forEach((chat)=>{
+            orgboatDB.query( 
+               `select sum(unread_messages) as unread  from messages where chat_uid = '${chat.chat_uid}' and u_id != '${user.u_id}' `,
+               (err, message)=>{
+                if(!message[0].unread){
+                  chat.unread_messages = message[0].unread
+                }
+              })
+            chats.push(chat)
+          })*/
           io.to(user.u_id).emit("retrieve chats", {
             my_uid: user.u_id,
             chats: rows,
           });
+          
         }
       );
     });

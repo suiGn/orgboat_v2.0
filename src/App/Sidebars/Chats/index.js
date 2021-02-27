@@ -23,15 +23,12 @@ function Index(props) {
       var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;
       });
-
       var grupos = data.chats.filter((grupos) => {
         return grupos.chat_type == 1 && grupos.user_chat == data.my_uid;
       });
-
       grupos.forEach((info) => {
         info.name = info.chat_name;
       });
-
       chats.push.apply(chats, grupos);
       setChatList(data);
       setfavoriteFriendFiltered(chats);
@@ -66,6 +63,12 @@ function Index(props) {
     return mytime;
   }
 
+  function SetClicked(e,chat){
+    e.preventDefault();
+    chat.unread_messages = 0
+    props.setClicked(chat);
+  }
+
   function getDateLabel(date) {
     let dateLabelDate =
       date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
@@ -83,6 +86,7 @@ function Index(props) {
     let chat_initial;
     let chat_name;
     let p;
+    console.log(chat)
     let chat_with_usr = chat.user_chat;
     if (chat.chat_type == 1 || my_uid != chat.user_chat) {
       chat_name = chat.name;
@@ -118,10 +122,8 @@ function Index(props) {
       }
       return (
         <li
-          className={"list-group-item " + (chat.selected ? "open-chat" : "")}
-          onClick={() => {
-            props.setClicked(chat);
-          }}
+          className={(chat.unread_messages && chat.last_message_user_uid!=my_uid)? "list-group-item open-chat" :  "list-group-item " + (chat.selected ? "open-chat" : "") }
+          onClick={(e) => SetClicked(e,chat)}
         >
           <div>
             <figure className="avatar">{p}</figure>
@@ -129,29 +131,32 @@ function Index(props) {
           <div className="users-list-body">
             <div i={chat.chat_uid}>
               <h5
-                // className={chat.unread_messages ? "text-primary" : ""}
+                className={(chat.unread_messages && chat.last_message_user_uid!=my_uid) ? "text-primary" : ""}
                 i={chat.chat_uid}
               >
                 {chat.name}
               </h5>
               {chat.last_message_message}
             </div>
+            {
+            (chat.unread_messages && chat.last_message_user_uid!=my_uid)>0 ?
             <div className="users-list-action">
-              {/* {chat.unread_messages ? (
-                <div className="new-message-count">{chat.unread_messages}</div>
-              ) : (
-                ""
-              )} */}
-              <small
-                // className={chat.unread_messages ? "text-primary" : "text-muted"}
-                className="text-muted"
-              >
-                {timeLabel}
-              </small>
+              <div className="new-message-count">{chat.unread_messages}</div>
+              <small className={chat.unread_messages ? "text-primary" : "text-muted"} className="text-muted"
+              >{timeLabel}</small>
               <div className="action-toggle">
                 <ChatsDropdown setUser={props.setUser} id={chat.user_chat} />
               </div>
             </div>
+            :
+            <div className="users-list-action">
+                <small  className="text-muted">{timeLabel}</small>
+              <div className="action-toggle">
+                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} />
+              </div>
+            </div>
+               
+            }
           </div>
         </li>
       );
