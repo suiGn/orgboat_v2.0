@@ -53,7 +53,7 @@ function Chat(props) {
     });
     socket.on("chat message", (data) => {
       socket.emit("get chats");
-      socket.emit("get messages", { id: data.chat, page: 1 });
+      socket.emit("get messages", { id: data.chat, page: 1, inChat: props.clicked.chat_uid== data.chat?1:0 });
     });
     socket.on("retrive update notification", (data) => {
       socket.emit("get chats");
@@ -64,7 +64,7 @@ function Chat(props) {
   });
 
   useEffect(() => {
-    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1 , inChat : true});
+    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1});
     socket.emit("update notification",{id: props.clicked.chat_uid});
   }, [props.clicked]);
 

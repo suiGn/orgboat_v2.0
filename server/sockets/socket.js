@@ -150,9 +150,7 @@ io.on("connection", function (socket) {
       console.log(
         `[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, get messages:${msg.page}`
       );
-      console.log(msg)
       if(msg.inChat){
-        console.log("si")
         orgboatDB.query(
           `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${msg.id}'`,
           (err,data)=>{

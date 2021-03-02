@@ -1,9 +1,15 @@
-import React from "react";
+import React,  { useEffect } from "react";
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
-
-function ChatNoMessage() {
+function ChatNoMessage(props) {
+  const { socket } = props;
   const mobileMenuBtn = () => document.body.classList.toggle("navigation-open");
+  
+  useEffect(() => {
+    socket.on("chat message", (data) => {
+      socket.emit("get chats");
+    });
+  })
   return (
     <div className="chat">
       <div className="chat-header justify-content-end">
