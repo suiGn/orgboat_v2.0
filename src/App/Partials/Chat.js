@@ -33,27 +33,29 @@ function Chat(props) {
   useEffect(() => {
     socket.once("retrieve messages", (data) => {
       if (data.messages.length != 0) {
-        var messages = [];
-        data.messages.forEach((element) => {
-          if (element.delete_message_to == 1) {
-            if (element.message_user_uid == props.my_uid.id) {
+        if(props.clicked.chat_uid==data.messages[0].chat_uid){
+          var messages = [];
+          data.messages.forEach((element) => {
+            if (element.delete_message_to == 1) {
+              if (element.message_user_uid == props.my_uid.id) {
+                messages.push(element);
+              }
+            } else {
               messages.push(element);
             }
-          } else {
-            messages.push(element);
-          }
-        });
-        setChatMessages(messages.reverse());
+          });
+          setChatMessages(messages.reverse());
+        }
       } else {
         setChatMessages([]);
       }
-      // socket.emit("get chats");
+      //socket.emit("get chats");
     });
-    socket.once("chat message", (data) => {
+    socket.on("chat message", (data) => {
       socket.emit("get chats");
       socket.emit("get messages", { id: data.chat, page: 1 });
     });
-    socket.once("retrive update notification", (data) => {
+    socket.on("retrive update notification", (data) => {
       socket.emit("get chats");
     });
     if (props.clicked && scrollEl) {
@@ -62,8 +64,8 @@ function Chat(props) {
   });
 
   useEffect(() => {
-    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1 });
-    //socket.emit("update notification",{id: props.clicked.chat_uid});
+    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1 , inChat : true});
+    socket.emit("update notification",{id: props.clicked.chat_uid});
   }, [props.clicked]);
 
   const handleSubmit = (newValue) => {

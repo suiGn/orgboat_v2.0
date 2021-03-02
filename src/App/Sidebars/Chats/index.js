@@ -17,8 +17,10 @@ function Index(props) {
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
+
   useEffect(() => {
     socket.on("retrieve chats", (data) => {
+      console.log(data)
       //TODO: acualizar la lista de unread_messages
       var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;
@@ -33,7 +35,8 @@ function Index(props) {
       setChatList(data);
       setfavoriteFriendFiltered(chats);
     });
-  }, one);
+  },one);
+
   useEffect(() => {
     socket.emit("get chats");
     // inputRef.current.focus();
@@ -63,12 +66,6 @@ function Index(props) {
     return mytime;
   }
 
-  function SetClicked(e,chat){
-    e.preventDefault();
-    chat.unread_messages = 0
-    props.setClicked(chat);
-  }
-
   function getDateLabel(date) {
     let dateLabelDate =
       date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
@@ -81,12 +78,12 @@ function Index(props) {
     return dateLabel;
   }
   let my_uid = chatLists.my_uid;
+
   const ChatListView = (props) => {
     const { chat } = props;
     let chat_initial;
     let chat_name;
     let p;
-    console.log(chat)
     let chat_with_usr = chat.user_chat;
     if (chat.chat_type == 1 || my_uid != chat.user_chat) {
       chat_name = chat.name;
@@ -123,7 +120,7 @@ function Index(props) {
       return (
         <li
           className={(chat.unread_messages && chat.last_message_user_uid!=my_uid)? "list-group-item open-chat" :  "list-group-item " + (chat.selected ? "open-chat" : "") }
-          onClick={(e) => SetClicked(e,chat)}
+          onClick={()=> {props.setClicked(chat);}}
         >
           <div>
             <figure className="avatar">{p}</figure>

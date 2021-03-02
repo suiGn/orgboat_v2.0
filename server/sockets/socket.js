@@ -148,26 +148,30 @@ io.on("connection", function (socket) {
     //Client request the messages
     socket.on("get messages", function (msg) {
       console.log(
-        `[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, page:${msg.page}`
+        `[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, get messages:${msg.page}`
       );
-      orgboatDB.query(
-        `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${msg.id}'`,
-        (err,data)=>{
-          if (err) {
-            return json({
-              ok: false,
-              err: {
-                message: "error al actualizar messages",
-              },
-            });
+      console.log(msg)
+      if(msg.inChat){
+        console.log("si")
+        orgboatDB.query(
+          `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${msg.id}'`,
+          (err,data)=>{
+            if (err) {
+              return json({
+                ok: false,
+                err: {
+                  message: "error al actualizar messages",
+                },
+              });
+            }
           }
-        }
-      );
+        );
+      }
       
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit 10;
