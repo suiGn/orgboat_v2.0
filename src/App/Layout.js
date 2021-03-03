@@ -102,7 +102,7 @@ function Layout(props) {
             my_uid={my_uid}
           />
         ) : (
-          <ChatN />
+          <ChatN socket={socket} />
         )}
 
         <Profile socket={socket} user={user} />
