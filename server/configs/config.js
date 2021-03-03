@@ -28,8 +28,8 @@ DB_PASS = "wel73mofval4ua95";
 DB_PORT = "3306";
 DB_DATABASE = "v0mgbm8nfthxqwz1";
 //google auth
-CLIENTID = "607767999750-f6d55nj3fpip31ovh1ml6n4p1sq499i3.apps.googleusercontent.com";
-CLIENTSECRET = "k0y5AVknuSUpBNMXndAmAVHZ";
+CLIENTID = "310233674297-v9uequ8u9f39n7ciui2pu300o1oks7n4.apps.googleusercontent.com";
+CLIENTSECRET = "wQ6Vgt5EJJq4Xnsa8G_7dvSW";
 CALLBACKURL = "/auth/google/callback";
 
 AUTHUSER ="cleaker6@gmail.com";
