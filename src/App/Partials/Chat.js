@@ -7,6 +7,11 @@ import { selectedChat } from "../Sidebars/Chats/Data";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ChatsMessageDropdown from "../Sidebars/Chats/ChatsMessageDropdown.js";
 import UnselectedChat from "../../assets/img/unselected-chat.svg";
+import UIfx from 'uifx';
+import notificationAudio from '../../assets/sound/much.mp3'
+import empty from "../../assets/img/undraw_empty_xct9.svg";
+import { Menu } from "react-feather";
+
 
 function Chat(props) {
   const [inputMsg, setInputMsg] = useState("");
@@ -17,6 +22,14 @@ function Chat(props) {
 
   const [messages, setChatMessages] = useState([]);
 
+  const mobileMenuBtn = () => document.body.classList.toggle("navigation-open");
+
+  const notificationSound = new UIfx(
+    notificationAudio,{
+    volume: 0.4,
+    throttleMs: 100
+  });
+
   let dateSend;
 
   if (messages && messages.length > 0) {
@@ -24,6 +37,8 @@ function Chat(props) {
   }
   const { socket } = props;
 
+  const { clicked } = props;
+  
   useEffect(() => {
     if (scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
@@ -51,21 +66,33 @@ function Chat(props) {
       }
       //socket.emit("get chats");
     });
+
     socket.on("chat message", (data) => {
       socket.emit("get chats");
-      socket.emit("get messages", { id: data.chat, page: 1, inChat: props.clicked.chat_uid== data.chat?1:0 });
+      console.log(props.clicked.chat_uid)
+      console.log(data.chat)
+      if(props.clicked.chat_uid){
+        if(props.clicked.chat_uid== data.chat){
+          socket.emit("get messages", { id: data.chat, page: 1, inChat:true });
+        } else if(props.clicked.chat_uid != data.chat){
+          notificationSound.play()
+          socket.emit("get messages", { id: data.chat, page: 1, inChat:false });
+        }
+      }else{
+        notificationSound.play()
+      }
     });
-    socket.on("retrive update notification", (data) => {
+    /*socket.on("retrive update notification", (data) => {
       socket.emit("get chats");
-    });
+    });*/
     if (props.clicked && scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
     }
   });
 
   useEffect(() => {
-    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1});
-    socket.emit("update notification",{id: props.clicked.chat_uid});
+    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1, inChat:true});
+    //socket.emit("update notification",{id: props.clicked.chat_uid});
   }, [props.clicked]);
 
   const handleSubmit = (newValue) => {
@@ -191,6 +218,7 @@ function Chat(props) {
   };
 
   return (
+    clicked.name ? 
     <div className="chat">
       <ChatHeader
         data={props.clicked}
@@ -226,6 +254,38 @@ function Chat(props) {
         chat_uid={props.clicked.chat_uid}
         darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
       />
+    </div>
+    :
+    <div className="chat">
+      <div className="chat-header justify-content-end">
+        <div className="chat-header-action">
+          <ul className="list-inline">
+            <li className="list-inline-item d-xl-none d-inline">
+              <button
+                onClick={mobileMenuBtn}
+                className="btn btn-outline-light mobile-navigation-button"
+              >
+                <Menu />
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="chat-body ">
+        <div
+          id="nochatselected"
+          className="justify-content-center align-items-center d-flex h-100"
+        >
+          <div className="no-message-container custom-chat-message">
+            <div className="row mb-5 chat-body-custom">
+              <div className="col-12 text-center">
+                <img src={empty} width="400px" className="" alt="image" />
+              </div>
+            </div>
+            <p className="lead text-center">Welcome to OrgBoat!</p>
+          </div>
+        </div>
+      </div> 
     </div>
   );
 }

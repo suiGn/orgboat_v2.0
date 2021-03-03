@@ -20,7 +20,7 @@ function Index(props) {
 
   useEffect(() => {
     socket.on("retrieve chats", (data) => {
-      console.log(data)
+      //console.log(data)
       //TODO: acualizar la lista de unread_messages
       var chats = data.chats.filter((chats) => {
         return chats.chat_type == 0;
@@ -79,6 +79,12 @@ function Index(props) {
   }
   let my_uid = chatLists.my_uid;
 
+  function setClicked(e,chat){
+    e.preventDefault();
+    chat.unread_messages = 0
+    props.setClicked(chat);
+  }
+
   const ChatListView = (props) => {
     const { chat } = props;
     let chat_initial;
@@ -120,7 +126,7 @@ function Index(props) {
       return (
         <li
           className={(chat.unread_messages && chat.last_message_user_uid!=my_uid)? "list-group-item open-chat" :  "list-group-item " + (chat.selected ? "open-chat" : "") }
-          onClick={()=> {props.setClicked(chat);}}
+          onClick={(e) => setClicked(e,chat)}
         >
           <div>
             <figure className="avatar">{p}</figure>
