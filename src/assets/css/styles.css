@@ -10,7 +10,8 @@ body.dark
   border: 0.5px solid;
   border-color: #f3c96e;
   max-width: 377px;
-  word-wrap: break-word;
+  display: flex;
+  flex-flow: row;
 }
 
 .messages-container {
@@ -151,10 +152,6 @@ body.dark .dropdown-menu .dropdown-divider {
   background-color: #2121248f !important;
 }
 
-.position-relative {
-  position: relative;
-}
-
 .emoji-picker {
   position: absolute;
   bottom: 38px;
@@ -167,6 +164,30 @@ body.dark .dropdown-menu .dropdown-divider {
 
 .show {
   display: inline;
+}
+
+.word-break {
+  word-break: break-word;
+}
+
+.misc-container {
+  flex: none;
+  align-self: flex-end;
+}
+
+.time {
+  position: relative;
+  float: right;
+  margin: 5px 0 -1px 18px;
+  color: #828282;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.own-avatar {
+  cursor: pointer;
+  height: 55px;
+  width: 55px;
 }
 
 @media (max-width: 1200px) {

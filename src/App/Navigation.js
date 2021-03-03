@@ -74,6 +74,8 @@ function Navigation(props) {
     setDarkSwitcherTooltipTextOpen,
   ] = useState(false);
 
+  const [logOutTooltipTextOpen, setLogOutTooltipTextOpen] = useState(false);
+
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   const userMenuToggle = () => {
@@ -85,6 +87,10 @@ function Navigation(props) {
       setUserMenuTooltipOpen(false);
       return !prevState;
     });
+
+  const logOutSwitcherTooltipTextToggler = () => {
+    setLogOutTooltipTextOpen(!logOutTooltipTextOpen);
+  };
 
   const darkSwitcherTooltipTextToggler = () => {
     setDarkSwitcherTooltipTextOpen(!darkSwitcherTooltipTextOpen);
@@ -189,11 +195,24 @@ function Navigation(props) {
       <SettingsModal modal={settingsModalOpen} toggle={settingsModalToggle} />
       <div className="nav-group">
         <ul>
-          <li className="logo">
+          <li id="user-menu" className="text-center pt-4 pb-4">
+            <figure onClick={profileActions} className="avatar own-avatar">
+              {p}
+            </figure>
+            <Tooltip
+              placement="right"
+              isOpen={userMenuTooltipOpen}
+              target="user-menu"
+              toggle={userMenuToggle}
+            >
+              Profile options
+            </Tooltip>
+          </li>
+          {/* <li className="logo">
             <a href="#/">
               <Logo />
             </a>
-          </li>
+          </li> */}
           {navigationItems.map((item, i) => (
             <NavigationItemView
               key={i}
@@ -219,23 +238,39 @@ function Navigation(props) {
               Dark mode
             </Tooltip>
           </li>
-          <li id="user-menu" className="text-center">
-            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+          <li id="logout-menu" className="text-center">
+            <a
+              href="#/"
+              onClick={logoutServer}
+              className="dark-light-switcher"
+              id="log-out"
+            >
+              <FeatherIcon.LogOut />
+            </a>
+            <Tooltip
+              placement="right"
+              isOpen={logOutTooltipTextOpen}
+              target="log-out"
+              toggle={logOutSwitcherTooltipTextToggler}
+            >
+              Log Out
+            </Tooltip>
+            {/* <Dropdown isOpen={dropdownOpen} toggle={toggle}>
               <DropdownToggle
                 tag="span"
                 data-toggle="dropdown"
                 aria-expanded={dropdownOpen}
               >
-                <figure className="avatar">{p}</figure>
+                <FeatherIcon.LogOut />
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={editModalToggle}>
                   Edit profile
                 </DropdownItem>
                 <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-                {/* <DropdownItem onClick={settingsModalToggle}>
+                 <DropdownItem onClick={settingsModalToggle}>
                   Settings
-                </DropdownItem> */}
+                </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem onClick={logoutServer}>Logout</DropdownItem>
               </DropdownMenu>
@@ -247,7 +282,7 @@ function Navigation(props) {
               toggle={userMenuToggle}
             >
               User menu
-            </Tooltip>
+            </Tooltip> */}
           </li>
         </ul>
       </div>

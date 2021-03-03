@@ -143,7 +143,7 @@ function Profile(props) {
                     <h6>Phone</h6>
                     <p className="text-muted">{phone}</p>
                   </div>
-                  <div className="mt-4 mb-4">
+                  {/* <div className="mt-4 mb-4">
                     <h6>City</h6>
                     <p className="text-muted">{city}</p>
                   </div>
@@ -152,7 +152,7 @@ function Profile(props) {
                     <p>
                       <a href="foo" className="text-muted">{website}</a>
                     </p>
-                  </div>
+                  </div> */}
                   {/*<div className="mt-4 mb-4">
                     <h6 className="mb-3">Social media accounts</h6>
                     <ul className="list-inline social-links">
