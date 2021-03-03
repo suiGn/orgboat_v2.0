@@ -43,7 +43,7 @@ function EditProfileModal(props) {
 
     useEffect(() => {   
         socket.emit('ViewOwnProfile2', props.userEdit); 
-        socket.once('retrieve viewownprofile2', function (data) {
+        socket.on('retrieve viewownprofile2', function (data) {
             userData = data.usrprofile[0];
             if(userData){
                 setName(userData.name!="null"?userData.name:"");
@@ -54,7 +54,7 @@ function EditProfileModal(props) {
                 setPphoto(userData.pphoto!="null"?userData.pphoto:"");
                 let chat_initial;
                 let chat_name;
-                if (userData.pphoto === "" || userData.pphoto === null) {
+                if (pphoto === "" || pphoto === null) {
                 chat_name = name;
                 chat_initial = chat_name.substring(0, 1);
                     setP(
@@ -63,7 +63,7 @@ function EditProfileModal(props) {
                         </span>
                     );
                 } else {
-                    setP(<img src={userData.pphoto} className="rounded-circle" alt="image" />)
+                    setP(<img src={pphoto} className="rounded-circle" alt="image" />)
                 }
             }
         });
@@ -84,11 +84,8 @@ function EditProfileModal(props) {
         id: props.userEdit.id,
       };
       socket.emit("SaveOwnProfile", userData);
-      socket.once("retrieve saveownprofile", (data) =>{
+      socket.once("retrieve saveownprofile", function (data) {
         socket.emit("ViewOwnProfile", { id: data.u_id });
-        socket.once("retrieve viewownprofile", ()=> {
-            socket.emit("my_uid");
-        })
       });
       props.toggle();
     }

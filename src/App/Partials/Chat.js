@@ -158,28 +158,36 @@ function Chat(props) {
           <div className="message-avatar">
             {/* {message.avatar} */}
             <div>
-              <h5>{message.name}</h5>
-              <div className="time">
+              {/* <h5>{message.name}</h5> */}
+              {/* <div className="time">
                 {moment(message.time).format("DD-MM-YYYY")}
                 {message.type ? (
                   <i className="ti-double-check text-info"></i>
                 ) : null}
-              </div>
+              </div> */}
             </div>
           </div>
           {message.media ? (
             message.media
           ) : (
             <div className="message-content position-relative">
-              {message.message}
-              <div className="action-toggle action-dropdown-chat">
-                <ChatsMessageDropdown
-                  message={message}
-                  prop_id={props.id}
-                  my_uid={props.my_uid}
-                  chat_id={props.chat_id}
-                  socket={socket}
-                />
+              <div className="word-break">{message.message}</div>
+              <div className="misc-container">
+                <div className="time">
+                  {moment(message.time).format("LT")}
+                  {message.type ? (
+                    <i className="ti-double-check text-info"></i>
+                  ) : null}
+                </div>
+                <div className="action-toggle action-dropdown-chat">
+                  <ChatsMessageDropdown
+                    message={message}
+                    prop_id={props.id}
+                    my_uid={props.my_uid}
+                    chat_id={props.chat_id}
+                    socket={socket}
+                  />
+                </div>
               </div>
             </div>
           )}

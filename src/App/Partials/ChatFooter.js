@@ -25,11 +25,13 @@ function ChatFooter(props) {
 
   const AddEmoji = (e) => {
     let emoji = e.native;
+    console.log(emoji);
     props.setInputMsg(props.inputMsg + emoji);
   };
 
   const onKeyDown = (e) => {
     // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    console.log(e);
     if (e.key === "Enter") {
       e.preventDefault();
       e.stopPropagation();

@@ -39,7 +39,7 @@ function AddFriendModal(props) {
     props.socket.emit("SearchUserByEmailOrUsername", {
       email: input,
       usrname: input,
-      my_uid: props.my_uid.id
+      my_uid: props.my_uid.id,
     });
     props.socket.once("retrive SearchUserByEmailOrUsername", (data) => {
       setfindUsers(data.users);
@@ -48,21 +48,20 @@ function AddFriendModal(props) {
   }
   function handleEmail(e) {
     setEmail(e.target.value);
-    if(e.target.value!="")
-      setShowSubmit(true);
+    if (e.target.value != "") setShowSubmit(true);
   }
   function AddUserContact(u_id) {
     props.socket.emit("AddContact", { u_id: u_id });
     props.socket.once("retrive Addcontact", (mssg) => {
       props.socket.emit("GetContacts");
-      modalToggle();
+      // modalToggle();
       setfindUsers([]);
     });
     notify();
   }
 
   const notify = () =>
-    toast.success("Usuario agregado con exito", {
+    toast.success("Usuario agregado con éxito", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -102,13 +101,8 @@ function AddFriendModal(props) {
         </ModalHeader>
         <ModalBody>
           <p>Send invitations to friends.</p>
-              <Label for="email">Email addresses</Label>
-              <Input
-                type="text"
-                name="email"
-                id="email"
-                onChange={handleEmail}
-              />
+          <Label for="email">Email addresses</Label>
+          <Input type="text" name="email" id="email" onChange={handleEmail} />
           <div>
             {findUsers && findUsers.length > 0 ? (
               findUsers.map((userf, index) => {
