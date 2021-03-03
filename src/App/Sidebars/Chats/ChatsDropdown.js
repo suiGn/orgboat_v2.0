@@ -8,10 +8,17 @@ import {useDispatch} from "react-redux";
 const ChatsDropdown = (props) => {
 
     const dispatch = useDispatch();
+    const {socket} = props;
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
+    function DeleteChat(idchat) {
+        socket.emit("Delete Chat", { chat_uid: idchat });
+        socket.once("retrive delete chat", () => {
+          socket.emit("get chats");
+        });
+    }
 
     const profileActions = () => {
         props.setUser({id:props.id});
@@ -26,7 +33,7 @@ const ChatsDropdown = (props) => {
             </DropdownToggle>
             <DropdownMenu>
                 <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
+                <DropdownItem onClick={() => DeleteChat(props.chat_uid)}>Delete</DropdownItem>
             </DropdownMenu>
         </Dropdown>
     )
