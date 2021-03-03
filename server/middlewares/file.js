@@ -2,7 +2,7 @@ const fs = require('fs');
 
 async function readFileSync (fileName) {
 	return new Promise((resolve, reject) => {
-		fs.readFile(fileName, 'utf8', (err, data) => {
+		fs.readFile(fileName, (err, data) => {
 			if (err) {
 				reject(err);
 			}

@@ -155,7 +155,7 @@ function Index(props) {
             <div className="users-list-action">
                 <small  className="text-muted">{timeLabel}</small>
               <div className="action-toggle">
-                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} />
+                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} socket={socket} chat_uid={chat.chat_uid}/>
               </div>
             </div>
                

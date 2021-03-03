@@ -13,11 +13,13 @@ where do we go from here?
 const index = require("./index");
 const uuid = require("node-uuid");
 const jwt = require("jsonwebtoken");
-const config = require("./configs/config");
+require('./configs/config');
 const method = require("./methods");
 const bcrypt = require("bcrypt");
 const mailer = require("./mailer");
 const multer = require("multer");
+const Dropbox = require("dropbox").Dropbox;
+const {readFileSync} =  require("./middlewares/file");
 const { CustomValidation } = require("express-validator/src/context-items");
 
 exports.home = function (req, res) {
@@ -384,6 +386,14 @@ exports.editProfile = function (req, res) {
 exports.savedbimage = function (req, res) {
   console.log(req.file);
   var photo = `uploads/${req.file.filename}`;
+  let dbx =  new Dropbox({accessToken:accesstokenDropbox})
+  readFileSync("../build/"+photo).then(data =>{
+    console.log(data);
+    dbx.filesUpload({path:"/"+photo,contents:data,autorename:false})
+    .catch(err=>{
+      console.log(err);
+    });
+  });
   var uidd = req.user[0].u_id;
   index.orgboatDB.query(
     "UPDATE usrs SET pphoto = ? WHERE u_id = ?",
