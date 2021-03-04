@@ -87,10 +87,10 @@ function Profile(props) {
     ev.target.src = WomenAvatar5;
   }
   function SaveProfile(e) {
-    e.preventDefault();
-    if (fileState) {
-      onFormSubmit(e);
-    }
+    // e.preventDefault();
+    // if (fileState) {
+    //   onFormSubmit(e);
+    // }
     if (name != "") {
       userData = {
         name: name,
@@ -104,6 +104,13 @@ function Profile(props) {
       socket.once("retrieve saveownprofile", function (data) {
         socket.emit("ViewOwnProfile", { id: data.u_id });
       });
+    }
+  }
+
+  function SaveImg(e) {
+    e.preventDefault();
+    if (fileState) {
+      onFormSubmit(e);
     }
   }
 
@@ -155,7 +162,8 @@ function Profile(props) {
 
   function onChangePhoto(e) {
     setFileState(e.target.files[0]);
-    SaveProfile(e);
+    console.log(e.target.files[0]);
+    SaveImg(e);
   }
 
   function onFormSubmit(e) {
@@ -172,6 +180,7 @@ function Profile(props) {
       .then((response) => {
         //alert("The file is successfully uploaded");
         console.log("Imagen subida con éxito");
+        SaveProfile(e);
       })
       .catch((error) => {});
   }
@@ -325,8 +334,42 @@ function Profile(props) {
                     </div>
                   </div>
                   <div className="mt-4 mb-4">
-                    <h6>Phone</h6>
-                    <p className="text-muted">{phone}</p>
+                    {/* <h6>Phone</h6>
+                    <p className="text-muted">{phone}</p> */}
+                    <div className="d-flex">
+                      <div className="ml-3 mr-3">
+                        <h6>Phone</h6>
+                        <p
+                          ref={phoneRef}
+                          className={
+                            openPhoneEditable
+                              ? "outline-none selected-input text-muted mb-1 pl-2 pr-2 pb-2 pt-2"
+                              : "fake-border text-muted mb-1 pl-2 pr-2 pb-2 pt-2"
+                          }
+                          contentEditable={openPhoneEditable}
+                          onBlur={(e) => handleSetPhone(e)}
+                        >
+                          {phone}
+                        </p>
+                      </div>
+                      <div className="border-none align-self-end">
+                        {openPhoneEditable ? (
+                          <Button
+                            onClick={(e) => openPhoneEditableToggler(true, e)}
+                            color="light"
+                          >
+                            <FeatherIcon.Save />
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={(e) => openPhoneEditableToggler(false, e)}
+                            color="light"
+                          >
+                            <FeatherIcon.Edit />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                   {/* <div className="mt-4 mb-4">
                     <h6>City</h6>

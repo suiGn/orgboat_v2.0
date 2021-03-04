@@ -5,6 +5,7 @@ import TourModal from "./Modals/TourModal";
 import SidebarIndex from "./Sidebars/index";
 import Navigation from "./Navigation";
 import Profile from "./Sidebars/Profile";
+import UserProfile from "./Sidebars/UserProfile";
 import Chat from "./Partials/Chat";
 import ChatN from "./Partials/ChatNoMessage";
 import { pageTourAction } from "../Store/Actions/pageTourAction";
@@ -37,7 +38,7 @@ function Layout(props) {
     props.socket.once("my_uid response", (data) => {
       setMy_Id({ id: data.user[0].u_id });
     });
-  },[my_uid]);
+  }, [my_uid]);
 
   const tourSteps = [
     {
@@ -106,6 +107,7 @@ function Layout(props) {
         )}
 
         <Profile socket={socket} user={user} />
+        <UserProfile socket={socket} user={user} />
         <TourModal />
         <DisconnectedModal />
       </div>
