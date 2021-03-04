@@ -18,6 +18,8 @@ import SettingsModal from "./Modals/SettingsModal";
 import { mobileSidebarAction } from "../Store/Actions/mobileSidebarAction";
 import WomenAvatar5 from "../assets/img/women_avatar5.jpg";
 import { mobileProfileAction } from "../Store/Actions/mobileProfileAction";
+import { userProfileAction } from "../Store/Actions/userProfileAction";
+import { mobileUserProfileAction } from "../Store/Actions/mobileUserProfileAction";
 
 function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
