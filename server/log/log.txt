@@ -90,6 +90,7 @@
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
+<<<<<<< HEAD
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
@@ -153,3 +154,9 @@
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
 {"message":"[Socket.io] - Connected user: karlarob, u_id: 3b49d3d9-0703-4d7e-a5c4-b46c53195816","level":"info"}
+=======
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"LogOut","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+>>>>>>> e5fde4a67f8f0dbcfa0cbeb5fdb598ea08a9d93b
