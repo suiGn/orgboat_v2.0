@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
+import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { profileAction } from "../../Store/Actions/profileAction";
 import { mobileProfileAction } from "../../Store/Actions/mobileProfileAction";
 import WomenAvatar5 from "../../assets/img/women_avatar5.jpg";
 import classnames from "classnames";
+import axios from "axios";
 
 function Profile(props) {
+  console.log(props, "profile");
   const { socket } = props;
   const dispatch = useDispatch();
-
+  var userData;
   const { profileSidebar, mobileProfileSidebar } = useSelector(
     (state) => state
   );
@@ -23,11 +25,19 @@ function Profile(props) {
   const [website, setWebSite] = useState("");
   const [about, setAbout] = useState("");
   const [pphoto, setPphoto] = useState("");
+  const [fileState, setFileState] = useState(null);
   const [activeTab, setActiveTab] = useState("1");
   const [p, setP] = useState("");
+  const [openContentEditable, setOpenContentEditable] = useState(false);
+  const [openAboutEditable, setOpenAboutEditable] = useState(false);
+  const [openPhoneEditable, setOpenPhoneEditable] = useState(false);
   /*const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
     };*/
+  const nameRef = useRef();
+  const aboutRef = useRef();
+  const phoneRef = useRef();
+  const inputFile = useRef(null);
 
   const profileActions = (e, data) => {
     e.preventDefault();
@@ -76,6 +86,95 @@ function Profile(props) {
   function addDefaultSrc(ev) {
     ev.target.src = WomenAvatar5;
   }
+  function SaveProfile(e) {
+    e.preventDefault();
+    if (fileState) {
+      onFormSubmit(e);
+    }
+    if (name != "") {
+      userData = {
+        name: name,
+        phone: phone,
+        city: city,
+        about: about ? about : "",
+        website: website,
+        id: props.user.id,
+      };
+      socket.emit("SaveOwnProfile", userData);
+      socket.once("retrieve saveownprofile", function (data) {
+        socket.emit("ViewOwnProfile", { id: data.u_id });
+      });
+    }
+  }
+
+  const openContentEditableToggler = (save, e) => {
+    if (save) {
+      setOpenContentEditable(!openContentEditable);
+      SaveProfile(e);
+    } else {
+      setOpenContentEditable(!openContentEditable);
+    }
+  };
+
+  const openAboutEditableToggler = (save, e) => {
+    if (save) {
+      setOpenAboutEditable(!openAboutEditable);
+      SaveProfile(e);
+    } else {
+      setOpenAboutEditable(!openAboutEditable);
+    }
+  };
+
+  const openPhoneEditableToggler = (save, e) => {
+    if (save) {
+      setOpenPhoneEditable(!openPhoneEditable);
+      SaveProfile(e);
+    } else {
+      setOpenPhoneEditable(!openPhoneEditable);
+    }
+  };
+
+  function handleSetName(e) {
+    e.preventDefault();
+    setName(nameRef.current.innerText);
+  }
+
+  function handleSetAbout(e) {
+    e.preventDefault();
+    setAbout(aboutRef.current.innerText);
+  }
+
+  function handleSetPhone(e) {
+    e.preventDefault();
+    setPhone(phoneRef.current.innerText);
+  }
+
+  const openFileUploader = (event) => {
+    inputFile.current.click();
+  };
+
+  function onChangePhoto(e) {
+    setFileState(e.target.files[0]);
+    SaveProfile(e);
+  }
+
+  function onFormSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("myImage", fileState);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post("/uploadpPhoto", formData, config)
+      .then((response) => {
+        //alert("The file is successfully uploaded");
+        console.log("Imagen subida con éxito");
+      })
+      .catch((error) => {});
+  }
 
   return (
     <div
@@ -100,16 +199,65 @@ function Profile(props) {
           <PerfectScrollbar>
             <div className="pl-4 pr-4">
               <div className="text-center">
-                <figure className="avatar avatar-xl mb-3">
-                  {/* <img
+                <input
+                  type="file"
+                  id="imgupload"
+                  ref={inputFile}
+                  className="d-none"
+                  onChange={onChangePhoto}
+                />
+                <button
+                  onClick={openFileUploader}
+                  className="profile-image-holder rounded-circle mb-4"
+                >
+                  <div className="overlay">
+                    <FeatherIcon.Camera color="white" />
+                    <p className="pt-1">Cambiar foto de perfil</p>
+                  </div>
+                  <figure className="avatar w-100 h-100 mb-3">
+                    {/* <img
                     onError={addDefaultSrc}
                     src={pphoto}
                     className="rounded-circle"
                     alt="avatar"
                   /> */}
-                  {p}
-                </figure>
-                <h5 className="mb-1">{name}</h5>
+                    {p}
+                  </figure>
+                </button>
+                <div className="d-flex justify-content-center">
+                  <div className="ml-3 mr-3">
+                    <h5
+                      ref={nameRef}
+                      className={
+                        openContentEditable
+                          ? "outline-none selected-input mb-1 pl-2 pr-2 pb-2 pt-2"
+                          : "fake-border mb-1 pl-2 pr-2 pb-2 pt-2"
+                      }
+                      contentEditable={openContentEditable}
+                      onBlur={(e) => handleSetName(e)}
+                    >
+                      {name}
+                    </h5>
+                  </div>
+                  <div className="border-none align-self-center">
+                    {openContentEditable ? (
+                      <Button
+                        onClick={(e) => openContentEditableToggler(true, e)}
+                        color="light"
+                      >
+                        <FeatherIcon.Save />
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={(e) => openContentEditableToggler(false, e)}
+                        color="light"
+                      >
+                        <FeatherIcon.Edit />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
                 <small className="text-muted font-italic">
                   Last seen: Today
                 </small>
@@ -138,7 +286,44 @@ function Profile(props) {
               </div>
               <TabContent activeTab={activeTab}>
                 <TabPane tabId="1">
-                  <p className="text-muted">{about}</p>
+                  <div className="mt-4 mb-4">
+                    {/* <h6>About</h6>
+                    <p className="text-muted">{about}</p> */}
+                    <div className="d-flex">
+                      <div className="ml-3 mr-3">
+                        <h6>About</h6>
+                        <p
+                          ref={aboutRef}
+                          className={
+                            openAboutEditable
+                              ? "outline-none selected-input text-muted mb-1 pl-2 pr-2 pb-2 pt-2"
+                              : "fake-border text-muted mb-1 pl-2 pr-2 pb-2 pt-2"
+                          }
+                          contentEditable={openAboutEditable}
+                          onBlur={(e) => handleSetAbout(e)}
+                        >
+                          {about}
+                        </p>
+                      </div>
+                      <div className="border-none align-self-end">
+                        {openAboutEditable ? (
+                          <Button
+                            onClick={(e) => openAboutEditableToggler(true, e)}
+                            color="light"
+                          >
+                            <FeatherIcon.Save />
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={(e) => openAboutEditableToggler(false, e)}
+                            color="light"
+                          >
+                            <FeatherIcon.Edit />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <div className="mt-4 mb-4">
                     <h6>Phone</h6>
                     <p className="text-muted">{phone}</p>
