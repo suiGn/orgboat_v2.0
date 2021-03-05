@@ -175,8 +175,10 @@ const server = express()
         res.redirect("/workspace");
       }
       //console.log(req.file.path);
-      routes.savedbimage(req);
-      res.redirect("/workspace");
+      routes.savedbimage(req,res);
+      res.json(
+        {"ok":true}
+      );
     });
   })
   .get("/pphoto", (req, res) => {

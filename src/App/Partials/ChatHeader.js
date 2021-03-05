@@ -101,7 +101,7 @@ function ChatHeader(props) {
                 <DropdownItem onClick={() => ArchiveChat(props.chat_uid)}>
                   Add to archive
                 </DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
+                {/* <DropdownItem>Delete</DropdownItem> */}
                 {/* <DropdownItem divider />
                 <DropdownItem>Block</DropdownItem> */}
               </DropdownMenu>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { profileAction } from "../../../Store/Actions/profileAction";
 import { mobileProfileAction } from "../../../Store/Actions/mobileProfileAction";
 import { useDispatch } from "react-redux";
+import { userProfileAction } from "../../../Store/Actions/userProfileAction";
+import { mobileUserProfileAction } from "../../../Store/Actions/mobileUserProfileAction";
 import {
   Dropdown,
   DropdownToggle,
@@ -18,8 +20,8 @@ const FriendsDropdown = (props) => {
 
   const profileActions = () => {
     props.setUser({ id: props.id });
-    dispatch(profileAction(true));
-    dispatch(mobileProfileAction(true));
+    dispatch(userProfileAction(true));
+    dispatch(mobileUserProfileAction(true));
   };
 
   return (

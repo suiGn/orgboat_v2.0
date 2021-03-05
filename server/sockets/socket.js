@@ -293,10 +293,12 @@ io.on("connection", function (socket) {
               if (result === false) {
                 io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
                   users: rows,
+                  validate: 0
                 });
               }else{
                 io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
                   users: [],
+                  validate: 1
                 });
               }
             })
@@ -304,6 +306,7 @@ io.on("connection", function (socket) {
           else{
             io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
               users: [],
+              validate:2
             });
           }
         }
