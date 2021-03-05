@@ -16,9 +16,6 @@ function UserProfile(props) {
     (state) => state
   );
 
-  console.log("userprofile", userProfileSidebar);
-  console.log("userprofilemob", mobileUserProfileSidebar);
-
   //const [activeTab, setActiveTab] = useState('1');
   const [name, setName] = useState("");
   const [city, setCity] = useState("");

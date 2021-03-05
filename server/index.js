@@ -29,9 +29,6 @@ var passport = require("passport");
 var cors = require("cors");
 const aws = require('aws-sdk');
 
-const S3_BUCKET = process.env.S3_BUCKET;
-aws.config.region = 'us-east-2';
-
 const buildPath = path.join(__dirname, "..", "build");
 //middlewares
 const {
@@ -50,8 +47,8 @@ var session = require("express-session");
 require('./configs/config');
 
 //AWS
-// aws.config.region = "us-east-2";
-// const S3_BUCKET = process.env.S3_BUCKET;
+const S3_BUCKET = process.env.S3_BUCKET;
+aws.config.region = 'us-east-2';
 
 //Mysql
 var mysql = require("mysql");
