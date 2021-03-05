@@ -10,7 +10,6 @@ import classnames from "classnames";
 import axios from "axios";
 
 function Profile(props) {
-  console.log(props, "profile");
   const { socket } = props;
   const { openProfile } = props;
   const { setOpenProfile } = props;
@@ -174,7 +173,6 @@ function Profile(props) {
 
   function onChangePhoto(e) {
     setFileState(e.target.files[0]);
-    console.log(e.target.files[0]);
     SaveImg(e);
   }
 

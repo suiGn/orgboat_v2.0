@@ -40,9 +40,7 @@ function ResetPassword() {
     const body = {
       rstEmail: rstEmail,
     };
-    console.log(rstEmail);
     axios.post("/rstpwd", body).then((res) => {
-      console.log(res);
       setResponse(res.data);
     });
   }

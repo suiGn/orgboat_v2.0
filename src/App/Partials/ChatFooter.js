@@ -31,7 +31,6 @@ function ChatFooter(props) {
 
   const onKeyDown = (e) => {
     // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
-    console.log(e);
     if (e.key === "Enter") {
       e.preventDefault();
       e.stopPropagation();

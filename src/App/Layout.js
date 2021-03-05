@@ -33,7 +33,6 @@ function Layout(props) {
         document.body.classList.remove("navigation-open");
       }
     });
-    console.log(clicked);
   }, []);
 
   useEffect(() => {

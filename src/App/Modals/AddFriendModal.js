@@ -44,6 +44,9 @@ function AddFriendModal(props) {
     props.socket.once("retrive SearchUserByEmailOrUsername", (data) => {
       setfindUsers(data.users);
     });
+    if (setfindUsers.length <= 1) {
+      setError("No existe el usuario");
+    }
     setShowSubmit(false);
   }
   function handleEmail(e) {

@@ -12,7 +12,6 @@ function NotValidateEmail() {
   const url = require("url").parse(window.location.href, true);
   let em = url.query.em ? url.query.em : "";
   let uuid = url.query.uuid ? url.query.uuid : "";
-  console.log(uuid);
   useEffect(() => {
     document.body.classList.add("form-membership");
   }, []);
