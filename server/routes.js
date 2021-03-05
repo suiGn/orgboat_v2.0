@@ -19,8 +19,12 @@ const bcrypt = require("bcrypt");
 const mailer = require("./mailer");
 const multer = require("multer");
 const Dropbox = require("dropbox").Dropbox;
-const {readFileSync} =  require("./middlewares/file");
+const {readFileSync,readStream} =  require("./middlewares/file");
 const { CustomValidation } = require("express-validator/src/context-items");
+var AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-2'});
+
+const s3 = new AWS.S3({apiVersion: '2006-03-01',accessKeyId:"AKIAJFKWYQADQFJP6O2Q",secretAccessKey:"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"});
 
 exports.home = function (req, res) {
   if (req.isAuthenticated()) {
@@ -386,28 +390,46 @@ exports.editProfile = function (req, res) {
 exports.savedbimage = function (req, res) {
   console.log(req.file);
   var photo = `uploads/${req.file.filename}`;
-  let dbx =  new Dropbox({accessToken:accesstokenDropbox})
-  readFileSync("../build/"+photo).then(data =>{
-    console.log(data);
-    dbx.filesUpload({path:"/"+photo,contents:data,autorename:false})
-    .catch(err=>{
-      console.log(err);
-    });
-  });
-  var uidd = req.user[0].u_id;
-  index.orgboatDB.query(
-    "UPDATE usrs SET pphoto = ? WHERE u_id = ?",
-    [photo, uidd],
-    (error, results) => {
-      if (error) {
-        //res.redirect("/workspace");
-        console.log(error);
-      } else {
-        //res.redirect("/workspace");
-        console.log("Okay");
+  // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
+  var uploadParams = {Bucket: "cleaker", Key: '', Body: '',ACL:'public-read'};
+  readStream("../build/"+photo).then(data => {
+    uploadParams.Body = data;
+    uploadParams.Key = req.file.filename;
+    s3.upload (uploadParams, function (err, data) {
+      if (err) {
+        console.log("Error", err);
+      } if (data) {
+        console.log("Upload Success", data.Location);
+        photo=data.Location;
+        var uidd = req.user[0].u_id;
+        index.orgboatDB.query(
+          "UPDATE usrs SET pphoto = ? WHERE u_id = ?",
+          [photo, uidd],
+          (error, results) => {
+            if (error) {
+              //res.redirect("/workspace");
+              console.log(error);
+            } else {
+              //res.redirect("/workspace");
+              console.log("Okay");
+            }
+          }
+        );
       }
-    }
-  );
+    });
+  })
+  .catch(err=>{
+    console.log(err);
+  });
+
+  // readFileSync("../build/"+photo).then(data =>{
+  //   console.log(data);
+  //   dbx.filesUpload({path:"/"+photo,contents:data,autorename:false})
+  //   .catch(err=>{
+  //     console.log(err);
+  //   });
+  // });
+  
 };
 
 exports.pphotourl = async function (req, res) {
