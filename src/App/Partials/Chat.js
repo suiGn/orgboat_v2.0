@@ -22,6 +22,8 @@ function Chat(props) {
 
   const [messages, setChatMessages] = useState([]);
 
+  const [click, setClick] = useState([]);
+
   const mobileMenuBtn = () => document.body.classList.toggle("navigation-open");
 
   const notificationSound = new UIfx(
@@ -44,56 +46,58 @@ function Chat(props) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
     }
   }, [scrollEl]);
-
-  useEffect(() => {
-    socket.once("retrieve messages", (data) => {
-      if (data.messages.length != 0) {
-        if(props.clicked.chat_uid==data.messages[0].chat_uid){
-          var messages = [];
-          data.messages.forEach((element) => {
-            if (element.delete_message_to == 1) {
-              if (element.message_user_uid == props.my_uid.id) {
-                messages.push(element);
-              }
-            } else {
+  
+  function RetrieveMessages(data) {
+    if (data.messages.length != 0) {
+      if(props.clicked.chat_uid==data.messages[0].chat_uid){
+        var messages = [];
+        data.messages.forEach((element) => {
+          if (element.delete_message_to == 1) {
+            if (element.message_user_uid == props.my_uid.id) {
               messages.push(element);
             }
-          });
-          setChatMessages(messages.reverse());
-        }
-      } else {
-        setChatMessages([]);
+          } else {
+            messages.push(element);
+          }
+        });
+        setChatMessages(messages.reverse());
       }
-      //socket.emit("get chats");
-    });
+    } else {
+      setChatMessages([]);
+    }
+  }
 
-    socket.on("chat message", (data) => {
-      socket.emit("get chats");
-      console.log(props.clicked.chat_uid)
-      console.log(data.chat)
-      if(props.clicked.chat_uid){
-        if(props.clicked.chat_uid== data.chat){
-          socket.emit("get messages", { id: data.chat, page: 1, inChat:true });
-        } else if(props.clicked.chat_uid != data.chat){
-          notificationSound.play()
-          socket.emit("get messages", { id: data.chat, page: 1, inChat:false });
-        }
-      }else{
+  
+  function OnChatMessage(data){
+    if(props.clicked.chat_uid){
+      if(props.clicked.chat_uid == data.chat){
+        socket.emit("get messages", { id: data.chat, page: 1, inChat:true });
+      } else if(props.clicked.chat_uid != data.chat){
         notificationSound.play()
+        socket.emit("get messages", { id: data.chat, page: 1, inChat:false });
       }
-    });
-    /*socket.on("retrive update notification", (data) => {
-      socket.emit("get chats");
-    });*/
+    }else{
+      notificationSound.play()
+    }
+    socket.emit("get chats");
+  }
+
+  useEffect(() => {
+    socket.on("retrieve messages", RetrieveMessages);
+    
+    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1, inChat:true});
+    socket.on("chat message", OnChatMessage);
+
     if (props.clicked && scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
     }
-  });
-
-  useEffect(() => {
-    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1, inChat:true});
-    //socket.emit("update notification",{id: props.clicked.chat_uid});
+    
+    return () => {
+      socket.off("chat message", OnChatMessage);
+      socket.off("retrieve messages", RetrieveMessages);
+    };
   }, [props.clicked]);
+
 
   const handleSubmit = (newValue) => {
     if (newMessage.length > 0) {
