@@ -182,10 +182,10 @@ function Profile(props) {
       .then((response) => {
         //alert("The file is successfully uploaded");
         console.log("Imagen subida con éxito");
-        /*socket.emit("ViewOwnProfile", { id: props.user.id });
+        socket.emit("ViewOwnProfile", { id: props.user.id });
         socket.once("retrieve viewownprofile", ()=> {
           socket.emit("my_uid");
-        })*/
+        })
       })
       .catch((error) => {});
   }
