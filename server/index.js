@@ -50,8 +50,8 @@ var session = require("express-session");
 require('./configs/config');
 
 //AWS
-aws.config.region = "us-east-2";
-const S3_BUCKET = process.env.S3_BUCKET;
+// aws.config.region = "us-east-2";
+// const S3_BUCKET = process.env.S3_BUCKET;
 
 //Mysql
 var mysql = require("mysql");
@@ -178,8 +178,10 @@ const server = express()
         res.redirect("/workspace");
       }
       //console.log(req.file.path);
-      routes.savedbimage(req);
-      res.redirect("/workspace");
+      routes.savedbimage(req,res);
+      res.json(
+        {"ok":true}
+      );
     });
   })
   .get("/pphoto", (req, res) => {
