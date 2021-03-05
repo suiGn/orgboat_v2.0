@@ -18,23 +18,26 @@ function Index(props) {
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
 
-  useEffect(() => {
-    socket.on("retrieve chats", (data) => {
-      //console.log(data)
-      //TODO: acualizar la lista de unread_messages
-      var chats = data.chats.filter((chats) => {
-        return chats.chat_type == 0;
-      });
-      var grupos = data.chats.filter((grupos) => {
-        return grupos.chat_type == 1 && grupos.user_chat == data.my_uid;
-      });
-      grupos.forEach((info) => {
-        info.name = info.chat_name;
-      });
-      chats.push.apply(chats, grupos);
-      setChatList(data);
-      setfavoriteFriendFiltered(chats);
+  function RetrieveChats(data){
+    var chats = data.chats.filter((chats) => {
+      return chats.chat_type == 0;
     });
+    var grupos = data.chats.filter((grupos) => {
+      return grupos.chat_type == 1 && grupos.user_chat == data.my_uid;
+    });
+    grupos.forEach((info) => {
+      info.name = info.chat_name;
+    });
+    chats.push.apply(chats, grupos);
+    setChatList(data);
+    setfavoriteFriendFiltered(chats);
+  }
+
+  useEffect(() => {
+    socket.on("retrieve chats", RetrieveChats);
+    return () => {
+      socket.off("retrieve chats", RetrieveChats);
+    };
   },one);
 
   useEffect(() => {

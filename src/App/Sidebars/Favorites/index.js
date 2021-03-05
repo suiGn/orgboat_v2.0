@@ -17,13 +17,18 @@ function Index(props) {
         socket.emit('GetFavorites', props.my_uid);
     },props);
 
+    function RetrieveGetFavorites(data) {
+        if(data.favorites){
+            setfavoriteChats(data.favorites)
+            setfavoriteChatsFiltered(data.favorites)
+        }
+    }
+
     useEffect(() => {
-        socket.once('retrieve getfavorites', function (data) {
-            if(data.favorites){
-                setfavoriteChats(data.favorites)
-                setfavoriteChatsFiltered(data.favorites)
-            }
-        });
+        socket.on('retrieve getfavorites', RetrieveGetFavorites );
+        return () => {
+            socket.off("retrieve getfavorites", RetrieveGetFavorites);
+        };
     })
 
     const inputRef = useRef();
