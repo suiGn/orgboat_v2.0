@@ -10,7 +10,6 @@ import classnames from "classnames";
 import axios from "axios";
 
 function Profile(props) {
-  console.log(props, "profile");
   const { socket } = props;
   const dispatch = useDispatch();
   var userData;
@@ -51,6 +50,7 @@ function Profile(props) {
 
   function RetrieveViewownprofile(data){
     var userData = data.usrprofile[0];
+    console.log(userData)
     if (userData) {
       let nameD = userData.name != "null" ? userData.name : "";
       let cityD = userData.city != "null" ? userData.city : "";
@@ -79,6 +79,7 @@ function Profile(props) {
       setPphoto(pphotoD);
     }
   }
+
   useEffect(() => {
     socket.on("retrieve viewownprofile", RetrieveViewownprofile );
     return () => {
@@ -89,11 +90,9 @@ function Profile(props) {
   function addDefaultSrc(ev) {
     ev.target.src = WomenAvatar5;
   }
+
   function SaveProfile(e) {
     // e.preventDefault();
-    // if (fileState) {
-    //   onFormSubmit(e);
-    // }
     if (name != "") {
       userData = {
         name: name,
@@ -106,15 +105,16 @@ function Profile(props) {
       socket.emit("SaveOwnProfile", userData);
       socket.once("retrieve saveownprofile", function (data) {
         socket.emit("ViewOwnProfile", { id: data.u_id });
+        socket.once("retrieve viewownprofile", ()=> {
+          socket.emit("my_uid");
+        })
       });
     }
   }
 
   function SaveImg(e) {
     e.preventDefault();
-    if (fileState) {
-      onFormSubmit(e);
-    }
+    onFormSubmit(e);
   }
 
   const openContentEditableToggler = (save, e) => {
@@ -165,14 +165,13 @@ function Profile(props) {
 
   function onChangePhoto(e) {
     setFileState(e.target.files[0]);
-    console.log(e.target.files[0]);
     SaveImg(e);
   }
 
   function onFormSubmit(e) {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("myImage", fileState);
+    formData.append("myImage", e.target.files[0]);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
@@ -183,7 +182,10 @@ function Profile(props) {
       .then((response) => {
         //alert("The file is successfully uploaded");
         console.log("Imagen subida con éxito");
-        SaveProfile(e);
+        /*socket.emit("ViewOwnProfile", { id: props.user.id });
+        socket.once("retrieve viewownprofile", ()=> {
+          socket.emit("my_uid");
+        })*/
       })
       .catch((error) => {});
   }
