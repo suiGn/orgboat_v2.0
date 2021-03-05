@@ -43,9 +43,10 @@ function ChatHeader(props) {
   } else {
     p = <img src={props.data.pphoto} className="rounded-circle" alt="image" />;
   }
+
   function ArchiveChat(chat_selected) {
     socket.emit("archived chat", { chat: chat_selected });
-    socket.on("archived response", function () {
+    socket.once("archived response", function () {
       socket.emit("get chats");
       socket.emit("get chats archived");
     });

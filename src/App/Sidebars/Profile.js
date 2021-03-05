@@ -39,38 +39,41 @@ function Profile(props) {
     socket.emit("ViewOwnProfile", props.user);
   }, [props.user]);
 
-  useEffect(() => {
-    var userData;
-    socket.on("retrieve viewownprofile", function (data) {
-      userData = data.usrprofile[0];
-      if (userData) {
-        let nameD = userData.name != "null" ? userData.name : "";
-        let cityD = userData.city != "null" ? userData.city : "";
-        let phoneD = userData.phone != "null" ? userData.phone : "";
-        let aboutD = userData.about != "null" ? userData.about : "";
-        let pphotoD = userData.pphoto != "null" ? userData.pphoto : "";
-        let websiteD = userData.website != "null" ? userData.website : "";
-        let chat_initial;
-        let chat_name;
-        if (pphotoD === "" || pphotoD === null) {
-          chat_name = nameD;
-          chat_initial = chat_name.substring(0, 1);
-          setP(
-            <span className="avatar-title bg-info rounded-circle">
-              {chat_initial}
-            </span>
-          );
-        } else {
-          setP(<img src={pphotoD} className="rounded-circle" alt="image" />);
-        }
-        setName(nameD);
-        setCity(cityD);
-        setPhone(phoneD);
-        setWebSite(websiteD);
-        setAbout(aboutD);
-        setPphoto(pphotoD);
+  function RetrieveViewownprofile(data){
+    var userData = data.usrprofile[0];
+    if (userData) {
+      let nameD = userData.name != "null" ? userData.name : "";
+      let cityD = userData.city != "null" ? userData.city : "";
+      let phoneD = userData.phone != "null" ? userData.phone : "";
+      let aboutD = userData.about != "null" ? userData.about : "";
+      let pphotoD = userData.pphoto != "null" ? userData.pphoto : "";
+      let websiteD = userData.website != "null" ? userData.website : "";
+      let chat_initial;
+      let chat_name;
+      if (pphotoD === "" || pphotoD === null) {
+        chat_name = nameD;
+        chat_initial = chat_name.substring(0, 1);
+        setP(
+          <span className="avatar-title bg-info rounded-circle">
+            {chat_initial}
+          </span>
+        );
+      } else {
+        setP(<img src={pphotoD} className="rounded-circle" alt="image" />);
       }
-    });
+      setName(nameD);
+      setCity(cityD);
+      setPhone(phoneD);
+      setWebSite(websiteD);
+      setAbout(aboutD);
+      setPphoto(pphotoD);
+    }
+  }
+  useEffect(() => {
+    socket.on("retrieve viewownprofile", RetrieveViewownprofile );
+    return () => {
+      socket.off("retrieve viewownprofile", RetrieveViewownprofile);
+    };
   }, [name]);
 
   function addDefaultSrc(ev) {
