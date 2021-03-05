@@ -29,6 +29,9 @@ var passport = require("passport");
 var cors = require("cors");
 const aws = require('aws-sdk');
 
+const S3_BUCKET = process.env.S3_BUCKET;
+aws.config.region = 'us-east-2';
+
 const buildPath = path.join(__dirname, "..", "build");
 //middlewares
 const {
@@ -140,8 +143,6 @@ const server = express()
         return res.redirect("/badLogin");
       }
       req.logIn(user, function (err) {
-        console.log("Entro a user coso este");
-        console.log(err);
         if (err) {
           return next(err);
         }

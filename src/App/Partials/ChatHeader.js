@@ -9,6 +9,8 @@ import {
 import * as FeatherIcon from "react-feather";
 import VoiceCallModal from "../Modals/VoiceCallModal";
 import VideoCallModal from "../Modals/VideoCallModal";
+import { userProfileAction } from "../../Store/Actions/userProfileAction";
+import { mobileUserProfileAction } from "../../Store/Actions/mobileUserProfileAction";
 import { profileAction } from "../../Store/Actions/profileAction";
 import { mobileProfileAction } from "../../Store/Actions/mobileProfileAction";
 import ManAvatar3 from "../../assets/img/man_avatar3.jpg";
@@ -26,8 +28,8 @@ function ChatHeader(props) {
 
   const profileActions = () => {
     props.setUser({ id: props.id });
-    dispatch(profileAction(true));
-    dispatch(mobileProfileAction(true));
+    dispatch(userProfileAction(true));
+    dispatch(mobileUserProfileAction(true));
   };
   let p;
   let chat_initial;
@@ -54,7 +56,7 @@ function ChatHeader(props) {
 
   return (
     <div className="chat-header">
-      <div className="chat-header-user">
+      <button onClick={profileActions} className="chat-header-user w-100">
         <figure className="avatar">{p}</figure>
         <div>
           <h5>{props.data.name}</h5>
@@ -62,7 +64,7 @@ function ChatHeader(props) {
             <i>writing...</i>
           </small> */}
         </div>
-      </div>
+      </button>
       <div className="chat-header-action">
         <ul className="list-inline">
           <li className="list-inline-item d-xl-none d-inline">

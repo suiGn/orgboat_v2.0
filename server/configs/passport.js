@@ -124,6 +124,7 @@ module.exports = function (passport) {
           // `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}') AND verified = 0`,
           `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}')`,
           (err, resp) => {
+            console.log(resp[0]);
             if (resp[0].verified === 0) {
               return done(null, resp[0]);
             } else {
