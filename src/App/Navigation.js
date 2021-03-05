@@ -18,8 +18,6 @@ import SettingsModal from "./Modals/SettingsModal";
 import { mobileSidebarAction } from "../Store/Actions/mobileSidebarAction";
 import WomenAvatar5 from "../assets/img/women_avatar5.jpg";
 import { mobileProfileAction } from "../Store/Actions/mobileProfileAction";
-import { userProfileAction } from "../Store/Actions/userProfileAction";
-import { mobileUserProfileAction } from "../Store/Actions/mobileUserProfileAction";
 
 function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
@@ -120,6 +118,14 @@ function Navigation(props) {
     dispatch(mobileProfileAction(true));
   };
 
+  const openProfileToggler = (e) => {
+    props.setUser(userEdit);
+    props.setOpenProfile(!props.openProfile);
+    if (props.openUserProfile) {
+      props.setOpenUserProfile(!props.openUserProfile);
+    }
+  };
+
   const navigationItems = [
     {
       name: "Chats",
@@ -198,7 +204,7 @@ function Navigation(props) {
       <div className="nav-group">
         <ul>
           <li id="user-menu" className="text-center pt-4 pb-4">
-            <figure onClick={profileActions} className="avatar own-avatar">
+            <figure onClick={openProfileToggler} className="avatar own-avatar">
               {p}
             </figure>
             <Tooltip

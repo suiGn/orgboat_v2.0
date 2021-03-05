@@ -13,9 +13,6 @@ import {
   Input,
 } from "reactstrap";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 // Feather icon
 import * as FeatherIcon from "react-feather";
 
@@ -27,6 +24,9 @@ function AddFriendModal(props) {
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const [showSubmit, setShowSubmit] = useState(false);
+
+  const [response, setResponse] = useState("");
+  const [error, setError] = useState("");
 
   const tooltipToggle = () => setTooltipOpen(!tooltipOpen);
 
@@ -51,25 +51,18 @@ function AddFriendModal(props) {
     if (e.target.value != "") setShowSubmit(true);
   }
   function AddUserContact(u_id) {
-    props.socket.emit("AddContact", { u_id: u_id });
-    props.socket.once("retrive Addcontact", (mssg) => {
-      props.socket.emit("GetContacts");
-      // modalToggle();
-      setfindUsers([]);
-    });
-    notify();
+    try {
+      props.socket.emit("AddContact", { u_id: u_id });
+      props.socket.once("retrive Addcontact", (mssg) => {
+        props.socket.emit("GetContacts");
+        // modalToggle();
+        setfindUsers([]);
+      });
+      setResponse("Se agrego con éxito");
+    } catch {
+      setError("Hubo un error favor de intentarlo nuevamente");
+    }
   }
-
-  const notify = () =>
-    toast.success("Usuario agregado con éxito", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
 
   return (
     <div>
@@ -95,11 +88,15 @@ function AddFriendModal(props) {
         toggle={modalToggle}
         centered
       >
-        <ToastContainer />
         <ModalHeader toggle={modalToggle}>
           <FeatherIcon.UserPlus className="mr-2" /> Add Friends
         </ModalHeader>
         <ModalBody>
+          {response ? (
+            <div class="text-success mt-0">{response}</div>
+          ) : (
+            <div class="text-error mt-0">{error}</div>
+          )}
           <p>Send invitations to friends.</p>
           <Label for="email">Email addresses</Label>
           <Input type="text" name="email" id="email" onChange={handleEmail} />

@@ -3,21 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { userProfileAction } from "../../Store/Actions/userProfileAction";
-import { mobileUserProfileAction } from "../../Store/Actions/mobileUserProfileAction";
 import WomenAvatar5 from "../../assets/img/women_avatar5.jpg";
 import classnames from "classnames";
 
 function UserProfile(props) {
   const { socket } = props;
+  const { openUserProfile } = props;
+  const { setOpenUserProfile } = props;
+  const { openProfile } = props;
+  const { setOpenProfile } = props;
   const dispatch = useDispatch();
 
-  const { userProfileSidebar, mobileUserProfileSidebar } = useSelector(
-    (state) => state
-  );
-
-  console.log("userprofile", userProfileSidebar);
-  console.log("userprofilemob", mobileUserProfileSidebar);
+  const openUserProfileToggler = (e) => {
+    setOpenUserProfile(!openUserProfile);
+    if (openProfile) {
+      setOpenProfile(!openProfile);
+    }
+  };
 
   //const [activeTab, setActiveTab] = useState('1');
   const [name, setName] = useState("");
@@ -31,12 +33,6 @@ function UserProfile(props) {
   /*const toggle = tab => {
         if (activeTab !== tab) setActiveTab(tab);
     };*/
-
-  const profileActions = (e, data) => {
-    e.preventDefault();
-    dispatch(userProfileAction(false));
-    dispatch(mobileUserProfileAction(false));
-  };
 
   useEffect(() => {
     socket.emit("ViewOwnProfile", props.user);
@@ -81,19 +77,15 @@ function UserProfile(props) {
   }
 
   return (
-    <div
-      className={`sidebar-group ${
-        mobileUserProfileSidebar ? "mobile-open" : ""
-      }`}
-    >
-      <div className={userProfileSidebar ? "sidebar active" : "sidebar"}>
+    <div className={`sidebar-group ${openUserProfile ? "mobile-open" : ""}`}>
+      <div className={openUserProfile ? "sidebar active" : "sidebar"}>
         <header>
           <span>Profile</span>
           <ul className="list-inline">
             <li className="list-inline-item">
               <a
                 href="#/"
-                onClick={(e) => profileActions(e)}
+                onClick={(e) => openUserProfileToggler(e)}
                 className="btn btn-outline-light text-danger sidebar-close"
               >
                 <FeatherIcon.X />
@@ -105,7 +97,7 @@ function UserProfile(props) {
           <PerfectScrollbar>
             <div className="pl-4 pr-4">
               <div className="text-center">
-                <figure className="avatar avatar-xl mb-3">
+                <figure className="avatar user-profile mb-3">
                   {/* <img
                     onError={addDefaultSrc}
                     src={pphoto}

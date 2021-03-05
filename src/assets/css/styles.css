@@ -66,13 +66,13 @@ body.dark .btn.btn-light {
 }
 
 .text-error {
-  color: #cf404d;
+  /* color: #cf404d; */
   font-size: 16px;
   margin: 20px 0;
 }
 
 .text-success {
-  color: #28a745;
+  /* color: #28a745; */
   font-size: 16px;
   margin: 20px 0;
 }
@@ -275,6 +275,11 @@ body.dark .time {
 
 .chat-header-action {
   padding: 17px 30px;
+}
+
+.user-profile {
+  height: 200px;
+  width: 200px;
 }
 
 @media (max-width: 1200px) {

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 // import { ReactComponent as Logo } from "../assets/logo.svg";
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function NotValidateEmail() {
   const [opt1, setOpt1] = useState("");
   const [opt2, setOpt2] = useState("");
   const [validateMail, setValidateMail] = useState(0);
+  const [response, setResponse] = useState("");
+  const [error, setError] = useState("");
   const url = require("url").parse(window.location.href, true);
   let em = url.query.em ? url.query.em : "";
   let uuid = url.query.uuid ? url.query.uuid : "";
@@ -26,43 +26,25 @@ function NotValidateEmail() {
     axios
       .post("/resnd?uuid=" + uuid + "&em=" + em, body)
       .then((res) => {
-        notify();
+        setResponse("Se reenvío con éxito");
       })
       .catch(() => {
-        error();
+        setError("Hubo un error favor de intentarlo nuevamente");
       });
   }
 
-  const notify = () =>
-    toast.success("Correo reenviado con exito", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-
-  const error = () =>
-    toast.error("Hubo un error, favor de intentarlo de nuevo", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-
   return (
     <div>
-      <ToastContainer />
       {
         <div className="form-wrapper">
           <div className="logo">
             <Logo />
           </div>
+          {response ? (
+            <div class="text-success ">{response}</div>
+          ) : (
+            <div class="text-error">{error}</div>
+          )}
           <h5>Email Verification Required</h5>
           <p>Please check your email to verify it.</p>
           <div className="form-group">
