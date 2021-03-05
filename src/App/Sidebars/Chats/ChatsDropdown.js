@@ -33,7 +33,7 @@ const ChatsDropdown = (props) => {
             </DropdownToggle>
             <DropdownMenu>
                 <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-                <DropdownItem onClick={() => DeleteChat(props.chat_uid)}>Delete</DropdownItem>
+                {/* <DropdownItem onClick={() => DeleteChat(props.chat_uid)}>Delete</DropdownItem> */}
             </DropdownMenu>
         </Dropdown>
     )
