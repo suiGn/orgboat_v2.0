@@ -83,6 +83,7 @@ function Chat(props) {
   }
 
   useEffect(() => {
+    setChatMessages([]);
     socket.on("retrieve messages", RetrieveMessages);
     socket.emit("get messages", { id: props.clicked.chat_uid, page: 1, inChat:true});
     socket.on("chat message", OnChatMessage);
