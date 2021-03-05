@@ -387,39 +387,43 @@ exports.editProfile = function (req, res) {
   );
 };
 
-exports.savedbimage = function (req, res) {
-  console.log(req.file);
-  var photo = `uploads/${req.file.filename}`;
-  // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
-  var uploadParams = {Bucket: "cleaker", Key: '', Body: '',ACL:'public-read'};
-  readStream("../build/"+photo).then(data => {
-    uploadParams.Body = data;
-    uploadParams.Key = req.file.filename;
-    s3.upload (uploadParams, function (err, data) {
-      if (err) {
-        console.log("Error", err);
-      } if (data) {
-        console.log("Upload Success", data.Location);
-        photo=data.Location;
-        var uidd = req.user[0].u_id;
-        index.orgboatDB.query(
-          "UPDATE usrs SET pphoto = ? WHERE u_id = ?",
-          [photo, uidd],
-          (error, results) => {
-            if (error) {
-              //res.redirect("/workspace");
-              console.log(error);
-            } else {
-              //res.redirect("/workspace");
-              console.log("Okay");
+exports.savedbimage =  async function (req, res) {
+  return new Promise((resolve, reject) =>{
+    console.log(req.file);
+    var photo = `uploads/${req.file.filename}`;
+    // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
+    var uploadParams = {Bucket: "cleaker", Key: '', Body: '',ACL:'public-read'};
+    readStream("../build/"+photo).then(data => {
+      uploadParams.Body = data;
+      uploadParams.Key = req.file.filename;
+      s3.upload (uploadParams, function (err, data) {
+        if (err) {
+          console.log("Error", err);
+        } if (data) {
+          console.log("Upload Success", data.Location);
+          photo=data.Location;
+          var uidd = req.user[0].u_id;
+          index.orgboatDB.query(
+            "UPDATE usrs SET pphoto = ? WHERE u_id = ?",
+            [photo, uidd],
+            (error, results) => {
+              if (error) {
+                //res.redirect("/workspace");
+                reject(error);
+                console.log(error);
+              } else {
+                //res.redirect("/workspace");
+                resolve(photo);
+                console.log("Okay");
+              }
             }
-          }
-        );
-      }
+          );
+        }
+      });
+    })
+    .catch(err=>{
+      reject(err);
     });
-  })
-  .catch(err=>{
-    console.log(err);
   });
 
   // readFileSync("../build/"+photo).then(data =>{

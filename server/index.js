@@ -178,10 +178,12 @@ const server = express()
         res.redirect("/workspace");
       }
       //console.log(req.file.path);
-      routes.savedbimage(req,res);
-      res.json(
-        {"ok":true}
-      );
+      routes.savedbimage(req,res)
+      .then(url =>{
+        res.json(
+          {"ok":url}
+        );
+      });
     });
   })
   .get("/pphoto", (req, res) => {
