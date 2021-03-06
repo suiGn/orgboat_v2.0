@@ -50,7 +50,6 @@ function Profile(props) {
 
   function RetrieveViewownprofile(data){
     var userData = data.usrprofile[0];
-    console.log(userData)
     if (userData) {
       let nameD = userData.name != "null" ? userData.name : "";
       let cityD = userData.city != "null" ? userData.city : "";
@@ -181,7 +180,6 @@ function Profile(props) {
       .post("/uploadpPhoto", formData, config)
       .then((response) => {
         //alert("The file is successfully uploaded");
-        console.log("Imagen subida con éxito");
         socket.emit("ViewOwnProfile", { id: props.user.id });
         socket.once("retrieve viewownprofile", ()=> {
           socket.emit("my_uid");
