@@ -142,7 +142,7 @@ function Index(props) {
               >
                 {chat.name}
               </h5>
-              {chat.last_message_message}
+              {(chat.deleted_message||chat.deleted_message_to)?"":chat.last_message_message}
             </div>
             {
             (chat.unread_messages && chat.last_message_user_uid!=my_uid)>0 ?

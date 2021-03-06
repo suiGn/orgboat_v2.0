@@ -48,6 +48,7 @@ const ChatsMessageDropdown = (props) => {
       socket.emit("Delete message", { id: message_id, to: false });
     }
     socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit("get chats")
   }
 
   return (
