@@ -40,7 +40,7 @@ io.on("connection", function (socket) {
         `
 			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, chats.chat_name,
         m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
-        ,chats_users.delete_chat, m.unread_messages as unread_messages
+        ,chats_users.delete_chat, m.unread_messages as unread_messages,  m.delete_message as deleted_message, m.delete_message_to as deleted_message_to
 			
 			from chats_users  
 
@@ -542,7 +542,7 @@ io.on("connection", function (socket) {
                 },
               });
             }
-            io.to(user.u_id).emit("retriveDeleteMessage");
+            io.to(user.u_id).emit("retrive DeleteMessage");
           }
         );
       }else{
@@ -557,7 +557,7 @@ io.on("connection", function (socket) {
                 },
               });
             }
-            io.to(user.u_id).emit("retriveDeleteMessage");
+            io.to(user.u_id).emit("retrive DeleteMessage");
           }
         );
       }
