@@ -44,7 +44,11 @@ function AddFriendModal(props) {
     });
     props.socket.once("retrive SearchUserByEmailOrUsername", (data) => {
       setfindUsers(data.users);
-      setValidate(data.validate);
+      if(data.validate === 1){
+        notifyFriend();
+      }else if(data.validate === 2){
+        notifyDontExist();
+      }
     });
     setShowSubmit(false);
   }
@@ -61,13 +65,6 @@ function AddFriendModal(props) {
     });
     notify();
   }
-  useEffect(()=>{
-    if(validate === 1){
-      notifyFriend();
-    }else if(validate === 2){
-      notifyDontExist();
-    }
-  },validate);
 
   const notify = () =>
     toast.success("Usuario agregado con éxito", {
@@ -89,6 +86,7 @@ function AddFriendModal(props) {
       draggable: true,
       progress: undefined,
     });
+    
   const notifyFriend = () =>
     toast.success("Usuario ya es amigo", {
       position: "top-right",
