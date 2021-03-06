@@ -94,18 +94,13 @@ function Layout(props) {
           setUser={setUser}
           my_uid={my_uid}
         />
-        {clicked.name ? (
-          <Chat
-            darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
-            socket={socket}
-            clicked={clicked}
-            setUser={setUser}
-            my_uid={my_uid}
-          />
-        ) : (
-          <ChatN />
-        )}
-
+       <Chat
+        darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+        socket={socket}
+        clicked={clicked}
+        setUser={setUser}
+        my_uid={my_uid}
+        />
         <Profile socket={socket} user={user} />
         <UserProfile socket={socket} user={user} />
         <TourModal />

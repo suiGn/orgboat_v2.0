@@ -29,11 +29,7 @@ var passport = require("passport");
 var cors = require("cors");
 const aws = require('aws-sdk');
 
-const S3_BUCKET = process.env.S3_BUCKET;
-aws.config.region = 'us-east-2';
-
 const buildPath = path.join(__dirname, "..", "build");
-
 //middlewares
 const {
   isLoggedIn,
@@ -48,7 +44,13 @@ var flash = require("connect-flash");
 require("./configs/passport")(passport); //pass passport for configuration
 var Sequelize = require("sequelize");
 var session = require("express-session");
-require("./configs/config");
+require('./configs/config');
+
+//AWS
+const S3_BUCKET = process.env.S3_BUCKET;
+aws.config.region = 'us-east-2';
+
+//Mysql
 var mysql = require("mysql");
 var MySQLStore = require("express-mysql-session")(session);
 let options = {
@@ -173,8 +175,12 @@ const server = express()
         res.redirect("/workspace");
       }
       //console.log(req.file.path);
-      routes.savedbimage(req);
-      res.redirect("/workspace");
+      routes.savedbimage(req,res)
+      .then(url =>{
+        res.json(
+          {"ok":url}
+        );
+      });
     });
   })
   .get("/pphoto", (req, res) => {

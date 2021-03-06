@@ -36,7 +36,6 @@ io.on("connection", function (socket) {
     //Transmit the messages from one user to another
     socket.on("get chats", function (msg) {
       console.log(`[Socket.io] - User ${user.usrname} asked for chats`);
-      //console.log(user.pphoto);
       orgboatDB.query(
         `
 			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, chats.chat_name,
@@ -59,12 +58,22 @@ io.on("connection", function (socket) {
           where chats_users.u_id = '${user.u_id}' and chats_users.archiveChat = 0 and chats_users.delete_chat = 0
           order by time desc;
 			`,
-        function (err, rows) {
-          //console.log(rows);
+        (err, rows) => {
+         /* rows.forEach((chat)=>{
+            orgboatDB.query( 
+               `select sum(unread_messages) as unread  from messages where chat_uid = '${chat.chat_uid}' and u_id != '${user.u_id}' `,
+               (err, message)=>{
+                if(!message[0].unread){
+                  chat.unread_messages = message[0].unread
+                }
+              })
+            chats.push(chat)
+          })*/
           io.to(user.u_id).emit("retrieve chats", {
             my_uid: user.u_id,
             chats: rows,
           });
+          
         }
       );
     });
@@ -139,26 +148,28 @@ io.on("connection", function (socket) {
     //Client request the messages
     socket.on("get messages", function (msg) {
       console.log(
-        `[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, page:${msg.page}`
+        `[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, get messages:${msg.page}`
       );
-      orgboatDB.query(
-        `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${msg.id}'`,
-        (err,data)=>{
-          if (err) {
-            return json({
-              ok: false,
-              err: {
-                message: "error al actualizar messages",
-              },
-            });
+      if(msg.inChat){
+        orgboatDB.query(
+          `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${msg.id}'`,
+          (err,data)=>{
+            if (err) {
+              return json({
+                ok: false,
+                err: {
+                  message: "error al actualizar messages",
+                },
+              });
+            }
           }
-        }
-      );
+        );
+      }
       
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit 10;
@@ -282,10 +293,12 @@ io.on("connection", function (socket) {
               if (result === false) {
                 io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
                   users: rows,
+                  validate: 0
                 });
               }else{
                 io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
                   users: [],
+                  validate: 1
                 });
               }
             })
@@ -293,6 +306,7 @@ io.on("connection", function (socket) {
           else{
             io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
               users: [],
+              validate:2
             });
           }
         }

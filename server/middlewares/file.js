@@ -2,7 +2,7 @@ const fs = require('fs');
 
 async function readFileSync (fileName) {
 	return new Promise((resolve, reject) => {
-		fs.readFile(fileName, 'utf8', (err, data) => {
+		fs.readFile(fileName, (err, data) => {
 			if (err) {
 				reject(err);
 			}
@@ -10,6 +10,18 @@ async function readFileSync (fileName) {
 		});
 	});
 };
+
+async function readStream(filename){
+	return new Promise((resolve,reject) =>{
+		var fileStream = fs.createReadStream(filename);
+		fileStream.on('error', function(err) {
+			if(err){
+				reject(err);
+			}
+		});
+		resolve(fileStream);
+	})
+}
 
 async function writeFileSync (fileName, text) {
 	return new Promise((resolve, reject) => {
@@ -29,5 +41,6 @@ async function writeFileSync (fileName, text) {
 
 module.exports = {
 	readFileSync,
-	writeFileSync
+	writeFileSync,
+	readStream
 };

@@ -17,26 +17,29 @@ function Index(props) {
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
-  useEffect(() => {
-    socket.on("retrieve chats", (data) => {
-      //TODO: acualizar la lista de unread_messages
-      var chats = data.chats.filter((chats) => {
-        return chats.chat_type == 0;
-      });
 
-      var grupos = data.chats.filter((grupos) => {
-        return grupos.chat_type == 1 && grupos.user_chat == data.my_uid;
-      });
-
-      grupos.forEach((info) => {
-        info.name = info.chat_name;
-      });
-
-      chats.push.apply(chats, grupos);
-      setChatList(data);
-      setfavoriteFriendFiltered(chats);
+  function RetrieveChats(data){
+    var chats = data.chats.filter((chats) => {
+      return chats.chat_type == 0;
     });
-  }, one);
+    var grupos = data.chats.filter((grupos) => {
+      return grupos.chat_type == 1 && grupos.user_chat == data.my_uid;
+    });
+    grupos.forEach((info) => {
+      info.name = info.chat_name;
+    });
+    chats.push.apply(chats, grupos);
+    setChatList(data);
+    setfavoriteFriendFiltered(chats);
+  }
+
+  useEffect(() => {
+    socket.on("retrieve chats", RetrieveChats);
+    return () => {
+      socket.off("retrieve chats", RetrieveChats);
+    };
+  },one);
+
   useEffect(() => {
     socket.emit("get chats");
     // inputRef.current.focus();
@@ -78,6 +81,13 @@ function Index(props) {
     return dateLabel;
   }
   let my_uid = chatLists.my_uid;
+
+  function setClicked(e,chat){
+    e.preventDefault();
+    chat.unread_messages = 0
+    props.setClicked(chat);
+  }
+
   const ChatListView = (props) => {
     const { chat } = props;
     let chat_initial;
@@ -118,10 +128,8 @@ function Index(props) {
       }
       return (
         <li
-          className={"list-group-item " + (chat.selected ? "open-chat" : "")}
-          onClick={() => {
-            props.setClicked(chat);
-          }}
+          className={(chat.unread_messages && chat.last_message_user_uid!=my_uid)? "list-group-item open-chat" :  "list-group-item " + (chat.selected ? "open-chat" : "") }
+          onClick={(e) => setClicked(e,chat)}
         >
           <div>
             <figure className="avatar">{p}</figure>
@@ -129,29 +137,32 @@ function Index(props) {
           <div className="users-list-body">
             <div i={chat.chat_uid}>
               <h5
-                // className={chat.unread_messages ? "text-primary" : ""}
+                className={(chat.unread_messages && chat.last_message_user_uid!=my_uid) ? "text-primary" : ""}
                 i={chat.chat_uid}
               >
                 {chat.name}
               </h5>
               {chat.last_message_message}
             </div>
+            {
+            (chat.unread_messages && chat.last_message_user_uid!=my_uid)>0 ?
             <div className="users-list-action">
-              {/* {chat.unread_messages ? (
-                <div className="new-message-count">{chat.unread_messages}</div>
-              ) : (
-                ""
-              )} */}
-              <small
-                // className={chat.unread_messages ? "text-primary" : "text-muted"}
-                className="text-muted"
-              >
-                {timeLabel}
-              </small>
+              <div className="new-message-count">{chat.unread_messages}</div>
+              <small className={chat.unread_messages ? "text-primary" : "text-muted"} className="text-muted"
+              >{timeLabel}</small>
               <div className="action-toggle">
                 <ChatsDropdown setUser={props.setUser} id={chat.user_chat} />
               </div>
             </div>
+            :
+            <div className="users-list-action">
+                <small  className="text-muted">{timeLabel}</small>
+              <div className="action-toggle">
+                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} socket={socket} chat_uid={chat.chat_uid}/>
+              </div>
+            </div>
+               
+            }
           </div>
         </li>
       );

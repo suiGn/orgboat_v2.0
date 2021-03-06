@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -32,6 +32,7 @@ function AddFriendModal(props) {
 
   const [email, setEmail] = useState("");
   const [findUsers, setfindUsers] = useState([]);
+  const [validate , setValidate] =  useState(null);
   function SearchUserByEmailOrUserName(e) {
     e.preventDefault();
     var input = email;
@@ -43,6 +44,11 @@ function AddFriendModal(props) {
     });
     props.socket.once("retrive SearchUserByEmailOrUsername", (data) => {
       setfindUsers(data.users);
+      if(data.validate === 1){
+        notifyFriend();
+      }else if(data.validate === 2){
+        notifyDontExist();
+      }
     });
     setShowSubmit(false);
   }
@@ -62,6 +68,27 @@ function AddFriendModal(props) {
 
   const notify = () =>
     toast.success("Usuario agregado con éxito", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  const notifyDontExist = () =>
+    toast.success("Nombre de usuario o correo no encontrado", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    
+  const notifyFriend = () =>
+    toast.success("Usuario ya es amigo", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,

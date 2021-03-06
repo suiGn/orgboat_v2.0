@@ -10,7 +10,6 @@ import classnames from "classnames";
 import axios from "axios";
 
 function Profile(props) {
-  console.log(props, "profile");
   const { socket } = props;
   const dispatch = useDispatch();
   var userData;
@@ -49,48 +48,51 @@ function Profile(props) {
     socket.emit("ViewOwnProfile", props.user);
   }, [props.user]);
 
-  useEffect(() => {
-    var userData;
-    socket.on("retrieve viewownprofile", function (data) {
-      userData = data.usrprofile[0];
-      if (userData) {
-        let nameD = userData.name != "null" ? userData.name : "";
-        let cityD = userData.city != "null" ? userData.city : "";
-        let phoneD = userData.phone != "null" ? userData.phone : "";
-        let aboutD = userData.about != "null" ? userData.about : "";
-        let pphotoD = userData.pphoto != "null" ? userData.pphoto : "";
-        let websiteD = userData.website != "null" ? userData.website : "";
-        let chat_initial;
-        let chat_name;
-        if (pphotoD === "" || pphotoD === null) {
-          chat_name = nameD;
-          chat_initial = chat_name.substring(0, 1);
-          setP(
-            <span className="avatar-title bg-info rounded-circle">
-              {chat_initial}
-            </span>
-          );
-        } else {
-          setP(<img src={pphotoD} className="rounded-circle" alt="image" />);
-        }
-        setName(nameD);
-        setCity(cityD);
-        setPhone(phoneD);
-        setWebSite(websiteD);
-        setAbout(aboutD);
-        setPphoto(pphotoD);
+  function RetrieveViewownprofile(data){
+    var userData = data.usrprofile[0];
+    console.log(userData)
+    if (userData) {
+      let nameD = userData.name != "null" ? userData.name : "";
+      let cityD = userData.city != "null" ? userData.city : "";
+      let phoneD = userData.phone != "null" ? userData.phone : "";
+      let aboutD = userData.about != "null" ? userData.about : "";
+      let pphotoD = userData.pphoto != "null" ? userData.pphoto : "";
+      let websiteD = userData.website != "null" ? userData.website : "";
+      let chat_initial;
+      let chat_name;
+      if (pphotoD === "" || pphotoD === null) {
+        chat_name = nameD;
+        chat_initial = chat_name.substring(0, 1);
+        setP(
+          <span className="avatar-title bg-info rounded-circle">
+            {chat_initial}
+          </span>
+        );
+      } else {
+        setP(<img src={pphotoD} className="rounded-circle" alt="image" />);
       }
-    });
+      setName(nameD);
+      setCity(cityD);
+      setPhone(phoneD);
+      setWebSite(websiteD);
+      setAbout(aboutD);
+      setPphoto(pphotoD);
+    }
+  }
+
+  useEffect(() => {
+    socket.on("retrieve viewownprofile", RetrieveViewownprofile );
+    return () => {
+      socket.off("retrieve viewownprofile", RetrieveViewownprofile);
+    };
   }, [name]);
 
   function addDefaultSrc(ev) {
     ev.target.src = WomenAvatar5;
   }
+
   function SaveProfile(e) {
     // e.preventDefault();
-    // if (fileState) {
-    //   onFormSubmit(e);
-    // }
     if (name != "") {
       userData = {
         name: name,
@@ -103,15 +105,16 @@ function Profile(props) {
       socket.emit("SaveOwnProfile", userData);
       socket.once("retrieve saveownprofile", function (data) {
         socket.emit("ViewOwnProfile", { id: data.u_id });
+        socket.once("retrieve viewownprofile", ()=> {
+          socket.emit("my_uid");
+        })
       });
     }
   }
 
   function SaveImg(e) {
     e.preventDefault();
-    if (fileState) {
-      onFormSubmit(e);
-    }
+    onFormSubmit(e);
   }
 
   const openContentEditableToggler = (save, e) => {
@@ -162,14 +165,13 @@ function Profile(props) {
 
   function onChangePhoto(e) {
     setFileState(e.target.files[0]);
-    console.log(e.target.files[0]);
     SaveImg(e);
   }
 
   function onFormSubmit(e) {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("myImage", fileState);
+    formData.append("myImage", e.target.files[0]);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
@@ -180,7 +182,10 @@ function Profile(props) {
       .then((response) => {
         //alert("The file is successfully uploaded");
         console.log("Imagen subida con éxito");
-        SaveProfile(e);
+        socket.emit("ViewOwnProfile", { id: props.user.id });
+        socket.once("retrieve viewownprofile", ()=> {
+          socket.emit("my_uid");
+        })
       })
       .catch((error) => {});
   }

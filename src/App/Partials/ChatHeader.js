@@ -34,7 +34,7 @@ function ChatHeader(props) {
   let p;
   let chat_initial;
   let chat_name;
-  if (props.data.pphoto === "") {
+  if (props.data.pphoto === "" || props.data.pphoto === null) {
     chat_name = props.data.name;
     chat_initial = chat_name.substring(0, 1);
     p = (
@@ -45,9 +45,10 @@ function ChatHeader(props) {
   } else {
     p = <img src={props.data.pphoto} className="rounded-circle" alt="image" />;
   }
+
   function ArchiveChat(chat_selected) {
     socket.emit("archived chat", { chat: chat_selected });
-    socket.on("archived response", function () {
+    socket.once("archived response", function () {
       socket.emit("get chats");
       socket.emit("get chats archived");
     });
@@ -100,7 +101,7 @@ function ChatHeader(props) {
                 <DropdownItem onClick={() => ArchiveChat(props.chat_uid)}>
                   Add to archive
                 </DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
+                {/* <DropdownItem>Delete</DropdownItem> */}
                 {/* <DropdownItem divider />
                 <DropdownItem>Block</DropdownItem> */}
               </DropdownMenu>

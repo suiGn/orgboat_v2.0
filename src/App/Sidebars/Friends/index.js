@@ -19,6 +19,8 @@ function Index(props) {
     });
     let my_uid
 
+    const {socket} =  props
+
     const inputRef = useRef();
 
     const dispatch = useDispatch();
@@ -27,18 +29,25 @@ function Index(props) {
         dispatch(mobileSidebarAction(false));
         document.body.classList.remove('navigation-open');
     };
+
+    function RetriveGetContacts(contacts){
+        var chats = contacts.chats.filter((chats)=>{
+            return chats.chat_type == 0;
+          })
+        contacts.chats = chats;
+        setContact(contacts);
+        setfavoriteFriendFiltered(chats);
+    }
+
     useEffect(() => {
-        props.socket.on("retrive GetContacts", (contacts) => {
-            var chats = contacts.chats.filter((chats)=>{
-                return chats.chat_type == 0;
-              })
-            contacts.chats = chats;
-            setContact(contacts);
-            setfavoriteFriendFiltered(chats);
-        });
+        socket.on("retrive GetContacts",RetriveGetContacts);
+        return () => {
+            socket.off("retrieve GetContacts", RetriveGetContacts);
+        };
     });
+
     useEffect(()=>{
-        props.socket.emit("GetContacts");
+        socket.emit("GetContacts");
     },[]);
     
     function searchFav(wordToSearch){
