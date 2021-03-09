@@ -392,7 +392,7 @@ io.on("connection", function (socket) {
             });
           }
           orgboatDB.query(
-            `UPDATE messages SET delete_message =1 WHERE chat_uid='${chatid.chat_uid}' AND u_id='${user.u_id}'`,
+            `UPDATE messages SET delete_message_to =1 WHERE chat_uid='${chatid.chat_uid}' AND u_id='${user.u_id}'`,
             (err, data) => {
               if (err) {
                 return json({
@@ -403,7 +403,7 @@ io.on("connection", function (socket) {
                 });
               }
               orgboatDB.query(
-                `UPDATE messages SET delete_message = 1 WHERE chat_uid='${chatid.chat_uid}' AND u_id='${user.u_id}'`
+                `UPDATE messages SET delete_message = 1 WHERE chat_uid='${chatid.chat_uid}' AND u_id!='${user.u_id}'`
               );
               io.to(user.u_id).emit("retrive delete chat");
             }
@@ -414,8 +414,9 @@ io.on("connection", function (socket) {
 
     //Create a new chat
     socket.on("newChat", (chat) => {
+      
       orgboatDB.query(
-        `SELECT archiveChat,delete_chat,chat_uid,u_id FROM chats_users WHERE chat_uid='${chat.chat_uid}' and u_id='${user.u_id}'`,
+        `SELECT archiveChat,delete_chat,chat_uid,u_id FROM chats_users WHERE chat_uid='${chat}' and u_id='${user.u_id}'`,
         (err, chats) => {
           if (err) {
             return json({
@@ -429,7 +430,7 @@ io.on("connection", function (socket) {
             console.log(chats);
             if (chats[0].delete_chat == 1) {
               orgboatDB.query(
-                `UPDATE chats_users SET delete_chat = 0 WHERE chat_uid='${chat.chat_uid}' AND u_id='${user.u_id}'`,
+                `UPDATE chats_users SET delete_chat = 0 WHERE chat_uid='${chat}' AND u_id='${user.u_id}'`,
                 (err, data) => {
                   if (err) {
                     return json({
@@ -439,7 +440,9 @@ io.on("connection", function (socket) {
                       },
                     });
                   }
-                  io.to(user.u_id).emit("retrive newchat");
+                  io.to(user.u_id).emit("retrive newchat",{
+                    chat_uid:chat
+                  });
                 }
               );
             }
@@ -637,6 +640,27 @@ io.on("connection", function (socket) {
           io.to(user.u_id).emit("retrive addgrupo", {
             chat: uuid_numbr,
             message: info.description,
+          });
+        }
+      );
+    });
+
+    socket.on("get group contacts",()=>{
+      orgboatDB.query(
+        `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,chats_users.archiveChat
+
+    
+          from chats_users  
+
+          inner join chats_users chats2 on chats2.chat_uid = chats_users.chat_uid
+          inner join usrs on usrs.u_id = chats2.u_id
+
+          inner join chats on chats_users.chat_uid = chats.chat_uid 
+          where chats_users.u_id = '${user.u_id}'`,
+        (err, chats) => {
+          io.to(user.u_id).emit("retrieve groups", {
+            my_uid: user.u_id,
+            chats,
           });
         }
       );

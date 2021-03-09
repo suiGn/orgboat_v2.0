@@ -18,6 +18,7 @@ const ChatsDropdown = (props) => {
     function DeleteChat(idchat) {
         socket.emit("Delete Chat", { chat_uid: idchat });
         socket.once("retrive delete chat", () => {
+          //props.setClicked(null);
           socket.emit("get chats");
         });
     }
@@ -35,7 +36,7 @@ const ChatsDropdown = (props) => {
             </DropdownToggle>
             <DropdownMenu>
                 <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-                {/* <DropdownItem onClick={() => DeleteChat(props.chat_uid)}>Delete</DropdownItem> */}
+                <DropdownItem onClick={() => DeleteChat(props.chat_uid)}>Delete</DropdownItem>
             </DropdownMenu>
         </Dropdown>
     )
