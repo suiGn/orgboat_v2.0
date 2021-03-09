@@ -132,6 +132,16 @@ function AddFriendModal(props) {
           <p>Send invitations to friends.</p>
           <Label for="email">Email addresses</Label>
           <Input type="text" name="email" id="email" onChange={handleEmail} />
+          <FormGroup>
+              <Label for="description">Invitation message</Label>
+              <Input
+                type="textarea"
+                name="description"
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </FormGroup>
           <div>
             {findUsers && findUsers.length > 0 ? (
               findUsers.map((userf, index) => {
@@ -153,16 +163,6 @@ function AddFriendModal(props) {
               <span></span>
             )}
           </div>
-          <FormGroup>
-              <Label for="description">Invitation message</Label>
-              <Input
-                type="textarea"
-                name="description"
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </FormGroup>
         </ModalBody>
         <ModalFooter>
           {showSubmit ? (
