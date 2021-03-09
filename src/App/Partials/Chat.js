@@ -164,6 +164,7 @@ function Chat(props) {
 
   const MessagesView = (props) => {
     const { message } = props;
+    const {group} =  props;
     let type;
     if (message.chat_type == 1) {
       if (message.message_user_uid == props.id) {
@@ -191,6 +192,7 @@ function Chat(props) {
           <div className="message-avatar">
             {/* {message.avatar} */}
             <div>
+              {group && message.message_user_uid != props.my_uid ? (<h5>{message.name}</h5>):("")}
               {/* <h5>{message.name}</h5> */}
               {/* <div className="time">
                 {moment(message.time).format("DD-MM-YYYY")}
@@ -252,6 +254,7 @@ function Chat(props) {
                   my_uid={props.my_uid}
                   setUser={props.setUser}
                   chat_id={props.clicked.chat_uid}
+                  group= {props.clicked.chat_type}
                 />
               </div>
             ))}

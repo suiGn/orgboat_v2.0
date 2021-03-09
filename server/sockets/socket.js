@@ -318,7 +318,8 @@ io.on("connection", function (socket) {
       var uuid_numbr = uuid.v4();
       routes.validateExistChat(user.u_id, data.u_id).then((result) => {
         //console.log(result);
-        message = `Hola soy ${user.name} , me gustaria contactar contigo.`;
+        // message = `Hola soy ${user.name} , me gustaria contactar contigo.`;
+        message = data.message;
         if (result === false) {
           console.log(result);
           orgboatDB.query(
