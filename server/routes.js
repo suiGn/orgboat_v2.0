@@ -24,7 +24,7 @@ const { CustomValidation } = require("express-validator/src/context-items");
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-2'});
 
-const s3 = new AWS.S3({apiVersion: '2006-03-01',accessKeyId:"AKIAJFKWYQADQFJP6O2Q",secretAccessKey:"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"});
+const s3 = new AWS.S3({apiVersion: '2006-03-01',accessKeyId:"AKIA2ACNBE2EJ7Z7P3SY",secretAccessKey:"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"});
 
 exports.home = function (req, res) {
   if (req.isAuthenticated()) {
@@ -392,7 +392,7 @@ exports.savedbimage =  async function (req, res) {
     console.log(req.file);
     var photo = `uploads/${req.file.filename}`;
     // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
-    var uploadParams = {Bucket: "cleaker", Key: '', Body: '',ACL:'public-read'};
+    var uploadParams = {Bucket: "cleaker", Key: '', Body: ''};
     readStream("../build/"+photo).then(data => {
       uploadParams.Body = data;
       uploadParams.Key = req.file.filename;
@@ -451,7 +451,7 @@ exports.savedbimageGroup =  async function (req, res) {
         } if (data) {
           console.log("Upload Success", data.Location);
           photo=data.Location;
-          var uidd = req.user[0].u_id;
+          var uidd = req.body.chat_uid;
           index.orgboatDB.query(
             "UPDATE chats SET groupphoto = ? WHERE chat_uid = ?",
             [photo, uidd],

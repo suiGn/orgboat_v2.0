@@ -185,7 +185,7 @@ const server = express()
   })
   .post("/uploadpPhotoGroup", (req, res) => {
     //Multer
-    /*const storage = multer.diskStorage({
+    const storage = multer.diskStorage({
       destination: "../build/uploads/",
       filename: function (req, file, cb) {
         cb(null, "IMAGE-" + Date.now() + path.extname(file.originalname));
@@ -204,7 +204,7 @@ const server = express()
           {"ok":url}
         );
       });
-    });*/
+    });
   })
   .get("/pphoto", (req, res) => {
     //console.log(req);

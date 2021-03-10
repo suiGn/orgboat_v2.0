@@ -147,6 +147,7 @@ function ProfileGroup(props) {
     e.preventDefault();
     const formData = new FormData();
     formData.append("myImage", e.target.files[0]);
+    formData.append("chat_uid",props.group.id);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
