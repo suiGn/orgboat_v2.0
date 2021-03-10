@@ -40,7 +40,8 @@ io.on("connection", function (socket) {
         `
 			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, chats.chat_name,
         m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
-        ,chats_users.delete_chat, m.unread_messages as unread_messages,  m.delete_message as deleted_message, m.delete_message_to as deleted_message_to
+        ,chats_users.delete_chat, m.unread_messages as unread_messages,  m.delete_message as deleted_message, m.delete_message_to as deleted_message_to,
+        chats.groupphoto
 			
 			from chats_users  
 
@@ -640,6 +641,49 @@ io.on("connection", function (socket) {
         }
       );
     });
+    //get grupo
+    socket.on("GetGrupo",function(data){
+      orgboatDB.query(
+        `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat, usrs.name, usrs.pphoto, chats.groupphoto, chats.about_chat
+
+        from chats_users  
+
+        inner join chats_users chats2 on chats2.chat_uid = chats_users.chat_uid
+        inner join usrs on usrs.u_id = chats2.u_id
+
+        inner join chats on chats_users.chat_uid = chats.chat_uid 
+            
+        left join messages m on m.chat_uid = chats.chat_uid 
+        and m.message_id = 
+          (
+            SELECT MAX(message_id)
+            FROM messages z 
+            WHERE z.chat_uid = m.chat_uid
+          )
+
+          where chats.chat_uid = '${data.id}' and chats_users.archiveChat = 0 and chats_users.delete_chat = 0
+          group by chats2.u_id
+          order by time desc;
+          `,(err, rows) => {
+            io.to(user.u_id).emit("retrieve GetGrupo", {
+              chat_uid: data.id,
+              chats: rows,
+            });
+            
+          })
+    })
+    //update grupo
+    socket.on("SaveGroup",function(chat){
+      console.log(chat)
+      orgboatDB.query(
+        `UPDATE chats SET chat_name = '${chat.chat_name}' , about_chat = '${chat.about_chat}'  WHERE chat_uid ='${chat.chat_uid}'`,
+        function (err, rows) {
+          io.to(user.u_id).emit("retrive SaveGroup", {
+            chat_uid: chat.chat_uid,
+          });
+        }
+      );
+    })
   } catch {
     console.log("problema");
   }

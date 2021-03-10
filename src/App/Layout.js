@@ -6,6 +6,7 @@ import SidebarIndex from "./Sidebars/index";
 import Navigation from "./Navigation";
 import Profile from "./Sidebars/Profile";
 import UserProfile from "./Sidebars/UserProfile";
+import ProfileGroup from "./Sidebars/ProfileGroup";
 import Chat from "./Partials/Chat";
 import ChatN from "./Partials/ChatNoMessage";
 import { pageTourAction } from "../Store/Actions/pageTourAction";
@@ -19,6 +20,7 @@ function Layout(props) {
   const { pageTour } = useSelector((state) => state);
   const { socket } = props;
   const [user, setUser] = useState("");
+  const [group, setGroup] = useState("");
   const dispatch = useDispatch();
   const [my_uid, setMy_Id] = useState("");
 
@@ -91,6 +93,7 @@ function Layout(props) {
           socket={socket}
           setClicked={setClicked}
           setUser={setUser}
+          setGroup={setGroup}
           my_uid={my_uid}
         />
        <Chat
@@ -100,6 +103,7 @@ function Layout(props) {
         setUser={setUser}
         my_uid={my_uid}
         />
+        <ProfileGroup socket={socket} group={group}/>
         <Profile socket={socket} user={user} />
         <UserProfile socket={socket} user={user} />
         <TourModal />

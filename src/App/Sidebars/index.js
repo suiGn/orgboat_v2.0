@@ -14,7 +14,7 @@ function Index(props) {
             {
                 (() => {
                     if (selectedSidebar === 'Chats') {
-                        return <ChatsIndex socket={props.socket} setClicked ={props.setClicked} setUser={props.setUser}/>
+                        return <ChatsIndex socket={props.socket} setClicked ={props.setClicked} setUser={props.setUser}  setGroup={props.setGroup}/>
                     } else if (selectedSidebar === 'Friends') {
                         return <FriendsIndex socket={props.socket} setClicked ={props.setClicked} setUser={props.setUser} my_uid={props.my_uid}/>
                     } else if (selectedSidebar === 'Favorites') {
