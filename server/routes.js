@@ -441,7 +441,7 @@ exports.savedbimageGroup =  async function (req, res) {
     console.log(req.file);
     var photo = `uploads/${req.file.filename}`;
     // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
-    var uploadParams = {Bucket: "cleaker", Key: '', Body: '',ACL:'public-read'};
+    var uploadParams = {Bucket: "cleaker", Key: '', Body: ''};
     readStream("../build/"+photo).then(data => {
       uploadParams.Body = data;
       uploadParams.Key = req.file.filename;
