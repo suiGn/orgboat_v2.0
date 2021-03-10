@@ -76,6 +76,11 @@ function ChatHeader(props) {
       </button>
       <div className="chat-header-action col-6">
         <ul className="list-inline">
+          <li className="list-inline-item">
+            <button className="btn btn-outline-light">
+              <FeatherIcon.Search />
+            </button>
+          </li>
           <li className="list-inline-item d-xl-none d-inline">
             <button
               onClick={mobileMenuBtn}
