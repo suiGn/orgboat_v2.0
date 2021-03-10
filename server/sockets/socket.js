@@ -688,7 +688,6 @@ io.on("connection", function (socket) {
         }
       );
     })
-
     socket.on("get group contacts",()=>{
       orgboatDB.query(
         `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,chats_users.archiveChat

@@ -45,7 +45,10 @@ const ChatsDropdown = (props) => {
                     <DropdownItem onClick={profileActions}>Profile</DropdownItem>:
                     <DropdownItem onClick={GroupProfileAction}>Group Info.</DropdownItem>
                 }
-                <DropdownItem onClick={() => DeleteChat(props.chat_uid)}>Delete</DropdownItem>
+                {props.chat_type==0?
+                    <DropdownItem onClick={() => DeleteChat(props.chat_uid)}>Delete</DropdownItem>:
+                    ""
+                }
             </DropdownMenu>
         </Dropdown>
     )
