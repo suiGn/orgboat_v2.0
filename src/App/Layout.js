@@ -101,6 +101,7 @@ function Layout(props) {
         socket={socket}
         clicked={clicked}
         setUser={setUser}
+        setGroup={setGroup}
         my_uid={my_uid}
         />
         <ProfileGroup socket={socket} group={group}/>

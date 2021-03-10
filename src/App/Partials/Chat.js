@@ -48,7 +48,6 @@ function Chat(props) {
   }, [scrollEl]);
   
   function RetrieveMessages(data) {
-    console.log(data);
     if (data.messages.length != 0) {
       if(props.clicked.chat_uid==data.messages[0].chat_uid){
         var messages = [];
@@ -166,7 +165,6 @@ function Chat(props) {
   const MessagesView = (props) => {
     const { message } = props;
     const {group} =  props;
-    console.log(group);
     let type;
     if (message.chat_type == 1) {
       if (message.message_user_uid == props.id) {
@@ -242,6 +240,7 @@ function Chat(props) {
         chat_uid={props.clicked.chat_uid}
         id={props.clicked.user_chat}
         setUser={props.setUser}
+        setGroup={props.setGroup}
       />
       <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
         <div className="chat-body">

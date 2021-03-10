@@ -11,6 +11,7 @@ import VoiceCallModal from "../Modals/VoiceCallModal";
 import VideoCallModal from "../Modals/VideoCallModal";
 import { userProfileAction } from "../../Store/Actions/userProfileAction";
 import { mobileUserProfileAction } from "../../Store/Actions/mobileUserProfileAction";
+import { groupProfileAction } from "../../Store/Actions/groupProfileAction";
 import { profileAction } from "../../Store/Actions/profileAction";
 import { mobileProfileAction } from "../../Store/Actions/mobileProfileAction";
 import ManAvatar3 from "../../assets/img/man_avatar3.jpg";
@@ -31,6 +32,12 @@ function ChatHeader(props) {
     dispatch(userProfileAction(true));
     dispatch(mobileUserProfileAction(true));
   };
+
+  const GroupProfileAction = () => {
+    props.setGroup({id:props.chat_uid});
+    dispatch(groupProfileAction(true));
+  };
+
   let p;
   let chat_initial;
   let chat_name;
@@ -56,15 +63,21 @@ function ChatHeader(props) {
 
   return (
     <div className="chat-header">
-      <button onClick={profileActions} className="chat-header-user w-100">
-        <figure className="avatar">{p}</figure>
-        <div>
-          <h5>{props.data.name}</h5>
-          {/* <small className="text-success">
-            <i>writing...</i>
-          </small> */}
-        </div>
-      </button>
+        {props.data.chat_type==1?
+          <button onClick={GroupProfileAction} className="chat-header-user w-100">
+            <figure className="avatar">{p}</figure>
+            <div>
+              <h5>{props.data.name}</h5>
+            </div>
+          </button>
+          :
+          <button onClick={profileActions} className="chat-header-user w-100">
+            <figure className="avatar">{p}</figure>
+            <div>
+              <h5>{props.data.name}</h5>
+            </div>
+          </button>
+        }
       <div className="chat-header-action">
         <ul className="list-inline">
           <li className="list-inline-item d-xl-none d-inline">
@@ -97,7 +110,9 @@ function ChatHeader(props) {
                 </button>
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem onClick={profileActions}>Profile</DropdownItem>
+                {props.data.chat_type==1?
+                <DropdownItem onClick={GroupProfileAction}>Group Info.</DropdownItem>
+                :<DropdownItem onClick={profileActions}>Profile</DropdownItem>}
                 <DropdownItem onClick={() => ArchiveChat(props.chat_uid)}>
                   Add to archive
                 </DropdownItem>
