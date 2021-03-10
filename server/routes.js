@@ -24,7 +24,7 @@ const { CustomValidation } = require("express-validator/src/context-items");
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-2'});
 
-const s3 = new AWS.S3({apiVersion: '2006-03-01',accessKeyId:"AKIAJFKWYQADQFJP6O2Q",secretAccessKey:"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"});
+const s3 = new AWS.S3({apiVersion: '2006-03-01',accessKeyId:"AKIA2ACNBE2EJ7Z7P3SY",secretAccessKey:"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"});
 
 exports.home = function (req, res) {
   if (req.isAuthenticated()) {
