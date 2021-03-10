@@ -1,5 +1,5 @@
 export const groupProfileAction = (status,id) => ({
-    type: 'PROFILE',
+    type: 'GROUP_PROFILE',
     status,
     id
 });

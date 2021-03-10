@@ -11,7 +11,7 @@ function ProfileGroup(props) {
   const { socket } = props;
   const dispatch = useDispatch();
   
-  const { profileSidebar, mobileProfileSidebar } = useSelector(
+  const { groupProfileSidebar, mobileGroupProfileSidebar } = useSelector(
     (state) => state
   );
 
@@ -200,9 +200,9 @@ function ProfileGroup(props) {
 
   return (
     <div
-      className={`sidebar-group ${mobileProfileSidebar ? "mobile-open" : ""}`}
+      className={`sidebar-group ${mobileGroupProfileSidebar ? "mobile-open" : ""}`}
     >
-      <div className={profileSidebar ? "sidebar active" : "sidebar"}>
+      <div className={groupProfileSidebar ? "sidebar active" : "sidebar"}>
         <header>
           <span>Group Info.</span>
           <ul className="list-inline">
