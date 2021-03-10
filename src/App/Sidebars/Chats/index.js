@@ -85,6 +85,7 @@ function Index(props) {
   function setClicked(e,chat){
     e.preventDefault();
     chat.unread_messages = 0
+    console.log(chat);
     props.setClicked(chat);
   }
 
@@ -161,6 +162,7 @@ function Index(props) {
             <div className="users-list-action">
                 <small  className="text-muted">{timeLabel}</small>
               <div className="action-toggle">
+                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} socket={socket} chat_uid={chat.chat_uid} setClicked={setClicked}/>
                 <ChatsDropdown setGroup={props.setGroup} setUser={props.setUser} id={chat.user_chat} socket={socket} chat_uid={chat.chat_uid} chat_type={chat.chat_type}/>
               </div>
             </div>

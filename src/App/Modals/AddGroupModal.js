@@ -60,6 +60,8 @@ function AddGroupModal(props) {
 
   const modalToggleFriend = () => setModalFriend(!modalFriend);
 
+  const [one, setIOne] = useState("");
+
   const AvatarTooltip = (props) => {
     const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -126,18 +128,39 @@ function AddGroupModal(props) {
       setAddFriends(removedFriend);
     }
   }
+  function RetriveGetContacts(contacts){
+    var chats = contacts.chats.filter((chats)=>{
+        return (
+          !chats.user_chat.includes(contacts.my_uid) && chats.chat_type != 1
+        );
+      })
+    contacts.chats = chats;
+    setUid(contacts.my_uid);
+    setChooseFriend(chats);
+  }
+  useEffect(() => {
+    socket.on("retrieve groups", RetriveGetContacts);
+    return () => {
+      socket.off("retrieve groups", RetriveGetContacts);
+    };
+  },one);
 
   useEffect(() => {
-    if (props.chatLists.length != 0) {
-      var chats = props.chatLists.chats.filter((val) => {
-        return (
-          !val.user_chat.includes(props.chatLists.my_uid) && val.chat_type != 1
-        );
-      });
-      setUid(props.chatLists.my_uid);
-      setChooseFriend(chats);
-    }
-  }, [props]);
+    socket.emit("get group contacts");
+    // inputRef.current.focus();
+  }, [one]);
+
+  // useEffect(() => {
+  //   if (props.chatLists.length != 0) {
+  //     var chats = props.chatLists.chats.filter((val) => {
+  //       return (
+  //         !val.user_chat.includes(props.chatLists.my_uid) && val.chat_type != 1
+  //       );
+  //     });
+  //     setUid(props.chatLists.my_uid);
+  //     setChooseFriend(chats);
+  //   }
+  // }, [props]);
 
   const ModalAddFriend = (props) => {
     return (

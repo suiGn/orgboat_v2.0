@@ -28,6 +28,8 @@ function AddFriendModal(props) {
 
   const [showSubmit, setShowSubmit] = useState(false);
 
+  const [description, setDescription] = useState("");
+
   const tooltipToggle = () => setTooltipOpen(!tooltipOpen);
 
   const [email, setEmail] = useState("");
@@ -57,7 +59,7 @@ function AddFriendModal(props) {
     if (e.target.value != "") setShowSubmit(true);
   }
   function AddUserContact(u_id) {
-    props.socket.emit("AddContact", { u_id: u_id });
+    props.socket.emit("AddContact", { u_id: u_id , message: description});
     props.socket.once("retrive Addcontact", (mssg) => {
       props.socket.emit("GetContacts");
       // modalToggle();
@@ -130,6 +132,16 @@ function AddFriendModal(props) {
           <p>Send invitations to friends.</p>
           <Label for="email">Email addresses</Label>
           <Input type="text" name="email" id="email" onChange={handleEmail} />
+          <FormGroup>
+              <Label for="description">Invitation message</Label>
+              <Input
+                type="textarea"
+                name="description"
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </FormGroup>
           <div>
             {findUsers && findUsers.length > 0 ? (
               findUsers.map((userf, index) => {
