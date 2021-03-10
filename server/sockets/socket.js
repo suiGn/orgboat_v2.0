@@ -334,12 +334,19 @@ io.on("connection", function (socket) {
               time = new Date();
               timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
               //console.log(msg);
-              orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
+              if(message == "" || message==null){
+                io.to(user.u_id).emit("retrive Addcontact", {
+                  chat: uuid_numbr,
+                  message,
+                });
+              }else{
+                orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
                                     values ('${uuid_numbr}','${user.u_id}','${message}','${timeDB}',0)`);
-              io.to(user.u_id).emit("retrive Addcontact", {
-                chat: uuid_numbr,
-                message,
-              });
+                io.to(user.u_id).emit("retrive Addcontact", {
+                  chat: uuid_numbr,
+                  message,
+                });
+              }
             }
           );
         }
