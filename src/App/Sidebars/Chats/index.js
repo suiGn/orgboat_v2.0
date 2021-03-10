@@ -85,7 +85,6 @@ function Index(props) {
   function setClicked(e,chat){
     e.preventDefault();
     chat.unread_messages = 0
-    console.log(chat);
     props.setClicked(chat);
   }
 
@@ -97,6 +96,9 @@ function Index(props) {
     let chat_with_usr = chat.user_chat;
     if (chat.chat_type == 1 || my_uid != chat.user_chat) {
       chat_name = chat.name;
+      if(chat.chat_type == 1){
+        chat.pphoto = chat.groupphoto
+      }
       chat_initial = chat_name.substring(0, 1);
       let timeMessage = new Date(chat.last_message_time);
       let timeLabel;
@@ -152,14 +154,14 @@ function Index(props) {
               <small className={chat.unread_messages ? "text-primary" : "text-muted"} className="text-muted"
               >{timeLabel}</small>
               <div className="action-toggle">
-                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} />
+              <ChatsDropdown setGroup={props.setGroup} setUser={props.setUser} id={chat.user_chat} socket={socket} chat_uid={chat.chat_uid} chat_type={chat.chat_type} setClicked={setClicked}/>
               </div>
             </div>
             :
             <div className="users-list-action">
                 <small  className="text-muted">{timeLabel}</small>
               <div className="action-toggle">
-                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} socket={socket} chat_uid={chat.chat_uid} setClicked={setClicked}/>
+                <ChatsDropdown setGroup={props.setGroup} setUser={props.setUser} id={chat.user_chat} socket={socket} chat_uid={chat.chat_uid} chat_type={chat.chat_type} setClicked={setClicked}/>
               </div>
             </div>
                
@@ -234,6 +236,7 @@ function Index(props) {
                   key={i}
                   setClicked={props.setClicked}
                   setUser={props.setUser}
+                  setGroup={props.setGroup}
                 />
               ))}
           </ul>
