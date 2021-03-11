@@ -214,7 +214,7 @@ function Chat(props) {
           ) : (
             <div className="message-content position-relative">
               {!message.is_image && !message.is_file ? (
-                message.message + " "
+                <div className="word-break">{message.message}</div>
               ) : message.is_image ? (
                 <figure className="avatar avatar-xl">
                   <img src={message.message} />
@@ -225,13 +225,22 @@ function Chat(props) {
                   {message.message.replace("uploads/", "")}{" "}
                 </a>
               )}
-              <div className="action-toggle action-dropdown-chat">
-                <ChatsMessageDropdown
-                  message={message}
-                  prop_id={props.id}
-                  my_uid={props.my_uid}
-                  chat_id={props.chat_id}
-                />
+              <div className="misc-container">
+                <div className="time">
+                  {moment(message.time).format("LT")}
+                  {message.type ? (
+                    <i className="ti-double-check text-info"></i>
+                  ) : null}
+                </div>
+                <div className="action-toggle action-dropdown-chat">
+                  <ChatsMessageDropdown
+                    message={message}
+                    prop_id={props.id}
+                    my_uid={props.my_uid}
+                    chat_id={props.chat_id}
+                    socket={socket}
+                  />
+                </div>
               </div>
             </div>
           )}
