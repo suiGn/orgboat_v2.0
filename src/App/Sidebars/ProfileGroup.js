@@ -9,11 +9,27 @@ import axios from "axios";
 
 function ProfileGroup(props) {
   const { socket } = props;
+  const { openUserProfile } = props;
+  const { setOpenUserProfile } = props;
+  const { openProfile } = props;
+  const { setOpenProfile } = props;
+  const { openGroupProfile } = props;
+  const { setOpenGroupProfile } = props;
   const dispatch = useDispatch();
   
   const { groupProfileSidebar, mobileGroupProfileSidebar } = useSelector(
     (state) => state
   );
+
+  const openGroupProfileToggler = (e) => {
+    setOpenGroupProfile(!openGroupProfile);
+    if (openProfile) {
+      setOpenProfile(!openProfile);
+    }
+    if (openUserProfile) {
+      setOpenUserProfile(!openUserProfile);
+    }
+  };
 
   const [name, setName] = useState("");
   const [pphoto, setPphoto] = useState("");
@@ -200,16 +216,16 @@ function ProfileGroup(props) {
 
   return (
     <div
-      className={`sidebar-group ${mobileGroupProfileSidebar ? "mobile-open" : ""}`}
+      className={`sidebar-group ${openGroupProfile ? "mobile-open" : ""}`}
     >
-      <div className={groupProfileSidebar ? "sidebar active" : "sidebar"}>
+      <div className={openGroupProfile ? "sidebar active" : "sidebar"}>
         <header>
           <span>Group Info.</span>
           <ul className="list-inline">
             <li className="list-inline-item">
               <a
                 href="#/"
-                onClick={(e) => GroupProfileActions(e)}
+                onClick={(e) => openGroupProfileToggler(e)}
                 className="btn btn-outline-light text-danger sidebar-close"
               >
                 <FeatherIcon.X />

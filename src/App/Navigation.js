@@ -143,6 +143,9 @@ function Navigation(props) {
     if (props.openUserProfile) {
       props.setOpenUserProfile(!props.openUserProfile);
     }
+    if (props.openGroupProfile) {
+      props.setOpenGroupProfile(!props.openGroupProfile);
+    }
   };
 
   const navigationItems = [

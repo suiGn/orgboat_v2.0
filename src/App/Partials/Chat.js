@@ -262,6 +262,8 @@ function Chat(props) {
         openUserProfile={props.openUserProfile}
         setOpenProfile={props.setOpenProfile}
         openProfile={props.openProfile}
+        openGroupProfile={props.openGroupProfile}
+        setOpenGroupProfile={props.setOpenGroupProfile}
       />
       <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
         <div className="chat-body">

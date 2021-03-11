@@ -13,6 +13,8 @@ function Index(props) {
   const { openProfile } = props;
   const { setOpenUserProfile } = props;
   const { openUserProfile } = props;
+  const { setOpenGroupProfile } = props;
+  const { openGroupProfile } = props;
   const [archivedChats, setArchivedChats] = useState([]);
   const [favoritearchivedChatsFiltered, setArchivedChatsFiltered] = useState(
     []
@@ -119,6 +121,8 @@ function Index(props) {
                             openProfile={openProfile}
                             openUserProfile={openUserProfile}
                             setOpenUserProfile={setOpenUserProfile}
+                            openGroupProfile={openGroupProfile}
+                            setOpenGroupProfile={setOpenGroupProfile}
                             setUser={props.setUser}
                             socket={socket}
                             id={chat.user_chat}

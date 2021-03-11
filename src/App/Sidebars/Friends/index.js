@@ -23,6 +23,8 @@ function Index(props) {
   const { openProfile } = props;
   const { setOpenUserProfile } = props;
   const { openUserProfile } = props;
+  const { setOpenGroupProfile } = props;
+  const { openGroupProfile } = props;
 
   const inputRef = useRef();
 
@@ -131,6 +133,8 @@ function Index(props) {
                             openProfile={openProfile}
                             openUserProfile={openUserProfile}
                             setOpenUserProfile={setOpenUserProfile}
+                            openGroupProfile={openGroupProfile}
+                            setOpenGroupProfile={setOpenGroupProfile}
                             setUser={props.setUser}
                             id={item.user_chat}
                             chat_uid={item.chat_uid}

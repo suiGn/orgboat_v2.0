@@ -12,6 +12,8 @@ function UserProfile(props) {
   const { setOpenUserProfile } = props;
   const { openProfile } = props;
   const { setOpenProfile } = props;
+  const { openGroupProfile } = props;
+  const { setOpenGroupProfile } = props;
   const dispatch = useDispatch();
 
   const { userProfileSidebar, mobileUserProfileSidebar } = useSelector(
@@ -21,6 +23,9 @@ function UserProfile(props) {
     setOpenUserProfile(!openUserProfile);
     if (openProfile) {
       setOpenProfile(!openProfile);
+    }
+    if (openGroupProfile) {
+      setOpenGroupProfile(!openGroupProfile);
     }
   };
 

@@ -29,6 +29,9 @@ const ArchivedDropdown = (props) => {
     if (props.openProfile) {
       props.setOpenProfile(!props.openProfile);
     }
+    if (props.openGroupProfile) {
+      props.setOpenGroupProfile(!props.openGroupProfile);
+    }
   };
 
   function Unarchive(chat_selected) {

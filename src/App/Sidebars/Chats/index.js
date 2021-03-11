@@ -17,6 +17,8 @@ function Index(props) {
   const { openProfile } = props;
   const { setOpenUserProfile } = props;
   const { openUserProfile } = props;
+  const { openGroupProfile } = props;
+  const { setOpenGroupProfile } = props;
   const [chatLists, setChatList] = useState([]);
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
@@ -189,6 +191,8 @@ function Index(props) {
                     openProfile={openProfile}
                     openUserProfile={openUserProfile}
                     setOpenUserProfile={setOpenUserProfile}
+                    openGroupProfile={openGroupProfile}
+                    setOpenGroupProfile={setOpenGroupProfile}
                   />
                 </div>
               </div>
@@ -208,6 +212,8 @@ function Index(props) {
                     openProfile={openProfile}
                     openUserProfile={openUserProfile}
                     setOpenUserProfile={setOpenUserProfile}
+                    openGroupProfile={openGroupProfile}
+                    setOpenGroupProfile={setOpenGroupProfile}
                   />
                 </div>
               </div>

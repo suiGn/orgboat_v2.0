@@ -22,6 +22,8 @@ function Index(props) {
               openProfile={props.openProfile}
               openUserProfile={props.openUserProfile}
               setOpenUserProfile={props.setOpenUserProfile}
+              openGroupProfile={props.openGroupProfile}
+              setOpenGroupProfile={props.setOpenGroupProfile}
             />
           );
         } else if (selectedSidebar === "Friends") {
@@ -35,6 +37,8 @@ function Index(props) {
               openProfile={props.openProfile}
               openUserProfile={props.openUserProfile}
               setOpenUserProfile={props.setOpenUserProfile}
+              openGroupProfile={props.openGroupProfile}
+              setOpenGroupProfile={props.setOpenGroupProfile}
             />
           );
         } else if (selectedSidebar === "Favorites") {
@@ -48,6 +52,8 @@ function Index(props) {
               openProfile={props.openProfile}
               openUserProfile={props.openUserProfile}
               setOpenUserProfile={props.setOpenUserProfile}
+              openGroupProfile={props.openGroupProfile}
+              setOpenGroupProfile={props.setOpenGroupProfile}
             />
           );
         }

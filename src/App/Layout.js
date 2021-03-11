@@ -25,6 +25,7 @@ function Layout(props) {
   const [my_uid, setMy_Id] = useState("");
   const [openUserProfile, setOpenUserProfile] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
+  const [openGroupProfile, setOpenGroupProfile] = useState(false);
 
   useEffect(() => {
     document.querySelector("*").addEventListener("click", (e) => {
@@ -92,6 +93,8 @@ function Layout(props) {
           openProfile={openProfile}
           openUserProfile={openUserProfile}
           setOpenUserProfile={setOpenUserProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
           my_uid={my_uid}
           data={clicked}
         />
@@ -105,6 +108,8 @@ function Layout(props) {
           openProfile={openProfile}
           openUserProfile={openUserProfile}
           setOpenUserProfile={setOpenUserProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
         />
         {clicked.name ? (
           <Chat
@@ -117,6 +122,8 @@ function Layout(props) {
             openUserProfile={openUserProfile}
             setOpenProfile={setOpenProfile}
             openProfile={openProfile}
+            openGroupProfile={openGroupProfile}
+            setOpenGroupProfile={setOpenGroupProfile}
             my_uid={my_uid}
           />
         ) : (
@@ -128,6 +135,8 @@ function Layout(props) {
           openProfile={openProfile}
           openUserProfile={openUserProfile}
           setOpenUserProfile={setOpenUserProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
           socket={socket}
           user={user}
         />
@@ -136,10 +145,20 @@ function Layout(props) {
           setOpenUserProfile={setOpenUserProfile}
           setOpenProfile={setOpenProfile}
           openProfile={openProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
           socket={socket}
           user={user}
         />
-        <ProfileGroup socket={socket} group={group}/>
+        <ProfileGroup 
+        openUserProfile={openUserProfile}
+        setOpenUserProfile={setOpenUserProfile}
+        setOpenProfile={setOpenProfile}
+        openProfile={openProfile}
+        openGroupProfile={openGroupProfile}
+        setOpenGroupProfile={setOpenGroupProfile}
+        socket={socket} 
+        group={group}/>
         <TourModal />
         <DisconnectedModal />
       </div>
