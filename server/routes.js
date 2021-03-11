@@ -476,7 +476,7 @@ exports.savedbimageGroup =  async function (req, res) {
   });
 };
 
-exports.saveImageChat = async function(req, res){
+exports.saveFileChat = async function(req, res){
   return new Promise((resolve, reject) =>{
     var photo = `uploads/${req.file.filename}`;
     // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
@@ -489,7 +489,7 @@ exports.saveImageChat = async function(req, res){
           console.log("Error", err);
         } if (data) {
           console.log("Upload Success", data.Location);
-          resolve(photo);
+          resolve(data.Location);
         }
       });
     })

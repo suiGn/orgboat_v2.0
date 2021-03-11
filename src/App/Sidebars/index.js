@@ -7,7 +7,6 @@ import ArchivedIndex from "./Archived";
 
 function Index(props) {
   const { selectedSidebar, mobileSidebar } = useSelector((state) => state);
-  console.log(props);
 
   return (
     <div className={`sidebar-group ${mobileSidebar ? "mobile-open" : ""}`}>

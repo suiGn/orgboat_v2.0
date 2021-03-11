@@ -65,9 +65,9 @@ function ChatFooter(props) {
     axios
       .post("/uploadpChatFile", formData, config)
       .then((response) => {
-        console.log(response.data.opt1)
+        console.log(response.data)
         props.onSubmit({
-          text:  "uploads/"+response.data.opt1.filename,
+          text:  response.data.url,
           chat_uid: props.chat_uid,
           is_image: 0,
           is_file: 1,
@@ -80,18 +80,18 @@ function ChatFooter(props) {
     e.preventDefault();
     setDropdownOpen(!dropdownOpen)
     const formData = new FormData();
-    formData.append("myImage", e.target.files[0]);
+    formData.append("myFile", e.target.files[0]);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
       },
     };
     axios
-      .post("/uploadpChatPhoto", formData, config)
+      .post("/uploadpChatFile", formData, config)
       .then((response) => {
-        console.log(response.data.opt1)
+        console.log(response.data)
         props.onSubmit({
-          text:  "uploads/"+response.data.opt1.filename,
+          text:  response.data.url,
           chat_uid: props.chat_uid,
           is_image: 1,
           is_file: 0,
