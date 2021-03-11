@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { profileAction } from "../../../Store/Actions/profileAction";
-import { mobileProfileAction } from "../../../Store/Actions/mobileProfileAction";
 import { useDispatch } from "react-redux";
-import { userProfileAction } from "../../../Store/Actions/userProfileAction";
-import { mobileUserProfileAction } from "../../../Store/Actions/mobileUserProfileAction";
 import {
   Dropdown,
   DropdownToggle,
@@ -17,14 +13,22 @@ const FriendsDropdown = (props) => {
   const [one, setIOne] = useState("");
   const dispatch = useDispatch();
 
-  const {socket} = props;
+  const { socket } = props;
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const profileActions = () => {
+  // const profileActions = () => {
+  //   props.setUser({ id: props.id });
+  //   dispatch(userProfileAction(true));
+  //   dispatch(mobileUserProfileAction(true));
+  // };
+
+  const openUserProfileToggler = (e) => {
     props.setUser({ id: props.id });
-    dispatch(userProfileAction(true));
-    dispatch(mobileUserProfileAction(true));
+    props.setOpenUserProfile(!props.openUserProfile);
+    if (props.openProfile) {
+      props.setOpenProfile(!props.openProfile);
+    }
   };
 
   // function RetriveNewChat(chat){
@@ -37,12 +41,12 @@ const FriendsDropdown = (props) => {
   //   };
   // },one);
 
-  const newchat = (chat_uid)=>{
+  const newchat = (chat_uid) => {
     //console.log(chat_uid);
-    socket.emit("newChat",chat_uid);
-    socket.once("retrive newchat", (chat)=>{
-      console.log({chat_uid:chat.chat_uid});
-      props.setClicked({chat_uid:chat.chat_uid});
+    socket.emit("newChat", chat_uid);
+    socket.once("retrive newchat", (chat) => {
+      console.log({ chat_uid: chat.chat_uid });
+      props.setClicked({ chat_uid: chat.chat_uid });
     });
   };
 
@@ -52,8 +56,10 @@ const FriendsDropdown = (props) => {
         <FeatherIcon.MoreHorizontal />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem  onClick={() => newchat(props.chat_uid)}>New chat</DropdownItem>
-        <DropdownItem onClick={profileActions}>Profile</DropdownItem>
+        <DropdownItem onClick={() => newchat(props.chat_uid)}>
+          New chat
+        </DropdownItem>
+        <DropdownItem onClick={openUserProfileToggler}>Profile</DropdownItem>
         {/* <DropdownItem divider/> */}
         {/* <DropdownItem>Block</DropdownItem> */}
       </DropdownMenu>

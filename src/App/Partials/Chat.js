@@ -7,12 +7,11 @@ import { selectedChat } from "../Sidebars/Chats/Data";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ChatsMessageDropdown from "../Sidebars/Chats/ChatsMessageDropdown.js";
 import UnselectedChat from "../../assets/img/unselected-chat.svg";
-import UIfx from 'uifx';
-import notificationAudio from '../../assets/sound/much.mp3'
+import UIfx from "uifx";
+import notificationAudio from "../../assets/sound/much.mp3";
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
 import * as FeatherIcon from "react-feather";
-
 
 function Chat(props) {
   const [inputMsg, setInputMsg] = useState("");
@@ -27,10 +26,9 @@ function Chat(props) {
 
   const mobileMenuBtn = () => document.body.classList.toggle("navigation-open");
 
-  const notificationSound = new UIfx(
-    notificationAudio,{
+  const notificationSound = new UIfx(notificationAudio, {
     volume: 0.4,
-    throttleMs: 100
+    throttleMs: 100,
   });
 
   let dateSend;
@@ -41,16 +39,16 @@ function Chat(props) {
   const { socket } = props;
 
   const { clicked } = props;
-  
+
   useEffect(() => {
     if (scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
     }
   }, [scrollEl]);
-  
+
   function RetrieveMessages(data) {
     if (data.messages.length != 0) {
-      if(props.clicked.chat_uid==data.messages[0].chat_uid){
+      if (props.clicked.chat_uid == data.messages[0].chat_uid) {
         var messages = [];
         data.messages.forEach((element) => {
           if (element.delete_message_to == 1) {
@@ -68,17 +66,16 @@ function Chat(props) {
     }
   }
 
-  
-  function OnChatMessage(data){
-    if(props.clicked.chat_uid){
-      if(props.clicked.chat_uid == data.chat){
-        socket.emit("get messages", { id: data.chat, page: 1, inChat:true });
-      } else if(props.clicked.chat_uid != data.chat){
-        notificationSound.play()
-        socket.emit("get messages", { id: data.chat, page: 1, inChat:false });
+  function OnChatMessage(data) {
+    if (props.clicked.chat_uid) {
+      if (props.clicked.chat_uid == data.chat) {
+        socket.emit("get messages", { id: data.chat, page: 1, inChat: true });
+      } else if (props.clicked.chat_uid != data.chat) {
+        notificationSound.play();
+        socket.emit("get messages", { id: data.chat, page: 1, inChat: false });
       }
-    }else{
-      notificationSound.play()
+    } else {
+      notificationSound.play();
     }
     socket.emit("get chats");
   }
@@ -86,7 +83,11 @@ function Chat(props) {
   useEffect(() => {
     setChatMessages([]);
     socket.on("retrieve messages", RetrieveMessages);
-    socket.emit("get messages", { id: props.clicked.chat_uid, page: 1, inChat:true});
+    socket.emit("get messages", {
+      id: props.clicked.chat_uid,
+      page: 1,
+      inChat: true,
+    });
     socket.on("chat message", OnChatMessage);
 
     if (props.clicked && scrollEl) {
@@ -99,14 +100,13 @@ function Chat(props) {
     };
   }, [props.clicked]);
 
-
   const handleSubmit = (newValue) => {
     if (newMessage.length > 0) {
       socket.emit("chat message", {
         chat: newValue.chat_uid,
         message: newValue.text,
         is_image: newValue.is_image,
-        is_file: newValue.is_file
+        is_file: newValue.is_file,
       });
       socket.emit("get chats");
       socket.emit("get messages", { id: newValue.chat_uid, page: 1 });
@@ -167,7 +167,7 @@ function Chat(props) {
 
   const MessagesView = (props) => {
     const { message } = props;
-    const {group} =  props;
+    const { group } = props;
     let type;
     if (message.chat_type == 1) {
       if (message.message_user_uid == props.id) {
@@ -195,7 +195,11 @@ function Chat(props) {
           <div className="message-avatar">
             {/* {message.avatar} */}
             <div>
-              {group && message.message_user_uid != props.my_uid ? (<h5>{message.name}</h5>):("")}
+              {group && message.message_user_uid != props.my_uid ? (
+                <h5>{message.name}</h5>
+              ) : (
+                ""
+              )}
               {/* <h5>{message.name}</h5> */}
               {/* <div className="time">
                 {moment(message.time).format("DD-MM-YYYY")}
@@ -209,18 +213,25 @@ function Chat(props) {
             message.media
           ) : (
             <div className="message-content position-relative">
-              {!message.is_image&&!message.is_file?
-                message.message+" "
-                :message.is_image?
+              {!message.is_image && !message.is_file ? (
+                message.message + " "
+              ) : message.is_image ? (
                 <figure className="avatar avatar-xl">
-                  <img
-                    src={message.message}
-                  />
-                </figure>:
-                <a href={message.message} download><FeatherIcon.Download/> {message.message.replace("uploads/","")} </a>
-                }
+                  <img src={message.message} />
+                </figure>
+              ) : (
+                <a href={message.message} download>
+                  <FeatherIcon.Download />{" "}
+                  {message.message.replace("uploads/", "")}{" "}
+                </a>
+              )}
               <div className="action-toggle action-dropdown-chat">
-                <ChatsMessageDropdown message={message} prop_id={props.id} my_uid={props.my_uid} chat_id={props.chat_id} socket={socket}/>
+                <ChatsMessageDropdown
+                  message={message}
+                  prop_id={props.id}
+                  my_uid={props.my_uid}
+                  chat_id={props.chat_id}
+                />
               </div>
             </div>
           )}
@@ -229,8 +240,7 @@ function Chat(props) {
     }
   };
 
-  return (
-    clicked.name ? 
+  return clicked.name ? (
     <div className="chat">
       <ChatHeader
         data={props.clicked}
@@ -239,6 +249,10 @@ function Chat(props) {
         id={props.clicked.user_chat}
         setUser={props.setUser}
         setGroup={props.setGroup}
+        setOpenUserProfile={props.setOpenUserProfile}
+        openUserProfile={props.openUserProfile}
+        setOpenProfile={props.setOpenProfile}
+        openProfile={props.openProfile}
       />
       <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
         <div className="chat-body">
@@ -253,7 +267,7 @@ function Chat(props) {
                   my_uid={props.my_uid}
                   setUser={props.setUser}
                   chat_id={props.clicked.chat_uid}
-                  group= {props.clicked.chat_type}
+                  group={props.clicked.chat_type}
                 />
               </div>
             ))}
@@ -269,7 +283,7 @@ function Chat(props) {
         darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
       />
     </div>
-    :
+  ) : (
     <div className="chat">
       <div className="chat-header justify-content-end">
         <div className="chat-header-action">
@@ -299,7 +313,7 @@ function Chat(props) {
             <p className="lead text-center">Welcome to OrgBoat!</p>
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   );
 }

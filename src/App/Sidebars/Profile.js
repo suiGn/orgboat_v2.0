@@ -11,6 +11,10 @@ import axios from "axios";
 
 function Profile(props) {
   const { socket } = props;
+  const { openProfile } = props;
+  const { setOpenProfile } = props;
+  const { openUserProfile } = props;
+  const { setOpenUserProfile } = props;
   const dispatch = useDispatch();
   var userData;
   const { profileSidebar, mobileProfileSidebar } = useSelector(
@@ -42,6 +46,13 @@ function Profile(props) {
     e.preventDefault();
     dispatch(profileAction(false));
     dispatch(mobileProfileAction(false));
+  };
+
+  const openProfileToggler = (e) => {
+    setOpenProfile(!openProfile);
+    if (openUserProfile) {
+      setOpenUserProfile(!openUserProfile);
+    }
   };
 
   useEffect(() => {
@@ -108,6 +119,7 @@ function Profile(props) {
           socket.emit("my_uid");
         })
       });
+      socket.emit("my_uid");
     }
   }
 
@@ -189,17 +201,15 @@ function Profile(props) {
   }
 
   return (
-    <div
-      className={`sidebar-group ${mobileProfileSidebar ? "mobile-open" : ""}`}
-    >
-      <div className={profileSidebar ? "sidebar active" : "sidebar"}>
+    <div className={`sidebar-group ${openProfile ? "mobile-open" : ""}`}>
+      <div className={openProfile ? "sidebar active" : "sidebar"}>
         <header>
           <span>Profile</span>
           <ul className="list-inline">
             <li className="list-inline-item">
               <a
                 href="#/"
-                onClick={(e) => profileActions(e)}
+                onClick={(e) => openProfileToggler(e)}
                 className="btn btn-outline-light text-danger sidebar-close"
               >
                 <FeatherIcon.X />
