@@ -5,6 +5,7 @@ import mobileSidebarReducer from "./Reducers/mobileSidebarReducer";
 import profileSidebarReducer from "./Reducers/profileSidebarReducer";
 import mobileProfileSidebarReducer from "./Reducers/mobileProfileSidebarReducer";
 import pageTourReducer from "./Reducers/pageTourReducer";
+import groupProfileReducer from "./Reducers/groupProfileReducer";
 
 const reducers = combineReducers({
   selectedSidebar: sidebarReducer,
@@ -12,6 +13,7 @@ const reducers = combineReducers({
   profileSidebar: profileSidebarReducer,
   mobileProfileSidebar: mobileProfileSidebarReducer,
   pageTour: pageTourReducer,
+  groupProfileSidebar : groupProfileReducer,
 });
 
 const store = createStore(reducers);

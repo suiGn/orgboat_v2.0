@@ -112,6 +112,7 @@ function Layout(props) {
             socket={socket}
             clicked={clicked}
             setUser={setUser}
+            setGroup={setGroup}
             setOpenUserProfile={setOpenUserProfile}
             openUserProfile={openUserProfile}
             setOpenProfile={setOpenProfile}
@@ -138,6 +139,7 @@ function Layout(props) {
           socket={socket}
           user={user}
         />
+        <ProfileGroup socket={socket} group={group}/>
         <TourModal />
         <DisconnectedModal />
       </div>
