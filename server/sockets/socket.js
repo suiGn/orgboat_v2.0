@@ -118,6 +118,8 @@ io.on("connection", function (socket) {
     socket.on("chat message", function (msg) {
       chat = msg.chat;
       message = msg.message;
+      is_image = msg.is_image;
+      is_file = msg.is_file;
       from = user.u_id;
       time = new Date();
       orgboatDB.query(
@@ -135,6 +137,8 @@ io.on("connection", function (socket) {
                 from: from,
                 from_name: user.name,
                 message: message,
+                is_image: is_image,
+                is_file:is_file,
                 time: time,
               });
             }
@@ -142,8 +146,8 @@ io.on("connection", function (socket) {
         }
       );
       timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
-      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message,unread_messages) 
-                            values ('${chat}','${from}','${message}','${timeDB}',0,1)`);
+      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message,unread_messages,is_image,is_file) 
+      values ('${chat}','${from}','${message}','${timeDB}',0,1,'${is_image}','${is_file}')`);
     });
 
     //Client request the messages
@@ -170,7 +174,7 @@ io.on("connection", function (socket) {
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit 10;

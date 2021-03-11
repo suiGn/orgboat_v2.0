@@ -11,6 +11,7 @@ import UIfx from 'uifx';
 import notificationAudio from '../../assets/sound/much.mp3'
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
+import * as FeatherIcon from "react-feather";
 
 
 function Chat(props) {
@@ -104,6 +105,8 @@ function Chat(props) {
       socket.emit("chat message", {
         chat: newValue.chat_uid,
         message: newValue.text,
+        is_image: newValue.is_image,
+        is_file: newValue.is_file
       });
       socket.emit("get chats");
       socket.emit("get messages", { id: newValue.chat_uid, page: 1 });
@@ -206,23 +209,18 @@ function Chat(props) {
             message.media
           ) : (
             <div className="message-content position-relative">
-              <div className="word-break">{message.message}</div>
-              <div className="misc-container">
-                <div className="time">
-                  {moment(message.time).format("LT")}
-                  {message.type ? (
-                    <i className="ti-double-check text-info"></i>
-                  ) : null}
-                </div>
-                <div className="action-toggle action-dropdown-chat">
-                  <ChatsMessageDropdown
-                    message={message}
-                    prop_id={props.id}
-                    my_uid={props.my_uid}
-                    chat_id={props.chat_id}
-                    socket={socket}
+              {!message.is_image&&!message.is_file?
+                message.message+" "
+                :message.is_image?
+                <figure className="avatar avatar-xl">
+                  <img
+                    src={message.message}
                   />
-                </div>
+                </figure>:
+                <a href={message.message} download><FeatherIcon.Download/> {message.message.replace("uploads/","")} </a>
+                }
+              <div className="action-toggle action-dropdown-chat">
+                <ChatsMessageDropdown message={message} prop_id={props.id} my_uid={props.my_uid} chat_id={props.chat_id} socket={socket}/>
               </div>
             </div>
           )}
