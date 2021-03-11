@@ -224,23 +224,21 @@ const server = express()
     const storage = multer.diskStorage({
       destination: "../build/uploads/",
       filename: function (req, file, cb) {
-        console.log("file function")
-        console.log(file)
         cb(null, "IMAGE-" + Date.now() + path.extname(file.originalname));
       },
     });
-    const upload = multer({ storage: storage }).single("myImage")
+    const upload = multer({ storage: storage }).single("myImage");
     upload(req, res, (err) => {
       console.log("Request ---", req.body);
       console.log("Request file ---", req.file); //Here you get file.
       if (err) {
-        console.log(err)
-        res.json({
-          opt1: err
-        });
+        res.redirect("/workspace");
       }
-      res.json({
-        opt1: req.file
+      routes.saveImageChat(req,res)
+      .then(url =>{
+        res.json(
+          {"ok":url}
+        );
       });
     });
   })
