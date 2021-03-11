@@ -222,7 +222,7 @@ function Chat(props) {
               ) : (
                 <a href={message.message} download>
                   <FeatherIcon.Download />{" "}
-                  {message.message.replace("uploads/", "")}{" "}
+                  {"file "}
                 </a>
               )}
               <div className="misc-container">

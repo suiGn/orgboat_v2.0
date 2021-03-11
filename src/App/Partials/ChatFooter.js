@@ -65,7 +65,6 @@ function ChatFooter(props) {
     axios
       .post("/uploadpChatFile", formData, config)
       .then((response) => {
-        console.log(response.data)
         props.onSubmit({
           text:  response.data.url,
           chat_uid: props.chat_uid,
@@ -89,7 +88,6 @@ function ChatFooter(props) {
     axios
       .post("/uploadpChatFile", formData, config)
       .then((response) => {
-        console.log(response.data)
         props.onSubmit({
           text:  response.data.url,
           chat_uid: props.chat_uid,

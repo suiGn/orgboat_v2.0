@@ -159,7 +159,10 @@ function Index(props) {
               </h5>
               {chat.deleted_message || chat.deleted_message_to
                 ? ""
-                : chat.last_message_message}
+                : 
+                chat.is_file? "file":
+                chat.is_image? "picture":
+                chat.last_message_message}
             </div>
             {(chat.unread_messages && chat.last_message_user_uid != my_uid) >
             0 ? (
