@@ -23,6 +23,8 @@ function Layout(props) {
   const [group, setGroup] = useState("");
   const dispatch = useDispatch();
   const [my_uid, setMy_Id] = useState("");
+  const [openUserProfile, setOpenUserProfile] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
 
   useEffect(() => {
     document.querySelector("*").addEventListener("click", (e) => {
@@ -84,8 +86,12 @@ function Layout(props) {
         <Navigation
           darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
           setDarkSwitcherTooltipOpen={props.setDarkSwitcherTooltipOpen}
-          socket={props.socket}
+          socket={socket}
           setUser={setUser}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
           my_uid={my_uid}
           data={clicked}
         />
@@ -95,18 +101,43 @@ function Layout(props) {
           setUser={setUser}
           setGroup={setGroup}
           my_uid={my_uid}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
         />
-       <Chat
-        darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
-        socket={socket}
-        clicked={clicked}
-        setUser={setUser}
-        setGroup={setGroup}
-        my_uid={my_uid}
+        {clicked.name ? (
+          <Chat
+            darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+            socket={socket}
+            clicked={clicked}
+            setUser={setUser}
+            setOpenUserProfile={setOpenUserProfile}
+            openUserProfile={openUserProfile}
+            setOpenProfile={setOpenProfile}
+            openProfile={openProfile}
+            my_uid={my_uid}
+          />
+        ) : (
+          <ChatN socket={socket} />
+        )}
+
+        <Profile
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
+          socket={socket}
+          user={user}
         />
-        <ProfileGroup socket={socket} group={group}/>
-        <Profile socket={socket} user={user} />
-        <UserProfile socket={socket} user={user} />
+        <UserProfile
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          socket={socket}
+          user={user}
+        />
         <TourModal />
         <DisconnectedModal />
       </div>

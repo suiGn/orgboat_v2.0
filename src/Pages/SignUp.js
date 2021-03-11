@@ -12,7 +12,6 @@ function SignUp() {
   const [pwrd, setPwrd] = useState("");
   const [pwrd2, setPwrd2] = useState("");
   useEffect(() => document.body.classList.add("form-membership"), []);
-  console.log("sign up");
   const subscribing = (event) => {
     event.preventDefault();
     const user = {
@@ -23,7 +22,6 @@ function SignUp() {
       subRtPwd: pwrd2,
     };
     axios.post("/subscribing", user).then((res) => {
-      console.log(res);
       setResponse(res.data);
     });
   };
