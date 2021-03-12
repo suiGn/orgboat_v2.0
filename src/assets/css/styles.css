@@ -243,6 +243,11 @@ body.dark .time {
   font-size: 5em;
 }
 
+.profile-image-holder .avatar-title,
+.user-profile .avatar-title {
+  font-size: 5em;
+}
+
 .overlay {
   background: #00000094;
   opacity: 0;
