@@ -404,7 +404,7 @@ io.on("connection", function (socket) {
             });
           }
           orgboatDB.query(
-            `UPDATE messages SET delete_message_to =1 WHERE chat_uid='${chatid.chat_uid}' AND u_id='${user.u_id}'`,
+            `UPDATE messages SET delete_message =1 WHERE chat_uid='${chatid.chat_uid}' AND u_id='${user.u_id}'`,
             (err, data) => {
               if (err) {
                 return json({
@@ -415,7 +415,7 @@ io.on("connection", function (socket) {
                 });
               }
               orgboatDB.query(
-                `UPDATE messages SET delete_message = 1 WHERE chat_uid='${chatid.chat_uid}' AND u_id!='${user.u_id}'`
+                `UPDATE messages SET delete_message_to = 1 WHERE chat_uid='${chatid.chat_uid}' AND u_id!='${user.u_id}'`
               );
               io.to(user.u_id).emit("retrive delete chat");
             }

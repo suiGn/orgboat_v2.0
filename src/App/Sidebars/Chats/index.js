@@ -160,7 +160,7 @@ function Index(props) {
                 {chat.name}
               </h5>
               {chat.deleted_message || chat.deleted_message_to
-                ? ""
+                ? "no messages"
                 : 
                 chat.is_file? "file":
                 chat.is_image? "picture":
