@@ -186,7 +186,7 @@ function Index(props) {
                     socket={socket}
                     chat_uid={chat.chat_uid}
                     chat_type={chat.chat_type}
-                    setClicked={setClicked}
+                    setClicked={props.setClicked}
                     setOpenProfile={setOpenProfile}
                     openProfile={openProfile}
                     openUserProfile={openUserProfile}
@@ -207,7 +207,7 @@ function Index(props) {
                     socket={socket}
                     chat_uid={chat.chat_uid}
                     chat_type={chat.chat_type}
-                    setClicked={setClicked}
+                    setClicked={props.setClicked}
                     setOpenProfile={setOpenProfile}
                     openProfile={openProfile}
                     openUserProfile={openUserProfile}

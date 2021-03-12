@@ -23,6 +23,7 @@ const ChatsDropdown = (props) => {
     socket.once("retrive delete chat", () => {
       //props.setClicked(null);
       socket.emit("get chats");
+      props.setClicked([]);
     });
   }
 

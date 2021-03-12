@@ -111,25 +111,20 @@ function Layout(props) {
           openGroupProfile={openGroupProfile}
           setOpenGroupProfile={setOpenGroupProfile}
         />
-        {clicked.name ? (
-          <Chat
-            darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
-            socket={socket}
-            clicked={clicked}
-            setUser={setUser}
-            setGroup={setGroup}
-            setOpenUserProfile={setOpenUserProfile}
-            openUserProfile={openUserProfile}
-            setOpenProfile={setOpenProfile}
-            openProfile={openProfile}
-            openGroupProfile={openGroupProfile}
-            setOpenGroupProfile={setOpenGroupProfile}
-            my_uid={my_uid}
-          />
-        ) : (
-          <ChatN socket={socket} />
-        )}
-
+        <Chat
+          darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+          socket={socket}
+          clicked={clicked}
+          setUser={setUser}
+          setGroup={setGroup}
+          setOpenUserProfile={setOpenUserProfile}
+          openUserProfile={openUserProfile}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
+          my_uid={my_uid}
+        />
         <Profile
           setOpenProfile={setOpenProfile}
           openProfile={openProfile}
