@@ -6,6 +6,7 @@ import SidebarIndex from "./Sidebars/index";
 import Navigation from "./Navigation";
 import Profile from "./Sidebars/Profile";
 import UserProfile from "./Sidebars/UserProfile";
+import ProfileGroup from "./Sidebars/ProfileGroup";
 import Chat from "./Partials/Chat";
 import ChatN from "./Partials/ChatNoMessage";
 import { pageTourAction } from "../Store/Actions/pageTourAction";
@@ -19,8 +20,12 @@ function Layout(props) {
   const { pageTour } = useSelector((state) => state);
   const { socket } = props;
   const [user, setUser] = useState("");
+  const [group, setGroup] = useState("");
   const dispatch = useDispatch();
   const [my_uid, setMy_Id] = useState("");
+  const [openUserProfile, setOpenUserProfile] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
+  const [openGroupProfile, setOpenGroupProfile] = useState(false);
 
   useEffect(() => {
     document.querySelector("*").addEventListener("click", (e) => {
@@ -31,7 +36,6 @@ function Layout(props) {
         document.body.classList.remove("navigation-open");
       }
     });
-    console.log(clicked);
   }, []);
 
   useEffect(() => {
@@ -83,8 +87,14 @@ function Layout(props) {
         <Navigation
           darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
           setDarkSwitcherTooltipOpen={props.setDarkSwitcherTooltipOpen}
-          socket={props.socket}
+          socket={socket}
           setUser={setUser}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
           my_uid={my_uid}
           data={clicked}
         />
@@ -92,17 +102,59 @@ function Layout(props) {
           socket={socket}
           setClicked={setClicked}
           setUser={setUser}
+          setGroup={setGroup}
           my_uid={my_uid}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
         />
-       <Chat
-        darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
-        socket={socket}
-        clicked={clicked}
-        setUser={setUser}
-        my_uid={my_uid}
+        <Chat
+          darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+          socket={socket}
+          clicked={clicked}
+          setUser={setUser}
+          setGroup={setGroup}
+          setOpenUserProfile={setOpenUserProfile}
+          openUserProfile={openUserProfile}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
+          my_uid={my_uid}
+          setClicked={setClicked}
         />
-        <Profile socket={socket} user={user} />
-        <UserProfile socket={socket} user={user} />
+        <Profile
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
+          socket={socket}
+          user={user}
+        />
+        <UserProfile
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
+          socket={socket}
+          user={user}
+        />
+        <ProfileGroup 
+        openUserProfile={openUserProfile}
+        setOpenUserProfile={setOpenUserProfile}
+        setOpenProfile={setOpenProfile}
+        openProfile={openProfile}
+        openGroupProfile={openGroupProfile}
+        setOpenGroupProfile={setOpenGroupProfile}
+        socket={socket} 
+        group={group}/>
         <TourModal />
         <DisconnectedModal />
       </div>

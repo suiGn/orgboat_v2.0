@@ -436,6 +436,69 @@ exports.savedbimage =  async function (req, res) {
   
 };
 
+exports.savedbimageGroup =  async function (req, res) {
+  return new Promise((resolve, reject) =>{
+    console.log(req.file);
+    var photo = `uploads/${req.file.filename}`;
+    // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
+    var uploadParams = {Bucket: "cleaker", Key: '', Body: ''};
+    readStream("../build/"+photo).then(data => {
+      uploadParams.Body = data;
+      uploadParams.Key = req.file.filename;
+      s3.upload (uploadParams, function (err, data) {
+        if (err) {
+          console.log("Error", err);
+        } if (data) {
+          console.log("Upload Success", data.Location);
+          photo=data.Location;
+          var uidd = req.body.chat_uid;
+          index.orgboatDB.query(
+            "UPDATE chats SET groupphoto = ? WHERE chat_uid = ?",
+            [photo, uidd],
+            (error, results) => {
+              if (error) {
+                //res.redirect("/workspace");
+                reject(error);
+                console.log(error);
+              } else {
+                //res.redirect("/workspace");
+                resolve(photo);
+                console.log("Okay");
+              }
+            }
+          );
+        }
+      });
+    })
+    .catch(err=>{
+      reject(err);
+    });
+  });
+};
+
+exports.saveFileChat = async function(req, res){
+  return new Promise((resolve, reject) =>{
+    var photo = `uploads/${req.file.filename}`;
+    // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
+    var uploadParams = {Bucket: "cleaker", Key: '', Body: ''};
+    readStream("../build/"+photo).then(data => {
+      uploadParams.Body = data;
+      uploadParams.Key = req.file.filename;
+      s3.upload (uploadParams, function (err, data) {
+        if (err) {
+          console.log("Error", err);
+        } if (data) {
+          console.log("Upload Success", data.Location);
+          resolve(data.Location);
+        }
+      });
+    })
+    .catch(err=>{
+      reject(err);
+    });
+  });
+}
+
 exports.pphotourl = async function (req, res) {
   //console.log(req);
   var usrname = req;

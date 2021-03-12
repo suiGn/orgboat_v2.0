@@ -183,6 +183,29 @@ const server = express()
       });
     });
   })
+  .post("/uploadpPhotoGroup", (req, res) => {
+    //Multer
+    const storage = multer.diskStorage({
+      destination: "../build/uploads/",
+      filename: function (req, file, cb) {
+        cb(null, "IMAGE-" + Date.now() + path.extname(file.originalname));
+      },
+    });
+    const upload = multer({ storage: storage }).single("myImage");
+    upload(req, res, (err) => {
+      console.log("Request ---", req.body);
+      console.log("Request file ---", req.file); //Here you get file.
+      if (err) {
+        res.redirect("/workspace");
+      }
+      routes.savedbimageGroup(req,res)
+      .then(url =>{
+        res.json(
+          {"ok":url}
+        );
+      });
+    });
+  })
   .get("/pphoto", (req, res) => {
     //console.log(req);
     //res.json()
@@ -196,8 +219,29 @@ const server = express()
       const result = await routes.pphotourl(req.params.name);
       res.sendFile(path.join(__dirname, result));
     })();
-  });
-
+  })
+  .post("/uploadpChatFile",(req, res)=>{
+    const storage = multer.diskStorage({
+      destination: "../build/uploads/",
+      filename: function (req, file, cb) {
+        cb(null, "IMAGE-" + Date.now() + path.extname(file.originalname));
+      },
+    });
+    const upload = multer({ storage: storage }).single("myFile");
+    upload(req, res, (err) => {
+      console.log("Request ---", req.body);
+      console.log("Request file ---", req.file); //Here you get file.
+      if (err) {
+        res.redirect("/workspace");
+      }
+      routes.saveFileChat(req,res)
+      .then(url =>{
+        res.json(
+          {"url":url}
+        );
+      });
+    });
+  })
 /** 			   o       o                                
            |       |                               
            o   o   o  

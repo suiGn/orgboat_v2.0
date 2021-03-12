@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { profileAction } from "../../../Store/Actions/profileAction";
 import { mobileProfileAction } from "../../../Store/Actions/mobileProfileAction";
 import { useDispatch } from "react-redux";
-import { userProfileAction } from "../../../Store/Actions/userProfileAction";
-import { mobileUserProfileAction } from "../../../Store/Actions/mobileUserProfileAction";
 import {
   Dropdown,
   DropdownToggle,
@@ -19,11 +17,23 @@ const ArchivedDropdown = (props) => {
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const profileActions = () => {
+  // const profileActions = () => {
+  //   props.setUser({ id: props.id });
+  //   dispatch(userProfileAction(true));
+  //   dispatch(mobileUserProfileAction(true));
+  // };
+
+  const openUserProfileToggler = (e) => {
     props.setUser({ id: props.id });
-    dispatch(userProfileAction(true));
-    dispatch(mobileUserProfileAction(true));
+    props.setOpenUserProfile(!props.openUserProfile);
+    if (props.openProfile) {
+      props.setOpenProfile(!props.openProfile);
+    }
+    if (props.openGroupProfile) {
+      props.setOpenGroupProfile(!props.openGroupProfile);
+    }
   };
+
   function Unarchive(chat_selected) {
     socket.emit("Unarchive chat", { chat: chat_selected });
     socket.once("Unarchive response", function (data) {
@@ -40,7 +50,7 @@ const ArchivedDropdown = (props) => {
         <DropdownItem onClick={() => Unarchive(props.chat_id)}>
           Unarchived
         </DropdownItem>
-        <DropdownItem onClick={profileActions}>Profile</DropdownItem>
+        <DropdownItem onClick={openUserProfileToggler}>Profile</DropdownItem>
         {/* <DropdownItem divider />
         <DropdownItem>Block</DropdownItem> */}
       </DropdownMenu>

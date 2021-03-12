@@ -11,6 +11,12 @@ import axios from "axios";
 
 function Profile(props) {
   const { socket } = props;
+  const { openProfile } = props;
+  const { setOpenProfile } = props;
+  const { openUserProfile } = props;
+  const { setOpenUserProfile } = props;
+  const { openGroupProfile } = props;
+  const { setOpenGroupProfile } = props;
   const dispatch = useDispatch();
   var userData;
   const { profileSidebar, mobileProfileSidebar } = useSelector(
@@ -44,13 +50,22 @@ function Profile(props) {
     dispatch(mobileProfileAction(false));
   };
 
+  const openProfileToggler = (e) => {
+    setOpenProfile(!openProfile);
+    if (openUserProfile) {
+      setOpenUserProfile(!openUserProfile);
+    }
+    if (openGroupProfile) {
+      setOpenGroupProfile(!openGroupProfile);
+    }
+  };
+
   useEffect(() => {
     socket.emit("ViewOwnProfile", props.user);
   }, [props.user]);
 
   function RetrieveViewownprofile(data){
     var userData = data.usrprofile[0];
-    console.log(userData)
     if (userData) {
       let nameD = userData.name != "null" ? userData.name : "";
       let cityD = userData.city != "null" ? userData.city : "";
@@ -109,6 +124,7 @@ function Profile(props) {
           socket.emit("my_uid");
         })
       });
+      socket.emit("my_uid");
     }
   }
 
@@ -181,7 +197,6 @@ function Profile(props) {
       .post("/uploadpPhoto", formData, config)
       .then((response) => {
         //alert("The file is successfully uploaded");
-        console.log("Imagen subida con éxito");
         socket.emit("ViewOwnProfile", { id: props.user.id });
         socket.once("retrieve viewownprofile", ()=> {
           socket.emit("my_uid");
@@ -191,17 +206,15 @@ function Profile(props) {
   }
 
   return (
-    <div
-      className={`sidebar-group ${mobileProfileSidebar ? "mobile-open" : ""}`}
-    >
-      <div className={profileSidebar ? "sidebar active" : "sidebar"}>
+    <div className={`sidebar-group ${openProfile ? "mobile-open" : ""}`}>
+      <div className={openProfile ? "sidebar active" : "sidebar"}>
         <header>
           <span>Profile</span>
           <ul className="list-inline">
             <li className="list-inline-item">
               <a
                 href="#/"
-                onClick={(e) => profileActions(e)}
+                onClick={(e) => openProfileToggler(e)}
                 className="btn btn-outline-light text-danger sidebar-close"
               >
                 <FeatherIcon.X />

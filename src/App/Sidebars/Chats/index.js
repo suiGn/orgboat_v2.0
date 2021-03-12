@@ -13,12 +13,18 @@ const ENDPOINT = "http://localhost:5000/";
 
 function Index(props) {
   const { socket } = props;
+  const { setOpenProfile } = props;
+  const { openProfile } = props;
+  const { setOpenUserProfile } = props;
+  const { openUserProfile } = props;
+  const { openGroupProfile } = props;
+  const { setOpenGroupProfile } = props;
   const [chatLists, setChatList] = useState([]);
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
 
-  function RetrieveChats(data){
+  function RetrieveChats(data) {
     var chats = data.chats.filter((chats) => {
       return chats.chat_type == 0;
     });
@@ -38,7 +44,7 @@ function Index(props) {
     return () => {
       socket.off("retrieve chats", RetrieveChats);
     };
-  },one);
+  }, one);
 
   useEffect(() => {
     socket.emit("get chats");
@@ -82,9 +88,9 @@ function Index(props) {
   }
   let my_uid = chatLists.my_uid;
 
-  function setClicked(e,chat){
+  function setClicked(e, chat) {
     e.preventDefault();
-    chat.unread_messages = 0
+    chat.unread_messages = 0;
     props.setClicked(chat);
   }
 
@@ -96,6 +102,9 @@ function Index(props) {
     let chat_with_usr = chat.user_chat;
     if (chat.chat_type == 1 || my_uid != chat.user_chat) {
       chat_name = chat.name;
+      if (chat.chat_type == 1) {
+        chat.pphoto = chat.groupphoto;
+      }
       chat_initial = chat_name.substring(0, 1);
       let timeMessage = new Date(chat.last_message_time);
       let timeLabel;
@@ -128,8 +137,12 @@ function Index(props) {
       }
       return (
         <li
-          className={(chat.unread_messages && chat.last_message_user_uid!=my_uid)? "list-group-item open-chat" :  "list-group-item " + (chat.selected ? "open-chat" : "") }
-          onClick={(e) => setClicked(e,chat)}
+          className={
+            chat.unread_messages && chat.last_message_user_uid != my_uid
+              ? "list-group-item open-chat"
+              : "list-group-item " + (chat.selected ? "open-chat" : "")
+          }
+          onClick={(e) => setClicked(e, chat)}
         >
           <div>
             <figure className="avatar">{p}</figure>
@@ -137,32 +150,74 @@ function Index(props) {
           <div className="users-list-body">
             <div i={chat.chat_uid}>
               <h5
-                className={(chat.unread_messages && chat.last_message_user_uid!=my_uid) ? "text-primary" : ""}
+                className={
+                  chat.unread_messages && chat.last_message_user_uid != my_uid
+                    ? "text-primary"
+                    : ""
+                }
                 i={chat.chat_uid}
               >
                 {chat.name}
               </h5>
-              {(chat.deleted_message||chat.deleted_message_to)?"":chat.last_message_message}
+              {chat.deleted_message || chat.deleted_message_to
+                ? "no messages"
+                : 
+                chat.is_file? "file":
+                chat.is_image? "picture":
+                chat.last_message_message}
             </div>
-            {
-            (chat.unread_messages && chat.last_message_user_uid!=my_uid)>0 ?
-            <div className="users-list-action">
-              <div className="new-message-count">{chat.unread_messages}</div>
-              <small className={chat.unread_messages ? "text-primary" : "text-muted"} className="text-muted"
-              >{timeLabel}</small>
-              <div className="action-toggle">
-                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} />
+            {(chat.unread_messages && chat.last_message_user_uid != my_uid) >
+            0 ? (
+              <div className="users-list-action">
+                <div className="new-message-count">{chat.unread_messages}</div>
+                <small
+                  className={
+                    chat.unread_messages ? "text-primary" : "text-muted"
+                  }
+                  className="text-muted"
+                >
+                  {timeLabel}
+                </small>
+                <div className="action-toggle">
+                  <ChatsDropdown
+                    setGroup={props.setGroup}
+                    setUser={props.setUser}
+                    id={chat.user_chat}
+                    socket={socket}
+                    chat_uid={chat.chat_uid}
+                    chat_type={chat.chat_type}
+                    setClicked={props.setClicked}
+                    setOpenProfile={setOpenProfile}
+                    openProfile={openProfile}
+                    openUserProfile={openUserProfile}
+                    setOpenUserProfile={setOpenUserProfile}
+                    openGroupProfile={openGroupProfile}
+                    setOpenGroupProfile={setOpenGroupProfile}
+                  />
+                </div>
               </div>
-            </div>
-            :
-            <div className="users-list-action">
-                <small  className="text-muted">{timeLabel}</small>
-              <div className="action-toggle">
-                <ChatsDropdown setUser={props.setUser} id={chat.user_chat} socket={socket} chat_uid={chat.chat_uid}/>
+            ) : (
+              <div className="users-list-action">
+                <small className="text-muted">{timeLabel}</small>
+                <div className="action-toggle">
+                  <ChatsDropdown
+                    setGroup={props.setGroup}
+                    setUser={props.setUser}
+                    id={chat.user_chat}
+                    socket={socket}
+                    chat_uid={chat.chat_uid}
+                    chat_type={chat.chat_type}
+                    setClicked={props.setClicked}
+                    setOpenProfile={setOpenProfile}
+                    openProfile={openProfile}
+                    openUserProfile={openUserProfile}
+                    setOpenUserProfile={setOpenUserProfile}
+                    openGroupProfile={openGroupProfile}
+                    setOpenGroupProfile={setOpenGroupProfile}
+                  />
+                </div>
               </div>
-            </div>
-               
-            }
+            )}
           </div>
         </li>
       );
@@ -233,6 +288,7 @@ function Index(props) {
                   key={i}
                   setClicked={props.setClicked}
                   setUser={props.setUser}
+                  setGroup={props.setGroup}
                 />
               ))}
           </ul>
