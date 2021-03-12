@@ -124,6 +124,7 @@ function Layout(props) {
           openGroupProfile={openGroupProfile}
           setOpenGroupProfile={setOpenGroupProfile}
           my_uid={my_uid}
+          setClicked={setClicked}
         />
         <Profile
           setOpenProfile={setOpenProfile}
