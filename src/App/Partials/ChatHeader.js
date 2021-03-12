@@ -73,6 +73,7 @@ function ChatHeader(props) {
     socket.once("archived response", function () {
       socket.emit("get chats");
       socket.emit("get chats archived");
+      props.setClicked([]);
     });
   }
 
