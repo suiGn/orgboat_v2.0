@@ -47,9 +47,8 @@ const FriendsDropdown = (props) => {
   const newchat = (chat_uid) => {
     //console.log(chat_uid);
     socket.emit("newChat", chat_uid);
-    socket.once("retrive newchat", (chat) => {
-      console.log({ chat_uid: chat.chat_uid });
-      props.setClicked([{ chat_uid: chat.chat_uid }]);
+    socket.once("retrive newchat", (data) => {
+      props.setClicked(data.chat);
     });
   };
 

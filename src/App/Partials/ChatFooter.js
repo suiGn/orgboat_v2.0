@@ -22,12 +22,14 @@ function ChatFooter(props) {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onSubmit({
-      text: props.inputMsg,
-      chat_uid: props.chat_uid,
-      is_image: 0,
-      is_file: 0,
-    });
+    if(props.inputMsg!=""){
+      props.onSubmit({
+        text: props.inputMsg,
+        chat_uid: props.chat_uid,
+        is_image: 0,
+        is_file: 0,
+      });
+    }
   };
 
   const handleChange = (e) => {

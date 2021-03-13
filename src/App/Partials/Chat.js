@@ -249,7 +249,7 @@ function Chat(props) {
     }
   };
 
-  return clicked.name ? (
+  return clicked.chat_uid ? (
     <div className="chat">
       <ChatHeader
         data={props.clicked}
