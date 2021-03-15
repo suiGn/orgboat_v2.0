@@ -136,7 +136,7 @@ const server = express()
         let em = user.email;
         let uuid = user.u_id;
         return res.redirect("/notverify-email?em=" + em + "&uuid=" + uuid);
-      } else if (err) {
+      } else if (err||!user) {
         return res.redirect("/badLogin");
       }
       req.logIn(user, function (err) {

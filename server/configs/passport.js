@@ -124,24 +124,28 @@ module.exports = function (passport) {
           // `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}') AND verified = 0`,
           `SELECT * FROM usrs WHERE (usrname = '${usrname}' OR email = '${usrname}')`,
           (err, resp) => {
-            console.log(resp[0]);
-            if (resp[0].verified === 0) {
-              return done(null, resp[0]);
-            } else {
-              // selects return an array, so access the first in the array
-              var usr = resp[0];
-              var hash = usr.password;
-              // now lets compare the passwords
-              bcrypt.compare(password, hash, function (err, isMatch) {
-                if (err) {
-                  return done(err);
-                } else if (!isMatch) {
-                  return done(true);
-                } else {
-                  //console.log(true)
-                  return done(null, usr);
-                }
-              });
+            console.log(resp);
+            if(resp[0] ){
+              if (resp[0].verified === 0) {
+                return done(null, resp[0]);
+              } else {
+                // selects return an array, so access the first in the array
+                var usr = resp[0];
+                var hash = usr.password;
+                // now lets compare the passwords
+                bcrypt.compare(password, hash, function (err, isMatch) {
+                  if (err) {
+                    return done(err);
+                  } else if (!isMatch) {
+                    return done(true);
+                  } else {
+                    //console.log(true)
+                    return done(null, usr);
+                  }
+                });
+              }
+            }else{
+              return done(err);
             }
           }
         );
