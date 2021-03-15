@@ -26,7 +26,7 @@ function Index(props) {
               setOpenGroupProfile={props.setOpenGroupProfile}
             />
           );
-        } else if (selectedSidebar === "Friends") {
+        } else if (selectedSidebar === "Contacts") {
           return (
             <FriendsIndex
               socket={props.socket}

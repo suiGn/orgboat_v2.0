@@ -51,7 +51,7 @@ function Layout(props) {
     },
     {
       selector: "#Tooltip-Add-Group",
-      content: "You can start a new group to chat with all your friends.",
+      content: "You can start a new group to chat with all your contacts.",
     },
     {
       selector: "#Tooltip-2",

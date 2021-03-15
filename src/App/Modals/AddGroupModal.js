@@ -298,7 +298,7 @@ function AddGroupModal(props) {
                 <a
                   onClick={modalToggleFriend}
                   href="#/"
-                  title="Add friends"
+                  title="Add contacts"
                   id="Tooltip-Avatar6"
                 >
                   <figure className="avatar">
@@ -307,7 +307,7 @@ function AddGroupModal(props) {
                     </span>
                   </figure>
                 </a>
-                <AvatarTooltip name="Add friends" id={6} />
+                <AvatarTooltip name="Add contacts" id={6} />
               </div>
             </FormGroup>
             <FormGroup>

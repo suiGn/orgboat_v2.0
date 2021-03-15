@@ -155,7 +155,7 @@ function Navigation(props) {
       badge: "warning",
     },
     {
-      name: "Friends",
+      name: "Contacts",
       icon: <FeatherIcon.User />,
       badge: "danger",
     },
