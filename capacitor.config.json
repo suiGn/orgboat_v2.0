@@ -1,0 +1,9 @@
+{
+    "appId": "io.ionic.nameofyourapp",
+    "appName": "cleaker",
+    "bundledWebRuntime": false,
+    "npmClient": "npm",
+    "webDir": "build",
+    "cordova": {},
+    "windowsAndroidStudioPath": "D:\\android\bin\\bin\\studio64.exe"
+}

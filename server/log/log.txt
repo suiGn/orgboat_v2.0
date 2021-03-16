@@ -224,3 +224,4 @@
 {"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
 {"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
 {"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}
+{"message":"[Socket.io] - Connected user: sebas, u_id: d7377280-8b0a-4569-8e34-6ea37ed2966d","level":"info"}

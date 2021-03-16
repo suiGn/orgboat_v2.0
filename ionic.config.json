@@ -1,0 +1,7 @@
+{
+    "name": "cleaker",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+  }
