@@ -41,6 +41,13 @@ function Chat(props) {
   const { clicked } = props;
 
   useEffect(() => {
+    if (props.clicked && scrollEl) {
+      scrollEl.scrollTop = scrollEl.scrollHeight;
+    }
+  });
+
+
+  useEffect(() => {
     if (scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
     }
@@ -89,10 +96,6 @@ function Chat(props) {
       inChat: true,
     });
     socket.on("chat message", OnChatMessage);
-
-    if (props.clicked && scrollEl) {
-      scrollEl.scrollTop = scrollEl.scrollHeight;
-    }
 
     return () => {
       socket.off("chat message", OnChatMessage);
