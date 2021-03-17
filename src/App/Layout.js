@@ -21,6 +21,8 @@ function Layout(props) {
   const { socket } = props;
   const [user, setUser] = useState("");
   const [group, setGroup] = useState("");
+  const [unread, setUnread] = useState(false);
+  const [unreadChats, setUnreadChats] = useState([]);
   const dispatch = useDispatch();
   const [my_uid, setMy_Id] = useState("");
   const [openUserProfile, setOpenUserProfile] = useState(false);
@@ -51,7 +53,7 @@ function Layout(props) {
     },
     {
       selector: "#Tooltip-Add-Group",
-      content: "You can start a new group to chat with all your friends.",
+      content: "You can start a new group to chat with all your contacts.",
     },
     {
       selector: "#Tooltip-2",
@@ -97,6 +99,8 @@ function Layout(props) {
           setOpenGroupProfile={setOpenGroupProfile}
           my_uid={my_uid}
           data={clicked}
+          unread={unread}
+          unreadChats={unreadChats}
         />
         <SidebarIndex
           socket={socket}
@@ -110,6 +114,8 @@ function Layout(props) {
           setOpenUserProfile={setOpenUserProfile}
           openGroupProfile={openGroupProfile}
           setOpenGroupProfile={setOpenGroupProfile}
+          setUnread={setUnread}
+          setUnreadChats={setUnreadChats}
         />
         <Chat
           darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
@@ -125,6 +131,9 @@ function Layout(props) {
           setOpenGroupProfile={setOpenGroupProfile}
           my_uid={my_uid}
           setClicked={setClicked}
+          setUnreadChats={setUnreadChats}
+          unreadChats={unreadChats}
+          setUnread={setUnread}
         />
         <Profile
           setOpenProfile={setOpenProfile}

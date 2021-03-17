@@ -24,9 +24,11 @@ function Index(props) {
               setOpenUserProfile={props.setOpenUserProfile}
               openGroupProfile={props.openGroupProfile}
               setOpenGroupProfile={props.setOpenGroupProfile}
+              setUnread={props.setUnread}
+              setUnreadChats={props.setUnreadChats}
             />
           );
-        } else if (selectedSidebar === "Friends") {
+        } else if (selectedSidebar === "Contacts") {
           return (
             <FriendsIndex
               socket={props.socket}

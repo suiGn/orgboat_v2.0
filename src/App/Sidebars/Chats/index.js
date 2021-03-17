@@ -37,6 +37,13 @@ function Index(props) {
     chats.push.apply(chats, grupos);
     setChatList(data);
     setfavoriteFriendFiltered(chats);
+    var chatsUnread = data.chats.filter((chats) => {
+        return chats.unread_messages == 1 && chats.last_message_user_uid != data.my_uid && chats.user_chat != data.my_uid 
+    });
+    if (chatsUnread.length>0){
+      props.setUnread(true)
+      props.setUnreadChats(chatsUnread)
+    }
   }
 
   useEffect(() => {

@@ -66,7 +66,7 @@ function Index(props) {
   return (
     <div className="sidebar active">
       <header>
-        <span>Friends</span>
+        <span>Contacts</span>
         <ul className="list-inline">
           <li className="list-inline-item">
             <AddFriendsModal socket={props.socket} my_uid={props.my_uid} />
@@ -85,7 +85,7 @@ function Index(props) {
         <input
           type="text"
           className="form-control"
-          placeholder="Search friends"
+          placeholder="Search contacts"
           ref={inputRef}
           value={searchFavorite}
           onChange={(e) => searchFav(e.target.value)}

@@ -134,7 +134,7 @@ function AddFriendModal(props) {
         target={"Tooltip-Add-Friend"}
         toggle={tooltipToggle}
       >
-        Add Friend
+        Add Contact
       </Tooltip>
 
       <Modal
@@ -145,7 +145,7 @@ function AddFriendModal(props) {
       >
         <ToastContainer />
         <ModalHeader toggle={modalToggle}>
-          <FeatherIcon.UserPlus className="mr-2" /> Add Friends
+          <FeatherIcon.UserPlus className="mr-2" /> Add Contacts
         </ModalHeader>
         <ModalBody>
           {/* {response ? (
@@ -153,7 +153,7 @@ function AddFriendModal(props) {
           ) : (
             <div class="text-error mt-0">{error}</div>
           )} */}
-          <p>Send invitations to friends.</p>
+          <p>Send invitations to contacts.</p>
           <Label for="email">Email addresses</Label>
           <Input type="text" name="email" id="email" onChange={handleEmail} />
           <FormGroup>

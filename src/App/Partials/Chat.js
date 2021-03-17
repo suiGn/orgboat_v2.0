@@ -22,7 +22,8 @@ function Chat(props) {
 
   const [messages, setChatMessages] = useState([]);
 
-  const [click, setClick] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   const mobileMenuBtn = () => document.body.classList.toggle("navigation-open");
 
@@ -41,10 +42,30 @@ function Chat(props) {
   const { clicked } = props;
 
   useEffect(() => {
+    if (props.clicked && scrollEl) {
+      scrollEl.scrollTop = scrollEl.scrollHeight;
+    }
+  });
+
+
+  useEffect(() => {
     if (scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
     }
   }, [scrollEl]);
+
+  function scrollMove(container) {  
+    if(container.scrollTop == 0){
+      setPage(page+1)
+      setLimit(limit+10)
+      socket.emit("get messages", {
+        id: props.clicked.chat_uid,
+        page: page,
+        inChat: true,
+        limit:limit,
+      });
+    }
+  }
 
   function RetrieveMessages(data) {
     if (data.messages.length != 0) {
@@ -69,10 +90,10 @@ function Chat(props) {
   function OnChatMessage(data) {
     if (props.clicked.chat_uid) {
       if (props.clicked.chat_uid == data.chat) {
-        socket.emit("get messages", { id: data.chat, page: 1, inChat: true });
+        socket.emit("get messages", { id: data.chat, page: page, inChat: true, limit:limit });
       } else if (props.clicked.chat_uid != data.chat) {
         notificationSound.play();
-        socket.emit("get messages", { id: data.chat, page: 1, inChat: false });
+        socket.emit("get messages", { id: data.chat, page: page, inChat: false, limit:limit });
       }
     } else {
       notificationSound.play();
@@ -81,19 +102,29 @@ function Chat(props) {
   }
 
   useEffect(() => {
+    setPage(1);
+    setLimit(10);
     setChatMessages([]);
-    socket.on("retrieve messages", RetrieveMessages);
-    socket.emit("get messages", {
-      id: props.clicked.chat_uid,
-      page: 1,
-      inChat: true,
-    });
-    socket.on("chat message", OnChatMessage);
 
-    if (props.clicked && scrollEl) {
-      scrollEl.scrollTop = scrollEl.scrollHeight;
+    var chat = props.unreadChats.filter((chat) => {
+      return chat.chat_uid != props.clicked.chat_uid
+    });
+    props.setUnreadChats(chat)
+    if (chat.length==0){
+      props.setUnread(false)
     }
 
+    socket.on("retrieve messages", RetrieveMessages);
+
+    socket.emit("get messages", {
+      id: props.clicked.chat_uid,
+      page: page,
+      inChat: true,
+      limit:limit
+    });
+
+    socket.on("chat message", OnChatMessage);
+    
     return () => {
       socket.off("chat message", OnChatMessage);
       socket.off("retrieve messages", RetrieveMessages);
@@ -109,7 +140,7 @@ function Chat(props) {
         is_file: newValue.is_file,
       });
       socket.emit("get chats");
-      socket.emit("get messages", { id: newValue.chat_uid, page: 1 });
+      socket.emit("get messages", { id: newValue.chat_uid, page: page, limit:limit });
     }
     setInputMsg("");
   };
@@ -266,7 +297,7 @@ function Chat(props) {
         setOpenGroupProfile={props.setOpenGroupProfile}
         setClicked={props.setClicked}
       />
-      <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)}>
+      <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)} onScrollY={(container)=>scrollMove(container)}>
         <div className="chat-body">
           <div className="messages">
             {messages.map((message, i) => (

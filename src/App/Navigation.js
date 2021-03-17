@@ -148,16 +148,16 @@ function Navigation(props) {
     }
   };
 
-  const navigationItems = [
+  let navigationItems = [
     {
       name: "Chats",
       icon: <FeatherIcon.MessageCircle />,
-      badge: "warning",
+      badge: props.unread?"success":"",
     },
     {
-      name: "Friends",
+      name: "Contacts",
       icon: <FeatherIcon.User />,
-      badge: "danger",
+      badge: "",
     },
     {
       name: "Favorites",
@@ -168,6 +168,30 @@ function Navigation(props) {
       icon: <FeatherIcon.Archive />,
     },
   ];
+
+  useEffect(() => {
+    navigationItems = [
+      {
+        name: "Chats",
+        icon: <FeatherIcon.MessageCircle />,
+        badge: props.unread?"success":"",
+      },
+      {
+        name: "Contacts",
+        icon: <FeatherIcon.User />,
+        badge: "",
+      },
+      {
+        name: "Favorites",
+        icon: <FeatherIcon.Star />,
+      },
+      {
+        name: "Archived",
+        icon: <FeatherIcon.Archive />,
+      },
+    ];
+  }, [props.unread]);
+
   function logoutServer() {
     axios.get("/logout").then((res) => {
       if (res.data.ok == true) {
