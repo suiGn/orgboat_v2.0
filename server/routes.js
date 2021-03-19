@@ -24,7 +24,7 @@ const { CustomValidation } = require("express-validator/src/context-items");
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-east-2'});
 
-const s3 = new AWS.S3({apiVersion: '2006-03-01',accessKeyId:"AKIA2ACNBE2EJ7Z7P3SY",secretAccessKey:"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"});
+const s3 = new AWS.S3({apiVersion: '2006-03-01',accessKeyId:"AKIAXRTWYJQD2RYQNOZV",secretAccessKey:"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"});
 
 exports.home = function (req, res) {
   if (req.isAuthenticated()) {
@@ -392,7 +392,7 @@ exports.savedbimage =  async function (req, res) {
     console.log(req.file);
     var photo = `uploads/${req.file.filename}`;
     // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
-    var uploadParams = {Bucket: "cleaker", Key: '', Body: ''};
+    var uploadParams = {Bucket: "cleakerapp", Key: '', Body: ''};
     readStream("../build/"+photo).then(data => {
       uploadParams.Body = data;
       uploadParams.Key = req.file.filename;
