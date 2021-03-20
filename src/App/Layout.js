@@ -19,7 +19,7 @@ import DisconnectedModal from "./Modals/DisconnectedModal";
 function Layout(props) {
   const [clicked, setClicked] = useState([]);
   const { pageTour } = useSelector((state) => state);
-  const { socket } = props;
+  const { socket, setLoaded } = props;
   const [user, setUser] = useState("");
   const [group, setGroup] = useState("");
   const [unread, setUnread] = useState(false);
@@ -38,7 +38,6 @@ function Layout(props) {
         document.body.classList.contains("navigation-open") &&
         e.target.nodeName === "BODY"
       ) {
-        document.body.classList.remove("navigation-open");
       }
     });
   }, []);

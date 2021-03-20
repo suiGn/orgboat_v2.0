@@ -5,11 +5,13 @@ import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
 import "../assets/css/styles.css";
 
 function SignIn(props) {
-  useEffect(() => document.body.classList.add("form-membership"), []);
+  useEffect(() => {
+    document.body.classList.add("form-membership");
+  }, []);
 
-  function GoogleAuth(){
+  function GoogleAuth() {
     axios.get("/auth/google").then((res) => {
-      console.log(res)
+      console.log(res);
     });
   }
 
@@ -61,13 +63,13 @@ function SignIn(props) {
         </button>
         <hr />
         <p className="text-muted">Login with your social media account.</p>
-          <ul className="list-inline">
-            <li className="list-inline-item">
-              <a href="/auth/google" className="btn btn-floating btn-google">
-                <i className="fa fa-google"></i>
-              </a>
-            </li>
-          </ul>
+        <ul className="list-inline">
+          <li className="list-inline-item">
+            <a href="/auth/google" className="btn btn-floating btn-google">
+              <i className="fa fa-google"></i>
+            </a>
+          </li>
+        </ul>
         <hr />
         {/* <p className="text-muted">Login with your social media account.</p>
         <ul className="list-inline">

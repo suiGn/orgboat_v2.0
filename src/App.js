@@ -27,15 +27,23 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     height: "100vh",
+    width: "100vw",
     alignItems: "center",
-    // background: "black",
     justifyContent: "center",
+    zIndex: "99999",
+    position: "fixed",
+    top: 0,
     "& > * + *": {
       marginLeft: theme.spacing(2),
     },
   },
   colorPrimary: {
-    color: "#f5af19",
+    color: "#0a80ff",
+    background: "white",
+  },
+  colorSecondary: {
+    color: "#f3c96e",
+    background: "#212124",
   },
 }));
 
@@ -56,7 +64,6 @@ function App() {
         onDownloadProgress: (progressEvent) => {
           const total = parseFloat(progressEvent.total);
           const current = progressEvent.loaded;
-
           setProgress(Math.floor((current / total) * 100));
         },
       })
@@ -66,7 +73,6 @@ function App() {
         } else {
           setLoaded(true);
         }
-
         setloggedIn(res.data.ok);
       });
   };
@@ -77,28 +83,52 @@ function App() {
       if (theme.theme[0].theme === 0) {
         document.body.className = "";
         setDarkSwitcherTooltipOpen(true);
+        localStorage.setItem("theme", "light");
       } else {
         document.body.className = "dark";
         setDarkSwitcherTooltipOpen(false);
+        localStorage.setItem("theme", "dark");
       }
+      setLoaded(true);
     });
-    setLoaded(true);
   };
 
-  if (!loaded) {
-    return (
-      <div className={classes.root}>
-        <CircularProgress
-          className={classes.colorPrimary}
-          variant="determinate"
-          size={100}
-          value={progress}
-        />
-      </div>
-    );
-  }
+  // if (!loaded) {
+  //   return (
+  //     <div className={classes.root}>
+  //       <CircularProgress
+  //         className={classes.colorPrimary}
+  //         variant="determinate"
+  //         size={100}
+  //         value={progress}
+  //       />
+  //     </div>
+  //   );
+  // }
   return (
     <Router>
+      {!loaded ? (
+        <div
+          className={
+            darkSwitcherTooltipOpen
+              ? classes.colorPrimary + " " + classes.root
+              : classes.colorSecondary + " " + classes.root
+          }
+          id="circular-progress"
+        >
+          <CircularProgress
+            className={
+              darkSwitcherTooltipOpen
+                ? classes.colorPrimary
+                : classes.colorSecondary
+            }
+            variant="determinate"
+            size={100}
+            value={progress}
+          />
+        </div>
+      ) : null}
+
       <Switch>
         <Route exact path="/">
           {loggedIn ? <Redirect to="/workspace" /> : <SignIn isBadLogin={""} />}
@@ -112,6 +142,7 @@ function App() {
               darkSwitcherTooltipOpen={darkSwitcherTooltipOpen}
               setDarkSwitcherTooltipOpen={setDarkSwitcherTooltipOpen}
               socket={socket}
+              setLoaded={setLoaded}
             />
           ) : (
             <SignIn isBadLogin={""} />
