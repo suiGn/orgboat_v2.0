@@ -7,19 +7,15 @@ import {
   DropdownItem,
 } from "reactstrap";
 import * as FeatherIcon from "react-feather";
-import VoiceCallModal from "../Modals/VoiceCallModal";
-import VideoCallModal from "../Modals/VideoCallModal";
-import { groupProfileAction } from "../../Store/Actions/groupProfileAction";
-import { profileAction } from "../../Store/Actions/profileAction";
-import { mobileProfileAction } from "../../Store/Actions/mobileProfileAction";
-import ManAvatar3 from "../../assets/img/man_avatar3.jpg";
+// import { searchChatAction } from "../../Store/Actions/searchChatAction";
 
 function ChatHeader(props) {
   const dispatch = useDispatch();
 
-  const { socket } = props;
+  const { socket, openSearchSidebar, setOpenSearchSidebar } = props;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchbarOpen, setSearchBarOpen] = useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
@@ -53,6 +49,10 @@ function ChatHeader(props) {
     }
   };
 
+  const OpenSearchBar = () => {
+    setOpenSearchSidebar(!openSearchSidebar);
+  };
+
   let p;
   let chat_initial;
   let chat_name;
@@ -78,7 +78,7 @@ function ChatHeader(props) {
   }
 
   return (
-    <div className="chat-header row">
+    <div className="chat-header">
       {props.data.chat_type == 1 ? (
         <button onClick={GroupProfileAction} className="chat-header-user col-6">
           <figure className="avatar">{p}</figure>
@@ -100,7 +100,7 @@ function ChatHeader(props) {
       <div className="chat-header-action col-6">
         <ul className="list-inline">
           <li className="list-inline-item">
-            <button className="btn btn-outline-light">
+            <button onClick={OpenSearchBar} className="btn btn-outline-light">
               <FeatherIcon.Search />
             </button>
           </li>

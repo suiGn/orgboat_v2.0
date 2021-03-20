@@ -13,7 +13,7 @@ const reducers = combineReducers({
   profileSidebar: profileSidebarReducer,
   mobileProfileSidebar: mobileProfileSidebarReducer,
   pageTour: pageTourReducer,
-  groupProfileSidebar : groupProfileReducer,
+  groupProfileSidebar: groupProfileReducer,
 });
 
 const store = createStore(reducers);

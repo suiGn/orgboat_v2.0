@@ -16,6 +16,7 @@ function Index(props) {
             <ChatsIndex
               socket={props.socket}
               setClicked={props.setClicked}
+              setOpenSearchSidebar={props.setOpenSearchSidebar}
               setUser={props.setUser}
               setGroup={props.setGroup}
               setOpenProfile={props.setOpenProfile}

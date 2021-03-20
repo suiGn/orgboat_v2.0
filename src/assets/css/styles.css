@@ -9,12 +9,12 @@ body.dark
   background-color: #212124;
   border: 0.5px solid;
   border-color: #f3c96e;
-  max-width: 377px;
 }
 
 .message-content {
   display: flex;
   flex-flow: row;
+  max-width: 377px;
 }
 
 .messages-container {
@@ -25,6 +25,13 @@ body.dark
   margin-bottom: 1em;
   margin-left: auto;
   margin-right: auto;
+}
+
+.img-chat{
+  height: auto;
+  max-height: 250px;
+  width: auto;
+  max-width: 250px;
 }
 
 .dark .outgoing-message .message-avatar .time {
@@ -239,7 +246,8 @@ body.dark .time {
   outline: 0;
 }
 
-.profile-image-holder .avatar-title {
+.profile-image-holder .avatar-title,
+.user-profile .avatar-title {
   font-size: 5em;
 }
 
@@ -287,6 +295,10 @@ body.dark .time {
   width: 200px;
 }
 
+.found .message-content {
+  animation: found_message 1s normal forwards ease-in-out;
+}
+
 @media (max-width: 1200px) {
   body.navigation-open:after {
     content: "";
@@ -319,5 +331,18 @@ body.dark .time {
 @media (max-width: 400px) {
   .emoji-mart {
     width: 300px !important;
+  }
+}
+
+/* Animation */
+
+@keyframes found_message {
+  from {
+    box-shadow: 0 0 17px 0px #ffffff29;
+    background-color: #303033;
+  }
+  to {
+    box-shadow: 0 0 0px 0px #ffffff29;
+    background-color: #212124;
   }
 }

@@ -549,24 +549,6 @@ function Profile(props) {
                           report4221.pdf
                         </a>
                       </li>
-                      <li className="list-group-item pl-0 pr-0 d-flex align-items-center">
-                        <a href="foo">
-                          <i className="fa fa-image text-muted mr-2"></i>{" "}
-                          avatar_image.png
-                        </a>
-                      </li>
-                      <li className="list-group-item pl-0 pr-0 d-flex align-items-center">
-                        <a href="foo">
-                          <i className="fa fa-file-excel-o text-success mr-2"></i>
-                          excel_report_file2020.xlsx
-                        </a>
-                      </li>
-                      <li className="list-group-item pl-0 pr-0 d-flex align-items-center">
-                        <a href="foo">
-                          <i className="fa fa-file-text-o text-warning mr-2"></i>{" "}
-                          articles342133.txt
-                        </a>
-                      </li>
                     </ul>
                   </div>
                 </TabPane>

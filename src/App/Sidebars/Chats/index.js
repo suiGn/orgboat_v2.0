@@ -12,13 +12,17 @@ import { mobileSidebarAction } from "../../../Store/Actions/mobileSidebarAction"
 const ENDPOINT = "http://localhost:5000/";
 
 function Index(props) {
-  const { socket } = props;
-  const { setOpenProfile } = props;
-  const { openProfile } = props;
-  const { setOpenUserProfile } = props;
-  const { openUserProfile } = props;
-  const { openGroupProfile } = props;
-  const { setOpenGroupProfile } = props;
+  const {
+    socket,
+    setOpenSearchSidebar,
+    setOpenProfile,
+    openProfile,
+    setOpenUserProfile,
+    openUserProfile,
+    openGroupProfile,
+    setOpenGroupProfile,
+    setClicked,
+  } = props;
   const [chatLists, setChatList] = useState([]);
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
@@ -95,10 +99,13 @@ function Index(props) {
   }
   let my_uid = chatLists.my_uid;
 
-  function setClicked(e, chat) {
+  function setClickedValue(e, chat) {
     e.preventDefault();
     chat.unread_messages = 0;
-    props.setClicked(chat);
+    setClicked(chat);
+    setOpenSearchSidebar(false);
+    socket.off("retrieve messages");
+    console.log("clicked");
   }
 
   const ChatListView = (props) => {
@@ -149,7 +156,7 @@ function Index(props) {
               ? "list-group-item open-chat"
               : "list-group-item " + (chat.selected ? "open-chat" : "")
           }
-          onClick={(e) => setClicked(e, chat)}
+          onClick={(e) => setClickedValue(e, chat)}
         >
           <div>
             <figure className="avatar">{p}</figure>
@@ -168,10 +175,11 @@ function Index(props) {
               </h5>
               {chat.deleted_message || chat.deleted_message_to
                 ? "no messages"
-                : 
-                chat.is_file? "file":
-                chat.is_image? "picture":
-                chat.last_message_message}
+                : chat.is_file
+                ? "file"
+                : chat.is_image
+                ? "picture"
+                : chat.last_message_message}
             </div>
             {(chat.unread_messages && chat.last_message_user_uid != my_uid) >
             0 ? (
@@ -193,7 +201,7 @@ function Index(props) {
                     socket={socket}
                     chat_uid={chat.chat_uid}
                     chat_type={chat.chat_type}
-                    setClicked={props.setClicked}
+                    setClicked={setClicked}
                     setOpenProfile={setOpenProfile}
                     openProfile={openProfile}
                     openUserProfile={openUserProfile}
@@ -214,7 +222,7 @@ function Index(props) {
                     socket={socket}
                     chat_uid={chat.chat_uid}
                     chat_type={chat.chat_type}
-                    setClicked={props.setClicked}
+                    setClicked={setClicked}
                     setOpenProfile={setOpenProfile}
                     openProfile={openProfile}
                     openUserProfile={openUserProfile}
@@ -293,7 +301,7 @@ function Index(props) {
                 <ChatListView
                   chat={chat}
                   key={i}
-                  setClicked={props.setClicked}
+                  setClicked={setClicked}
                   setUser={props.setUser}
                   setGroup={props.setGroup}
                 />

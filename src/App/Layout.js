@@ -6,6 +6,7 @@ import SidebarIndex from "./Sidebars/index";
 import Navigation from "./Navigation";
 import Profile from "./Sidebars/Profile";
 import UserProfile from "./Sidebars/UserProfile";
+import SearchChat from "./Sidebars/SearchChats";
 import ProfileGroup from "./Sidebars/ProfileGroup";
 import Chat from "./Partials/Chat";
 import ChatN from "./Partials/ChatNoMessage";
@@ -28,6 +29,8 @@ function Layout(props) {
   const [openUserProfile, setOpenUserProfile] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [openGroupProfile, setOpenGroupProfile] = useState(false);
+  const [openSearchSidebar, setOpenSearchSidebar] = useState(false);
+  const [scrollEl, setScrollEl] = useState();
 
   useEffect(() => {
     document.querySelector("*").addEventListener("click", (e) => {
@@ -105,6 +108,7 @@ function Layout(props) {
         <SidebarIndex
           socket={socket}
           setClicked={setClicked}
+          setOpenSearchSidebar={setOpenSearchSidebar}
           setUser={setUser}
           setGroup={setGroup}
           my_uid={my_uid}
@@ -130,6 +134,10 @@ function Layout(props) {
           openGroupProfile={openGroupProfile}
           setOpenGroupProfile={setOpenGroupProfile}
           my_uid={my_uid}
+          scrollEl={scrollEl}
+          openSearchSidebar={openSearchSidebar}
+          setOpenSearchSidebar={setOpenSearchSidebar}
+          setScrollEl={setScrollEl}
           setClicked={setClicked}
           setUnreadChats={setUnreadChats}
           unreadChats={unreadChats}
@@ -155,15 +163,24 @@ function Layout(props) {
           socket={socket}
           user={user}
         />
-        <ProfileGroup 
-        openUserProfile={openUserProfile}
-        setOpenUserProfile={setOpenUserProfile}
-        setOpenProfile={setOpenProfile}
-        openProfile={openProfile}
-        openGroupProfile={openGroupProfile}
-        setOpenGroupProfile={setOpenGroupProfile}
-        socket={socket} 
-        group={group}/>
+        <SearchChat
+          socket={socket}
+          clicked={clicked}
+          my_uid={my_uid}
+          setOpenSearchSidebar={setOpenSearchSidebar}
+          openSearchSidebar={openSearchSidebar}
+          scrollEl={scrollEl}
+        />
+        <ProfileGroup
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
+          socket={socket}
+          group={group}
+        />
         <TourModal />
         <DisconnectedModal />
       </div>

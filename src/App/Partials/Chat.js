@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
+import Moment from "react-moment";
+import "moment-timezone";
 import ChatHeader from "./ChatHeader";
 import ChatFooter from "./ChatFooter";
 import ManAvatar3 from "../../assets/img/man_avatar3.jpg";
@@ -12,13 +13,14 @@ import notificationAudio from "../../assets/sound/much.mp3";
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
 import * as FeatherIcon from "react-feather";
+import ModalImage from "react-modal-image";
 
 function Chat(props) {
   const [inputMsg, setInputMsg] = useState("");
 
   const [newMessage, setMessages] = useState(selectedChat);
 
-  const [scrollEl, setScrollEl] = useState();
+  // const [scrollEl, setScrollEl] = useState();
 
   const [messages, setChatMessages] = useState([]);
 
@@ -37,9 +39,14 @@ function Chat(props) {
   if (messages && messages.length > 0) {
     dateSend = new Date(messages[0].time);
   }
-  const { socket } = props;
-
-  const { clicked } = props;
+  const {
+    socket,
+    clicked,
+    scrollEl,
+    setScrollEl,
+    setOpenSearchSidebar,
+    openSearchSidebar,
+  } = props;
 
   useEffect(() => {
     if (props.clicked && scrollEl) {
@@ -47,22 +54,21 @@ function Chat(props) {
     }
   });
 
-
   useEffect(() => {
     if (scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
     }
   }, [scrollEl]);
 
-  function scrollMove(container) {  
-    if(container.scrollTop == 0){
-      setPage(page+1)
-      setLimit(limit+10)
+  function scrollMove(container) {
+    if (container.scrollTop == 0) {
+      setPage(page + 1);
+      setLimit(limit + 10);
       socket.emit("get messages", {
         id: props.clicked.chat_uid,
         page: page,
         inChat: true,
-        limit:limit,
+        limit: limit,
       });
     }
   }
@@ -90,10 +96,20 @@ function Chat(props) {
   function OnChatMessage(data) {
     if (props.clicked.chat_uid) {
       if (props.clicked.chat_uid == data.chat) {
-        socket.emit("get messages", { id: data.chat, page: page, inChat: true, limit:limit });
+        socket.emit("get messages", {
+          id: data.chat,
+          page: page,
+          inChat: true,
+          limit: limit,
+        });
       } else if (props.clicked.chat_uid != data.chat) {
         notificationSound.play();
-        socket.emit("get messages", { id: data.chat, page: page, inChat: false, limit:limit });
+        socket.emit("get messages", {
+          id: data.chat,
+          page: page,
+          inChat: false,
+          limit: limit,
+        });
       }
     } else {
       notificationSound.play();
@@ -107,11 +123,11 @@ function Chat(props) {
     setChatMessages([]);
 
     var chat = props.unreadChats.filter((chat) => {
-      return chat.chat_uid != props.clicked.chat_uid
+      return chat.chat_uid != props.clicked.chat_uid;
     });
-    props.setUnreadChats(chat)
-    if (chat.length==0){
-      props.setUnread(false)
+    props.setUnreadChats(chat);
+    if (chat.length == 0) {
+      props.setUnread(false);
     }
 
     socket.on("retrieve messages", RetrieveMessages);
@@ -120,11 +136,11 @@ function Chat(props) {
       id: props.clicked.chat_uid,
       page: page,
       inChat: true,
-      limit:limit
+      limit: limit,
     });
 
     socket.on("chat message", OnChatMessage);
-    
+
     return () => {
       socket.off("chat message", OnChatMessage);
       socket.off("retrieve messages", RetrieveMessages);
@@ -140,7 +156,11 @@ function Chat(props) {
         is_file: newValue.is_file,
       });
       socket.emit("get chats");
-      socket.emit("get messages", { id: newValue.chat_uid, page: page, limit:limit });
+      socket.emit("get messages", {
+        id: newValue.chat_uid,
+        page: page,
+        limit: limit,
+      });
     }
     setInputMsg("");
   };
@@ -222,43 +242,48 @@ function Chat(props) {
       );
     } else {
       return (
-        <div className={"message-item " + type}>
-          <div className="message-avatar">
-            {/* {message.avatar} */}
-            <div>
-              {group && message.message_user_uid != props.my_uid ? (
+        <div id={message.message_id} className={"message-item " + type}>
+          {/* {message.avatar} */}
+
+          {group && message.message_user_uid != props.my_uid ? (
+            <div className="message-avatar">
+              <div>
                 <h5>{message.name}</h5>
-              ) : (
-                ""
-              )}
-              {/* <h5>{message.name}</h5> */}
-              {/* <div className="time">
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+          {/* <h5>{message.name}</h5> */}
+          {/* <div className="time">
                 {moment(message.time).format("DD-MM-YYYY")}
                 {message.type ? (
                   <i className="ti-double-check text-info"></i>
                 ) : null}
               </div> */}
-            </div>
-          </div>
+
           {message.media ? (
             message.media
           ) : (
-            <div className="message-content position-relative">
+            <div className="message-content position-relative img-chat">
               {!message.is_image && !message.is_file ? (
                 <div className="word-break">{message.message}</div>
               ) : message.is_image ? (
-                <figure className="avatar avatar-xl">
-                  <img src={message.message} />
+                <figure className="avatar img-chat">
+                  <ModalImage
+                    small={message.message}
+                    large={message.message}
+                    alt="image"
+                  />
                 </figure>
               ) : (
                 <a href={message.message} download>
-                  <FeatherIcon.Download />{" "}
-                  {"file "}
+                  <FeatherIcon.Download /> {"file "}
                 </a>
               )}
               <div className="misc-container">
                 <div className="time">
-                  {moment(message.time).format("LT")}
+                  <Moment format="LT">{message.time}</Moment>
                   {message.type ? (
                     <i className="ti-double-check text-info"></i>
                   ) : null}
@@ -295,9 +320,14 @@ function Chat(props) {
         openProfile={props.openProfile}
         openGroupProfile={props.openGroupProfile}
         setOpenGroupProfile={props.setOpenGroupProfile}
+        openSearchSidebar={openSearchSidebar}
+        setOpenSearchSidebar={setOpenSearchSidebar}
         setClicked={props.setClicked}
       />
-      <PerfectScrollbar containerRef={(ref) => setScrollEl(ref)} onScrollY={(container)=>scrollMove(container)}>
+      <PerfectScrollbar
+        containerRef={(ref) => setScrollEl(ref)}
+        onScrollY={(container) => scrollMove(container)}
+      >
         <div className="chat-body">
           <div className="messages">
             {messages.map((message, i) => (

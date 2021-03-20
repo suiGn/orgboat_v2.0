@@ -63,6 +63,16 @@ function Index(props) {
     setfavoriteFriendFiltered(resultFavorits);
   }
 
+  const newchat = (chat_uid) => {
+    //console.log(chat_uid);
+    console.log(chat_uid)
+    socket.emit("newChat", chat_uid);
+    socket.once("retrive newchat", (data) => {
+      console.log(data)
+      props.setClicked(data.chat);
+    });
+  };
+
   return (
     <div className="sidebar active">
       <header>
@@ -119,7 +129,7 @@ function Index(props) {
                   );
                 }
                 return (
-                  <li key={i} className="list-group-item">
+                  <li key={i} className="list-group-item"  onClick={() => newchat(item.chat_uid)}>
                     <figure className="avatar">{p}</figure>
                     <div className="users-list-body">
                       <div>

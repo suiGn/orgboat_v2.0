@@ -45,7 +45,6 @@ const FriendsDropdown = (props) => {
   // },one);
 
   const newchat = (chat_uid) => {
-    //console.log(chat_uid);
     socket.emit("newChat", chat_uid);
     socket.once("retrive newchat", (data) => {
       props.setClicked(data.chat);
@@ -58,9 +57,9 @@ const FriendsDropdown = (props) => {
         <FeatherIcon.MoreHorizontal />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem onClick={() => newchat(props.chat_uid)}>
+        {/*<DropdownItem onClick={() => newchat(props.chat_uid)}>
           New chat
-        </DropdownItem>
+        </DropdownItem>*/}
         <DropdownItem onClick={openUserProfileToggler}>Profile</DropdownItem>
         {/* <DropdownItem divider/> */}
         {/* <DropdownItem>Block</DropdownItem> */}
