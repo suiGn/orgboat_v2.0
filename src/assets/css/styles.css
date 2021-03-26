@@ -6,7 +6,7 @@ body.dark
   .messages
   .message-item
   .message-content {
-  background-color: #212124;
+  /* background-color: #212124; */
   border: 0.5px solid;
   border-color: #f3c96e;
 }
@@ -27,11 +27,19 @@ body.dark
   margin-right: auto;
 }
 
-.img-chat{
+.img-chat {
   height: auto;
   max-height: 250px;
   width: auto;
   max-width: 250px;
+}
+
+.fav-message{
+  cursor: text !important;
+}
+
+.favorite-message{
+  background: #f7eb59 !important;
 }
 
 .dark .outgoing-message .message-avatar .time {
@@ -299,7 +307,13 @@ body.dark .time {
   animation: found_message 1s normal forwards ease-in-out;
 }
 
-@media (max-width: 1200px) {
+.custom-chat-message img {
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+}
+
+/* @media (max-width: 1200px) {
   body.navigation-open:after {
     content: "";
     display: block;
@@ -312,12 +326,12 @@ body.dark .time {
     z-index: 1020;
   }
   body.navigation-open .navigation {
-    /* display: block; */
+    display: block;
     opacity: 1;
   }
 
   .navigation {
-    /* display: none; */
+    display: none;
     position: fixed;
     opacity: 0;
     bottom: 0;
@@ -326,7 +340,7 @@ body.dark .time {
     z-index: 1021;
     transition: all.2s ease-in-out;
   }
-}
+} */
 
 @media (max-width: 400px) {
   .emoji-mart {

@@ -18,6 +18,7 @@ import NewPassword from "./Pages/NewPassword";
 import PhoneCode from "./Pages/PhoneCode";
 import Layout from "./App/Layout";
 import io from "socket.io-client";
+import { LogIn } from "react-feather";
 const ENDPOINT = "http://localhost:5000/";
 const socket = io({
   transports: ["websocket"],
@@ -51,11 +52,15 @@ function App() {
   const [loggedIn, setloggedIn] = useState(false);
   const [progress, setProgress] = useState(0);
   const [loaded, setLoaded] = useState(false);
-  const [darkSwitcherTooltipOpen, setDarkSwitcherTooltipOpen] = useState(false);
+  const [darkSwitcherTooltipOpen, setDarkSwitcherTooltipOpen] = useState(true);
   const classes = useStyles();
 
   useEffect(() => {
-    CheckIfLogged();
+    if (!localStorage.getItem("theme")) {
+      UpdateTheme();
+    } else {
+      SetLocalStorage();
+    }
   }, []);
 
   const CheckIfLogged = () => {
@@ -68,12 +73,17 @@ function App() {
         },
       })
       .then((res) => {
-        if (res.data.ok) {
-          UpdateTheme();
-        } else {
+        if (!res.data.ok) {
+          localStorage.removeItem("theme");
+          document.body.className = "";
+          document.body.classList.add("form-membership");
           setLoaded(true);
         }
         setloggedIn(res.data.ok);
+        // if (localStorage.getItem("theme")) {
+        //   setLoaded(true);
+        // }
+        // setLoaded(true);
       });
   };
 
@@ -89,8 +99,19 @@ function App() {
         setDarkSwitcherTooltipOpen(false);
         localStorage.setItem("theme", "dark");
       }
-      setLoaded(true);
     });
+    CheckIfLogged();
+  };
+
+  const SetLocalStorage = () => {
+    if (localStorage.getItem("theme") === "light") {
+      document.body.className = "";
+      setDarkSwitcherTooltipOpen(true);
+    } else {
+      document.body.className = "dark";
+      setDarkSwitcherTooltipOpen(false);
+    }
+    CheckIfLogged();
   };
 
   // if (!loaded) {
@@ -111,8 +132,8 @@ function App() {
         <div
           className={
             darkSwitcherTooltipOpen
-              ? classes.colorPrimary + " " + classes.root
-              : classes.colorSecondary + " " + classes.root
+              ? `${classes.colorPrimary} ${classes.root}`
+              : `${classes.colorSecondary} ${classes.root}`
           }
           id="circular-progress"
         >
@@ -131,10 +152,18 @@ function App() {
 
       <Switch>
         <Route exact path="/">
-          {loggedIn ? <Redirect to="/workspace" /> : <SignIn isBadLogin={""} />}
+          {loggedIn ? (
+            <Redirect to="/workspace" />
+          ) : (
+            <SignIn setLoaded={setLoaded} isBadLogin={""} />
+          )}
         </Route>
         <Route path="/sign-in">
-          {loggedIn ? <Redirect to="/workspace" /> : <SignIn isBadLogin={""} />}
+          {loggedIn ? (
+            <Redirect to="/workspace" />
+          ) : (
+            <SignIn setLoaded={setLoaded} isBadLogin={""} />
+          )}
         </Route>
         <Route path="/workspace">
           {loggedIn ? (
@@ -145,7 +174,7 @@ function App() {
               setLoaded={setLoaded}
             />
           ) : (
-            <SignIn isBadLogin={""} />
+            <SignIn setLoaded={setLoaded} isBadLogin={""} />
           )}
         </Route>
         <Route

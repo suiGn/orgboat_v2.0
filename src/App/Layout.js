@@ -21,6 +21,7 @@ function Layout(props) {
   const { pageTour } = useSelector((state) => state);
   const { socket, setLoaded } = props;
   const [user, setUser] = useState("");
+  const [chat, setChat] = useState("");
   const [group, setGroup] = useState("");
   const [unread, setUnread] = useState(false);
   const [unreadChats, setUnreadChats] = useState([]);
@@ -119,6 +120,7 @@ function Layout(props) {
           setOpenGroupProfile={setOpenGroupProfile}
           setUnread={setUnread}
           setUnreadChats={setUnreadChats}
+          setLoaded={setLoaded}
         />
         <Chat
           darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
@@ -140,6 +142,7 @@ function Layout(props) {
           setClicked={setClicked}
           setUnreadChats={setUnreadChats}
           unreadChats={unreadChats}
+          setChat={setChat}
           setUnread={setUnread}
         />
         <Profile
@@ -161,6 +164,7 @@ function Layout(props) {
           setOpenGroupProfile={setOpenGroupProfile}
           socket={socket}
           user={user}
+          chat={chat}
         />
         <SearchChat
           socket={socket}
@@ -179,6 +183,8 @@ function Layout(props) {
           setOpenGroupProfile={setOpenGroupProfile}
           socket={socket}
           group={group}
+          clicked={clicked}
+          chat={chat}
         />
         <TourModal />
         <DisconnectedModal />

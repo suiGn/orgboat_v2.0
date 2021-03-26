@@ -183,6 +183,7 @@ io.on("connection", function (socket) {
           io.to(user.u_id).emit("retrieve messages", {
             messages: rows,
             message_user_uid: user.message_user_uid,
+            idSearch: msg.idSearch,
           });
         }
       );
@@ -252,10 +253,19 @@ io.on("connection", function (socket) {
                 WHERE messages.favorite_to=1 and messages.chat_uid in (${chat_uids}) 
                 and messages.u_id ='${user.u_id}'`,
                 function (err, chats) {
-                  io.to(user.u_id).emit("retrieve viewProfileUser", {
-                    favorites: chats,
-                    usrprofile: rowsUser
-                  });
+                  orgboatDB.query(
+                    `SELECT 
+                    distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+                    inner join usrs on messages.u_id = usrs.u_id
+                    inner join chats_users on messages.u_id = chats_users.u_id
+                    WHERE messages.is_image =1 and messages.chat_uid = '${data.chat_id}'`,
+                  function(err, chatsfile){
+                    io.to(user.u_id).emit("retrieve viewProfileUser", {
+                      favorites: chats,
+                      usrprofile: rowsUser,
+                      files: chatsfile
+                    });
+                  })
                 }
               )
             }
@@ -736,12 +746,20 @@ io.on("connection", function (socket) {
           where chats.chat_uid = '${data.id}' and chats_users.archiveChat = 0 and chats_users.delete_chat = 0
           group by chats2.u_id
           order by time desc;
-          `,(err, rows) => {
-            io.to(user.u_id).emit("retrieve GetGrupo", {
-              chat_uid: data.id,
-              chats: rows,
-            });
-            
+          `,function (err, rows) {
+            orgboatDB.query(
+              `SELECT 
+              distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+              inner join usrs on messages.u_id = usrs.u_id
+              inner join chats_users on messages.u_id = chats_users.u_id
+              WHERE messages.is_image =1 and messages.chat_uid = '${data.chat_id}'`,
+            function(err, chatsfile){
+              io.to(user.u_id).emit("retrieve GetGrupo", {
+                chat_uid: data.id,
+                chats: rows,
+                files: chatsfile
+              });
+            })    
           })
     })
     //update grupo
@@ -776,6 +794,56 @@ io.on("connection", function (socket) {
         }
       );
     });
+    socket.on("get group name",(data)=>{
+      orgboatDB.query(
+        `select DISTINCT chats.chat_name, chats_users.chat_uid
+          from chats_users  
+          inner join chats_users chats2 on chats2.chat_uid = chats_users.chat_uid
+          inner join usrs on usrs.u_id = chats2.u_id
+          inner join chats on chats_users.chat_uid = chats.chat_uid 
+          where chats_users.chat_uid = '${data.chat_uid}' and chats_users.u_id =  '${user.u_id}'`,
+        (err, chats) => {
+          io.to(user.u_id).emit("retrieve group name", {
+            group : chats[0]
+          });
+        }
+      );
+    });
+    socket.on("get group photo",(data)=>{
+      orgboatDB.query(
+        `select DISTINCT chats.groupphoto, chats.chat_name, chats_users.chat_uid
+          from chats_users  
+          inner join chats_users chats2 on chats2.chat_uid = chats_users.chat_uid
+          inner join usrs on usrs.u_id = chats2.u_id
+          inner join chats on chats_users.chat_uid = chats.chat_uid 
+          where chats_users.chat_uid = '${data.chat_uid}' and chats_users.u_id =  '${user.u_id}'`,
+        (err, chats) => {
+          io.to(user.u_id).emit("retrieve group photo", {
+            group : chats[0]
+          });
+        }
+      );
+    });
+    socket.on("search message",function(data){
+      orgboatDB.query(
+        `select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file
+          from messages inner join usrs on messages.u_id = usrs.u_id
+          inner join chats on chats.chat_uid = messages.chat_uid
+          where  messages.chat_uid = '${data.id}' 
+           AND messages.delete_message = 0 order by time desc`,
+          function (err, rows) {
+            io.to(user.u_id).emit("retrive search message", {
+              messages: rows,
+              message_user_uid: user.message_user_uid,
+            });
+          }
+      );
+    });
+    socket.on("search select",function(data){
+      io.to(user.u_id).emit("retrive search select", {
+        id: data.id,
+      });
+    })
   } catch {
     console.log("problema");
   }

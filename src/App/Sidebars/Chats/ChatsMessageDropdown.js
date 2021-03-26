@@ -19,25 +19,45 @@ const ChatsMessageDropdown = (props) => {
 
   function AddFavorite(message_id) {
     socket.emit("FavoriteMessage", { id: message_id });
-    socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit("get messages", {
+      id: props.chat_id,
+      page: props.page,
+      inChat: true,
+      limit: props.limit,
+    });
     socket.emit("GetFavorites", props.my_uid);
   }
 
   function RemoveFavorite(message_id) {
     socket.emit("RemoveFavorite", { id: message_id });
-    socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit("get messages", {
+      id: props.chat_id,
+      page: props.page,
+      inChat: true,
+      limit: props.limit,
+    });
     socket.emit("GetFavorites", props.my_uid);
   }
 
   function AddFavoriteTo(message_id) {
     socket.emit("FavoriteMessage_to", { id: message_id });
-    socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit("get messages", {
+      id: props.chat_id,
+      page: props.page,
+      inChat: true,
+      limit: props.limit,
+    });
     socket.emit("GetFavorites", props.my_uid);
   }
 
   function RemoveFavoriteTo(message_id) {
     socket.emit("RemoveFavorite_to", { id: message_id });
-    socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit("get messages", {
+      id: props.chat_id,
+      page: props.page,
+      inChat: true,
+      limit: props.limit,
+    });
     socket.emit("GetFavorites", props.my_uid);
   }
 
@@ -47,7 +67,12 @@ const ChatsMessageDropdown = (props) => {
     } else {
       socket.emit("Delete message", { id: message_id, to: false });
     }
-    socket.emit("get messages", { id: props.chat_id, page: 1 });
+    socket.emit("get messages", {
+      id: props.chat_id,
+      page: props.page,
+      inChat: true,
+      limit: props.limit,
+    });
     socket.emit("get chats")
   }
 

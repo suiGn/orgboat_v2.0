@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { InputGroup, InputGroupAddon, Input, Button } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -9,16 +8,13 @@ import "moment-timezone";
 function SearchChat(props) {
   const { socket } = props;
   const {
-    scrollEl,
-    setScrollEl,
     setOpenSearchSidebar,
     openSearchSidebar,
+    scrollEl
   } = props;
-  const dispatch = useDispatch();
   const [searchInChat, setSearchInChat] = useState("");
-  const [messages, setChatMessages] = useState([]);
   const [filteredChats, setFilteredChats] = useState([]);
-  const { searchChat } = useSelector((state) => state);
+  const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(30);
 
@@ -34,12 +30,10 @@ function SearchChat(props) {
   const searchChatToggler = (e) => {
     e.preventDefault();
     setOpenSearchSidebar(!openSearchSidebar);
-    setChatMessages([]);
   };
 
-  function RetrieveMessages(data) {
-    if (data.messages.length != 0) {
-      if (props.clicked.chat_uid == data.messages[0].chat_uid) {
+  function RetrieveSearchedMessages(data) {
+    if (data.messages) {
         let messages = [];
         data.messages.forEach((element) => {
           if (element.delete_message_to == 1) {
@@ -50,9 +44,8 @@ function SearchChat(props) {
             messages.push(element);
           }
         });
-        setChatMessages(messages.reverse());
-      }
-      setSearchInChats(messages);
+        setMessages(messages.reverse())
+        setSearchInChats(messages.reverse());
     }
   }
 
@@ -78,59 +71,50 @@ function SearchChat(props) {
   }
 
   function SearchInsideBody(id) {
-    let size = document.getElementById(id).getBoundingClientRect();
-    scrollEl.scrollTop = size.top;
-    document.getElementById(id).classList.add("found");
-    if (document.getElementById(id)) {
-      setTimeout(function () {
-        document.getElementById(id).classList.remove("found");
-      }, 1000);
-    }
-  }
-
-  useEffect(() => {
-    setSearchInChat([]);
-    setFilteredChats([]);
-    setChatMessages([]);
-  }, [openSearchSidebar == false]);
-
-  useEffect(() => {
-    setFilteredChats([]);
-    setChatMessages([]);
-    socket.on("retrieve messages", RetrieveMessages);
+    let lmt=0;
+    let i=0;
+    messages.forEach((element) => {
+      i++
+      if(element.message_id == id ){
+        lmt= i;
+      }
+    });
+    lmt = lmt + 5
     socket.emit("get messages", {
       id: props.clicked.chat_uid,
       page: 1,
       inChat: true,
-      limit: 30,
+      limit: lmt,
+      idSearch: id
     });
+  }
+
+
+  useEffect(() => {
+    setSearchInChat([]);
+    setFilteredChats([]);
+  }, [openSearchSidebar == false]);
+
+  useEffect(() => {
+    socket.on("retrive search message", RetrieveSearchedMessages);
     return () => {
-      socket.off("retrieve messages", RetrieveMessages);
+      socket.off("retrive search message", RetrieveSearchedMessages);
     };
-  }, [searchInChat]);
+  },[filteredChats]);
+
+  useEffect(() => {
+    setFilteredChats([]);
+    socket.emit("search message", {
+      id: props.clicked.chat_uid,
+      search: searchInChat
+    });
+  },[searchInChat])
 
   const PreventSubmit = (e) => {
     e.preventDefault();
     setSearchInChat([]);
     setFilteredChats([]);
-    setChatMessages([]);
   };
-
-  // function handlePagination(container) {
-  //   let sh = container.scrollHeight;
-  //   let st = container.scrollTop;
-  //   let ht = container.offsetHeight;
-  //   if (ht == 0 || st == sh - ht) {
-  //     setPage(page + 1);
-  //     setLimit(limit + 10);
-  //     socket.emit("get messages", {
-  //       id: props.clicked.chat_uid,
-  //       page: page,
-  //       inChat: true,
-  //       limit: limit,
-  //     });
-  //   }
-  // }
 
   return (
     <div className={`sidebar-group ${openSearchSidebar ? "mobile-open" : ""}`}>

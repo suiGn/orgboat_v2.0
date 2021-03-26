@@ -7,6 +7,7 @@ import ArchivedIndex from "./Archived";
 
 function Index(props) {
   const { selectedSidebar, mobileSidebar } = useSelector((state) => state);
+  const { setLoaded } = props;
 
   return (
     <div className={`sidebar-group ${mobileSidebar ? "mobile-open" : ""}`}>
@@ -27,6 +28,7 @@ function Index(props) {
               setOpenGroupProfile={props.setOpenGroupProfile}
               setUnread={props.setUnread}
               setUnreadChats={props.setUnreadChats}
+              setLoaded={setLoaded}
             />
           );
         } else if (selectedSidebar === "Contacts") {

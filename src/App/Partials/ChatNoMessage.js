@@ -1,18 +1,16 @@
-import React,  { useEffect } from "react";
+import React, { useEffect } from "react";
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
-import UIfx from 'uifx';
-import notificationAudio from '../../assets/sound/much.mp3'
+import UIfx from "uifx";
+import notificationAudio from "../../assets/sound/much.mp3";
 function ChatNoMessage(props) {
-  
   const { socket } = props;
 
   const mobileMenuBtn = () => document.body.classList.toggle("navigation-open");
 
-  const notificationSound = new UIfx(
-    notificationAudio,{
+  const notificationSound = new UIfx(notificationAudio, {
     volume: 0.4,
-    throttleMs: 100
+    throttleMs: 100,
   });
 
   useEffect(() => {
@@ -20,11 +18,11 @@ function ChatNoMessage(props) {
       socket.emit("get chats");
       notificationSound.play();
     });
-  })
+  });
 
   return (
     <div className="chat">
-      <div className="chat-header justify-content-end">
+      {/* <div className="chat-header justify-content-end">
         <div className="chat-header-action">
           <ul className="list-inline">
             <li className="list-inline-item d-xl-none d-inline">
@@ -37,7 +35,7 @@ function ChatNoMessage(props) {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
       <div className="chat-body ">
         <div
           id="nochatselected"

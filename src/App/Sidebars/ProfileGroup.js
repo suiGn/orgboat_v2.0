@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { groupProfileAction } from "../../Store/Actions/groupProfileAction";
 import classnames from "classnames";
 import axios from "axios";
+import ModalImage from "react-modal-image";
 
 function ProfileGroup(props) {
   const { socket } = props;
@@ -15,11 +15,10 @@ function ProfileGroup(props) {
   const { setOpenProfile } = props;
   const { openGroupProfile } = props;
   const { setOpenGroupProfile } = props;
-  const dispatch = useDispatch();
-  
-  const { groupProfileSidebar, mobileGroupProfileSidebar } = useSelector(
-    (state) => state
-  );
+
+  const toggle = tab => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
 
   const openGroupProfileToggler = (e) => {
     setOpenGroupProfile(!openGroupProfile);
@@ -36,6 +35,7 @@ function ProfileGroup(props) {
   const [fileState, setFileState] = useState(null);
   const [about, setAbout] = useState("");
   const [activeTab, setActiveTab] = useState("1");
+  const [files, setFiles] = useState([]);
   const [p, setP] = useState("");
   const [members, setMembers] = useState([]);
   const [openContentEditable, setOpenContentEditable] = useState(false);
@@ -45,12 +45,11 @@ function ProfileGroup(props) {
   const aboutRef = useRef();
   const inputFile = useRef(null);
 
-  const GroupProfileActions = (e, data) => {
-    e.preventDefault();
-    dispatch(groupProfileAction(false));
-  };
-
   useEffect(() => {
+    setActiveTab("1")
+    if(props.chat.id){
+      props.group.chat_id = props.chat.id
+    }
     socket.emit("GetGrupo", props.group);
   }, [props.group]);
 
@@ -77,6 +76,7 @@ function ProfileGroup(props) {
       setPphoto(pphotoD);
       setAbout(about_chatD)
       setMembers(data.chats)
+      setFiles(data.files)
     }
   }
 
@@ -88,7 +88,6 @@ function ProfileGroup(props) {
   }, [name]);
 
   function SaveProfile() {
-    console.log(name)
     var groupData;
     if (name != "") {
       groupData = {
@@ -96,13 +95,14 @@ function ProfileGroup(props) {
         about_chat: about ? about : "",
         chat_uid: props.group.id,
       };
-      console.log(groupData)
       socket.emit("SaveGroup", groupData);
       socket.once("retrive SaveGroup", function (data) {
-        console.log(data)
         socket.emit("GetGrupo", { id: data.chat_uid });
         socket.once("retrieve GetGrupo", ()=> {
           socket.emit("get chats");
+          if(props.clicked.chat_uid==data.chat_uid){
+            socket.emit("get group name", {chat_uid:data.chat_uid});
+          }
         })
       });
     }
@@ -176,6 +176,9 @@ function ProfileGroup(props) {
         socket.emit("GetGrupo", props.group);
         socket.once("retrieve GetGrupo", ()=> {
           socket.emit("get chats");
+          if(props.clicked.chat_uid==props.group.id){
+            socket.emit("get group photo", {chat_uid:props.group.id});
+          }
         })
       })
       .catch((error) => {});
@@ -304,6 +307,21 @@ function ProfileGroup(props) {
                       About
                     </NavLink>
                   </NavItem>
+                  {
+                    files.length>0?
+                  <NavItem>
+                      <NavLink
+                        className={classnames({
+                          active: activeTab === "3",
+                        })}
+                        onClick={() => {
+                          toggle('3');
+                        }}
+                      >
+                        Files ( {files.length} )
+                      </NavLink>
+                    </NavItem>:""
+                    }
                 </Nav>
               </div>
               <TabContent activeTab={activeTab}>
@@ -356,6 +374,25 @@ function ProfileGroup(props) {
                       </ul>
                     </PerfectScrollbar>
                   </div>        
+                </TabPane>
+                <TabPane tabId="3">
+                  <h6 className="mb-3 d-flex align-items-center justify-content-between">
+                    <span>Files</span>
+                  </h6>
+                  <div>
+                    <ul className="list-group list-group-flush">
+                    {files.map((message, i) => (
+                      <li className="list-group-item">
+                        <ModalImage
+                          small={message.message}
+                          large={message.message}
+                          alt="image"
+                        />
+                      </li>
+                      ))
+                    }
+                    </ul>
+                  </div>
                 </TabPane>
               </TabContent>
             </div>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import WomenAvatar5 from "../../assets/img/women_avatar5.jpg";
 import classnames from "classnames";
+import ModalImage from "react-modal-image";
 
 function UserProfile(props) {
   const { socket } = props;
@@ -14,11 +14,7 @@ function UserProfile(props) {
   const { setOpenProfile } = props;
   const { openGroupProfile } = props;
   const { setOpenGroupProfile } = props;
-  const dispatch = useDispatch();
 
-  const { userProfileSidebar, mobileUserProfileSidebar } = useSelector(
-    (state) => state
-  );
   const openUserProfileToggler = (e) => {
     setOpenUserProfile(!openUserProfile);
     if (openProfile) {
@@ -38,13 +34,17 @@ function UserProfile(props) {
   const [activeTab, setActiveTab] = useState("1");
   const [p, setP] = useState("");
   const [favorites, setFavorites] = useState([]);
+  const [files, setFiles] = useState([]);
 
   const toggle = tab => {
-        if (activeTab !== tab) setActiveTab(tab);
-    };
+    if (activeTab !== tab) setActiveTab(tab);
+  };
 
   useEffect(() => {
     setActiveTab("1")
+    if(props.chat.id){
+      props.user.chat_id = props.chat.id
+    }
     socket.emit("ViewProfileUser", props.user);
   }, [props.user]);
 
@@ -70,6 +70,7 @@ function UserProfile(props) {
         } else {
           setP(<img src={pphotoD} className="rounded-circle" alt="image" />);
         }
+        setFiles(data.files)
         setFavorites(data.favorites)
         setName(nameD);
         setCity(cityD);
@@ -148,6 +149,21 @@ function UserProfile(props) {
                       </NavLink>
                     </NavItem>:""
                   }
+                  {
+                    files.length>0?
+                  <NavItem>
+                      <NavLink
+                        className={classnames({
+                          active: activeTab === "3",
+                        })}
+                        onClick={() => {
+                          toggle('3');
+                        }}
+                      >
+                        Files ( {files.length} )
+                      </NavLink>
+                    </NavItem>:""
+                    }
                 </Nav>
               </div>
               <TabContent activeTab={activeTab}>
@@ -168,10 +184,27 @@ function UserProfile(props) {
                   <div>
                     <ul className="list-group list-group-flush">
                     {favorites.map((message, i) => (
-                      <li className="list-group-item pl-0 pr-0 d-flex align-items-center">
-                        <a href="foo">
+                      <li className="list-group-item pl-0 pr-0 d-flex align-items-center fav-message">
                           {message.message}
-                        </a>
+                      </li>
+                      ))
+                    }
+                    </ul>
+                  </div>
+                </TabPane>
+                <TabPane tabId="3">
+                  <h6 className="mb-3 d-flex align-items-center justify-content-between">
+                    <span>Files</span>
+                  </h6>
+                  <div>
+                    <ul className="list-group list-group-flush">
+                    {files.map((message, i) => (
+                      <li className="list-group-item">
+                        <ModalImage
+                          small={message.message}
+                          large={message.message}
+                          alt="image"
+                        />
                       </li>
                       ))
                     }

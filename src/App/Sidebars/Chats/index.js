@@ -22,8 +22,10 @@ function Index(props) {
     openGroupProfile,
     setOpenGroupProfile,
     setClicked,
+    setLoaded,
   } = props;
   const [chatLists, setChatList] = useState([]);
+  const [chatsL, setChatL] = useState([]);
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
   const [one, setIOne] = useState("");
@@ -40,14 +42,20 @@ function Index(props) {
     });
     chats.push.apply(chats, grupos);
     setChatList(data);
+    setChatL(chats);
     setfavoriteFriendFiltered(chats);
     var chatsUnread = data.chats.filter((chats) => {
-        return chats.unread_messages == 1 && chats.last_message_user_uid != data.my_uid && chats.user_chat != data.my_uid 
+      return (
+        chats.unread_messages == 1 &&
+        chats.last_message_user_uid != data.my_uid &&
+        chats.user_chat != data.my_uid
+      );
     });
-    if (chatsUnread.length>0){
-      props.setUnread(true)
-      props.setUnreadChats(chatsUnread)
+    if (chatsUnread.length > 0) {
+      props.setUnread(true);
+      props.setUnreadChats(chatsUnread);
     }
+    setLoaded(true);
   }
 
   useEffect(() => {
@@ -105,7 +113,6 @@ function Index(props) {
     setClicked(chat);
     setOpenSearchSidebar(false);
     socket.off("retrieve messages");
-    console.log("clicked");
   }
 
   const ChatListView = (props) => {
@@ -242,7 +249,7 @@ function Index(props) {
 
   function searchChat(wordToSearch) {
     setSearchFavorite(wordToSearch);
-    var resultFavorits = chatLists.chats.filter((val) => {
+    var resultFavorits = chatsL.filter((val) => {
       return val.name.toLowerCase().includes(wordToSearch.toLowerCase());
     });
     setfavoriteFriendFiltered(resultFavorits);
@@ -256,7 +263,7 @@ function Index(props) {
           <li className="list-inline-item">
             <AddGroupModal socket={socket} chatLists={chatLists} />
           </li>
-          <li className="list-inline-item">
+         {/*<li className="list-inline-item">
             <button
               onClick={() => dispatch(sidebarAction("Friends"))}
               className="btn btn-outline-light"
@@ -272,7 +279,7 @@ function Index(props) {
             >
               New chat
             </Tooltip>
-          </li>
+          </li>*/}
           <li className="list-inline-item d-xl-none d-inline">
             <button
               onClick={mobileSidebarClose}

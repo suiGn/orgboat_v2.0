@@ -78,6 +78,11 @@ function Chat(props) {
       if (props.clicked.chat_uid == data.messages[0].chat_uid) {
         var messages = [];
         data.messages.forEach((element) => {
+          if(data.idSearch){
+            if(element.message_id ==  data.idSearch){
+              element.search = 1
+            }
+          }
           if (element.delete_message_to == 1) {
             if (element.message_user_uid == props.my_uid.id) {
               messages.push(element);
@@ -87,6 +92,7 @@ function Chat(props) {
           }
         });
         setChatMessages(messages.reverse());
+        props.setChat({id:messages[0].chat_uid});
       }
     } else {
       setChatMessages([]);
@@ -220,15 +226,30 @@ function Chat(props) {
     const { message } = props;
     const { group } = props;
     let type;
+    let fav = "";
+    let search = ""
+    if(message.favorite_to||message.favorite){
+      fav = " favorite-message"
+    }
+    if(message.search){
+      search = " found"
+      setTimeout(function () {
+        //let size = document.getElementById(message.message_id).getBoundingClientRect();
+        //scrollEl.scrollTop = (-(scrollEl.scrollHeight) + size.top);
+        setTimeout(function () {
+          document.getElementById(message.message_id).classList.remove("found");
+        }, 2000);
+      }, 3000);
+    }
     if (message.chat_type == 1) {
       if (message.message_user_uid == props.id) {
         type = "outgoing-message";
       } else {
-        type = "undefined";
+        type = "";
       }
     } else {
       if (message.message_user_uid == props.id) {
-        type = "undefine";
+        type = "";
       } else {
         type = "outgoing-message";
       }
@@ -242,9 +263,7 @@ function Chat(props) {
       );
     } else {
       return (
-        <div id={message.message_id} className={"message-item " + type}>
-          {/* {message.avatar} */}
-
+        <div id={message.message_id} className={"message-item " + type + search}>
           {group && message.message_user_uid != props.my_uid ? (
             <div className="message-avatar">
               <div>
@@ -254,20 +273,13 @@ function Chat(props) {
           ) : (
             ""
           )}
-          {/* <h5>{message.name}</h5> */}
-          {/* <div className="time">
-                {moment(message.time).format("DD-MM-YYYY")}
-                {message.type ? (
-                  <i className="ti-double-check text-info"></i>
-                ) : null}
-              </div> */}
-
           {message.media ? (
             message.media
           ) : (
-            <div className="message-content position-relative img-chat">
+            <div className={"message-content position-relative img-chat" + fav} >
               {!message.is_image && !message.is_file ? (
-                <div className="word-break">{message.message}</div>
+                <div className="word-break">{message.message}
+                </div>
               ) : message.is_image ? (
                 <figure className="avatar img-chat">
                   <ModalImage
@@ -295,6 +307,8 @@ function Chat(props) {
                     my_uid={props.my_uid}
                     chat_id={props.chat_id}
                     socket={socket}
+                    page = {page}
+                    limit = {limit}
                   />
                 </div>
               </div>
@@ -358,7 +372,7 @@ function Chat(props) {
     </div>
   ) : (
     <div className="chat">
-      <div className="chat-header justify-content-end">
+      {/* <div className="chat-header justify-content-end">
         <div className="chat-header-action">
           <ul className="list-inline">
             <li className="list-inline-item d-xl-none d-inline">
@@ -371,7 +385,7 @@ function Chat(props) {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
       <div className="chat-body ">
         <div
           id="nochatselected"

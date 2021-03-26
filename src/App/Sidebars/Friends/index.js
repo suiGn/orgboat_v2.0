@@ -64,11 +64,8 @@ function Index(props) {
   }
 
   const newchat = (chat_uid) => {
-    //console.log(chat_uid);
-    console.log(chat_uid)
     socket.emit("newChat", chat_uid);
     socket.once("retrive newchat", (data) => {
-      console.log(data)
       props.setClicked(data.chat);
     });
   };

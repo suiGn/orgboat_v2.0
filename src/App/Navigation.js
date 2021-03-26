@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Logo } from "../assets/icons/blue_helm2.svg";
 import axios from "axios";
 import * as winston from "winston";
-import BrowserConsole from 'winston-transport-browserconsole';
+import BrowserConsole from "winston-transport-browserconsole";
 // import { ReactComponent as Logo } from "../assets/logo.svg";
 import {
   Tooltip,
@@ -29,18 +29,16 @@ function Navigation(props) {
   const level = "debug";
   winston.configure({
     transports: [
-        new BrowserConsole(
-            {
-                format: winston.format.simple(),
-                level,
-                filename: 'logs.log'
-            },
-        )
-        // Uncomment to compare with default Console transport
-        // new winston.transports.Console({
-        //     format: winston.format.simple(),
-        //     level,
-        // }),
+      new BrowserConsole({
+        format: winston.format.simple(),
+        level,
+        filename: "logs.log",
+      }),
+      // Uncomment to compare with default Console transport
+      // new winston.transports.Console({
+      //     format: winston.format.simple(),
+      //     level,
+      // }),
     ],
   });
   // Foto de perfil
@@ -49,7 +47,7 @@ function Navigation(props) {
 
   useEffect(() => {
     props.socket.once("my_uid response", (data) => {
-      winston.info("INFO ", {a: 1, b: "two"});
+      winston.info("INFO ", { a: 1, b: "two" });
       my_uid = data.user[0].u_id;
       setUserEdit({ id: data.user[0].u_id });
       setUser(data.user[0].u_id);
@@ -117,6 +115,7 @@ function Navigation(props) {
 
   const darkSwitcherTooltipToggle = () => {
     props.setDarkSwitcherTooltipOpen(!props.darkSwitcherTooltipOpen);
+    setLocalStorage();
   };
   const darkSwitcherToggle = (e) => {
     e.preventDefault();
@@ -137,6 +136,12 @@ function Navigation(props) {
     dispatch(mobileProfileAction(true));
   };
 
+  const setLocalStorage = () => {
+    !props.darkSwitcherTooltipOpen
+      ? localStorage.setItem("theme", "light")
+      : localStorage.setItem("theme", "dark");
+  };
+
   const openProfileToggler = (e) => {
     props.setUser(userEdit);
     props.setOpenProfile(!props.openProfile);
@@ -152,7 +157,7 @@ function Navigation(props) {
     {
       name: "Chats",
       icon: <FeatherIcon.MessageCircle />,
-      badge: props.unread?"success":"",
+      badge: props.unread ? "success" : "",
     },
     {
       name: "Contacts",
@@ -174,7 +179,7 @@ function Navigation(props) {
       {
         name: "Chats",
         icon: <FeatherIcon.MessageCircle />,
-        badge: props.unread?"success":"",
+        badge: props.unread ? "success" : "",
       },
       {
         name: "Contacts",
@@ -194,6 +199,7 @@ function Navigation(props) {
 
   function logoutServer() {
     axios.get("/logout").then((res) => {
+      localStorage.removeItem("theme");
       if (res.data.ok == true) {
         window.location.reload();
       }
@@ -293,50 +299,59 @@ function Navigation(props) {
             </Tooltip>
           </li>
           <li id="logout-menu" className="text-center">
-            <a
-              href="#/"
-              onClick={logoutServer}
-              className="dark-light-switcher"
-              id="log-out"
-            >
-              <FeatherIcon.LogOut />
-            </a>
-            <Tooltip
-              placement="right"
-              isOpen={logOutTooltipTextOpen}
-              target="log-out"
-              toggle={logOutSwitcherTooltipTextToggler}
-            >
-              Log Out
-            </Tooltip>
-            {/* <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-              <DropdownToggle
-                tag="span"
-                data-toggle="dropdown"
-                aria-expanded={dropdownOpen}
+            <a href="#/" id="logout-desktop">
+              <div
+                href="#/"
+                onClick={logoutServer}
+                className="dark-light-switcher"
+                id="log-out"
               >
                 <FeatherIcon.LogOut />
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={editModalToggle}>
+              </div>
+              <Tooltip
+                placement="right"
+                isOpen={logOutTooltipTextOpen}
+                target="log-out"
+                toggle={logOutSwitcherTooltipTextToggler}
+              >
+                Log Out
+              </Tooltip>
+            </a>
+            <a href="#/" id="logout-responsive">
+              <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+                <DropdownToggle
+                  tag="span"
+                  data-toggle="dropdown"
+                  aria-expanded={dropdownOpen}
+                >
+                  <FeatherIcon.MoreVertical />
+                </DropdownToggle>
+                <DropdownMenu>
+                  {/* <DropdownItem onClick={editModalToggle}>
                   Edit profile
-                </DropdownItem>
-                <DropdownItem onClick={profileActions}>Profile</DropdownItem>
-                 <DropdownItem onClick={settingsModalToggle}>
+                </DropdownItem> */}
+                  <DropdownItem onClick={openProfileToggler}>
+                    Profile
+                  </DropdownItem>
+                  {/* <DropdownItem onClick={settingsModalToggle}>
                   Settings
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem onClick={logoutServer}>Logout</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-            <Tooltip
-              placement="right"
-              isOpen={userMenuTooltipOpen}
-              target="user-menu"
-              toggle={userMenuToggle}
-            >
-              User menu
-            </Tooltip> */}
+                </DropdownItem> */}
+                  <DropdownItem onClick={(e) => darkSwitcherToggle(e)}>
+                    Dark mode
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem onClick={logoutServer}>Logout</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              <Tooltip
+                placement="right"
+                isOpen={userMenuTooltipOpen}
+                target="user-menu"
+                toggle={userMenuToggle}
+              >
+                User menu
+              </Tooltip>
+            </a>
           </li>
         </ul>
       </div>
