@@ -385,6 +385,7 @@
 
           .form-buttons {
             display: flex;
+            z-index: -1;
 
             .btn {
               margin-left: 1rem;
