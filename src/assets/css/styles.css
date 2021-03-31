@@ -313,6 +313,43 @@ body.dark .time {
   max-width: 400px;
 }
 
+.img-preview{
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.img-preview-container{
+  max-height: 400px;
+  position: relative;
+  top: 10%;
+}
+
+.img-preview-container-header .modal-body{
+  display: flex;
+  text-align: center;
+}
+
+.img-preview-container-head{
+  display: flex;
+  text-align: center;
+}
+
+.send-file{
+  height: 100px;
+  width: 100px;
+  position: relative;
+  left: 80%;
+}
+
+.send-file-button{
+  position: relative;
+  bottom: 60%;
+  cursor: pointer;
+}
+.footer-file{
+  height: 10%;
+}
+
 /* @media (max-width: 1200px) {
   body.navigation-open:after {
     content: "";

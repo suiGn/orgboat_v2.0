@@ -4,6 +4,7 @@ import * as FeatherIcon from "react-feather";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import { dark, light } from "@material-ui/core/styles/createPalette";
+import FilePreview from "../Modals/FilePreview";
 import {
   Dropdown,
   DropdownToggle,
@@ -16,9 +17,11 @@ import axios from "axios";
 function ChatFooter(props) {
   const [emojiMenuOpen, setEmojiMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [fileState, setFileState] = useState(null);
+  //const [imgPreview, setImgPreview] = useState(false);
+  //const [file, setFile] = useState(null);
   const inputFile = useRef(null);
   const inputImage = useRef(null);
+  const inputPreview = useRef(null);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,8 +60,11 @@ function ChatFooter(props) {
   function onChangeFile(e) {
     e.preventDefault();
     setDropdownOpen(!dropdownOpen)
+    let file = e.target.files[0]
+    var reader = new FileReader();
     const formData = new FormData();
-    formData.append("myFile", e.target.files[0]);
+    formData.append("myFile", file);
+   
     const config = {
       headers: {
         "content-type": "multipart/form-data",
@@ -80,24 +86,18 @@ function ChatFooter(props) {
   function onChangePhoto(e) {
     e.preventDefault();
     setDropdownOpen(!dropdownOpen)
-    const formData = new FormData();
-    formData.append("myFile", e.target.files[0]);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    axios
-      .post("/uploadpChatFile", formData, config)
-      .then((response) => {
-        props.onSubmit({
-          text:  response.data.url,
-          chat_uid: props.chat_uid,
-          is_image: 1,
-          is_file: 0,
-        });
-      })
-      .catch((error) => {});
+
+    let file = e.target.files[0]
+    var reader = new FileReader();
+
+    reader.onloadend = () => {
+      props.setFile(file)
+      props.setImgPreview(reader.result)
+      props.setViewPreview(true)
+      //inputPreview.current.click();
+    }
+    
+    reader.readAsDataURL(file);
   }
 
   const onButtonClickFile = () => {
@@ -110,6 +110,7 @@ function ChatFooter(props) {
 
   return (
     <div className="chat-footer">
+      {/*<FilePreview inputPreview={inputPreview} imgPreview={props.imgPreview} file={props.file}/>*/}
       <form onSubmit={handleSubmit}>
         {/* <div className="position-relative">
           <Button
@@ -141,12 +142,6 @@ function ChatFooter(props) {
           onKeyDown={onKeyDown}
         />
         <div className="form-buttons">
-          {/* <Button color="light">
-            <FeatherIcon.Paperclip />
-          </Button>
-          <Button color="light" className="d-sm-none d-block">
-            <FeatherIcon.Mic />
-          </Button> */}
           <Button type="submit" color="primary">
             <FeatherIcon.Send />
           </Button>

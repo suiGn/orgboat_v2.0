@@ -25,7 +25,12 @@ function Chat(props) {
   const [messages, setChatMessages] = useState([]);
 
   const [page, setPage] = useState(1);
+
   const [limit, setLimit] = useState(10);
+
+  const [firstTime, setFirstTime] = useState(true);
+
+  const [scrolled, setScrolled] = useState(false);
 
   const mobileMenuBtn = () => document.body.classList.toggle("navigation-open");
 
@@ -39,6 +44,7 @@ function Chat(props) {
   if (messages && messages.length > 0) {
     dateSend = new Date(messages[0].time);
   }
+
   const {
     socket,
     clicked,
@@ -49,26 +55,27 @@ function Chat(props) {
   } = props;
 
   useEffect(() => {
-    if (props.clicked && scrollEl) {
-      scrollEl.scrollTop = scrollEl.scrollHeight;
+    if (scrollEl){
+      if(firstTime && messages.length > 0){
+        scrollEl.scrollTop = scrollEl.scrollHeight;
+        setFirstTime(false)
+      }else if(scrolled && !firstTime){
+        scrollEl.scrollTop =  500
+      }
     }
-  });
-
-  useEffect(() => {
-    if (scrollEl) {
-      scrollEl.scrollTop = scrollEl.scrollHeight;
-    }
-  }, [scrollEl]);
+  },[messages]);
 
   function scrollMove(container) {
-    if (container.scrollTop == 0) {
+    if (container.scrollTop == 0 && !firstTime) {
+      var newLimit = limit + 10
       setPage(page + 1);
-      setLimit(limit + 10);
+      setLimit(newLimit);
+      setScrolled(true)
       socket.emit("get messages", {
         id: props.clicked.chat_uid,
         page: page,
         inChat: true,
-        limit: limit,
+        limit: newLimit,
       });
     }
   }
@@ -125,28 +132,29 @@ function Chat(props) {
 
   useEffect(() => {
     setPage(1);
-    setLimit(10);
+    setLimit(10)
     setChatMessages([]);
+    setFirstTime(true)
+    setScrolled(false)
 
     var chat = props.unreadChats.filter((chat) => {
       return chat.chat_uid != props.clicked.chat_uid;
     });
+
     props.setUnreadChats(chat);
     if (chat.length == 0) {
       props.setUnread(false);
     }
 
-    socket.on("retrieve messages", RetrieveMessages);
-
     socket.emit("get messages", {
       id: props.clicked.chat_uid,
       page: page,
       inChat: true,
-      limit: limit,
+      limit: 10,
     });
 
+    socket.on("retrieve messages", RetrieveMessages);
     socket.on("chat message", OnChatMessage);
-
     return () => {
       socket.off("chat message", OnChatMessage);
       socket.off("retrieve messages", RetrieveMessages);
@@ -174,6 +182,7 @@ function Chat(props) {
   const handleChange = (newValue) => {
     setInputMsg(newValue);
   };
+
   function timeformat(date) {
     var h = date.getHours();
     var m = date.getMinutes();
@@ -196,6 +205,7 @@ function Chat(props) {
     let dateLabel = dateLabelDate + "/" + dateLabelMonth + "/" + dateLabelYear;
     return dateLabel;
   }
+
   let yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   let yesterdayLabel = getDateLabel(yesterday);
@@ -235,7 +245,7 @@ function Chat(props) {
       search = " found"
       setTimeout(function () {
         //let size = document.getElementById(message.message_id).getBoundingClientRect();
-        //scrollEl.scrollTop = (-(scrollEl.scrollHeight) + size.top);
+        scrollEl.scrollTop =  200
         setTimeout(function () {
           document.getElementById(message.message_id).classList.remove("found");
         }, 2000);
@@ -319,8 +329,9 @@ function Chat(props) {
     }
   };
 
-  return clicked.chat_uid ? (
-    <div className="chat">
+  return(
+    clicked.chat_uid ? (  
+    <div className="chat" hidden={props.viewPreview}>
       <ChatHeader
         data={props.clicked}
         socket={socket}
@@ -368,29 +379,17 @@ function Chat(props) {
         setInputMsg={setInputMsg}
         chat_uid={props.clicked.chat_uid}
         darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+        setImgPreview={props.setImgPreview}
+        setFile={props.setFile}
+        imgPreview={props.imgPreview}
+        file={props.file}
+        viewPreview={props.viewPreview}
+        setViewPreview={props.setViewPreview}
       />
-    </div>
-  ) : (
+    </div>):(
     <div className="chat">
-      {/* <div className="chat-header justify-content-end">
-        <div className="chat-header-action">
-          <ul className="list-inline">
-            <li className="list-inline-item d-xl-none d-inline">
-              <button
-                onClick={mobileMenuBtn}
-                className="btn btn-outline-light mobile-navigation-button"
-              >
-                <Menu />
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div> */}
       <div className="chat-body ">
-        <div
-          id="nochatselected"
-          className="justify-content-center align-items-center d-flex h-100"
-        >
+        <div id="nochatselected" className="justify-content-center align-items-center d-flex h-100">
           <div className="no-message-container custom-chat-message">
             <div className="row mb-5 chat-body-custom">
               <div className="col-12 text-center">
@@ -401,8 +400,7 @@ function Chat(props) {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>))
 }
 
 export default Chat;

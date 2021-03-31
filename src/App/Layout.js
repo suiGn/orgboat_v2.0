@@ -13,6 +13,7 @@ import ChatN from "./Partials/ChatNoMessage";
 import { pageTourAction } from "../Store/Actions/pageTourAction";
 import { profileAction } from "../Store/Actions/profileAction";
 import DisconnectedModal from "./Modals/DisconnectedModal";
+import ChatNoMessage from "./Partials/ChatNoMessage";
 // import socketIOClient from "socket.io-client";
 // const ENDPOINT = "http://localhost:5000/";
 
@@ -32,6 +33,10 @@ function Layout(props) {
   const [openGroupProfile, setOpenGroupProfile] = useState(false);
   const [openSearchSidebar, setOpenSearchSidebar] = useState(false);
   const [scrollEl, setScrollEl] = useState();
+  const [imgPreview, setImgPreview] = useState(false);
+  const [file, setFile] = useState(null);
+  const [viewPreview, setViewPreview] = useState(false);
+  
 
   useEffect(() => {
     document.querySelector("*").addEventListener("click", (e) => {
@@ -144,6 +149,18 @@ function Layout(props) {
           unreadChats={unreadChats}
           setChat={setChat}
           setUnread={setUnread}
+          setImgPreview={setImgPreview}
+          setFile={setFile}
+          imgPreview={imgPreview}
+          file={file}
+          viewPreview={viewPreview}
+          setViewPreview={setViewPreview}
+        />
+        <ChatNoMessage
+          imgPreview={imgPreview}
+          file={file}
+          viewPreview={viewPreview}
+          setViewPreview={setViewPreview}
         />
         <Profile
           setOpenProfile={setOpenProfile}

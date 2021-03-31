@@ -3,52 +3,63 @@ import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
 import UIfx from "uifx";
 import notificationAudio from "../../assets/sound/much.mp3";
+import { Button } from "reactstrap";
+import * as FeatherIcon from "react-feather";
+import axios from "axios";
 function ChatNoMessage(props) {
-  const { socket } = props;
 
-  const mobileMenuBtn = () => document.body.classList.toggle("navigation-open");
-
-  const notificationSound = new UIfx(notificationAudio, {
-    volume: 0.4,
-    throttleMs: 100,
-  });
-
-  useEffect(() => {
-    socket.on("chat message", (data) => {
-      socket.emit("get chats");
-      notificationSound.play();
-    });
-  });
+  const{imgPreview,file,viewPreview} = props
+  
+  function Send(){
+    props.setViewPreview(false)
+    //activar cuando se corriga el AWS
+    /*const formData = new FormData();
+    formData.append("myFile", file);
+    const config = {
+    headers: {
+        "content-type": "multipart/form-data",
+    },
+    };
+    axios
+    .post("/uploadpChatFile", formData, config)
+    .then((response) => {
+        props.onSubmit({
+        text:  response.data.url,
+        chat_uid: props.chat_uid,
+        is_image: 1,
+        is_file: 0,
+        });
+    })
+    .catch((error) => {});*/
+}
 
   return (
-    <div className="chat">
-      {/* <div className="chat-header justify-content-end">
-        <div className="chat-header-action">
-          <ul className="list-inline">
-            <li className="list-inline-item d-xl-none d-inline">
-              <button
-                onClick={mobileMenuBtn}
-                className="btn btn-outline-light mobile-navigation-button"
-              >
-                <Menu />
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div> */}
+    <div className="chat" hidden={!viewPreview}>
+      <div className="chat-header">
+          <div class="chat-header-user col-6">
+            <h3>Preview</h3>
+          </div>
+      </div>
       <div className="chat-body ">
-        <div
-          id="nochatselected"
-          className="justify-content-center align-items-center d-flex h-100"
-        >
+        <div id="nochatselected" className="justify-content-center align-items-center d-flex h-100">
           <div className="no-message-container custom-chat-message">
             <div className="row mb-5 chat-body-custom">
-              <div className="col-12 text-center">
-                <img src={empty} width="400px" className="" alt="image" />
+              <div className="col-12 img-preview-container-head">
+                <div className="img-preview-container">
+                    <img src={imgPreview} className="img-preview" alt="image"/>
+                </div>
               </div>
             </div>
-            <p className="lead text-center">Welcome to OrgBoat!</p>
           </div>
+        </div>
+      </div>
+      <div className="chat-footer footer-file">
+        <div className="form-buttons">
+            <figure class="avatar send-file mb-3" onClick={Send}>
+              <span class="avatar-title send-file-button bg-info rounded-circle">
+                <FeatherIcon.Send />
+              </span>
+            </figure>
         </div>
       </div>
     </div>
