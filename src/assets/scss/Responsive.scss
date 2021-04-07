@@ -1,5 +1,10 @@
 @media (max-width: 1200px) {
   body {
+    .layout {
+      .content {
+        flex-flow: column-reverse;
+      }
+    }
     &.navigation-open {
       // &:after {
       //   content: "";
@@ -26,10 +31,10 @@
     width: 100%;
     order: 1;
     display: block;
-    position: fixed;
-    bottom: 0;
-    top: auto;
-    left: auto;
+    // position: fixed;
+    // bottom: 0;
+    // top: auto;
+    // left: auto;
     border-top: 1px solid $style-color;
     .nav-group {
       width: 100%;

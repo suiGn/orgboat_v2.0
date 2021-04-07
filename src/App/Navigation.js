@@ -318,7 +318,7 @@ function Navigation(props) {
               </Tooltip>
             </a>
             <a href="#/" id="logout-responsive">
-              <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+              <Dropdown direction="up" isOpen={dropdownOpen} toggle={toggle}>
                 <DropdownToggle
                   tag="span"
                   data-toggle="dropdown"
@@ -343,14 +343,14 @@ function Navigation(props) {
                   <DropdownItem onClick={logoutServer}>Logout</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
-              <Tooltip
+              {/* <Tooltip
                 placement="right"
                 isOpen={userMenuTooltipOpen}
                 target="user-menu"
                 toggle={userMenuToggle}
               >
                 User menu
-              </Tooltip>
+              </Tooltip> */}
             </a>
           </li>
         </ul>

@@ -6,19 +6,15 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import AddFriendsModal from "../../Modals/AddFriendModal";
 import FriendsDropdown from "./FriendsDropdown";
 import { mobileSidebarAction } from "../../../Store/Actions/mobileSidebarAction";
-// import {friendLists} from "./Data"
+import { Button } from "reactstrap";
 
 function Index(props) {
   const [friendLists, setContact] = useState([]);
   const [favoriteFriendFiltered, setfavoriteFriendFiltered] = useState([]);
+  const [searchAll, setsearchAll] = useState([]);
   const [searchFavorite, setSearchFavorite] = useState("");
-  useEffect(() => {
-    inputRef.current.focus();
-  });
-  let my_uid;
 
   const { socket } = props;
-
   const { setOpenProfile } = props;
   const { openProfile } = props;
   const { setOpenUserProfile } = props;
@@ -37,7 +33,9 @@ function Index(props) {
 
   function RetriveGetContacts(contacts) {
     var chats = contacts.chats.filter((chats) => {
-      return chats.chat_type == 0;
+        if(chats.chat_type == 0&&chats.user_chat!=contacts.my_uid){
+          return chats
+        }
     });
     contacts.chats = chats;
     setContact(contacts);
@@ -57,16 +55,42 @@ function Index(props) {
 
   function searchFav(wordToSearch) {
     setSearchFavorite(wordToSearch);
-    var resultFavorits = friendLists.chats.filter((val) => {
-      return val.name.toLowerCase().includes(wordToSearch.toLowerCase());
-    });
-    setfavoriteFriendFiltered(resultFavorits);
+    if (wordToSearch.length){
+      var uids = "";
+      friendLists.chats.forEach((user)=>{
+        uids +=("'"+ user.user_chat + "',");
+      })
+      uids = uids +"'"+friendLists.my_uid+"'"
+      socket.emit("SearchContacts", 
+      {
+        wordToSearch:wordToSearch,
+        uids: uids
+      });
+      socket.once("retrive SearchContacts",(data)=>{
+        setsearchAll(data)
+        var resultFavorits = friendLists.chats.filter((val) => {
+          if(val.name.toLowerCase().includes(wordToSearch.toLowerCase())&&val.user_chat!=friendLists.my_uid){
+            return val
+          }
+        });
+        var NewresultFavorits = resultFavorits.concat(data.users)
+        //console.log(NewresultFavorits)
+        setfavoriteFriendFiltered(NewresultFavorits);
+      })
+    }else{
+      var resultFavorits = friendLists.chats.filter((val) => {
+        return val.name.toLowerCase().includes(wordToSearch.toLowerCase());
+      });
+      
+      setfavoriteFriendFiltered(resultFavorits);
+    }
   }
 
   const newchat = (chat_uid) => {
     socket.emit("newChat", chat_uid);
     socket.once("retrive newchat", (data) => {
       props.setClicked(data.chat);
+      mobileSidebarClose();
     });
   };
 
@@ -103,10 +127,6 @@ function Index(props) {
           <ul className="list-group list-group-flush">
             {friendLists.chats &&
               favoriteFriendFiltered.map((item, i) => {
-                let my_uid = friendLists.my_uid;
-                if (my_uid == item.user_chat) {
-                  return "";
-                }
                 let chat_name = item.name;
                 let p;
                 let chat_initial = chat_name.substring(0, 1);
@@ -126,12 +146,16 @@ function Index(props) {
                   );
                 }
                 return (
-                  <li key={i} className="list-group-item"  onClick={() => newchat(item.chat_uid)}>
+                  item.chat_uid?
+                  <li
+                    key={i}
+                    className="list-group-item"
+                    onClick={() => newchat(item.chat_uid)}
+                  >
                     <figure className="avatar">{p}</figure>
                     <div className="users-list-body">
                       <div>
                         <h5>{item.name}</h5>
-                        {/* <p>{item.title}</p> */}
                       </div>
                       <div className="users-list-action">
                         <div className="action-toggle">
@@ -148,6 +172,21 @@ function Index(props) {
                             socket={props.socket}
                             setClicked={props.setClicked}
                           />
+                        </div>
+                      </div>
+                    </div>
+                  </li>:
+                  <li key={i} className="list-group-item list-group-extra">
+                    <figure className="avatar">{p}</figure>
+                    <div className="users-list-body">
+                      <div>
+                        <h5>{item.name}</h5>
+                      </div>
+                      <div className="users-list-action">
+                        <div className="action-toggle">
+                        <Button color="primary">
+                          <FeatherIcon.UserPlus />
+                        </Button>
                         </div>
                       </div>
                     </div>

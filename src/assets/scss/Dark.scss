@@ -1,5 +1,7 @@
 $dark-mode: #212124;
 $dark-mode-light: $dark-mode + 15;
+$dark-mode-message: #f3c96e;
+$dark-mode-outgoing: #3cdbc3;
 
 body.dark {
   background-color: $dark-mode;
@@ -64,11 +66,11 @@ body.dark {
 
           &:hover,
           &:focus {
-            background-color: $dark-mode-light;
+            background-color: #293145;
           }
 
           &.active {
-            background-color: $color-primary;
+            background-color: #2c2b30;
           }
         }
       }
@@ -109,19 +111,48 @@ body.dark {
           .chat-header-user {
             color: rgba(white, 0.7);
           }
+          .close-preview svg {
+            color: white;
+          }
         }
 
         .chat-body {
           .messages {
             .message-item {
-              &:not(.outgoing-message) {
-                .message-content {
-                  background-color: $dark-mode-light;
+              .message-content {
+                background-color: $dark-mode;
+                border: 0.5px solid $dark-mode-message;
+                .favorite-message {
+                  svg {
+                    color: $dark-mode-message;
+                  }
+                }
+                .time {
+                  color: #828282;
+                }
+                .action-dropdown-chat:hover {
+                  .dropdown-chat-message {
+                    display: block;
+                    background-color: rgba($dark-mode, 0.5);
+                  }
                 }
               }
-
+              &:not(.outgoing-message) {
+                .message-content {
+                  border: 0.5px solid $dark-mode-outgoing;
+                  .favorite-message {
+                    svg {
+                      color: $dark-mode-outgoing;
+                    }
+                  }
+                }
+              }
               &.messages-divider:before {
                 background-color: $dark-mode-light;
+              }
+              .found {
+                animation: found_message_dark 2s normal forwards ease-in-out;
+                border-radius: 8px;
               }
             }
           }
@@ -265,5 +296,18 @@ body.dark {
         border-color: $dark-mode;
       }
     }
+  }
+}
+
+/* Animation */
+
+@keyframes found_message_dark {
+  from {
+    box-shadow: 0 0 17px 0px #ffffff29;
+    background-color: #303033;
+  }
+  to {
+    box-shadow: 0 0 0px 0px #ffffff29;
+    background-color: #212124;
   }
 }

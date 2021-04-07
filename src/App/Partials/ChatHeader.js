@@ -152,7 +152,6 @@ function ChatHeader(props) {
           <li
             className="list-inline-item"
             data-toggle="tooltip"
-            title="Video call"
           >
             <Dropdown isOpen={dropdownOpen} toggle={toggle}>
               <DropdownToggle

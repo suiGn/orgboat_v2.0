@@ -11,6 +11,16 @@ body.form-membership {
     margin: 50px auto;
     text-align: center;
 
+    .text-error {
+      font-size: 16px;
+      margin: 20px 0;
+    }
+
+    .text-success {
+      font-size: 16px;
+      margin: 20px 0;
+    }
+
     .logo {
       background-color: white;
       width: 100px;
@@ -25,6 +35,9 @@ body.form-membership {
       margin-left: auto;
       margin-right: auto;
       padding: 20px;
+      svg {
+        height: 100px;
+      }
     }
 
     h5 {

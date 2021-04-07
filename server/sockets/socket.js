@@ -411,7 +411,6 @@ io.on("connection", function (socket) {
     });
     //Obtaine contacts
     socket.on("GetContacts", () => {
-      console.log("contacts");
       orgboatDB.query(
         `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,chats_users.archiveChat
 
@@ -844,6 +843,20 @@ io.on("connection", function (socket) {
         id: data.id,
       });
     })
+    socket.on("SearchContacts", (data) => {
+      orgboatDB.query(
+        `select usrs.*
+        from  usrs 
+        where u_id not in (${data.uids}) and (
+        usrs.name like "%${data.wordToSearch}%" OR usrs.usrname like "%${data.wordToSearch}%")
+        `,
+        (err, users) => {
+          io.to(user.u_id).emit("retrive SearchContacts", {
+            users: users,
+          });
+        }
+      );
+    });
   } catch {
     console.log("problema");
   }

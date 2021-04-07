@@ -28,7 +28,7 @@ function Index(props) {
   }
 
   useEffect(() => {
-    inputRef.current.focus();
+    // inputRef.current.focus();
     socket.on("retrieve chats archived", RetrieveChatsArchived);
     return () => {
       socket.off("retrieve chats archived", RetrieveChatsArchived);

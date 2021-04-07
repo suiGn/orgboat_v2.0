@@ -10,7 +10,16 @@ function Index(props) {
   const { setLoaded } = props;
 
   return (
-    <div className={`sidebar-group ${mobileSidebar ? "mobile-open" : ""}`}>
+    <div
+      className={`sidebar-group ${mobileSidebar ? "mobile-open" : ""} ${
+        selectedSidebar === "Chats" ||
+        selectedSidebar === "Contacts" ||
+        selectedSidebar === "Favorites" ||
+        selectedSidebar === "Archived"
+          ? "sidebar-chat"
+          : ""
+      }`}
+    >
       {(() => {
         if (selectedSidebar === "Chats") {
           return (

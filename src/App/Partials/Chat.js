@@ -19,7 +19,6 @@ function Chat(props) {
   const [inputMsg, setInputMsg] = useState("");
 
   const [newMessage, setMessages] = useState(selectedChat);
-
   // const [scrollEl, setScrollEl] = useState();
 
   const [messages, setChatMessages] = useState([]);
@@ -55,22 +54,22 @@ function Chat(props) {
   } = props;
 
   useEffect(() => {
-    if (scrollEl){
-      if(firstTime && messages.length > 0){
+    if (scrollEl) {
+      if (firstTime && messages.length > 0) {
         scrollEl.scrollTop = scrollEl.scrollHeight;
-        setFirstTime(false)
-      }else if(scrolled && !firstTime){
-        scrollEl.scrollTop =  500
+        setFirstTime(false);
+      } else if (scrolled && !firstTime) {
+        scrollEl.scrollTop = 500;
       }
     }
-  },[messages]);
+  }, [messages]);
 
   function scrollMove(container) {
     if (container.scrollTop == 0 && !firstTime) {
-      var newLimit = limit + 10
+      var newLimit = limit + 10;
       setPage(page + 1);
       setLimit(newLimit);
-      setScrolled(true)
+      setScrolled(true);
       socket.emit("get messages", {
         id: props.clicked.chat_uid,
         page: page,
@@ -85,9 +84,9 @@ function Chat(props) {
       if (props.clicked.chat_uid == data.messages[0].chat_uid) {
         var messages = [];
         data.messages.forEach((element) => {
-          if(data.idSearch){
-            if(element.message_id ==  data.idSearch){
-              element.search = 1
+          if (data.idSearch) {
+            if (element.message_id == data.idSearch) {
+              element.search = 1;
             }
           }
           if (element.delete_message_to == 1) {
@@ -99,7 +98,7 @@ function Chat(props) {
           }
         });
         setChatMessages(messages.reverse());
-        props.setChat({id:messages[0].chat_uid});
+        props.setChat({ id: messages[0].chat_uid });
       }
     } else {
       setChatMessages([]);
@@ -132,10 +131,10 @@ function Chat(props) {
 
   useEffect(() => {
     setPage(1);
-    setLimit(10)
+    setLimit(10);
     setChatMessages([]);
-    setFirstTime(true)
-    setScrolled(false)
+    setFirstTime(true);
+    setScrolled(false);
 
     var chat = props.unreadChats.filter((chat) => {
       return chat.chat_uid != props.clicked.chat_uid;
@@ -235,17 +234,18 @@ function Chat(props) {
   const MessagesView = (props) => {
     const { message } = props;
     const { group } = props;
+
     let type;
     let fav = "";
-    let search = ""
-    if(message.favorite_to||message.favorite){
-      fav = " favorite-message"
+    let search = "";
+    if (message.favorite_to || message.favorite) {
+      fav = " favorite-message";
     }
-    if(message.search){
-      search = " found"
+    if (message.search) {
+      search = " found";
       setTimeout(function () {
         //let size = document.getElementById(message.message_id).getBoundingClientRect();
-        scrollEl.scrollTop =  200
+        scrollEl.scrollTop = 200;
         setTimeout(function () {
           document.getElementById(message.message_id).classList.remove("found");
         }, 2000);
@@ -273,7 +273,7 @@ function Chat(props) {
       );
     } else {
       return (
-        <div id={message.message_id} className={"message-item " + type + search}>
+        <div id={message.message_id} className={"message-item " + type}>
           {group && message.message_user_uid != props.my_uid ? (
             <div className="message-avatar">
               <div>
@@ -286,10 +286,11 @@ function Chat(props) {
           {message.media ? (
             message.media
           ) : (
-            <div className={"message-content position-relative img-chat" + fav} >
+            <div
+              className={"message-content position-relative img-chat" + search}
+            >
               {!message.is_image && !message.is_file ? (
-                <div className="word-break">{message.message}
-                </div>
+                <div className="word-break">{message.message}</div>
               ) : message.is_image ? (
                 <figure className="avatar img-chat">
                   <ModalImage
@@ -305,6 +306,13 @@ function Chat(props) {
               )}
               <div className="misc-container">
                 <div className="time">
+                  {fav.length > 0 ? (
+                    <div className={fav}>
+                      <FeatherIcon.Star />
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <Moment format="LT">{message.time}</Moment>
                   {message.type ? (
                     <i className="ti-double-check text-info"></i>
@@ -317,8 +325,8 @@ function Chat(props) {
                     my_uid={props.my_uid}
                     chat_id={props.chat_id}
                     socket={socket}
-                    page = {page}
-                    limit = {limit}
+                    page={page}
+                    limit={limit}
                   />
                 </div>
               </div>
@@ -329,8 +337,7 @@ function Chat(props) {
     }
   };
 
-  return(
-    clicked.chat_uid ? (  
+  return clicked.chat_uid ? (
     <div className="chat" hidden={props.viewPreview}>
       <ChatHeader
         data={props.clicked}
@@ -385,11 +392,17 @@ function Chat(props) {
         file={props.file}
         viewPreview={props.viewPreview}
         setViewPreview={props.setViewPreview}
+        setImageOrFile={props.setImageOrFile}
+        setFilePreview={props.setFilePreview}
       />
-    </div>):(
+    </div>
+  ) : (
     <div className="chat">
       <div className="chat-body ">
-        <div id="nochatselected" className="justify-content-center align-items-center d-flex h-100">
+        <div
+          id="nochatselected"
+          className="justify-content-center align-items-center d-flex h-100"
+        >
           <div className="no-message-container custom-chat-message">
             <div className="row mb-5 chat-body-custom">
               <div className="col-12 text-center">
@@ -400,7 +413,8 @@ function Chat(props) {
           </div>
         </div>
       </div>
-    </div>))
+    </div>
+  );
 }
 
 export default Chat;

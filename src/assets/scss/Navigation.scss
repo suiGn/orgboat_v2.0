@@ -1,6 +1,7 @@
 .navigation {
   background: white;
   border-right: 1px solid darken(white, 10%);
+  order: 1;
 
   .nav-group {
     width: 100px;
@@ -21,6 +22,12 @@
     }
     li {
       list-style: none;
+
+      .own-avatar {
+        cursor: pointer;
+        height: 55px;
+        width: 55px;
+      }
 
       &:not(.logo) {
         margin: 5px 20px;

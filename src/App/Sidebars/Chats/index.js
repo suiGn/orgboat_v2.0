@@ -111,6 +111,7 @@ function Index(props) {
     e.preventDefault();
     chat.unread_messages = 0;
     setClicked(chat);
+    mobileSidebarClose();
     setOpenSearchSidebar(false);
     socket.off("retrieve messages");
   }
@@ -263,7 +264,7 @@ function Index(props) {
           <li className="list-inline-item">
             <AddGroupModal socket={socket} chatLists={chatLists} />
           </li>
-         {/*<li className="list-inline-item">
+          {/*<li className="list-inline-item">
             <button
               onClick={() => dispatch(sidebarAction("Friends"))}
               className="btn btn-outline-light"

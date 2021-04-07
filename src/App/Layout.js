@@ -33,9 +33,11 @@ function Layout(props) {
   const [openGroupProfile, setOpenGroupProfile] = useState(false);
   const [openSearchSidebar, setOpenSearchSidebar] = useState(false);
   const [scrollEl, setScrollEl] = useState();
-  const [imgPreview, setImgPreview] = useState(false);
-  const [file, setFile] = useState(null);
+  const [imgPreview, setImgPreview] = useState("");
+  const [filePreview, setFilePreview] = useState("");
+  const [file, setFile] = useState();
   const [viewPreview, setViewPreview] = useState(false);
+  const [imageOrFile, setImageOrFile] = useState(1);
   
 
   useEffect(() => {
@@ -94,22 +96,6 @@ function Layout(props) {
         onRequestClose={() => dispatch(pageTourAction(false))}
       />
       <div className="content">
-        <Navigation
-          darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
-          setDarkSwitcherTooltipOpen={props.setDarkSwitcherTooltipOpen}
-          socket={socket}
-          setUser={setUser}
-          setOpenProfile={setOpenProfile}
-          openProfile={openProfile}
-          openUserProfile={openUserProfile}
-          setOpenUserProfile={setOpenUserProfile}
-          openGroupProfile={openGroupProfile}
-          setOpenGroupProfile={setOpenGroupProfile}
-          my_uid={my_uid}
-          data={clicked}
-          unread={unread}
-          unreadChats={unreadChats}
-        />
         <SidebarIndex
           socket={socket}
           setClicked={setClicked}
@@ -155,12 +141,32 @@ function Layout(props) {
           file={file}
           viewPreview={viewPreview}
           setViewPreview={setViewPreview}
+          setImageOrFile={setImageOrFile}
+          setFilePreview={setFilePreview}
         />
         <ChatNoMessage
           imgPreview={imgPreview}
+          filePreview={filePreview}
           file={file}
           viewPreview={viewPreview}
           setViewPreview={setViewPreview}
+          imageOrFile={imageOrFile}
+        />
+        <Navigation
+          darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
+          setDarkSwitcherTooltipOpen={props.setDarkSwitcherTooltipOpen}
+          socket={socket}
+          setUser={setUser}
+          setOpenProfile={setOpenProfile}
+          openProfile={openProfile}
+          openUserProfile={openUserProfile}
+          setOpenUserProfile={setOpenUserProfile}
+          openGroupProfile={openGroupProfile}
+          setOpenGroupProfile={setOpenGroupProfile}
+          my_uid={my_uid}
+          data={clicked}
+          unread={unread}
+          unreadChats={unreadChats}
         />
         <Profile
           setOpenProfile={setOpenProfile}

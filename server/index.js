@@ -3,7 +3,7 @@ APP: OrgBoat                        *
 ____ ____ ____ ___  ____ ____ ___   *
 |  | |__/ | __ |__] |  | |__|  |    *
 |__| |  \ |__] |__] |__| |  |  |    *                                                                                                                                                                                                                                                                                                 
-Coded by Sui Gn			            *
+Coded by Sui Gn			                *
 Copyrights Neurons Art & Technology *
 *************************************/
 const express = require("express");
@@ -27,7 +27,7 @@ var nodemailer = require("nodemailer");
 var cookieParser = require("cookie-parser");
 var passport = require("passport");
 var cors = require("cors");
-const aws = require('aws-sdk');
+const aws = require("aws-sdk");
 
 const buildPath = path.join(__dirname, "..", "build");
 //middlewares
@@ -44,11 +44,11 @@ var flash = require("connect-flash");
 require("./configs/passport")(passport); //pass passport for configuration
 var Sequelize = require("sequelize");
 var session = require("express-session");
-require('./configs/config');
+require("./configs/config");
 
 //AWS
 const S3_BUCKET = process.env.S3_BUCKET;
-aws.config.region = 'us-east-2';
+aws.config.region = "us-east-2";
 
 //Mysql
 var mysql = require("mysql");
@@ -102,26 +102,26 @@ const server = express()
     passport.authenticate("google"),
     routes.authGoogle
   )
-  .get('/sign-s3', (req, res) => {
+  .get("/sign-s3", (req, res) => {
     const s3 = new aws.S3();
-    const fileName = req.query['file-name'];
-    const fileType = req.query['file-type'];
+    const fileName = req.query["file-name"];
+    const fileType = req.query["file-type"];
     const s3Params = {
       Bucket: S3_BUCKET,
       Key: fileName,
       Expires: 60,
       ContentType: fileType,
-      ACL: 'public-read'
+      ACL: "public-read",
     };
-  
-    s3.getSignedUrl('putObject', s3Params, (err, data) => {
-      if(err){
+
+    s3.getSignedUrl("putObject", s3Params, (err, data) => {
+      if (err) {
         console.log(err);
         return res.end();
       }
       const returnData = {
         signedRequest: data,
-        url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+        url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
       };
       res.write(JSON.stringify(returnData));
       res.end();
@@ -136,7 +136,7 @@ const server = express()
         let em = user.email;
         let uuid = user.u_id;
         return res.redirect("/notverify-email?em=" + em + "&uuid=" + uuid);
-      } else if (err||!user) {
+      } else if (err || !user) {
         return res.redirect("/badLogin");
       }
       req.logIn(user, function (err) {
@@ -175,11 +175,8 @@ const server = express()
         res.redirect("/workspace");
       }
       //console.log(req.file.path);
-      routes.savedbimage(req,res)
-      .then(url =>{
-        res.json(
-          {"ok":url}
-        );
+      routes.savedbimage(req, res).then((url) => {
+        res.json({ ok: url });
       });
     });
   })
@@ -198,11 +195,8 @@ const server = express()
       if (err) {
         res.redirect("/workspace");
       }
-      routes.savedbimageGroup(req,res)
-      .then(url =>{
-        res.json(
-          {"ok":url}
-        );
+      routes.savedbimageGroup(req, res).then((url) => {
+        res.json({ ok: url });
       });
     });
   })
@@ -220,7 +214,7 @@ const server = express()
       res.sendFile(path.join(__dirname, result));
     })();
   })
-  .post("/uploadpChatFile",(req, res)=>{
+  .post("/uploadpChatFile", (req, res) => {
     const storage = multer.diskStorage({
       destination: "../build/uploads/",
       filename: function (req, file, cb) {
@@ -234,14 +228,11 @@ const server = express()
       if (err) {
         res.redirect("/workspace");
       }
-      routes.saveFileChat(req,res)
-      .then(url =>{
-        res.json(
-          {"url":url}
-        );
+      routes.saveFileChat(req, res).then((url) => {
+        res.json({ url: url });
       });
     });
-  })
+  });
 /** 			   o       o                                
            |       |                               
            o   o   o  

@@ -59,38 +59,32 @@ function ChatFooter(props) {
 
   function onChangeFile(e) {
     e.preventDefault();
-    setDropdownOpen(!dropdownOpen)
-    let file = e.target.files[0]
-    var reader = new FileReader();
-    const formData = new FormData();
-    formData.append("myFile", file);
-   
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    axios
-      .post("/uploadpChatFile", formData, config)
-      .then((response) => {
-        props.onSubmit({
-          text:  response.data.url,
-          chat_uid: props.chat_uid,
-          is_image: 0,
-          is_file: 1,
-        });
-      })
-      .catch((error) => {});
-  }
-
-  function onChangePhoto(e) {
-    e.preventDefault();
-    setDropdownOpen(!dropdownOpen)
+    //setDropdownOpen(!dropdownOpen)
 
     let file = e.target.files[0]
     var reader = new FileReader();
 
     reader.onloadend = () => {
+      props.setImageOrFile(2)
+      props.setFile(file)
+      props.setFilePreview(reader.result)
+      props.setViewPreview(true)
+      //inputPreview.current.click();
+    }
+    
+    reader.readAsDataURL(file);
+    
+  }
+
+  function onChangePhoto(e) {
+    e.preventDefault();
+    //setDropdownOpen(!dropdownOpen)
+
+    let file = e.target.files[0]
+    var reader = new FileReader();
+
+    reader.onloadend = () => {
+      props.setImageOrFile(1)
       props.setFile(file)
       props.setImgPreview(reader.result)
       props.setViewPreview(true)
