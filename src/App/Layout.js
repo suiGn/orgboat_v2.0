@@ -35,6 +35,7 @@ function Layout(props) {
   const [scrollEl, setScrollEl] = useState();
   const [imgPreview, setImgPreview] = useState("");
   const [filePreview, setFilePreview] = useState("");
+  const [videoPreview, setVideoPreview] = useState("");
   const [file, setFile] = useState();
   const [viewPreview, setViewPreview] = useState(false);
   const [imageOrFile, setImageOrFile] = useState(1);
@@ -143,10 +144,12 @@ function Layout(props) {
           setViewPreview={setViewPreview}
           setImageOrFile={setImageOrFile}
           setFilePreview={setFilePreview}
+          setVideoPreview = {setVideoPreview}
         />
         <ChatNoMessage
           imgPreview={imgPreview}
           filePreview={filePreview}
+          videoPreview={videoPreview}
           file={file}
           viewPreview={viewPreview}
           setViewPreview={setViewPreview}

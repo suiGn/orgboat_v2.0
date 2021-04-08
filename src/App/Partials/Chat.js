@@ -234,7 +234,6 @@ function Chat(props) {
   const MessagesView = (props) => {
     const { message } = props;
     const { group } = props;
-
     let type;
     let fav = "";
     let search = "";
@@ -289,9 +288,10 @@ function Chat(props) {
             <div
               className={"message-content position-relative img-chat" + search}
             >
-              {!message.is_image && !message.is_file ? (
+              {
+                !message.is_image && !message.is_file && !message.is_video ?
                 <div className="word-break">{message.message}</div>
-              ) : message.is_image ? (
+              : message.is_image ? 
                 <figure className="avatar img-chat">
                   <ModalImage
                     small={message.message}
@@ -299,11 +299,15 @@ function Chat(props) {
                     alt="image"
                   />
                 </figure>
-              ) : (
+              : message.is_file? 
                 <a href={message.message} download>
                   <FeatherIcon.Download /> {"file "}
                 </a>
-              )}
+              :
+                <video className="video-container" controls>
+                  <source src={message.message} />
+                </video>
+            }
               <div className="misc-container">
                 <div className="time">
                   {fav.length > 0 ? (
@@ -394,6 +398,7 @@ function Chat(props) {
         setViewPreview={props.setViewPreview}
         setImageOrFile={props.setImageOrFile}
         setFilePreview={props.setFilePreview}
+        setVideoPreview={props.setVideoPreview}
       />
     </div>
   ) : (

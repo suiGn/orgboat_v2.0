@@ -16,7 +16,7 @@ function ChatNoMessage(props) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
-  const { imgPreview, file, viewPreview, imageOrFile, filePreview } = props;
+  const { imgPreview, file, viewPreview, imageOrFile, filePreview, videoPreview } = props;
 
   function Send() {
     const formData = new FormData();
@@ -84,13 +84,14 @@ function ChatNoMessage(props) {
         >
           <div className="no-message-container custom-chat-message">
             <div className="row mb-5 chat-body-custom">
-              {imageOrFile == 1 ? (
+              {imageOrFile == 1 ? 
                 <div className="col-12 img-preview-container-head">
                   <div className="img-preview-container">
                     <img src={imgPreview} className="img-preview" alt="image" />
                   </div>
                 </div>
-              ) : (
+               : 
+               imageOrFile == 2 ? 
                 <div className="col-12 img-preview-container-head">
                   <div className="img-preview-container">
                     <Document
@@ -100,8 +101,16 @@ function ChatNoMessage(props) {
                       <Page pageNumber={pageNumber} />
                     </Document>
                   </div>
+                </div> 
+                :
+                <div className="col-12 img-preview-container-head">
+                  <div className="img-preview-container">
+                    <video className="video-container" controls>
+                      <source src={videoPreview} />
+                    </video>
+                  </div>
                 </div>
-              )}
+              }
             </div>
           </div>
         </div>

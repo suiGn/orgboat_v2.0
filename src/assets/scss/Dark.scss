@@ -102,8 +102,8 @@ body.dark {
       }
 
       .chat {
-        // border-right-color: $dark-mode-light;
-        border-right-color: transparent;
+        border-right-color: $dark-mode-light;
+        //border-right-color: transparent;
         border-left-color: $dark-mode-light;
 
         .chat-header {

@@ -21,6 +21,7 @@ function ChatFooter(props) {
   //const [file, setFile] = useState(null);
   const inputFile = useRef(null);
   const inputImage = useRef(null);
+  const inputVideo = useRef(null);
   const inputPreview = useRef(null);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const handleSubmit = (e) => {
@@ -94,6 +95,23 @@ function ChatFooter(props) {
     reader.readAsDataURL(file);
   }
 
+  function onChangeVideo(e){
+    e.preventDefault();
+
+    let file = e.target.files[0]
+    var reader = new FileReader();
+
+    reader.onloadend = () => {
+      props.setImageOrFile(3)
+      props.setFile(file)
+      props.setVideoPreview(reader.result)
+      props.setViewPreview(true)
+    }
+    
+    reader.readAsDataURL(file);
+
+  }
+
   const onButtonClickFile = () => {
     inputFile.current.click();
   };
@@ -101,6 +119,10 @@ function ChatFooter(props) {
   const onButtonClickImage = () => {
     inputImage.current.click();
   };
+
+  const onButtonClickVideo = () =>{
+    inputVideo.current.click();
+  }
 
   return (
     <div className="chat-footer">
@@ -148,11 +170,15 @@ function ChatFooter(props) {
                 accept=".pdf"/>
                 <input type="file" hidden ref={inputImage}  id="customFileF" name="customFileF" onChange={(e) =>onChangePhoto(e)}
                 accept=".png,.gif,.jpg"/>
+                <input type="file" hidden ref={inputVideo}  id="customFileV" name="customFileV" onChange={(e) =>onChangeVideo(e)}
+                accept=".mp4,.webm"/>
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem onClick={() => onButtonClickImage()}><FeatherIcon.Image/> Image</DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem onClick={() => onButtonClickFile()}><FeatherIcon.File/> File</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem onClick={() => onButtonClickVideo()}><FeatherIcon.Video/> Video</DropdownItem>
               </DropdownMenu>
           </Dropdown>
         </div>

@@ -41,7 +41,7 @@ io.on("connection", function (socket) {
 			select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, chats.chat_name,
         m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
         ,chats_users.delete_chat, m.unread_messages as unread_messages,  m.delete_message as deleted_message, m.delete_message_to as deleted_message_to,
-        chats.groupphoto, m.is_file , m.is_image
+        chats.groupphoto, m.is_file , m.is_image, m.is_video
 			
 			from chats_users  
 
@@ -174,7 +174,7 @@ io.on("connection", function (socket) {
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file
+			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file, messages.is_video
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit ${msg.limit};
@@ -374,9 +374,7 @@ io.on("connection", function (socket) {
       var chat_type = 0;
       var uuid_numbr = uuid.v4();
       routes.validateExistChat(user.u_id, data.u_id).then((result) => {
-        //console.log(result);
-        // message = `Hola soy ${user.name} , me gustaria contactar contigo.`;
-        message = data.message;
+        var message = data.message!=""?data.message: `Hola soy ${user.name}, me gustaria contactar contigo.`;
         if (result === false) {
           console.log(result);
           orgboatDB.query(
@@ -481,7 +479,7 @@ io.on("connection", function (socket) {
         `  select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto, chats.chat_name,
         m.u_id as last_message_user_uid, m.message as last_message_message, m.time as last_message_time,chats_users.archiveChat
         ,chats_users.delete_chat, m.unread_messages as unread_messages,  m.delete_message as deleted_message, m.delete_message_to as deleted_message_to,
-        chats.groupphoto, m.is_file , m.is_image
+        chats.groupphoto, m.is_file , m.is_image,  m.is_video
       
       from chats_users  
 
@@ -825,7 +823,7 @@ io.on("connection", function (socket) {
     });
     socket.on("search message",function(data){
       orgboatDB.query(
-        `select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file
+        `select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file, messages.is_video
           from messages inner join usrs on messages.u_id = usrs.u_id
           inner join chats on chats.chat_uid = messages.chat_uid
           where  messages.chat_uid = '${data.id}' 
@@ -848,7 +846,7 @@ io.on("connection", function (socket) {
         `select usrs.*
         from  usrs 
         where u_id not in (${data.uids}) and (
-        usrs.name like "%${data.wordToSearch}%" OR usrs.usrname like "%${data.wordToSearch}%")
+        usrs.name like "%${data.wordToSearch}%")
         `,
         (err, users) => {
           io.to(user.u_id).emit("retrive SearchContacts", {

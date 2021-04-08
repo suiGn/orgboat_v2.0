@@ -94,11 +94,18 @@ function Index(props) {
     });
   };
 
+  function AddUserContact(u_id) {
+    props.socket.emit("AddContact", { u_id: u_id, message: "" });
+    props.socket.once("retrive Addcontact", (mssg) => {
+      props.socket.emit("GetContacts");
+    });
+  }
+
   return (
     <div className="sidebar active">
       <header>
         <span>Contacts</span>
-        <ul className="list-inline">
+       {/* <ul className="list-inline">
           <li className="list-inline-item">
             <AddFriendsModal socket={props.socket} my_uid={props.my_uid} />
           </li>
@@ -110,7 +117,7 @@ function Index(props) {
               <FeatherIcon.X />
             </button>
           </li>
-        </ul>
+        </ul>*/}
       </header>
       <form>
         <input
@@ -183,11 +190,9 @@ function Index(props) {
                         <h5>{item.name}</h5>
                       </div>
                       <div className="users-list-action">
-                        <div className="action-toggle">
-                        <Button color="primary">
+                        <Button color="primary" onClick={()=>AddUserContact(item.u_id)}>
                           <FeatherIcon.UserPlus />
                         </Button>
-                        </div>
                       </div>
                     </div>
                   </li>

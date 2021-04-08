@@ -187,6 +187,8 @@ function Index(props) {
                 ? "file"
                 : chat.is_image
                 ? "picture"
+                : chat.is_video
+                ? "video"
                 : chat.last_message_message}
             </div>
             {(chat.unread_messages && chat.last_message_user_uid != my_uid) >
