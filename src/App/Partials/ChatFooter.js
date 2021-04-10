@@ -32,6 +32,7 @@ function ChatFooter(props) {
         chat_uid: props.chat_uid,
         is_image: 0,
         is_file: 0,
+        is_video: 0,
       });
     }
   };

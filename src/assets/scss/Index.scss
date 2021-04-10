@@ -295,7 +295,9 @@
       .chat-body {
         flex: 1;
         padding: 30px;
-
+        .video-container-preview{
+          width: 400px;
+        }
         .img-preview-container-head {
           display: flex;
           text-align: center;

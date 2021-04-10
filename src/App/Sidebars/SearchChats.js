@@ -6,17 +6,14 @@ import Moment from "react-moment";
 import "moment-timezone";
 
 function SearchChat(props) {
-  const { socket } = props;
   const {
+    socket,
     setOpenSearchSidebar,
     openSearchSidebar,
-    scrollEl
   } = props;
   const [searchInChat, setSearchInChat] = useState("");
   const [filteredChats, setFilteredChats] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(30);
 
   const calendarStrings = {
     lastDay: "[Yesterday]",

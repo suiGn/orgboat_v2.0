@@ -23,6 +23,16 @@ import { mobileProfileAction } from "../Store/Actions/mobileProfileAction";
 
 function Navigation(props) {
   const { selectedSidebar } = useSelector((state) => state);
+  const {
+    setOpenSearchSidebar,
+    openSearchSidebar,
+    setOpenUserProfile,
+    setOpenProfile,
+    setOpenGroupProfile,
+    openProfile,
+    openGroupProfile,
+    openUserProfile
+  } = props
   const [user, setUser] = useState([]);
   let my_uid;
   const [p, setP] = useState("");
@@ -144,12 +154,15 @@ function Navigation(props) {
 
   const openProfileToggler = (e) => {
     props.setUser(userEdit);
-    props.setOpenProfile(!props.openProfile);
-    if (props.openUserProfile) {
-      props.setOpenUserProfile(!props.openUserProfile);
+    setOpenProfile(!openProfile);
+    if (openUserProfile) {
+      setOpenUserProfile(!openUserProfile);
     }
-    if (props.openGroupProfile) {
-      props.setOpenGroupProfile(!props.openGroupProfile);
+    if (openGroupProfile) {
+      setOpenGroupProfile(!openGroupProfile);
+    }
+    if (openSearchSidebar) {
+      setOpenSearchSidebar(!openSearchSidebar);
     }
   };
 

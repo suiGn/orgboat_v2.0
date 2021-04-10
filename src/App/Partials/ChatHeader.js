@@ -12,7 +12,18 @@ import * as FeatherIcon from "react-feather";
 function ChatHeader(props) {
   const dispatch = useDispatch();
 
-  const { socket, openSearchSidebar, setOpenSearchSidebar } = props;
+  const { 
+    socket,
+    openSearchSidebar, 
+    setOpenSearchSidebar,
+    setOpenUserProfile,
+    setOpenProfile,
+    setOpenGroupProfile,
+    openProfile,
+    openGroupProfile,
+    openUserProfile
+   } = props;
+
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchbarOpen, setSearchBarOpen] = useState(false);
@@ -75,28 +86,43 @@ function ChatHeader(props) {
 
   const openUserProfileToggler = (e) => {
     props.setUser({ id: props.id });
-    props.setOpenUserProfile(!props.openUserProfile);
-    if (props.openProfile) {
-      props.setOpenProfile(!props.openProfile);
+    setOpenUserProfile(!openUserProfile);
+    if (openProfile) {
+      setOpenProfile(!openProfile);
     }
-    if (props.openGroupProfile) {
-      props.setOpenGroupProfile(!props.openGroupProfile);
+    if (openGroupProfile) {
+      setOpenGroupProfile(!openGroupProfile);
+    }
+    if (openSearchSidebar) {
+      setOpenSearchSidebar(!openSearchSidebar);
     }
   };
 
   const GroupProfileAction = () => {
     props.setGroup({ id: props.chat_uid });
-    props.setOpenGroupProfile(!props.openGroupProfile);
-    if (props.openProfile) {
-      props.setOpenProfile(!props.openProfile);
+    setOpenGroupProfile(!openGroupProfile);
+    if (openProfile) {
+      setOpenProfile(!openProfile);
     }
-    if (props.openUserProfile) {
-      props.setOpenUserProfile(!props.openUserProfile);
+    if (openUserProfile) {
+      setOpenUserProfile(!openUserProfile);
+    }
+    if (openSearchSidebar) {
+      setOpenSearchSidebar(!openSearchSidebar);
     }
   };
 
   const OpenSearchBar = () => {
     setOpenSearchSidebar(!openSearchSidebar);
+    if (openProfile) {
+      setOpenProfile(!openProfile);
+    }
+    if (openUserProfile) {
+      setOpenUserProfile(!openUserProfile);
+    }
+    if (openGroupProfile) {
+      setOpenGroupProfile(!openGroupProfile);
+    }
   };
 
   function ArchiveChat(chat_selected) {

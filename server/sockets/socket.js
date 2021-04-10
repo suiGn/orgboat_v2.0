@@ -120,6 +120,7 @@ io.on("connection", function (socket) {
       message = msg.message;
       is_image = msg.is_image;
       is_file = msg.is_file;
+      is_video = msg.is_video;
       from = user.u_id;
       time = new Date();
       orgboatDB.query(
@@ -139,6 +140,7 @@ io.on("connection", function (socket) {
                 message: message,
                 is_image: is_image,
                 is_file:is_file,
+                is_video:is_video,
                 time: time,
               });
             }
@@ -146,8 +148,8 @@ io.on("connection", function (socket) {
         }
       );
       timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
-      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message,unread_messages,is_image,is_file) 
-      values ('${chat}','${from}','${message}','${timeDB}',0,1,'${is_image}','${is_file}')`);
+      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message,unread_messages,is_image,is_file,is_video) 
+      values ('${chat}','${from}','${message}','${timeDB}',0,1,'${is_image}','${is_file}','${is_video}')`);
     });
 
     //Client request the messages

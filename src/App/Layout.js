@@ -38,7 +38,7 @@ function Layout(props) {
   const [videoPreview, setVideoPreview] = useState("");
   const [file, setFile] = useState();
   const [viewPreview, setViewPreview] = useState(false);
-  const [imageOrFile, setImageOrFile] = useState(1);
+  const [imageOrFile, setImageOrFile] = useState(0);
   
 
   useEffect(() => {
@@ -153,6 +153,9 @@ function Layout(props) {
           file={file}
           viewPreview={viewPreview}
           setViewPreview={setViewPreview}
+          setImageOrFile={setImageOrFile}
+          setFilePreview={setFilePreview}
+          setVideoPreview = {setVideoPreview}
           imageOrFile={imageOrFile}
         />
         <Navigation
@@ -166,6 +169,8 @@ function Layout(props) {
           setOpenUserProfile={setOpenUserProfile}
           openGroupProfile={openGroupProfile}
           setOpenGroupProfile={setOpenGroupProfile}
+          openSearchSidebar={openSearchSidebar}
+          setOpenSearchSidebar={setOpenSearchSidebar}
           my_uid={my_uid}
           data={clicked}
           unread={unread}

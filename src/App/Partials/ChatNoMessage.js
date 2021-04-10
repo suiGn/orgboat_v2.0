@@ -16,7 +16,10 @@ function ChatNoMessage(props) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
-  const { imgPreview, file, viewPreview, imageOrFile, filePreview, videoPreview } = props;
+  const { 
+    imgPreview, file, viewPreview, imageOrFile, filePreview,
+    videoPreview, setImageOrFile, setFilePreview, setVideoPreview, setViewPreview
+  } = props;
 
   function Send() {
     const formData = new FormData();
@@ -36,6 +39,7 @@ function ChatNoMessage(props) {
               chat_uid: props.chat_uid,
               is_image: 1,
               is_file: 0,
+              is_video: 0,
             });
           })
           .catch((error) => {});
@@ -49,17 +53,45 @@ function ChatNoMessage(props) {
               chat_uid: props.chat_uid,
               is_image: 0,
               is_file: 1,
+              is_video: 0,
+            });
+          })
+          .catch((error) => {});
+        break;
+      case 3:
+        axios
+          .post("/uploadpChatFile", formData, config)
+          .then((response) => {
+            props.onSubmit({
+              text: response.data.url,
+              chat_uid: props.chat_uid,
+              is_image: 0,
+              is_file: 0,
+              is_video: 1,
             });
           })
           .catch((error) => {});
         break;
       default:
     }
-    props.setViewPreview(false);
+    setImageOrFile("");
+    setFilePreview("");
+    setVideoPreview("");
+    setImageOrFile(0);
+    setViewPreview(false);
   }
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
+  }
+
+  function ClosePreview(e){
+    e.preventDefault();
+    setImageOrFile("");
+    setFilePreview("");
+    setVideoPreview("");
+    setImageOrFile(0);
+    setViewPreview(false);
   }
 
   return (
@@ -69,7 +101,7 @@ function ChatNoMessage(props) {
           <span className="avatar-title preview-close rounded-circle">
             <a
               className="close-preview"
-              onClick={(e) => props.setViewPreview(false)}
+              onClick={(e) => ClosePreview(e)}
             >
               <FeatherIcon.X />
             </a>
@@ -103,13 +135,17 @@ function ChatNoMessage(props) {
                   </div>
                 </div> 
                 :
+                imageOrFile == 3 ? 
                 <div className="col-12 img-preview-container-head">
                   <div className="img-preview-container">
-                    <video className="video-container" controls>
+                    {videoPreview != "" ? 
+                    <video className="video-container-preview" controls>
                       <source src={videoPreview} />
-                    </video>
+                    </video>:""}
                   </div>
                 </div>
+                :
+                ""
               }
             </div>
           </div>
