@@ -3,7 +3,7 @@ import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
 import UIfx from "uifx";
 import notificationAudio from "../../assets/sound/much.mp3";
-import { Button } from "reactstrap";
+import { Input } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import axios from "axios";
 import { setOptions, Document, Page } from "react-pdf";
@@ -15,11 +15,27 @@ setOptions({
 function ChatNoMessage(props) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [inputMsg,setInputMsg] = useState("");
 
   const { 
-    imgPreview, file, viewPreview, imageOrFile, filePreview,
+    socket, imgPreview, file, viewPreview, imageOrFile, filePreview,
     videoPreview, setImageOrFile, setFilePreview, setVideoPreview, setViewPreview
   } = props;
+
+  const handleSubmit = (newValue) => {
+    socket.emit("chat message", {
+      chat: newValue.chat_uid,
+      message: newValue.text,
+      is_image: newValue.is_image,
+      is_file: newValue.is_file,
+    });
+    socket.emit("get chats");
+    socket.emit("get messages", {
+      id: newValue.chat_uid,
+      page: 1,
+      limit: 10,
+    });
+  };
 
   function Send() {
     const formData = new FormData();
@@ -34,7 +50,7 @@ function ChatNoMessage(props) {
         axios
           .post("/uploadpChatFile", formData, config)
           .then((response) => {
-            props.onSubmit({
+            handleSubmit({
               text: response.data.url,
               chat_uid: props.chat_uid,
               is_image: 1,
@@ -48,7 +64,7 @@ function ChatNoMessage(props) {
         axios
           .post("/uploadpChatFile", formData, config)
           .then((response) => {
-            props.onSubmit({
+            handleSubmit({
               text: response.data.url,
               chat_uid: props.chat_uid,
               is_image: 0,
@@ -62,7 +78,7 @@ function ChatNoMessage(props) {
         axios
           .post("/uploadpChatFile", formData, config)
           .then((response) => {
-            props.onSubmit({
+            handleSubmit({
               text: response.data.url,
               chat_uid: props.chat_uid,
               is_image: 0,
@@ -93,6 +109,19 @@ function ChatNoMessage(props) {
     setImageOrFile(0);
     setViewPreview(false);
   }
+
+  const handleChange = (e) => {
+    setInputMsg(e.target.value);
+  };
+
+  const onKeyDown = (e) => {
+    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+      Send();
+    }
+  };
 
   return (
     <div className="chat" hidden={!viewPreview}>
@@ -150,6 +179,16 @@ function ChatNoMessage(props) {
             </div>
           </div>
         </div>
+        <div>
+            <Input
+            type="text"
+            className="form-control"
+            placeholder="Write a message."
+            value={inputMsg}
+            onChange={handleChange}
+            onKeyDown={onKeyDown}
+           />
+          </div>
       </div>
       <div className="chat-footer footer-file">
         <div className="form-buttons">

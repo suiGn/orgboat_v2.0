@@ -292,21 +292,30 @@ function Chat(props) {
                 !message.is_image && !message.is_file && !message.is_video ?
                 <div className="word-break">{message.message}</div>
               : message.is_image ? 
-                <figure className="avatar img-chat">
-                  <ModalImage
-                    small={message.file}
-                    large={message.file}
-                    alt="image"
-                  />
-                </figure>
+                <div>
+                  <figure className="avatar img-chat">
+                    <ModalImage
+                      small={message.file}
+                      large={message.file}
+                      alt="image"
+                    />
+                  </figure>
+                  <div className="word-break">{message.message}</div>
+                </div>
               : message.is_file? 
-                <a href={message.file} download>
-                  <FeatherIcon.Download /> {"file "}
-                </a>
+                <div>
+                  <a href={message.file} download>
+                    <FeatherIcon.Download /> {"file "}
+                  </a>
+                  <div className="word-break">{message.message}</div>
+                </div>
               :
+              <div>
                 <video className="video-container" controls>
                   <source src={message.file} />
                 </video>
+                <div className="word-break">{message.message}</div>
+              </div>
             }
               <div className="misc-container">
                 <div className="time">

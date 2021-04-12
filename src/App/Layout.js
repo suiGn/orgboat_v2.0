@@ -157,6 +157,7 @@ function Layout(props) {
           setFilePreview={setFilePreview}
           setVideoPreview = {setVideoPreview}
           imageOrFile={imageOrFile}
+          socket={socket}
         />
         <Navigation
           darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}
