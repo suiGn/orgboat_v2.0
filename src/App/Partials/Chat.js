@@ -294,18 +294,18 @@ function Chat(props) {
               : message.is_image ? 
                 <figure className="avatar img-chat">
                   <ModalImage
-                    small={message.message}
-                    large={message.message}
+                    small={message.file}
+                    large={message.file}
                     alt="image"
                   />
                 </figure>
               : message.is_file? 
-                <a href={message.message} download>
+                <a href={message.file} download>
                   <FeatherIcon.Download /> {"file "}
                 </a>
               :
                 <video className="video-container" controls>
-                  <source src={message.message} />
+                  <source src={message.file} />
                 </video>
             }
               <div className="misc-container">

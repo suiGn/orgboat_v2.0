@@ -176,7 +176,10 @@ io.on("connection", function (socket) {
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file, messages.is_video
+			select messages.u_id as message_user_uid, messages.message, messages.time, 
+      usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message,
+      messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, 
+      chats.chat_uid, messages.is_image, messages.is_file, messages.is_video, messages.file
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit ${msg.limit};
@@ -241,7 +244,8 @@ io.on("connection", function (socket) {
               chat_uids = chat_uids.replace(/,\s*$/, "");
               orgboatDB.query(
                 `SELECT 
-                distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+                distinct messages.message, messages.time, usrs.name, message_id, messages.u_id,
+                messages.file FROM messages
                 inner join usrs on messages.u_id = usrs.u_id
                 inner join chats_users on messages.u_id = chats_users.u_id
                 WHERE messages.favorite=1 and messages.chat_uid in (${chat_uids}) 
@@ -249,7 +253,8 @@ io.on("connection", function (socket) {
                 and messages.u_id='${data.id}'
                 UNION 
                 SELECT 
-                distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+                distinct messages.message, messages.time, usrs.name, message_id, messages.u_id,
+                messages.file FROM messages
                 inner join usrs on messages.u_id = usrs.u_id
                 inner join chats_users on messages.u_id = chats_users.u_id
                 WHERE messages.favorite_to=1 and messages.chat_uid in (${chat_uids}) 
@@ -257,7 +262,8 @@ io.on("connection", function (socket) {
                 function (err, chats) {
                   orgboatDB.query(
                     `SELECT 
-                    distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+                    distinct messages.message, messages.time, usrs.name, message_id, messages.u_id, messages.file
+                    FROM messages
                     inner join usrs on messages.u_id = usrs.u_id
                     inner join chats_users on messages.u_id = chats_users.u_id
                     WHERE messages.is_image =1 and messages.chat_uid = '${data.chat_id}'`,
@@ -825,7 +831,10 @@ io.on("connection", function (socket) {
     });
     socket.on("search message",function(data){
       orgboatDB.query(
-        `select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file, messages.is_video
+        `select messages.u_id as message_user_uid, messages.message, messages.time, 
+        usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, 
+        messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, 
+        chats.chat_uid, messages.is_image, messages.is_file, messages.is_video, messages.file
           from messages inner join usrs on messages.u_id = usrs.u_id
           inner join chats on chats.chat_uid = messages.chat_uid
           where  messages.chat_uid = '${data.id}' 
