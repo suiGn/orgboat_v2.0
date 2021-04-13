@@ -294,7 +294,7 @@
 
       .chat-body {
         flex: 1;
-        padding: 30px;
+        padding: 7em;
         .video-container-preview{
           width: 400px;
         }
@@ -435,6 +435,7 @@
                 display: inline-flex;
                 height: 15.5px;
                 vertical-align: middle;
+                margin-right: .5em;
                 svg {
                   width: auto;
                   height: 12px;
@@ -629,6 +630,11 @@
   }
 }
 
+@media screen and (max-width: 900px) {
+  .chat-body {
+    padding: 1em;
+  }
+}
 /* Animation */
 
 @keyframes found_message_white {
