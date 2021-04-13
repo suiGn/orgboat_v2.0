@@ -40,6 +40,8 @@ function Layout(props) {
   const [viewPreview, setViewPreview] = useState(false);
   const [imageOrFile, setImageOrFile] = useState(0);
   const [limitChat, setLimitChat] = useState(10);
+  const [chat_uid, setChat_uid] = useState("");
+
   
 
   useEffect(() => {
@@ -147,6 +149,7 @@ function Layout(props) {
           setFilePreview={setFilePreview}
           setVideoPreview ={setVideoPreview}
           setLimitChat={setLimitChat}
+          setChat_uid={setChat_uid}
         />
         <ChatNoMessage
           imgPreview={imgPreview}
@@ -161,6 +164,7 @@ function Layout(props) {
           imageOrFile={imageOrFile}
           socket={socket}
           limitChat={limitChat}
+          chat_uid={chat_uid}
         />
         <Navigation
           darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}

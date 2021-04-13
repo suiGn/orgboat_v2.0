@@ -137,6 +137,7 @@ function Chat(props) {
     setChatMessages([]);
     setFirstTime(true);
     setScrolled(false);
+    props.setChat_uid(props.clicked.chat_uid)
 
     var chat = props.unreadChats.filter((chat) => {
       return chat.chat_uid != props.clicked.chat_uid;
