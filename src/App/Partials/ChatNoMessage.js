@@ -28,6 +28,8 @@ function ChatNoMessage(props) {
       message: newValue.text,
       is_image: newValue.is_image,
       is_file: newValue.is_file,
+      is_video: newValue.is_video,
+      file: newValue.file
     });
     socket.emit("get chats");
     socket.emit("get messages", {
@@ -51,11 +53,12 @@ function ChatNoMessage(props) {
           .post("/uploadpChatFile", formData, config)
           .then((response) => {
             handleSubmit({
-              text: response.data.url,
+              text: inputMsg,
               chat_uid: props.chat_uid,
               is_image: 1,
               is_file: 0,
               is_video: 0,
+              file: response.data.url
             });
           })
           .catch((error) => {});
@@ -65,11 +68,12 @@ function ChatNoMessage(props) {
           .post("/uploadpChatFile", formData, config)
           .then((response) => {
             handleSubmit({
-              text: response.data.url,
+              text: inputMsg,
               chat_uid: props.chat_uid,
               is_image: 0,
               is_file: 1,
               is_video: 0,
+              file: response.data.url
             });
           })
           .catch((error) => {});
@@ -79,11 +83,12 @@ function ChatNoMessage(props) {
           .post("/uploadpChatFile", formData, config)
           .then((response) => {
             handleSubmit({
-              text: response.data.url,
+              text: inputMsg,
               chat_uid: props.chat_uid,
               is_image: 0,
               is_file: 0,
               is_video: 1,
+              file: response.data.url
             });
           })
           .catch((error) => {});

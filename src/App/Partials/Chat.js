@@ -166,7 +166,8 @@ function Chat(props) {
         chat: newValue.chat_uid,
         message: newValue.text,
         is_image: newValue.is_image,
-        is_file: newValue.is_file,
+        is_file: newValue.is_file
+        is_video: newValue.is_video
       });
       socket.emit("get chats");
       socket.emit("get messages", {
