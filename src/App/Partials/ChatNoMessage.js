@@ -18,7 +18,7 @@ function ChatNoMessage(props) {
   const [inputMsg,setInputMsg] = useState("");
 
   const { 
-    socket, imgPreview, file, viewPreview, imageOrFile, filePreview,
+    socket, imgPreview, file, viewPreview, imageOrFile, filePreview, limitChat,
     videoPreview, setImageOrFile, setFilePreview, setVideoPreview, setViewPreview
   } = props;
 
@@ -35,7 +35,7 @@ function ChatNoMessage(props) {
     socket.emit("get messages", {
       id: newValue.chat_uid,
       page: 1,
-      limit: 10,
+      limit: limitChat,
     });
   };
 

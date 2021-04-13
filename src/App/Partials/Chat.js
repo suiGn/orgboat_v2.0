@@ -69,6 +69,7 @@ function Chat(props) {
       var newLimit = limit + 10;
       setPage(page + 1);
       setLimit(newLimit);
+      props.setLimitChat(newLimit)
       setScrolled(true);
       socket.emit("get messages", {
         id: props.clicked.chat_uid,
@@ -132,6 +133,7 @@ function Chat(props) {
   useEffect(() => {
     setPage(1);
     setLimit(10);
+    props.setLimitChat(10)
     setChatMessages([]);
     setFirstTime(true);
     setScrolled(false);
@@ -166,7 +168,7 @@ function Chat(props) {
         chat: newValue.chat_uid,
         message: newValue.text,
         is_image: newValue.is_image,
-        is_file: newValue.is_file
+        is_file: newValue.is_file,
         is_video: newValue.is_video
       });
       socket.emit("get chats");
