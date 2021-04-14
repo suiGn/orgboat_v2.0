@@ -13,6 +13,7 @@ import {
   CustomInput
 } from "reactstrap";
 import axios from "axios";
+import { Console } from "winston/lib/winston/transports";
 
 function ChatFooter(props) {
   const [emojiMenuOpen, setEmojiMenuOpen] = useState(false);
@@ -61,55 +62,24 @@ function ChatFooter(props) {
 
   function onChangeFile(e) {
     e.preventDefault();
-    //setDropdownOpen(!dropdownOpen)
-
-    let file = e.target.files[0]
-    var reader = new FileReader();
-
-    reader.onloadend = () => {
-      props.setImageOrFile(2)
-      props.setFile(file)
-      props.setFilePreview(reader.result)
-      props.setViewPreview(true)
-      //inputPreview.current.click();
-    }
-    
-    reader.readAsDataURL(file);
+    props.setImageOrFile(2)
+    props.setFile(e.target.files)
+    props.setViewPreview(true)
     
   }
 
   function onChangePhoto(e) {
     e.preventDefault();
-    //setDropdownOpen(!dropdownOpen)
-
-    let file = e.target.files[0]
-    var reader = new FileReader();
-
-    reader.onloadend = () => {
-      props.setImageOrFile(1)
-      props.setFile(file)
-      props.setImgPreview(reader.result)
-      props.setViewPreview(true)
-      //inputPreview.current.click();
-    }
-    
-    reader.readAsDataURL(file);
+    props.setImageOrFile(1)
+    props.setFile(e.target.files)
+    props.setViewPreview(true)
   }
 
   function onChangeVideo(e){
     e.preventDefault();
-
-    let file = e.target.files[0]
-    var reader = new FileReader();
-
-    reader.onloadend = () => {
-      props.setImageOrFile(3)
-      props.setFile(file)
-      props.setVideoPreview(reader.result)
-      props.setViewPreview(true)
-    }
-    
-    reader.readAsDataURL(file);
+    props.setImageOrFile(3)
+    props.setFile(e.target.files)
+    props.setViewPreview(true)
 
   }
 
@@ -168,11 +138,11 @@ function ChatFooter(props) {
                   <FeatherIcon.Paperclip />
                 </Button>
                 <input type="file" hidden ref={inputFile}  id="customFileI" name="customFileI" onChange={(e) =>onChangeFile(e)}
-                accept=".pdf"/>
+                accept=".pdf" multiple/>
                 <input type="file" hidden ref={inputImage}  id="customFileF" name="customFileF" onChange={(e) =>onChangePhoto(e)}
-                accept=".png,.gif,.jpg"/>
+                accept=".png,.gif,.jpg" multiple/>
                 <input type="file" hidden ref={inputVideo}  id="customFileV" name="customFileV" onChange={(e) =>onChangeVideo(e)}
-                accept=".mp4,.webm"/>
+                accept=".mp4,.webm" multiple/>
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem onClick={() => onButtonClickImage()}><FeatherIcon.Image/> Image</DropdownItem>

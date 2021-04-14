@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
 import UIfx from "uifx";
@@ -16,11 +16,46 @@ function ChatNoMessage(props) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [inputMsg,setInputMsg] = useState("");
+  const [filesArray,setFilesArray] = useState([]);
+  const [imgPreview,setImgPreview] = useState("");
+  const [filePreview,setFilePreview] = useState("");
+  const [videoPreview,setVideoPreview] = useState("");
 
   const { 
-    socket, imgPreview, file, viewPreview, imageOrFile, filePreview, limitChat,
-    videoPreview, setImageOrFile, setFilePreview, setVideoPreview, setViewPreview
+    socket, files, viewPreview, imageOrFile, limitChat, 
+    setImageOrFile, setViewPreview
   } = props;
+
+  useEffect(() => {
+    let fileArray = []
+    for (var i = 0; i < files.length; i++)
+    {
+      (function(file) {
+        var reader = new FileReader();  
+        reader.onload = ()=> {  
+            fileArray.push(reader.result)
+            setFilesArray(fileArray)
+            switch (imageOrFile) {
+              case 1:
+                setImgPreview(reader.result)
+                setImgPreview(fileArray[0])
+                break;
+              case 2:
+                setFilePreview(reader.result)
+                setFilePreview(fileArray[0])
+                break;
+              case 3:
+                setVideoPreview(reader.result)
+                setVideoPreview(fileArray[0])
+                break;
+              default:
+            }
+            
+        }
+        reader.readAsDataURL(file);
+      })(files[i]);
+    }
+  },[files])
 
   const handleSubmit = (newValue) => {
     socket.emit("chat message", {
@@ -40,60 +75,63 @@ function ChatNoMessage(props) {
   };
 
   function Send() {
-    const formData = new FormData();
-    formData.append("myFile", file);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    switch (imageOrFile) {
-      case 1:
-        axios
-          .post("/uploadpChatFile", formData, config)
-          .then((response) => {
-            handleSubmit({
-              text: inputMsg,
-              chat_uid: props.chat_uid,
-              is_image: 1,
-              is_file: 0,
-              is_video: 0,
-              file: response.data.url
-            });
-          })
-          .catch((error) => {});
-        break;
-      case 2:
-        axios
-          .post("/uploadpChatFile", formData, config)
-          .then((response) => {
-            handleSubmit({
-              text: inputMsg,
-              chat_uid: props.chat_uid,
-              is_image: 0,
-              is_file: 1,
-              is_video: 0,
-              file: response.data.url
-            });
-          })
-          .catch((error) => {});
-        break;
-      case 3:
-        axios
-          .post("/uploadpChatFile", formData, config)
-          .then((response) => {
-            handleSubmit({
-              text: inputMsg,
-              chat_uid: props.chat_uid,
-              is_image: 0,
-              is_file: 0,
-              is_video: 1,
-              file: response.data.url
-            });
-          })
-          .catch((error) => {});
-        break;
-      default:
+    for (var i = 0; i < files.length; i++)
+    {
+      const formData = new FormData();
+      formData.append("myFile", files[i]);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+      switch (imageOrFile) {
+        case 1:
+          axios
+            .post("/uploadpChatFile", formData, config)
+            .then((response) => {
+              handleSubmit({
+                text: inputMsg,
+                chat_uid: props.chat_uid,
+                is_image: 1,
+                is_file: 0,
+                is_video: 0,
+                file: response.data.url
+              });
+            })
+            .catch((error) => {});
+          break;
+        case 2:
+          axios
+            .post("/uploadpChatFile", formData, config)
+            .then((response) => {
+              handleSubmit({
+                text: inputMsg,
+                chat_uid: props.chat_uid,
+                is_image: 0,
+                is_file: 1,
+                is_video: 0,
+                file: response.data.url
+              });
+            })
+            .catch((error) => {});
+          break;
+        case 3:
+          axios
+            .post("/uploadpChatFile", formData, config)
+            .then((response) => {
+              handleSubmit({
+                text: inputMsg,
+                chat_uid: props.chat_uid,
+                is_image: 0,
+                is_file: 0,
+                is_video: 1,
+                file: response.data.url
+              });
+            })
+            .catch((error) => {});
+          break;
+        default:
+      }
     }
     setImageOrFile("");
     setFilePreview("");
@@ -203,6 +241,12 @@ function ChatNoMessage(props) {
             </span>
           </figure>
         </div>
+        {/*filesArray.map((img, i) => (
+            <div style={{position: "absolute",bottom:"0%"}}>
+              <img src={img} alt="image" style={{width: "150px"}}/>
+            </div>
+          ))*/
+        }
       </div>
     </div>
   );

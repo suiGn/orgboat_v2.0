@@ -33,10 +33,10 @@ function Layout(props) {
   const [openGroupProfile, setOpenGroupProfile] = useState(false);
   const [openSearchSidebar, setOpenSearchSidebar] = useState(false);
   const [scrollEl, setScrollEl] = useState();
-  const [imgPreview, setImgPreview] = useState("");
-  const [filePreview, setFilePreview] = useState("");
-  const [videoPreview, setVideoPreview] = useState("");
-  const [file, setFile] = useState();
+  const [imgPreview, setImgPreview] = useState([]);
+  const [filePreview, setFilePreview] = useState([]);
+  const [videoPreview, setVideoPreview] = useState([]);
+  const [files, setFile] = useState([]);
   const [viewPreview, setViewPreview] = useState(false);
   const [imageOrFile, setImageOrFile] = useState(0);
   const [limitChat, setLimitChat] = useState(10);
@@ -142,7 +142,7 @@ function Layout(props) {
           setImgPreview={setImgPreview}
           setFile={setFile}
           imgPreview={imgPreview}
-          file={file}
+          files={files}
           viewPreview={viewPreview}
           setViewPreview={setViewPreview}
           setImageOrFile={setImageOrFile}
@@ -152,15 +152,10 @@ function Layout(props) {
           setChat_uid={setChat_uid}
         />
         <ChatNoMessage
-          imgPreview={imgPreview}
-          filePreview={filePreview}
-          videoPreview={videoPreview}
-          file={file}
+          files={files}
           viewPreview={viewPreview}
           setViewPreview={setViewPreview}
           setImageOrFile={setImageOrFile}
-          setFilePreview={setFilePreview}
-          setVideoPreview = {setVideoPreview}
           imageOrFile={imageOrFile}
           socket={socket}
           limitChat={limitChat}
