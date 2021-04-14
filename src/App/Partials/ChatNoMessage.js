@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
 import UIfx from "uifx";
 import notificationAudio from "../../assets/sound/much.mp3";
-import { Button } from "reactstrap";
+import { Input } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import axios from "axios";
 import { setOptions, Document, Page } from "react-pdf";
@@ -15,70 +15,130 @@ setOptions({
 function ChatNoMessage(props) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [inputMsg,setInputMsg] = useState("");
+  const [filesArray,setFilesArray] = useState([]);
+  const [imgPreview,setImgPreview] = useState("");
+  const [filePreview,setFilePreview] = useState("");
+  const [videoPreview,setVideoPreview] = useState("");
 
   const { 
-    imgPreview, file, viewPreview, imageOrFile, filePreview,
-    videoPreview, setImageOrFile, setFilePreview, setVideoPreview, setViewPreview
+    socket, files, viewPreview, imageOrFile, limitChat, 
+    setImageOrFile, setViewPreview
   } = props;
 
+  useEffect(() => {
+    let fileArray = []
+    for (var i = 0; i < files.length; i++)
+    {
+      (function(file) {
+        var reader = new FileReader();  
+        reader.onload = ()=> {  
+            fileArray.push(reader.result)
+            setFilesArray(fileArray)
+            switch (imageOrFile) {
+              case 1:
+                setImgPreview(reader.result)
+                setImgPreview(fileArray[0])
+                break;
+              case 2:
+                setFilePreview(reader.result)
+                setFilePreview(fileArray[0])
+                break;
+              case 3:
+                setVideoPreview(reader.result)
+                setVideoPreview(fileArray[0])
+                break;
+              default:
+            }
+            
+        }
+        reader.readAsDataURL(file);
+      })(files[i]);
+    }
+  },[files])
+
+  const handleSubmit = (newValue) => {
+    socket.emit("chat message", {
+      chat: newValue.chat_uid,
+      message: newValue.text,
+      is_image: newValue.is_image,
+      is_file: newValue.is_file,
+      is_video: newValue.is_video,
+      file: newValue.file
+    });
+    socket.emit("get chats");
+    socket.emit("get messages", {
+      id: newValue.chat_uid,
+      page: 1,
+      limit: limitChat,
+    });
+  };
+
   function Send() {
-    const formData = new FormData();
-    formData.append("myFile", file);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    switch (imageOrFile) {
-      case 1:
-        axios
-          .post("/uploadpChatFile", formData, config)
-          .then((response) => {
-            props.onSubmit({
-              text: response.data.url,
-              chat_uid: props.chat_uid,
-              is_image: 1,
-              is_file: 0,
-              is_video: 0,
-            });
-          })
-          .catch((error) => {});
-        break;
-      case 2:
-        axios
-          .post("/uploadpChatFile", formData, config)
-          .then((response) => {
-            props.onSubmit({
-              text: response.data.url,
-              chat_uid: props.chat_uid,
-              is_image: 0,
-              is_file: 1,
-              is_video: 0,
-            });
-          })
-          .catch((error) => {});
-        break;
-      case 3:
-        axios
-          .post("/uploadpChatFile", formData, config)
-          .then((response) => {
-            props.onSubmit({
-              text: response.data.url,
-              chat_uid: props.chat_uid,
-              is_image: 0,
-              is_file: 0,
-              is_video: 1,
-            });
-          })
-          .catch((error) => {});
-        break;
-      default:
+    for (var i = 0; i < files.length; i++)
+    {
+      const formData = new FormData();
+      formData.append("myFile", files[i]);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+      switch (imageOrFile) {
+        case 1:
+          axios
+            .post("/uploadpChatFile", formData, config)
+            .then((response) => {
+              handleSubmit({
+                text: inputMsg,
+                chat_uid: props.chat_uid,
+                is_image: 1,
+                is_file: 0,
+                is_video: 0,
+                file: response.data.url
+              });
+            })
+            .catch((error) => {});
+          break;
+        case 2:
+          axios
+            .post("/uploadpChatFile", formData, config)
+            .then((response) => {
+              handleSubmit({
+                text: inputMsg,
+                chat_uid: props.chat_uid,
+                is_image: 0,
+                is_file: 1,
+                is_video: 0,
+                file: response.data.url
+              });
+            })
+            .catch((error) => {});
+          break;
+        case 3:
+          axios
+            .post("/uploadpChatFile", formData, config)
+            .then((response) => {
+              handleSubmit({
+                text: inputMsg,
+                chat_uid: props.chat_uid,
+                is_image: 0,
+                is_file: 0,
+                is_video: 1,
+                file: response.data.url
+              });
+            })
+            .catch((error) => {});
+          break;
+        default:
+      }
     }
     setImageOrFile("");
     setFilePreview("");
     setVideoPreview("");
     setImageOrFile(0);
     setViewPreview(false);
+    setInputMsg("");
   }
 
   function onDocumentLoadSuccess({ numPages }) {
@@ -92,7 +152,21 @@ function ChatNoMessage(props) {
     setVideoPreview("");
     setImageOrFile(0);
     setViewPreview(false);
+    setInputMsg("");
   }
+
+  const handleChange = (e) => {
+    setInputMsg(e.target.value);
+  };
+
+  const onKeyDown = (e) => {
+    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+      Send();
+    }
+  };
 
   return (
     <div className="chat" hidden={!viewPreview}>
@@ -150,6 +224,16 @@ function ChatNoMessage(props) {
             </div>
           </div>
         </div>
+        <div>
+            <Input
+            type="text"
+            className="form-control"
+            placeholder="Write a message."
+            value={inputMsg}
+            onChange={handleChange}
+            onKeyDown={onKeyDown}
+           />
+          </div>
       </div>
       <div className="chat-footer footer-file">
         <div className="form-buttons">
@@ -159,6 +243,12 @@ function ChatNoMessage(props) {
             </span>
           </figure>
         </div>
+        {/*filesArray.map((img, i) => (
+            <div style={{position: "absolute",bottom:"0%"}}>
+              <img src={img} alt="image" style={{width: "150px"}}/>
+            </div>
+          ))*/
+        }
       </div>
     </div>
   );
