@@ -138,6 +138,7 @@ function ChatNoMessage(props) {
     setVideoPreview("");
     setImageOrFile(0);
     setViewPreview(false);
+    setInputMsg("");
   }
 
   function onDocumentLoadSuccess({ numPages }) {
@@ -151,6 +152,7 @@ function ChatNoMessage(props) {
     setVideoPreview("");
     setImageOrFile(0);
     setViewPreview(false);
+    setInputMsg("");
   }
 
   const handleChange = (e) => {
