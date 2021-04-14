@@ -3,7 +3,7 @@ APP: OrgBoat                        *
 ____ ____ ____ ___  ____ ____ ___   *
 |  | |__/ | __ |__] |  | |__|  |    *
 |__| |  \ |__] |__] |__| |  |  |    *                                                                                                                                                                                                                                                                                                 
-Coded by Sui Gn			                *
+Coded by Sui Gn		                *
 Copyrights Neurons Art & Technology *
 *************************************/
 const express = require("express");
@@ -233,11 +233,11 @@ const server = express()
       });
     });
   });
-/** 			   o       o                                
+/** 	   o       o                                
            |       |                               
            o   o   o  
-          \ / \ / 
-           o   o  ebsocket IO
+            \ / \ / 
+             o   o  ebsocket IO
       __ _    __ 
      (_ / \	|_ 
      __)\_/	|__
