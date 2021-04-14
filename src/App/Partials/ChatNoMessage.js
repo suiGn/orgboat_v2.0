@@ -235,7 +235,19 @@ function ChatNoMessage(props) {
            />
           </div>
       </div>
-      <div className="chat-footer footer-file">
+      <div className="chat-footer footer-file" style={{height: "20%"}}>
+        <div>
+          <ul style={{display: "flex"}}>
+            {filesArray.map((img, i) => (
+              <li>
+                <div style={{bottom:"0%"}}>
+                  <img src={img} alt="image" style={{width: "150px"}}/>
+                </div>
+              </li>
+              ))
+            }
+          </ul>
+        </div>
         <div className="form-buttons">
           <figure class="avatar send-file mb-3" onClick={Send}>
             <span class="avatar-title send-file-button bg-info rounded-circle">
@@ -243,12 +255,6 @@ function ChatNoMessage(props) {
             </span>
           </figure>
         </div>
-        {/*filesArray.map((img, i) => (
-            <div style={{position: "absolute",bottom:"0%"}}>
-              <img src={img} alt="image" style={{width: "150px"}}/>
-            </div>
-          ))*/
-        }
       </div>
     </div>
   );
