@@ -538,6 +538,18 @@
         }
       }
 
+      @media screen and (max-width: 1200px) {
+        .chat-body {
+          padding: 5em;
+        }
+      }
+
+      @media screen and (max-width: 700px) {
+        .chat-body {
+          padding: 1em;
+        }
+      }
+
       .footer-file {
         height: 10%;
       }
@@ -630,11 +642,10 @@
   }
 }
 
-@media screen and (max-width: 900px) {
-  .chat-body {
-    padding: 1em;
-  }
+.pointer-hover{
+  cursor: pointer;
 }
+
 /* Animation */
 
 @keyframes found_message_white {

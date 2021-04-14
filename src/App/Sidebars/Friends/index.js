@@ -105,10 +105,7 @@ function Index(props) {
     <div className="sidebar active">
       <header>
         <span>Contacts</span>
-       {/* <ul className="list-inline">
-          <li className="list-inline-item">
-            <AddFriendsModal socket={props.socket} my_uid={props.my_uid} />
-          </li>
+        <ul className="list-inline">
           <li className="list-inline-item d-xl-none d-inline">
             <button
               onClick={mobileSidebarClose}
@@ -117,7 +114,7 @@ function Index(props) {
               <FeatherIcon.X />
             </button>
           </li>
-        </ul>*/}
+        </ul>
       </header>
       <form>
         <input

@@ -84,7 +84,7 @@ function App() {
         //   setLoaded(true);
         // }
         // setLoaded(true);
-      });
+      }).catch((err) => setLoaded(true));
   };
 
   const UpdateTheme = () => {
