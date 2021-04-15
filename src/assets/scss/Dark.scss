@@ -58,6 +58,7 @@ body.dark {
   nav.navigation {
     background-color: $dark-mode;
     border-right-color: $dark-mode-light;
+    border-left-color: $dark-mode-light;
 
     ul {
       li {
