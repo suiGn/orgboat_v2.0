@@ -294,7 +294,7 @@
 
       .chat-body {
         flex: 1;
-        padding: 7em;
+        padding: 5em;
         .video-container-preview{
           width: 400px;
         }
@@ -540,7 +540,7 @@
 
       @media screen and (max-width: 1200px) {
         .chat-body {
-          padding: 5em;
+          padding: 4em;
         }
       }
 
@@ -591,6 +591,14 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .themed-container {
+    max-width: 720px;
+    padding-right: 0px;
+    padding-left: 0px;
   }
 }
 
