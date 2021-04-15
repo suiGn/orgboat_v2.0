@@ -160,6 +160,7 @@ function Layout(props) {
           socket={socket}
           limitChat={limitChat}
           chat_uid={chat_uid}
+          setFile={setFile}
         />
         <Navigation
           darkSwitcherTooltipOpen={props.darkSwitcherTooltipOpen}

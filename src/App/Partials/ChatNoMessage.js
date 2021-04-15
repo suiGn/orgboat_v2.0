@@ -24,7 +24,7 @@ function ChatNoMessage(props) {
 
   const { 
     socket, files, viewPreview, imageOrFile, limitChat, 
-    setImageOrFile, setViewPreview
+    setImageOrFile, setViewPreview, setFile
   } = props;
 
   useEffect(() => {
@@ -185,7 +185,10 @@ function ChatNoMessage(props) {
   }
 
   function Remove(clicked){
+    var newFileList = Array.from(files);
+    newFileList.splice(clicked,1)
     filesArray.splice(clicked,1)
+    setFile(newFileList);
     setFilesArray(filesArray)
     if(filesArray.length<=0){
       setImageOrFile("");
