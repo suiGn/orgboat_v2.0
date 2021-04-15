@@ -549,6 +549,10 @@
         .file-list{
           display:flex;
           list-style-type: none;
+          .mini-preview-close{
+            position: absolute;
+            cursor: pointer;
+          }
           .mini-preview-container{
             bottom:0%;
             background-size: cover; /* or contain */

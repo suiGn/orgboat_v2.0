@@ -184,6 +184,35 @@ function ChatNoMessage(props) {
     }
   }
 
+  function Remove(clicked){
+    filesArray.splice(clicked,1)
+    setFilesArray(filesArray)
+    if(filesArray.length<=0){
+      setImageOrFile("");
+      setFilePreview("");
+      setVideoPreview("");
+      setImageOrFile(0);
+      setViewPreview(false);
+      setInputMsg("");
+    }else{
+      switch (imageOrFile) {
+        case 1:
+          setVideoPreview(filesArray[1])
+          setImgPreview(filesArray[0])
+          break;
+        case 2:
+          setVideoPreview(filesArray[1])
+          setFilePreview(filesArray[0])
+          break;
+        case 3:
+          setVideoPreview(filesArray[1])
+          setVideoPreview(filesArray[0])
+          break;
+        default:
+      }
+    }
+  }
+
   return (
     <div className="chat" hidden={!viewPreview}>
       <div className="chat-header">
@@ -256,6 +285,9 @@ function ChatNoMessage(props) {
           <ul className="file-list">
             {filesArray.map((img, i) => (
               <li>
+                <a className="mini-preview-close" onClick={() => Remove(i)}>
+                  <FeatherIcon.X />
+                </a>
                 <div className="mini-preview-container" style={{backgroundImage:"url("+img+")"}}
                 onClick={() => PreviewClick(i)} src={img}>
                 </div>
