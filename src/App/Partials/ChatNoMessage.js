@@ -7,6 +7,7 @@ import { Input } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import axios from "axios";
 import { setOptions, Document, Page } from "react-pdf";
+import PerfectScrollbar from "react-perfect-scrollbar";
 const pdfjsVersion = "2.0.305";
 setOptions({
   workerSrc: `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`,
@@ -168,6 +169,21 @@ function ChatNoMessage(props) {
     }
   };
 
+  function PreviewClick(clicked){
+    switch (imageOrFile) {
+      case 1:
+        setImgPreview(filesArray[clicked])
+        break;
+      case 2:
+        setFilePreview(filesArray[clicked])
+        break;
+      case 3:
+        setVideoPreview(filesArray[clicked])
+        break;
+      default:
+    }
+  }
+
   return (
     <div className="chat" hidden={!viewPreview}>
       <div className="chat-header">
@@ -227,7 +243,7 @@ function ChatNoMessage(props) {
         <div>
             <Input
             type="text"
-            className="form-control"
+            className="form-control input-file"
             placeholder="Write a message."
             value={inputMsg}
             onChange={handleChange}
@@ -235,22 +251,22 @@ function ChatNoMessage(props) {
            />
           </div>
       </div>
-      <div className="chat-footer footer-file" style={{height: "20%"}}>
-        <div>
-          <ul style={{display: "flex"}}>
+      <div className="chat-footer footer-file">
+        <PerfectScrollbar>
+          <ul className="file-list">
             {filesArray.map((img, i) => (
               <li>
-                <div style={{bottom:"0%"}}>
-                  <img src={img} alt="image" style={{width: "150px"}}/>
+                <div className="mini-preview-container" style={{backgroundImage:"url("+img+")"}}
+                onClick={() => PreviewClick(i)} src={img}>
                 </div>
               </li>
               ))
             }
           </ul>
-        </div>
+        </PerfectScrollbar>
         <div className="form-buttons">
-          <figure class="avatar send-file mb-3" onClick={Send}>
-            <span class="avatar-title send-file-button bg-info rounded-circle">
+          <figure class="avatar send-file mb-3">
+            <span class="avatar-title send-file-button bg-info rounded-circle" onClick={Send}>
               <FeatherIcon.Send />
             </span>
           </figure>

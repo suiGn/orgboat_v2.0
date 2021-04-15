@@ -107,6 +107,7 @@ function Chat(props) {
   }
 
   function OnChatMessage(data) {
+    setFirstTime(true)
     if (props.clicked.chat_uid) {
       if (props.clicked.chat_uid == data.chat) {
         socket.emit("get messages", {
@@ -165,6 +166,7 @@ function Chat(props) {
 
   const handleSubmit = (newValue) => {
     if (newMessage.length > 0) {
+      setFirstTime(true)
       socket.emit("chat message", {
         chat: newValue.chat_uid,
         message: newValue.text,
