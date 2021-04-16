@@ -178,6 +178,7 @@ function ChatNoMessage(props) {
         setFilePreview(filesArray[clicked])
         break;
       case 3:
+        setVideoPreview("")
         setVideoPreview(filesArray[clicked])
         break;
       default:
@@ -208,7 +209,7 @@ function ChatNoMessage(props) {
           setFilePreview(filesArray[0])
           break;
         case 3:
-          setVideoPreview(filesArray[1])
+          setVideoPreview("")
           setVideoPreview(filesArray[0])
           break;
         default:
@@ -247,7 +248,7 @@ function ChatNoMessage(props) {
                : 
                imageOrFile == 2 ? 
                 <div className="col-12 img-preview-container-head">
-                  <div className="img-preview-container">
+                  <div className="pdf-preview-container">
                     <Document
                       file={`${filePreview}`}
                       onLoadSuccess={onDocumentLoadSuccess}
@@ -260,10 +261,11 @@ function ChatNoMessage(props) {
                 imageOrFile == 3 ? 
                 <div className="col-12 img-preview-container-head">
                   <div className="img-preview-container">
-                    {videoPreview != "" ? 
                     <video className="video-container-preview" controls>
+                    {videoPreview != "" ?
                       <source src={videoPreview} />
-                    </video>:""}
+                    :""}
+                    </video>
                   </div>
                 </div>
                 :
@@ -291,9 +293,25 @@ function ChatNoMessage(props) {
                 <a className="mini-preview-close" onClick={() => Remove(i)}>
                   <FeatherIcon.X />
                 </a>
-                <div className="mini-preview-container" style={{backgroundImage:"url("+img+")"}}
-                onClick={() => PreviewClick(i)} src={img}>
-                </div>
+                {imageOrFile == 1 ? 
+                  <div className="mini-preview-container" style={{backgroundImage:"url("+img+")"}}
+                  onClick={() => PreviewClick(i)}>
+                  </div>
+                  :imageOrFile == 2?
+                  <div className="mini-preview-container"
+                  onClick={() => PreviewClick(i)}>
+                    <Document
+                      file={`${img}`}
+                      onLoadSuccess={onDocumentLoadSuccess}
+                    >
+                      <Page pageNumber={pageNumber} />
+                    </Document>
+                  </div>
+                  :imageOrFile == 3?
+                  <div className="mini-preview-container"
+                  onClick={() => PreviewClick(i)}></div>
+                  :"" 
+                }
               </li>
               ))
             }

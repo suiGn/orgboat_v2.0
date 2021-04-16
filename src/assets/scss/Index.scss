@@ -309,6 +309,14 @@
               max-width: 80%;
               max-height: 80%;
             }
+          }.pdf-preview-container{
+            max-height: 400px;
+            position: relative;
+            top: 0%;
+            .react-pdf__Page__canvas{
+              width: 200px !important;
+              height: 300px !important;
+            }
           }
         }
         .input-file{
@@ -552,6 +560,7 @@
           .mini-preview-close{
             position: absolute;
             cursor: pointer;
+            z-index: 1;
           }
           .mini-preview-container{
             bottom:0%;
@@ -560,6 +569,10 @@
             background-repeat: no-repeat;
             width: 100px;
             height: 100px;
+            .react-pdf__Page__canvas{
+              width: 100px !important;
+              height: 100px !important;
+            }
           }
         }
       }
