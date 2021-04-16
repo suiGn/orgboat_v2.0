@@ -295,9 +295,8 @@ function Navigation(props) {
           ))}
           <li className="scissors">
             <a
-              href="#/"
               onClick={(e) => darkSwitcherToggle(e)}
-              className="dark-light-switcher"
+              className="dark-light-switcher pointer-hover"
               id="dark-switcher"
             >
               <FeatherIcon.Moon />
@@ -312,11 +311,10 @@ function Navigation(props) {
             </Tooltip>
           </li>
           <li id="logout-menu" className="text-center">
-            <a href="#/" id="logout-desktop">
+            <a id="logout-desktop" className="pointer-hover">
               <div
-                href="#/"
                 onClick={logoutServer}
-                className="dark-light-switcher"
+                className="dark-light-switcher pointer-hover"
                 id="log-out"
               >
                 <FeatherIcon.LogOut />
@@ -330,7 +328,7 @@ function Navigation(props) {
                 Log Out
               </Tooltip>
             </a>
-            <a href="#/" id="logout-responsive">
+            <a className="pointer-hover" id="logout-responsive" >
               <Dropdown direction="up" isOpen={dropdownOpen} toggle={toggle}>
                 <DropdownToggle
                   tag="span"
@@ -339,7 +337,7 @@ function Navigation(props) {
                 >
                   <FeatherIcon.MoreVertical />
                 </DropdownToggle>
-                <DropdownMenu>
+                <DropdownMenu right>
                   {/* <DropdownItem onClick={editModalToggle}>
                   Edit profile
                 </DropdownItem> */}

@@ -82,7 +82,7 @@ const ChatsMessageDropdown = (props) => {
       toggle={toggle}
       className="dropdown-chat-message"
     >
-      <DropdownToggle tag="span">
+      <DropdownToggle tag="span" style={{  position: "absolute", right: "0"}}>
         <FeatherIcon.MoreHorizontal />
       </DropdownToggle>
       <DropdownMenu>

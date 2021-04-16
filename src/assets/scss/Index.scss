@@ -294,7 +294,7 @@
 
       .chat-body {
         flex: 1;
-        padding: 30px;
+        padding: 5em;
         .video-container-preview{
           width: 400px;
         }
@@ -448,6 +448,7 @@
                 display: inline-flex;
                 height: 15.5px;
                 vertical-align: middle;
+                margin-right: .5em;
                 svg {
                   width: auto;
                   height: 12px;
@@ -550,6 +551,18 @@
         }
       }
 
+      @media screen and (max-width: 1200px) {
+        .chat-body {
+          padding: 4em;
+        }
+      }
+
+      @media screen and (max-width: 700px) {
+        .chat-body {
+          padding: 1em;
+        }
+      }
+
       .footer-file {
         height: 20%;
         max-width: 800px;
@@ -634,6 +647,14 @@
   }
 }
 
+@media screen and (max-width: 700px) {
+  .themed-container {
+    max-width: 720px;
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}
+
 .tooltip {
   .arrow {
     display: none;
@@ -680,6 +701,10 @@
       }
     }
   }
+}
+
+.pointer-hover{
+  cursor: pointer;
 }
 
 /* Animation */
