@@ -458,9 +458,11 @@
               .misc-container {
                 flex: none;
                 align-self: flex-end;
-                .dropdown-chat-message {
-                  display: none;
-                  transition: all 0.5s ease-in-out;
+                .show {
+                  display: block;
+                }
+                .dropdown-view{
+                  visibility: hidden;
                 }
                 .time {
                   position: relative;
@@ -472,14 +474,19 @@
                 }
               }
               .misc-container:hover{
-                .dropdown-chat-message {
-                  display: block;
+                .dropdown-view {
+                  visibility: visible;
                   background-color: rgba($style-color, 0.5);
                   span{
                     cursor: pointer;
                     position: relative;
                     left: 65%;
                   }
+                }
+
+                .dropdown-position {
+                  position: "absolute";
+                  right: "0";
                 }
               }
               .img-chat {
@@ -515,6 +522,10 @@
                   .dropdown-chat-message {
                     display: block;
                     background-color: rgba($color-primary, 0.5);
+                  }
+                  .dropdown-position {
+                    position: "absolute";
+                    right: "0";
                   }
                 }
                 .time {
