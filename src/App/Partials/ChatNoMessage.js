@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
 import UIfx from "uifx";
@@ -21,6 +21,9 @@ function ChatNoMessage(props) {
   const [imgPreview,setImgPreview] = useState("");
   const [filePreview,setFilePreview] = useState("");
   const [videoPreview,setVideoPreview] = useState("");
+  const inputFile = useRef(null);
+  const inputImage = useRef(null);
+  const inputVideo = useRef(null);
 
   const { 
     socket, files, viewPreview, imageOrFile, limitChat, 
@@ -201,11 +204,11 @@ function ChatNoMessage(props) {
     }else{
       switch (imageOrFile) {
         case 1:
-          setVideoPreview(filesArray[1])
+          setImgPreview(filesArray[1])
           setImgPreview(filesArray[0])
           break;
         case 2:
-          setVideoPreview(filesArray[1])
+          setFilePreview(filesArray[1])
           setFilePreview(filesArray[0])
           break;
         case 3:
@@ -215,6 +218,55 @@ function ChatNoMessage(props) {
         default:
       }
     }
+  }
+
+  const onButtonClickFile = () => {
+    inputFile.current.click();
+  };
+
+  const onButtonClickImage = () => {
+    inputImage.current.click();
+  };
+
+  const onButtonClickVideo = () =>{
+    inputVideo.current.click();
+  }
+
+  function onChangeFile(e) {
+    e.preventDefault();
+    var newFileList = Array.from(files);
+    setFile(newFileList);
+    setFilesArray(filesArray)
+    console.log(e.target.files)
+  }
+
+  function onChangePhoto(e) {
+    e.preventDefault();
+    var newFileList = Array.from(files);
+    var newFileListChange = Array.from(e.target.files);
+    var newList = newFileList.concat(newFileListChange)
+    let fileArray = []
+    for (var i = 0; i < newList.length; i++)
+    {
+      (function(file) {
+        var reader = new FileReader();  
+        reader.onload = ()=> {  
+            fileArray.push(reader.result)
+        }
+        reader.readAsDataURL(file);
+      })(newList[i]);
+    }
+    setImgPreview(fileArray[0])
+    setFilesArray(fileArray)
+    setFile(newList);
+  }
+
+  function onChangeVideo(e){
+    e.preventDefault();
+    var newFileList = Array.from(files);
+    setFile(newFileList);
+    setFilesArray(filesArray)
+    console.log(e.target.files)
   }
 
   return (
@@ -316,10 +368,41 @@ function ChatNoMessage(props) {
               ))
             }
             <li>
-            <div className="mini-preview-container-add">
-            <FeatherIcon.Plus />
-              <div className="mini-preview-container-add-text">Añadir archivo</div>
-            </div>
+              {
+              imageOrFile == 1 ? 
+              <div onClick={() => onButtonClickImage()}  className="mini-preview-container-add">
+                <FeatherIcon.Plus />
+                <input type="file" hidden ref={inputFile}  id="customFileI" name="customFileI" onChange={(e) =>onChangeFile(e)}
+                  accept=".pdf" multiple/>
+                <input type="file" hidden ref={inputImage}  id="customFileF" name="customFileF" onChange={(e) =>onChangePhoto(e)}
+                accept=".png,.gif,.jpg" multiple/>
+                <input type="file" hidden ref={inputVideo}  id="customFileV" name="customFileV" onChange={(e) =>onChangeVideo(e)}
+                accept=".mp4,.webm" multiple/>
+                <div className="mini-preview-container-add-text">Añadir archivo</div>
+              </div>
+              :imageOrFile == 2? 
+              <div onClick={() => onButtonClickFile()}   className="mini-preview-container-add">
+                <FeatherIcon.Plus />
+                <input type="file" hidden ref={inputFile}  id="customFileI" name="customFileI" onChange={(e) =>onChangeFile(e)}
+                  accept=".pdf" multiple/>
+                <input type="file" hidden ref={inputImage}  id="customFileF" name="customFileF" onChange={(e) =>onChangePhoto(e)}
+                accept=".png,.gif,.jpg" multiple/>
+                <input type="file" hidden ref={inputVideo}  id="customFileV" name="customFileV" onChange={(e) =>onChangeVideo(e)}
+                accept=".mp4,.webm" multiple/>
+                <div className="mini-preview-container-add-text">Añadir archivo</div>
+              </div>
+              :imageOrFile == 3?
+              <div onClick={() => onButtonClickVideo()}   className="mini-preview-container-add">
+                <FeatherIcon.Plus />
+                <input type="file" hidden ref={inputFile}  id="customFileI" name="customFileI" onChange={(e) =>onChangeFile(e)}
+                  accept=".pdf" multiple/>
+                <input type="file" hidden ref={inputImage}  id="customFileF" name="customFileF" onChange={(e) =>onChangePhoto(e)}
+                accept=".png,.gif,.jpg" multiple/>
+                <input type="file" hidden ref={inputVideo}  id="customFileV" name="customFileV" onChange={(e) =>onChangeVideo(e)}
+                accept=".mp4,.webm" multiple/>
+                <div className="mini-preview-container-add-text">Añadir archivo</div>
+              </div>:""
+              }
             </li>
           </ul>
         </PerfectScrollbar>
