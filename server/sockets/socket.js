@@ -4,7 +4,7 @@ const uuid = require("node-uuid");
 const { formatLocalDate } = require("../middlewares/authentication");
 const routes = require("../routes");
 const { use } = require("passport");
-const {logger} = require('../logs/log');
+const { logger } = require("../logs/log");
 
 io.on("connection", function (socket) {
   //login in socket
@@ -16,19 +16,21 @@ io.on("connection", function (socket) {
       console.log(
         `[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`
       );
-      logger.info(`[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`)
+      logger.info(
+        `[Socket.io] - Connected user: ${user.usrname}, u_id: ${user.u_id}`
+      );
       //console.log(user);
     } else {
       var guest = uuid.v4();
       socket.join(guest);
       exports.guest = guest;
     }
-    socket.on("my_uid",()=>{
+    socket.on("my_uid", () => {
       orgboatDB.query(
         `select u_id, pphoto, name from usrs where u_id='${user.u_id}'`,
         function (err, rows) {
           io.to(user.u_id).emit("my_uid response", {
-            user: rows
+            user: rows,
           });
         }
       );
@@ -60,7 +62,7 @@ io.on("connection", function (socket) {
           order by time desc;
 			`,
         (err, rows) => {
-         /* rows.forEach((chat)=>{
+          /* rows.forEach((chat)=>{
             orgboatDB.query( 
                `select sum(unread_messages) as unread  from messages where chat_uid = '${chat.chat_uid}' and u_id != '${user.u_id}' `,
                (err, message)=>{
@@ -74,7 +76,6 @@ io.on("connection", function (socket) {
             my_uid: user.u_id,
             chats: rows,
           });
-          
         }
       );
     });
@@ -121,6 +122,7 @@ io.on("connection", function (socket) {
       is_image = msg.is_image;
       is_file = msg.is_file;
       is_video = msg.is_video;
+      file = msg.file ? msg.file : "";
       from = user.u_id;
       time = new Date();
       orgboatDB.query(
@@ -139,17 +141,18 @@ io.on("connection", function (socket) {
                 from_name: user.name,
                 message: message,
                 is_image: is_image,
-                is_file:is_file,
-                is_video:is_video,
+                is_file: is_file,
+                is_video: is_video,
                 time: time,
+                file: file,
               });
             }
           });
         }
       );
       timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
-      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message,unread_messages,is_image,is_file,is_video) 
-      values ('${chat}','${from}','${message}','${timeDB}',0,1,'${is_image}','${is_file}','${is_video}')`);
+      orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message,unread_messages,is_image,is_file,is_video,file) 
+      values ('${chat}','${from}','${message}','${timeDB}',0,1,'${is_image}','${is_file}','${is_video}','${file}')`);
     });
 
     //Client request the messages
@@ -157,10 +160,10 @@ io.on("connection", function (socket) {
       console.log(
         `[Socket.io] - ${user.usrname} request the messages from chat: ${msg.id}, get messages:${msg.page}`
       );
-      if(msg.inChat){
+      if (msg.inChat) {
         orgboatDB.query(
           `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${msg.id}'`,
-          (err,data)=>{
+          (err, data) => {
             if (err) {
               return json({
                 ok: false,
@@ -172,11 +175,14 @@ io.on("connection", function (socket) {
           }
         );
       }
-      
+
       //initMsg
       orgboatDB.query(
         `
-			select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file, messages.is_video
+			select messages.u_id as message_user_uid, messages.message, messages.time, 
+      usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message,
+      messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, 
+      chats.chat_uid, messages.is_image, messages.is_file, messages.is_video, messages.file
 			from messages inner join usrs on messages.u_id = usrs.u_id
 			inner join chats on chats.chat_uid = messages.chat_uid
 			where  messages.chat_uid = '${msg.id}' AND messages.delete_message = 0 order by time desc limit ${msg.limit};
@@ -212,20 +218,20 @@ io.on("connection", function (socket) {
     });
     // Show own profile
     socket.on("ViewOwnProfile", function (data) {
-      if(!data){
+      if (!data) {
         return;
       }
       orgboatDB.query(
         `select usrname, pphoto,name,about,phone,city,website from usrs where u_id='${data.id}'`,
         function (err, rowsUser) {
-            io.to(user.u_id).emit("retrieve viewownprofile", {
-              usrprofile: rowsUser
-            });
-          }
+          io.to(user.u_id).emit("retrieve viewownprofile", {
+            usrprofile: rowsUser,
+          });
+        }
       );
     });
     socket.on("ViewProfileUser", function (data) {
-      if(!data){
+      if (!data) {
         return;
       }
       orgboatDB.query(
@@ -234,14 +240,15 @@ io.on("connection", function (socket) {
           orgboatDB.query(
             `SELECT chat_uid FROM chats_users WHERE u_id='${user.u_id}'`,
             function (err, rows) {
-              var chat_uids = ""
-              rows.forEach((info)=>{
-                chat_uids +=("'"+ info.chat_uid + "',");
-              })
+              var chat_uids = "";
+              rows.forEach((info) => {
+                chat_uids += "'" + info.chat_uid + "',";
+              });
               chat_uids = chat_uids.replace(/,\s*$/, "");
               orgboatDB.query(
                 `SELECT 
-                distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+                distinct messages.message, messages.time, usrs.name, message_id, messages.u_id,
+                messages.file FROM messages
                 inner join usrs on messages.u_id = usrs.u_id
                 inner join chats_users on messages.u_id = chats_users.u_id
                 WHERE messages.favorite=1 and messages.chat_uid in (${chat_uids}) 
@@ -249,7 +256,8 @@ io.on("connection", function (socket) {
                 and messages.u_id='${data.id}'
                 UNION 
                 SELECT 
-                distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+                distinct messages.message, messages.time, usrs.name, message_id, messages.u_id,
+                messages.file FROM messages
                 inner join usrs on messages.u_id = usrs.u_id
                 inner join chats_users on messages.u_id = chats_users.u_id
                 WHERE messages.favorite_to=1 and messages.chat_uid in (${chat_uids}) 
@@ -257,19 +265,21 @@ io.on("connection", function (socket) {
                 function (err, chats) {
                   orgboatDB.query(
                     `SELECT 
-                    distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
+                    distinct messages.message, messages.time, usrs.name, message_id, messages.u_id, messages.file
+                    FROM messages
                     inner join usrs on messages.u_id = usrs.u_id
                     inner join chats_users on messages.u_id = chats_users.u_id
                     WHERE messages.is_image =1 and messages.chat_uid = '${data.chat_id}'`,
-                  function(err, chatsfile){
-                    io.to(user.u_id).emit("retrieve viewProfileUser", {
-                      favorites: chats,
-                      usrprofile: rowsUser,
-                      files: chatsfile
-                    });
-                  })
+                    function (err, chatsfile) {
+                      io.to(user.u_id).emit("retrieve viewProfileUser", {
+                        favorites: chats,
+                        usrprofile: rowsUser,
+                        files: chatsfile,
+                      });
+                    }
+                  );
                 }
-              )
+              );
             }
           );
         }
@@ -343,29 +353,30 @@ io.on("connection", function (socket) {
     });
     //For search
     socket.on("SearchUserByEmailOrUsername", (data) => {
-      data.my_uid
+      data.my_uid;
       orgboatDB.query(
         `SELECT name,usrname,email,u_id FROM usrs WHERE email='${data.email}' or usrname='${data.usrname}'`,
         (err, rows) => {
-          if(rows.length>0){
-            routes.validateExistChat(rows[0].u_id, data.my_uid).then((result) => {
-              if (result === false) {
-                io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
-                  users: rows,
-                  validate: 0
-                });
-              }else{
-                io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
-                  users: [],
-                  validate: 1
-                });
-              }
-            })
-          }
-          else{
+          if (rows.length > 0) {
+            routes
+              .validateExistChat(rows[0].u_id, data.my_uid)
+              .then((result) => {
+                if (result === false) {
+                  io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+                    users: rows,
+                    validate: 0,
+                  });
+                } else {
+                  io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
+                    users: [],
+                    validate: 1,
+                  });
+                }
+              });
+          } else {
             io.to(user.u_id).emit("retrive SearchUserByEmailOrUsername", {
               users: [],
-              validate:2
+              validate: 2,
             });
           }
         }
@@ -376,7 +387,10 @@ io.on("connection", function (socket) {
       var chat_type = 0;
       var uuid_numbr = uuid.v4();
       routes.validateExistChat(user.u_id, data.u_id).then((result) => {
-        var message = data.message!=""?data.message: `Hola soy ${user.name}, me gustaria contactar contigo.`;
+        var message =
+          data.message != ""
+            ? data.message
+            : `Hola soy ${user.name}, me gustaria contactar contigo.`;
         if (result === false) {
           console.log(result);
           orgboatDB.query(
@@ -391,12 +405,13 @@ io.on("connection", function (socket) {
               time = new Date();
               timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
               //console.log(msg);
-              if(message == "" || message==null){
+              message = "";
+              if (message == "" || message == null) {
                 io.to(user.u_id).emit("retrive Addcontact", {
                   chat: uuid_numbr,
                   message,
                 });
-              }else{
+              } else {
                 orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
                                     values ('${uuid_numbr}','${user.u_id}','${message}','${timeDB}',0)`);
                 io.to(user.u_id).emit("retrive Addcontact", {
@@ -438,7 +453,7 @@ io.on("connection", function (socket) {
     //   time = new Date();
     //   timeDB = formatLocalDate().slice(0, 19).replace("T", " ");
     //   console.log(msg);
-    //   orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message) 
+    //   orgboatDB.query(`insert into messages(chat_uid, u_id, message,time,delete_message)
     //                         values ('${chat}','${from}','${message}','${timeDB}',0)`);
     // });
     //Delete Chat
@@ -519,8 +534,8 @@ io.on("connection", function (socket) {
                     },
                   });
                 }
-                io.to(user.u_id).emit("retrive newchat",{
-                  chat:chats[0]
+                io.to(user.u_id).emit("retrive newchat", {
+                  chat: chats[0],
                 });
               }
             );
@@ -540,10 +555,10 @@ io.on("connection", function (socket) {
       orgboatDB.query(
         `SELECT chat_uid FROM chats_users WHERE u_id='${data.id}'`,
         function (err, rows) {
-          var chat_uids = ""
-          rows.forEach((data)=>{
-            chat_uids +=("'"+ data.chat_uid + "',");
-          })
+          var chat_uids = "";
+          rows.forEach((data) => {
+            chat_uids += "'" + data.chat_uid + "',";
+          });
           chat_uids = chat_uids.replace(/,\s*$/, "");
           orgboatDB.query(
             `SELECT 
@@ -564,7 +579,7 @@ io.on("connection", function (socket) {
                 favorites: chats,
               });
             }
-          )
+          );
         }
       );
     });
@@ -612,7 +627,7 @@ io.on("connection", function (socket) {
     });
     //Delete message
     socket.on("Delete message", (message) => {
-      if(message.to){
+      if (message.to) {
         orgboatDB.query(
           `UPDATE messages SET delete_message_to=1 WHERE message_id='${message.id}'`,
           (err, data) => {
@@ -627,7 +642,7 @@ io.on("connection", function (socket) {
             io.to(user.u_id).emit("retrive DeleteMessage");
           }
         );
-      }else{
+      } else {
         orgboatDB.query(
           `UPDATE messages SET delete_message=1 WHERE message_id='${message.id}'`,
           (err, data) => {
@@ -643,25 +658,24 @@ io.on("connection", function (socket) {
           }
         );
       }
-      
     });
 
-    socket.on("update notification",(data)=>{
+    socket.on("update notification", (data) => {
       //console.log(`UPDATE messages SET unread_messages WHERE u_id!='${user.u_id}' and chat_uid='${data.id}'`);
-        orgboatDB.query(
-          `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${data.id}'`,
-          (err,data)=>{
-            if (err) {
-              return json({
-                ok: false,
-                err: {
-                  message: "error al actualizar messages",
-                },
-              });
-            }
-            io.to(user.u_id).emit("retrive update notification");
+      orgboatDB.query(
+        `UPDATE messages SET unread_messages=0 WHERE u_id!='${user.u_id}' and chat_uid='${data.id}'`,
+        (err, data) => {
+          if (err) {
+            return json({
+              ok: false,
+              err: {
+                message: "error al actualizar messages",
+              },
+            });
           }
-        );
+          io.to(user.u_id).emit("retrive update notification");
+        }
+      );
     });
     //favoriteMessage
     socket.on("FavoriteMessage", function (data) {
@@ -700,18 +714,18 @@ io.on("connection", function (socket) {
       );
     });
     //addGrupo
-    socket.on("AddGrupo",function(info){
+    socket.on("AddGrupo", function (info) {
       var uuid_numbr = uuid.v4();
       var chat_type = 1;
       orgboatDB.query(
         `INSERT  INTO chats (chat_uid,chat_name,chat_type) VALUES ('${uuid_numbr}','${info.groupName}',${chat_type})`
       );
-      chat_type=0;
-      info.addFriends.forEach(function(friend){
+      chat_type = 0;
+      info.addFriends.forEach(function (friend) {
         orgboatDB.query(
           `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${friend.user_chat}',${chat_type})`
         );
-      })
+      });
       orgboatDB.query(
         `INSERT  INTO chats_users (chat_uid,u_id,archiveChat) VALUES ('${uuid_numbr}','${info.id}',${chat_type})`,
         (err, data) => {
@@ -723,7 +737,7 @@ io.on("connection", function (socket) {
       );
     });
     //get grupo
-    socket.on("GetGrupo",function(data){
+    socket.on("GetGrupo", function (data) {
       orgboatDB.query(
         `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat, usrs.name, usrs.pphoto, chats.groupphoto, chats.about_chat
 
@@ -745,25 +759,28 @@ io.on("connection", function (socket) {
           where chats.chat_uid = '${data.id}' and chats_users.archiveChat = 0 and chats_users.delete_chat = 0
           group by chats2.u_id
           order by time desc;
-          `,function (err, rows) {
-            orgboatDB.query(
-              `SELECT 
+          `,
+        function (err, rows) {
+          orgboatDB.query(
+            `SELECT 
               distinct messages.message, messages.time, usrs.name, message_id, messages.u_id FROM messages
               inner join usrs on messages.u_id = usrs.u_id
               inner join chats_users on messages.u_id = chats_users.u_id
               WHERE messages.is_image =1 and messages.chat_uid = '${data.chat_id}'`,
-            function(err, chatsfile){
+            function (err, chatsfile) {
               io.to(user.u_id).emit("retrieve GetGrupo", {
                 chat_uid: data.id,
                 chats: rows,
-                files: chatsfile
+                files: chatsfile,
               });
-            })    
-          })
-    })
+            }
+          );
+        }
+      );
+    });
     //update grupo
-    socket.on("SaveGroup",function(chat){
-      console.log(chat)
+    socket.on("SaveGroup", function (chat) {
+      console.log(chat);
       orgboatDB.query(
         `UPDATE chats SET chat_name = '${chat.chat_name}' , about_chat = '${chat.about_chat}'  WHERE chat_uid ='${chat.chat_uid}'`,
         function (err, rows) {
@@ -772,8 +789,8 @@ io.on("connection", function (socket) {
           });
         }
       );
-    })
-    socket.on("get group contacts",()=>{
+    });
+    socket.on("get group contacts", () => {
       orgboatDB.query(
         `select chats.chat_uid, chats.chat_name, chats.chat_type, chats2.u_id as user_chat ,usrs.name,usrs.pphoto,chats_users.archiveChat
 
@@ -793,7 +810,7 @@ io.on("connection", function (socket) {
         }
       );
     });
-    socket.on("get group name",(data)=>{
+    socket.on("get group name", (data) => {
       orgboatDB.query(
         `select DISTINCT chats.chat_name, chats_users.chat_uid
           from chats_users  
@@ -803,12 +820,12 @@ io.on("connection", function (socket) {
           where chats_users.chat_uid = '${data.chat_uid}' and chats_users.u_id =  '${user.u_id}'`,
         (err, chats) => {
           io.to(user.u_id).emit("retrieve group name", {
-            group : chats[0]
+            group: chats[0],
           });
         }
       );
     });
-    socket.on("get group photo",(data)=>{
+    socket.on("get group photo", (data) => {
       orgboatDB.query(
         `select DISTINCT chats.groupphoto, chats.chat_name, chats_users.chat_uid
           from chats_users  
@@ -818,31 +835,34 @@ io.on("connection", function (socket) {
           where chats_users.chat_uid = '${data.chat_uid}' and chats_users.u_id =  '${user.u_id}'`,
         (err, chats) => {
           io.to(user.u_id).emit("retrieve group photo", {
-            group : chats[0]
+            group: chats[0],
           });
         }
       );
     });
-    socket.on("search message",function(data){
+    socket.on("search message", function (data) {
       orgboatDB.query(
-        `select messages.u_id as message_user_uid, messages.message, messages.time, usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, chats.chat_uid, messages.is_image, messages.is_file, messages.is_video
+        `select messages.u_id as message_user_uid, messages.message, messages.time, 
+        usrs.name, chats.chat_type , usrs.pphoto, messages.message_id, messages.delete_message, 
+        messages.delete_message_to as delete_message_to, messages.favorite,messages.favorite_to, 
+        chats.chat_uid, messages.is_image, messages.is_file, messages.is_video, messages.file
           from messages inner join usrs on messages.u_id = usrs.u_id
           inner join chats on chats.chat_uid = messages.chat_uid
           where  messages.chat_uid = '${data.id}' 
            AND messages.delete_message = 0 order by time desc`,
-          function (err, rows) {
-            io.to(user.u_id).emit("retrive search message", {
-              messages: rows,
-              message_user_uid: user.message_user_uid,
-            });
-          }
+        function (err, rows) {
+          io.to(user.u_id).emit("retrive search message", {
+            messages: rows,
+            message_user_uid: user.message_user_uid,
+          });
+        }
       );
     });
-    socket.on("search select",function(data){
+    socket.on("search select", function (data) {
       io.to(user.u_id).emit("retrive search select", {
         id: data.id,
       });
-    })
+    });
     socket.on("SearchContacts", (data) => {
       orgboatDB.query(
         `select usrs.*

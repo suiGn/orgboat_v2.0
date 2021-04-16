@@ -201,8 +201,8 @@ function UserProfile(props) {
                     {files.map((message, i) => (
                       <li className="list-group-item">
                         <ModalImage
-                          small={message.message}
-                          large={message.message}
+                          small={message.file}
+                          large={message.file}
                           alt="image"
                         />
                       </li>
