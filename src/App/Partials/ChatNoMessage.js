@@ -164,7 +164,6 @@ function ChatNoMessage(props) {
   };
 
   const onKeyDown = (e) => {
-    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
     if (e.key === "Enter") {
       e.preventDefault();
       e.stopPropagation();
@@ -235,9 +234,22 @@ function ChatNoMessage(props) {
   function onChangeFile(e) {
     e.preventDefault();
     var newFileList = Array.from(files);
-    setFile(newFileList);
-    setFilesArray(filesArray)
-    console.log(e.target.files)
+    var newFileListChange = Array.from(e.target.files);
+    var newList = newFileList.concat(newFileListChange)
+    let fileArray = []
+    for (var i = 0; i < newList.length; i++)
+    {
+      (function(file) {
+        var reader = new FileReader();  
+        reader.onload = ()=> {  
+            fileArray.push(reader.result)
+        }
+        reader.readAsDataURL(file);
+      })(newList[i]);
+    }
+    setFilePreview(fileArray[0])
+    setFilesArray(fileArray)
+    setFile(newList);
   }
 
   function onChangePhoto(e) {
@@ -264,9 +276,23 @@ function ChatNoMessage(props) {
   function onChangeVideo(e){
     e.preventDefault();
     var newFileList = Array.from(files);
-    setFile(newFileList);
-    setFilesArray(filesArray)
-    console.log(e.target.files)
+    var newFileListChange = Array.from(e.target.files);
+    var newList = newFileList.concat(newFileListChange)
+    let fileArray = []
+    for (var i = 0; i < newList.length; i++)
+    {
+      (function(file) {
+        var reader = new FileReader();  
+        reader.onload = ()=> {  
+            fileArray.push(reader.result)
+        }
+        reader.readAsDataURL(file);
+      })(newList[i]);
+    }
+    setVideoPreview("")
+    setVideoPreview(fileArray[0])
+    setFilesArray(fileArray)
+    setFile(newList);
   }
 
   return (
