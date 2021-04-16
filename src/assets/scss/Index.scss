@@ -325,9 +325,7 @@
           width: 740px !important;
         }
 
-        &:not(.no-message) {
-          overflow: auto;
-        }
+        
 
         &.no-message {
           user-select: none;
@@ -564,13 +562,13 @@
 
       @media screen and (max-width: 1200px) {
         .chat-body {
-          padding: 4em;
+          padding: 4.5em;
         }
       }
 
-      @media screen and (max-width: 700px) {
+      @media screen and (max-width: 900px) {
         .chat-body {
-          padding: 1em;
+          padding: 2em;
         }
       }
 
@@ -658,9 +656,9 @@
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 900px) {
   .themed-container {
-    max-width: 720px;
+    max-width: 900px;
     padding-right: 0px;
     padding-left: 0px;
   }

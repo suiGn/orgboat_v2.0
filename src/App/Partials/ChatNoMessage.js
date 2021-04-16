@@ -277,7 +277,7 @@ function ChatNoMessage(props) {
         <div>
             <Input
             type="text"
-            className="form-control input-file"
+            className="form-control"
             placeholder="Write a message."
             value={inputMsg}
             onChange={handleChange}
