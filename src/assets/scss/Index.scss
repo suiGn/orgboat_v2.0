@@ -574,6 +574,22 @@
               height: 100px !important;
             }
           }
+          .mini-preview-container-add{
+            bottom:0%;
+            width: 100px;
+            height: 100px;
+            .mini-preview-container-add-text{
+              position: relative;
+              left: 25px;
+              width: 10px;
+              padding-top: 10px;
+            }
+            svg{
+              position: relative;
+              left: 35px;
+              top: 10px;
+            }
+          }
         }
       }
 

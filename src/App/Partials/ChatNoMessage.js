@@ -315,6 +315,12 @@ function ChatNoMessage(props) {
               </li>
               ))
             }
+            <li>
+            <div className="mini-preview-container-add">
+            <FeatherIcon.Plus />
+              <div className="mini-preview-container-add-text">Añadir archivo</div>
+            </div>
+            </li>
           </ul>
         </PerfectScrollbar>
         <div className="form-buttons">
