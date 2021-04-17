@@ -82,9 +82,11 @@ const ChatsMessageDropdown = (props) => {
       toggle={toggle}
       className="dropdown-chat-message"
     >
-      <DropdownToggle tag="span" style={{  position: "absolute", right: "0"}}>
+      <div className="dropdown-view">
+      <DropdownToggle className="dropdown-position" tag="span" style={{  position: "absolute", right: "0"}}>
         <FeatherIcon.MoreHorizontal />
       </DropdownToggle>
+      </div>
       <DropdownMenu>
         <DropdownItem onClick={() => DeleteMessage(props.message.message_id)}>
           Delete

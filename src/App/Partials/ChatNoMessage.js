@@ -277,7 +277,7 @@ function ChatNoMessage(props) {
         <div>
             <Input
             type="text"
-            className="form-control input-file"
+            className="form-control"
             placeholder="Write a message."
             value={inputMsg}
             onChange={handleChange}
@@ -286,6 +286,15 @@ function ChatNoMessage(props) {
           </div>
       </div>
       <div className="chat-footer footer-file">
+        <div className="clearfix">
+          <button className="btn float-right">
+            <figure class="avatar send-file mb-3">
+              <span class="avatar-title send-file-button bg-info rounded-circle" onClick={Send}>
+                <FeatherIcon.Send />
+              </span>
+            </figure>
+          </button>
+        </div>
         <PerfectScrollbar>
           <ul className="file-list">
             {filesArray.map((img, i) => (
@@ -323,13 +332,6 @@ function ChatNoMessage(props) {
             </li>
           </ul>
         </PerfectScrollbar>
-        <div className="form-buttons">
-          <figure class="avatar send-file mb-3">
-            <span class="avatar-title send-file-button bg-info rounded-circle" onClick={Send}>
-              <FeatherIcon.Send />
-            </span>
-          </figure>
-        </div>
       </div>
     </div>
   );
