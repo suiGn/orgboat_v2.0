@@ -8,6 +8,7 @@ import * as FeatherIcon from "react-feather";
 import axios from "axios";
 import { setOptions, Document, Page } from "react-pdf";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import VideoThumbnail from 'react-video-thumbnail';
 const pdfjsVersion = "2.0.305";
 setOptions({
   workerSrc: `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`,
@@ -181,7 +182,6 @@ function ChatNoMessage(props) {
         break;
       case 3:
         setVideoPreview("")
-        setVideoPreview(filesArray[clicked])
         break;
       default:
     }
@@ -387,7 +387,14 @@ function ChatNoMessage(props) {
                   </div>
                   :imageOrFile == 3?
                   <div className="mini-preview-container"
-                  onClick={() => PreviewClick(i)}></div>
+                  onClick={() => PreviewClick(i)}>
+                    <VideoThumbnail
+                      videoUrl={img}
+                      thumbnailHandler={(thumbnail) => {}}
+                      width={100}
+                      height={100}
+                      />
+                  </div>
                   :"" 
                 }
               </li>
