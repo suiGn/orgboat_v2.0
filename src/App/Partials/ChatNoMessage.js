@@ -25,6 +25,7 @@ function ChatNoMessage(props) {
   const inputFile = useRef(null);
   const inputImage = useRef(null);
   const inputVideo = useRef(null);
+  const videoplayer = useRef(null);
 
   const { 
     socket, files, viewPreview, imageOrFile, limitChat, 
@@ -181,7 +182,8 @@ function ChatNoMessage(props) {
         setFilePreview(filesArray[clicked])
         break;
       case 3:
-        setVideoPreview("")
+        setVideoPreview(filesArray[clicked])
+        videoplayer.current.load()
         break;
       default:
     }
@@ -211,8 +213,8 @@ function ChatNoMessage(props) {
           setFilePreview(filesArray[0])
           break;
         case 3:
-          setVideoPreview("")
           setVideoPreview(filesArray[0])
+          videoplayer.current.load()
           break;
         default:
       }
@@ -289,10 +291,10 @@ function ChatNoMessage(props) {
         reader.readAsDataURL(file);
       })(newList[i]);
     }
-    setVideoPreview("")
-    setVideoPreview(fileArray[0])
+    //setVideoPreview(fileArray[0])
     setFilesArray(fileArray)
     setFile(newList);
+    videoplayer.current.load()
   }
 
   return (
@@ -339,9 +341,9 @@ function ChatNoMessage(props) {
                 imageOrFile == 3 ? 
                 <div className="col-12 img-preview-container-head">
                   <div className="img-preview-container">
-                    <video className="video-container-preview" controls>
+                    <video ref={videoplayer} className="video-container-preview" controls>
                     {videoPreview != "" ?
-                      <source src={videoPreview} />
+                      <source src={videoPreview}/>
                     :""}
                     </video>
                   </div>
