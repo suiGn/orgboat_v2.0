@@ -13,16 +13,16 @@ where do we go from here?
 const index = require("./index");
 const uuid = require("node-uuid");
 const jwt = require("jsonwebtoken");
-require('./configs/config');
+require("./configs/config");
 const method = require("./methods");
 const bcrypt = require("bcrypt");
 const mailer = require("./mailer");
 const multer = require("multer");
 const Dropbox = require("dropbox").Dropbox;
-const {readFileSync,readStream} =  require("./middlewares/file");
+const { readFileSync, readStream } = require("./middlewares/file");
 const { CustomValidation } = require("express-validator/src/context-items");
-var AWS = require('aws-sdk');
-AWS.config.update({region: 'us-east-2'});
+var AWS = require("aws-sdk");
+AWS.config.update({ region: "us-east-2" });
 
 const s3 = new AWS.S3({apiVersion: '2006-03-01',accessKeyId:"AKIAZRQJR7NBHDBMENXG",secretAccessKey:"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"});
 
@@ -40,7 +40,7 @@ exports.subscribe = function (req, res) {
   //res.render("pages/subscribe", { opt: " ", opt1: "Log In", opt2: "/" });
 };
 exports.authGoogle = (req, res) => {
-  console.log(req)
+  console.log(req);
   var name = req.user.displayName;
   var usrname = req.user.emails[0].value;
   var email = usrname;
@@ -387,43 +387,45 @@ exports.editProfile = function (req, res) {
   );
 };
 
-exports.savedbimage =  async function (req, res) {
-  return new Promise((resolve, reject) =>{
+exports.savedbimage = async function (req, res) {
+  return new Promise((resolve, reject) => {
     console.log(req.file);
     var photo = `uploads/${req.file.filename}`;
     // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
-    var uploadParams = {Bucket: "cleakerapp", Key: '', Body: ''};
-    readStream("../build/"+photo).then(data => {
-      uploadParams.Body = data;
-      uploadParams.Key = req.file.filename;
-      s3.upload (uploadParams, function (err, data) {
-        if (err) {
-          console.log("Error", err);
-        } if (data) {
-          console.log("Upload Success", data.Location);
-          photo=data.Location;
-          var uidd = req.user[0].u_id;
-          index.orgboatDB.query(
-            "UPDATE usrs SET pphoto = ? WHERE u_id = ?",
-            [photo, uidd],
-            (error, results) => {
-              if (error) {
-                //res.redirect("/workspace");
-                reject(error);
-                console.log(error);
-              } else {
-                //res.redirect("/workspace");
-                resolve(photo);
-                console.log("Okay");
+    var uploadParams = { Bucket: "cleaker-orgboat", Key: "", Body: "" };
+    readStream("../build/" + photo)
+      .then((data) => {
+        uploadParams.Body = data;
+        uploadParams.Key = req.file.filename;
+        s3.upload(uploadParams, function (err, data) {
+          if (err) {
+            console.log("Error", err);
+          }
+          if (data) {
+            console.log("Upload Success", data.Location);
+            photo = data.Location;
+            var uidd = req.user[0].u_id;
+            index.orgboatDB.query(
+              "UPDATE usrs SET pphoto = ? WHERE u_id = ?",
+              [photo, uidd],
+              (error, results) => {
+                if (error) {
+                  //res.redirect("/workspace");
+                  reject(error);
+                  console.log(error);
+                } else {
+                  //res.redirect("/workspace");
+                  resolve(photo);
+                  console.log("Okay");
+                }
               }
-            }
-          );
-        }
+            );
+          }
+        });
+      })
+      .catch((err) => {
+        reject(err);
       });
-    })
-    .catch(err=>{
-      reject(err);
-    });
   });
 
   // readFileSync("../build/"+photo).then(data =>{
@@ -433,71 +435,74 @@ exports.savedbimage =  async function (req, res) {
   //     console.log(err);
   //   });
   // });
-  
 };
 
-exports.savedbimageGroup =  async function (req, res) {
-  return new Promise((resolve, reject) =>{
+exports.savedbimageGroup = async function (req, res) {
+  return new Promise((resolve, reject) => {
     console.log(req.file);
     var photo = `uploads/${req.file.filename}`;
     // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
-    var uploadParams = {Bucket: "cleakerapp", Key: '', Body: ''};
-    readStream("../build/"+photo).then(data => {
-      uploadParams.Body = data;
-      uploadParams.Key = req.file.filename;
-      s3.upload (uploadParams, function (err, data) {
-        if (err) {
-          console.log("Error", err);
-        } if (data) {
-          console.log("Upload Success", data.Location);
-          photo=data.Location;
-          var uidd = req.body.chat_uid;
-          index.orgboatDB.query(
-            "UPDATE chats SET groupphoto = ? WHERE chat_uid = ?",
-            [photo, uidd],
-            (error, results) => {
-              if (error) {
-                //res.redirect("/workspace");
-                reject(error);
-                console.log(error);
-              } else {
-                //res.redirect("/workspace");
-                resolve(photo);
-                console.log("Okay");
+    var uploadParams = { Bucket: "cleaker-orgboat", Key: "", Body: "" };
+    readStream("../build/" + photo)
+      .then((data) => {
+        uploadParams.Body = data;
+        uploadParams.Key = req.file.filename;
+        s3.upload(uploadParams, function (err, data) {
+          if (err) {
+            console.log("Error", err);
+          }
+          if (data) {
+            console.log("Upload Success", data.Location);
+            photo = data.Location;
+            var uidd = req.body.chat_uid;
+            index.orgboatDB.query(
+              "UPDATE chats SET groupphoto = ? WHERE chat_uid = ?",
+              [photo, uidd],
+              (error, results) => {
+                if (error) {
+                  //res.redirect("/workspace");
+                  reject(error);
+                  console.log(error);
+                } else {
+                  //res.redirect("/workspace");
+                  resolve(photo);
+                  console.log("Okay");
+                }
               }
-            }
-          );
-        }
+            );
+          }
+        });
+      })
+      .catch((err) => {
+        reject(err);
       });
-    })
-    .catch(err=>{
-      reject(err);
-    });
   });
 };
 
-exports.saveFileChat = async function(req, res){
-  return new Promise((resolve, reject) =>{
+exports.saveFileChat = async function (req, res) {
+  return new Promise((resolve, reject) => {
     var photo = `uploads/${req.file.filename}`;
     // let dbx =  new Dropbox({accessToken:accesstokenDropbox})
-    var uploadParams = {Bucket: "cleakerapp", Key: '', Body: ''};
-    readStream("../build/"+photo).then(data => {
-      uploadParams.Body = data;
-      uploadParams.Key = req.file.filename;
-      s3.upload (uploadParams, function (err, data) {
-        if (err) {
-          console.log("Error", err);
-        } if (data) {
-          console.log("Upload Success", data.Location);
-          resolve(data.Location);
-        }
+    var uploadParams = { Bucket: "cleaker-orgboat", Key: "", Body: "" };
+    readStream("../build/" + photo)
+      .then((data) => {
+        uploadParams.Body = data;
+        uploadParams.Key = req.file.filename;
+        s3.upload(uploadParams, function (err, data) {
+          if (err) {
+            console.log("Error", err);
+          }
+          if (data) {
+            console.log("Upload Success", data.Location);
+            resolve(data.Location);
+          }
+        });
+      })
+      .catch((err) => {
+        reject(err);
       });
-    })
-    .catch(err=>{
-      reject(err);
-    });
   });
-}
+};
 
 exports.pphotourl = async function (req, res) {
   //console.log(req);

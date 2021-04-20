@@ -69,6 +69,7 @@ function Chat(props) {
       var newLimit = limit + 10;
       setPage(page + 1);
       setLimit(newLimit);
+      props.setLimitChat(newLimit)
       setScrolled(true);
       socket.emit("get messages", {
         id: props.clicked.chat_uid,
@@ -106,6 +107,7 @@ function Chat(props) {
   }
 
   function OnChatMessage(data) {
+    setFirstTime(true)
     if (props.clicked.chat_uid) {
       if (props.clicked.chat_uid == data.chat) {
         socket.emit("get messages", {
@@ -132,9 +134,12 @@ function Chat(props) {
   useEffect(() => {
     setPage(1);
     setLimit(10);
+    props.setLimitChat(10)
     setChatMessages([]);
     setFirstTime(true);
     setScrolled(false);
+    props.setChat_uid(props.clicked.chat_uid)
+    props.setViewPreview(false)
 
     var chat = props.unreadChats.filter((chat) => {
       return chat.chat_uid != props.clicked.chat_uid;
@@ -162,11 +167,13 @@ function Chat(props) {
 
   const handleSubmit = (newValue) => {
     if (newMessage.length > 0) {
+      setFirstTime(true)
       socket.emit("chat message", {
         chat: newValue.chat_uid,
         message: newValue.text,
         is_image: newValue.is_image,
         is_file: newValue.is_file,
+        is_video: newValue.is_video
       });
       socket.emit("get chats");
       socket.emit("get messages", {
@@ -292,21 +299,30 @@ function Chat(props) {
                 !message.is_image && !message.is_file && !message.is_video ?
                 <div className="word-break">{message.message}</div>
               : message.is_image ? 
-                <figure className="avatar img-chat">
-                  <ModalImage
-                    small={message.message}
-                    large={message.message}
-                    alt="image"
-                  />
-                </figure>
+                <div>
+                  <figure className="avatar img-chat">
+                    <ModalImage
+                      small={message.file}
+                      large={message.file}
+                      alt="image"
+                    />
+                  </figure>
+                  <div className="word-break">{message.message}</div>
+                </div>
               : message.is_file? 
-                <a href={message.message} download>
-                  <FeatherIcon.Download /> {"file "}
-                </a>
+                <div>
+                  <a href={message.file} download>
+                    <FeatherIcon.Download /> {"file "}
+                  </a>
+                  <div className="word-break">{message.message}</div>
+                </div>
               :
+              <div>
                 <video className="video-container" controls>
-                  <source src={message.message} />
+                  <source src={message.file} />
                 </video>
+                <div className="word-break">{message.message}</div>
+              </div>
             }
               <div className="misc-container">
                 <div className="time">
