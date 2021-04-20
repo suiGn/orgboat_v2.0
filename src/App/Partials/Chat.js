@@ -99,7 +99,7 @@ function Chat(props) {
           }
         });
         setChatMessages(messages.reverse());
-        props.setChat({ id: messages[0].chat_uid });
+        props.setChat({ id: props.clicked.chat_uid});
       }
     } else {
       setChatMessages([]);

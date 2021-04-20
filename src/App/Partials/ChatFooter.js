@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Button, Input } from "reactstrap";
 import * as FeatherIcon from "react-feather";
 import "emoji-mart/css/emoji-mart.css";

@@ -26,8 +26,8 @@ AWS.config.update({ region: "us-east-2" });
 
 const s3 = new AWS.S3({
   apiVersion: "2006-03-01",
-  accessKeyId: "AKIAZRQJR7NBNMVVWZPV",
-  secretAccessKey: "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",
+  accessKeyId: "AKIAZRQJR7NBHDBMENXG",
+  secretAccessKey: "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"
 });
 
 exports.home = function (req, res) {

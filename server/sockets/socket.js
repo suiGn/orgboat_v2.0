@@ -57,6 +57,8 @@ io.on("connection", function (socket) {
 						SELECT MAX(message_id) 
 						FROM messages z 
 						WHERE z.chat_uid = m.chat_uid
+            and z.delete_message = 0
+            and z.delete_message_to = 0
 					)
           where chats_users.u_id = '${user.u_id}' and chats_users.archiveChat = 0 and chats_users.delete_chat = 0
           order by time desc;

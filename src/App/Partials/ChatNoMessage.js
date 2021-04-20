@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import empty from "../../assets/img/undraw_empty_xct9.svg";
 import { Menu } from "react-feather";
 import UIfx from "uifx";
@@ -8,6 +8,7 @@ import * as FeatherIcon from "react-feather";
 import axios from "axios";
 import { setOptions, Document, Page } from "react-pdf";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import VideoThumbnail from 'react-video-thumbnail';
 const pdfjsVersion = "2.0.305";
 setOptions({
   workerSrc: `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`,
@@ -21,6 +22,10 @@ function ChatNoMessage(props) {
   const [imgPreview,setImgPreview] = useState("");
   const [filePreview,setFilePreview] = useState("");
   const [videoPreview,setVideoPreview] = useState("");
+  const inputFile = useRef(null);
+  const inputImage = useRef(null);
+  const inputVideo = useRef(null);
+  const videoplayer = useRef(null);
 
   const { 
     socket, files, viewPreview, imageOrFile, limitChat, 
@@ -161,7 +166,6 @@ function ChatNoMessage(props) {
   };
 
   const onKeyDown = (e) => {
-    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
     if (e.key === "Enter") {
       e.preventDefault();
       e.stopPropagation();
@@ -178,8 +182,8 @@ function ChatNoMessage(props) {
         setFilePreview(filesArray[clicked])
         break;
       case 3:
-        setVideoPreview("")
         setVideoPreview(filesArray[clicked])
+        videoplayer.current.load()
         break;
       default:
     }
@@ -201,20 +205,96 @@ function ChatNoMessage(props) {
     }else{
       switch (imageOrFile) {
         case 1:
-          setVideoPreview(filesArray[1])
+          setImgPreview(filesArray[1])
           setImgPreview(filesArray[0])
           break;
         case 2:
-          setVideoPreview(filesArray[1])
+          setFilePreview(filesArray[1])
           setFilePreview(filesArray[0])
           break;
         case 3:
-          setVideoPreview("")
           setVideoPreview(filesArray[0])
+          videoplayer.current.load()
           break;
         default:
       }
     }
+  }
+
+  const onButtonClickFile = () => {
+    inputFile.current.click();
+  };
+
+  const onButtonClickImage = () => {
+    inputImage.current.click();
+  };
+
+  const onButtonClickVideo = () =>{
+    inputVideo.current.click();
+  }
+
+  function onChangeFile(e) {
+    e.preventDefault();
+    var newFileList = Array.from(files);
+    var newFileListChange = Array.from(e.target.files);
+    var newList = newFileList.concat(newFileListChange)
+    let fileArray = []
+    for (var i = 0; i < newList.length; i++)
+    {
+      (function(file) {
+        var reader = new FileReader();  
+        reader.onload = ()=> {  
+            fileArray.push(reader.result)
+        }
+        reader.readAsDataURL(file);
+      })(newList[i]);
+    }
+    setFilePreview(fileArray[0])
+    setFilesArray(fileArray)
+    setFile(newList);
+  }
+
+  function onChangePhoto(e) {
+    e.preventDefault();
+    var newFileList = Array.from(files);
+    var newFileListChange = Array.from(e.target.files);
+    var newList = newFileList.concat(newFileListChange)
+    let fileArray = []
+    for (var i = 0; i < newList.length; i++)
+    {
+      (function(file) {
+        var reader = new FileReader();  
+        reader.onload = ()=> {  
+            fileArray.push(reader.result)
+        }
+        reader.readAsDataURL(file);
+      })(newList[i]);
+    }
+    setImgPreview(fileArray[0])
+    setFilesArray(fileArray)
+    setFile(newList);
+  }
+
+  function onChangeVideo(e){
+    e.preventDefault();
+    var newFileList = Array.from(files);
+    var newFileListChange = Array.from(e.target.files);
+    var newList = newFileList.concat(newFileListChange)
+    let fileArray = []
+    for (var i = 0; i < newList.length; i++)
+    {
+      (function(file) {
+        var reader = new FileReader();  
+        reader.onload = ()=> {  
+            fileArray.push(reader.result)
+        }
+        reader.readAsDataURL(file);
+      })(newList[i]);
+    }
+    //setVideoPreview(fileArray[0])
+    setFilesArray(fileArray)
+    setFile(newList);
+    videoplayer.current.load()
   }
 
   return (
@@ -261,9 +341,9 @@ function ChatNoMessage(props) {
                 imageOrFile == 3 ? 
                 <div className="col-12 img-preview-container-head">
                   <div className="img-preview-container">
-                    <video className="video-container-preview" controls>
+                    <video ref={videoplayer} className="video-container-preview" controls>
                     {videoPreview != "" ?
-                      <source src={videoPreview} />
+                      <source src={videoPreview}/>
                     :""}
                     </video>
                   </div>
@@ -318,17 +398,55 @@ function ChatNoMessage(props) {
                   </div>
                   :imageOrFile == 3?
                   <div className="mini-preview-container"
-                  onClick={() => PreviewClick(i)}></div>
+                  onClick={() => PreviewClick(i)}>
+                    <VideoThumbnail
+                      videoUrl={img}
+                      thumbnailHandler={(thumbnail) => {}}
+                      width={100}
+                      height={100}
+                      />
+                  </div>
                   :"" 
                 }
               </li>
               ))
             }
             <li>
-            <div className="mini-preview-container-add">
-            <FeatherIcon.Plus />
-              <div className="mini-preview-container-add-text">Añadir archivo</div>
-            </div>
+              {
+              imageOrFile == 1 ? 
+              <div onClick={() => onButtonClickImage()}  className="mini-preview-container-add">
+                <FeatherIcon.Plus />
+                <input type="file" hidden ref={inputFile}  id="customFileI" name="customFileI" onChange={(e) =>onChangeFile(e)}
+                  accept=".pdf" multiple/>
+                <input type="file" hidden ref={inputImage}  id="customFileF" name="customFileF" onChange={(e) =>onChangePhoto(e)}
+                accept=".png,.gif,.jpg" multiple/>
+                <input type="file" hidden ref={inputVideo}  id="customFileV" name="customFileV" onChange={(e) =>onChangeVideo(e)}
+                accept=".mp4,.webm" multiple/>
+                <div className="mini-preview-container-add-text">Añadir archivo</div>
+              </div>
+              :imageOrFile == 2? 
+              <div onClick={() => onButtonClickFile()}   className="mini-preview-container-add">
+                <FeatherIcon.Plus />
+                <input type="file" hidden ref={inputFile}  id="customFileI" name="customFileI" onChange={(e) =>onChangeFile(e)}
+                  accept=".pdf" multiple/>
+                <input type="file" hidden ref={inputImage}  id="customFileF" name="customFileF" onChange={(e) =>onChangePhoto(e)}
+                accept=".png,.gif,.jpg" multiple/>
+                <input type="file" hidden ref={inputVideo}  id="customFileV" name="customFileV" onChange={(e) =>onChangeVideo(e)}
+                accept=".mp4,.webm" multiple/>
+                <div className="mini-preview-container-add-text">Añadir archivo</div>
+              </div>
+              :imageOrFile == 3?
+              <div onClick={() => onButtonClickVideo()}   className="mini-preview-container-add">
+                <FeatherIcon.Plus />
+                <input type="file" hidden ref={inputFile}  id="customFileI" name="customFileI" onChange={(e) =>onChangeFile(e)}
+                  accept=".pdf" multiple/>
+                <input type="file" hidden ref={inputImage}  id="customFileF" name="customFileF" onChange={(e) =>onChangePhoto(e)}
+                accept=".png,.gif,.jpg" multiple/>
+                <input type="file" hidden ref={inputVideo}  id="customFileV" name="customFileV" onChange={(e) =>onChangeVideo(e)}
+                accept=".mp4,.webm" multiple/>
+                <div className="mini-preview-container-add-text">Añadir archivo</div>
+              </div>:""
+              }
             </li>
           </ul>
         </PerfectScrollbar>
