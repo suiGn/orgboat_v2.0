@@ -128,74 +128,81 @@ function Index(props) {
       </form>
       <div className="sidebar-body">
         <PerfectScrollbar>
-          <ul className="list-group list-group-flush">
-            {friendLists.chats &&
-              favoriteFriendFiltered.map((item, i) => {
-                let chat_name = item.name;
-                let p;
-                let chat_initial = chat_name.substring(0, 1);
-                if (item.pphoto === "" || item.pphoto === null) {
-                  p = (
-                    <span className="avatar-title bg-info rounded-circle">
-                      {chat_initial}
-                    </span>
-                  );
-                } else {
-                  p = (
-                    <img
-                      src={item.pphoto}
-                      className="rounded-circle"
-                      alt="image"
-                    />
-                  );
-                }
-                return (
-                  item.chat_uid?
-                  <li
-                    key={i}
-                    className="list-group-item"
-                    onClick={() => newchat(item.chat_uid)}
-                  >
-                    <figure className="avatar">{p}</figure>
-                    <div className="users-list-body">
-                      <div>
-                        <h5>{item.name}</h5>
-                      </div>
-                      <div className="users-list-action">
-                        <div className="action-toggle">
-                          <FriendsDropdown
-                            setOpenProfile={setOpenProfile}
-                            openProfile={openProfile}
-                            openUserProfile={openUserProfile}
-                            setOpenUserProfile={setOpenUserProfile}
-                            openGroupProfile={openGroupProfile}
-                            setOpenGroupProfile={setOpenGroupProfile}
-                            setUser={props.setUser}
-                            id={item.user_chat}
-                            chat_uid={item.chat_uid}
-                            socket={props.socket}
-                            setClicked={props.setClicked}
-                          />
+          {
+            favoriteFriendFiltered.length>0?
+            <ul className="list-group list-group-flush">
+              {friendLists.chats &&
+                favoriteFriendFiltered.map((item, i) => {
+                  let chat_name = item.name;
+                  let p;
+                  let chat_initial = chat_name.substring(0, 1);
+                  if (item.pphoto === "" || item.pphoto === null) {
+                    p = (
+                      <span className="avatar-title bg-info rounded-circle">
+                        {chat_initial}
+                      </span>
+                    );
+                  } else {
+                    p = (
+                      <img
+                        src={item.pphoto}
+                        className="rounded-circle"
+                        alt="image"
+                      />
+                    );
+                  }
+                  return (
+                    item.chat_uid?
+                    <li
+                      key={i}
+                      className="list-group-item"
+                      onClick={() => newchat(item.chat_uid)}
+                    >
+                      <figure className="avatar">{p}</figure>
+                      <div className="users-list-body">
+                        <div>
+                          <h5>{item.name}</h5>
+                        </div>
+                        <div className="users-list-action">
+                          <div className="action-toggle">
+                            <FriendsDropdown
+                              setOpenProfile={setOpenProfile}
+                              openProfile={openProfile}
+                              openUserProfile={openUserProfile}
+                              setOpenUserProfile={setOpenUserProfile}
+                              openGroupProfile={openGroupProfile}
+                              setOpenGroupProfile={setOpenGroupProfile}
+                              setUser={props.setUser}
+                              id={item.user_chat}
+                              chat_uid={item.chat_uid}
+                              socket={props.socket}
+                              setClicked={props.setClicked}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>:
-                  <li key={i} className="list-group-item list-group-extra">
-                    <figure className="avatar">{p}</figure>
-                    <div className="users-list-body">
-                      <div>
-                        <h5>{item.name}</h5>
+                    </li>:
+                    <li key={i} className="list-group-item list-group-extra">
+                      <figure className="avatar">{p}</figure>
+                      <div className="users-list-body">
+                        <div>
+                          <h5>{item.name}</h5>
+                        </div>
+                        <div className="users-list-action">
+                          <Button color="primary" onClick={()=>AddUserContact(item.u_id)}>
+                            <FeatherIcon.UserPlus />
+                          </Button>
+                        </div>
                       </div>
-                      <div className="users-list-action">
-                        <Button color="primary" onClick={()=>AddUserContact(item.u_id)}>
-                          <FeatherIcon.UserPlus />
-                        </Button>
-                      </div>
-                    </div>
-                  </li>
-                );
-              })}
-          </ul>
+                    </li>
+                  );
+                })}
+            </ul>
+            :
+            <div className="user-help">
+              Please search for users on the search bar above
+            </div>
+          }
         </PerfectScrollbar>
       </div>
     </div>
