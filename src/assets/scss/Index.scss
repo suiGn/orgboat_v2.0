@@ -718,6 +718,34 @@
   cursor: pointer;
 }
 
+body:not(.rtl) {
+  .sidebar-group {
+    position: fixed;
+    right: -50%;
+    top: 0;
+    bottom: 0;
+    width: 30%;
+    opacity: 0;
+    transition: all 0.2s;
+    box-shadow: 25px 0px 30px 5px black;
+    visibility: hidden;
+    z-index: 1021;
+
+    .sidebar {
+      width: 100% !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      border-radius: 0 !important;
+    }
+
+    &.mobile-open {
+      opacity: 1;
+      right: 0;
+      visibility: visible;
+    }
+  }
+}
+
 /* Animation */
 
 @keyframes found_message_white {
