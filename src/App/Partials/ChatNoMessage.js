@@ -8,6 +8,7 @@ import * as FeatherIcon from "react-feather";
 import axios from "axios";
 import { setOptions, Document, Page } from "react-pdf";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import VideoThumbnail from 'react-video-thumbnail';
 const pdfjsVersion = "2.0.305";
 setOptions({
   workerSrc: `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`,
@@ -24,6 +25,7 @@ function ChatNoMessage(props) {
   const inputFile = useRef(null);
   const inputImage = useRef(null);
   const inputVideo = useRef(null);
+  const videoplayer = useRef(null);
 
   const { 
     socket, files, viewPreview, imageOrFile, limitChat, 
@@ -180,8 +182,8 @@ function ChatNoMessage(props) {
         setFilePreview(filesArray[clicked])
         break;
       case 3:
-        setVideoPreview("")
         setVideoPreview(filesArray[clicked])
+        videoplayer.current.load()
         break;
       default:
     }
@@ -211,8 +213,8 @@ function ChatNoMessage(props) {
           setFilePreview(filesArray[0])
           break;
         case 3:
-          setVideoPreview("")
           setVideoPreview(filesArray[0])
+          videoplayer.current.load()
           break;
         default:
       }
@@ -289,10 +291,10 @@ function ChatNoMessage(props) {
         reader.readAsDataURL(file);
       })(newList[i]);
     }
-    setVideoPreview("")
-    setVideoPreview(fileArray[0])
+    //setVideoPreview(fileArray[0])
     setFilesArray(fileArray)
     setFile(newList);
+    videoplayer.current.load()
   }
 
   return (
@@ -339,9 +341,9 @@ function ChatNoMessage(props) {
                 imageOrFile == 3 ? 
                 <div className="col-12 img-preview-container-head">
                   <div className="img-preview-container">
-                    <video className="video-container-preview" controls>
+                    <video ref={videoplayer} className="video-container-preview" controls>
                     {videoPreview != "" ?
-                      <source src={videoPreview} />
+                      <source src={videoPreview}/>
                     :""}
                     </video>
                   </div>
@@ -387,7 +389,14 @@ function ChatNoMessage(props) {
                   </div>
                   :imageOrFile == 3?
                   <div className="mini-preview-container"
-                  onClick={() => PreviewClick(i)}></div>
+                  onClick={() => PreviewClick(i)}>
+                    <VideoThumbnail
+                      videoUrl={img}
+                      thumbnailHandler={(thumbnail) => {}}
+                      width={100}
+                      height={100}
+                      />
+                  </div>
                   :"" 
                 }
               </li>

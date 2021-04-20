@@ -9,7 +9,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || "dev";
 let urlFront;
 if (process.env.NODE_ENV === "dev") {
   urlDB = "http://localhost:3000";
-  urlMAIL = "http://localhost:5000";
+  urlMAIL = "https://www.orgboat.me";
 } else {
   urlDB = process.env.URL_FRONT;
   urlMAIL = "https://www.orgboat.me";;
