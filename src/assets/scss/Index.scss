@@ -14,7 +14,6 @@
 
 .layout {
   height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
   display: flex;
 
   .content {
@@ -239,6 +238,8 @@
 
     .sidebar-chat {
       order: 2;
+      border-top: 1px solid $style-color;
+      border-bottom: 1px solid $style-color;
     }
 
     .chat {
@@ -247,6 +248,8 @@
       flex-direction: column;
       border-right: 1px solid $style-color;
       border-left: 1px solid $style-color;
+      border-top: 1px solid $style-color;
+      border-bottom: 1px solid $style-color;
       order: 3;
 
       .chat-header {
@@ -663,9 +666,9 @@
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1400px) {
   .themed-container {
-    max-width: 900px;
+    max-width: 1400px;
     padding-right: 0px;
     padding-left: 0px;
   }
@@ -723,32 +726,33 @@
   cursor: pointer;
 }
 
-body:not(.rtl) {
-  .sidebar-group {
-    position: fixed;
-    right: -50%;
-    top: 0;
-    bottom: 0;
-    width: 30%;
-    opacity: 0;
-    transition: all 0.2s;
-    box-shadow: 25px 0px 30px 5px black;
-    visibility: hidden;
-    z-index: 1021;
-
-    .sidebar {
-      width: 100% !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-      border-radius: 0 !important;
-    }
-
-    &.mobile-open {
-      opacity: 1;
-      right: 0;
-      visibility: visible;
-    }
+@media (min-width: 0px) {
+  .principal-view {
+      max-width: 100%;
   }
+
+  .layout {
+    height: calc(var(--vh, 1vh) * 100);
+  }
+
+  .navigation ul {
+    height: calc(var(--vh, 1vh) * 100);
+  }
+}
+
+@media (min-width: 1400px) {
+  .principal-view {
+      max-width: 80%;
+      margin-top: 2em;
+  }
+  .layout {
+    height: calc(var(--vh, 1vh) * 93);
+  }
+
+  .navigation ul {
+    height: calc(var(--vh, 1vh) * 93);
+  }
+
 }
 
 /* Animation */

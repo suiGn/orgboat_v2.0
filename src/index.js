@@ -11,7 +11,7 @@ import store from './Store'
 
 ReactDOM.render(
     <Provider store={store}>
-      <Container className="themed-container" fluid="sm">
+      <Container className="themed-container principal-view" fluid="sm">
           <App />
       </Container>
     </Provider>,

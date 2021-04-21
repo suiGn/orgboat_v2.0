@@ -59,7 +59,8 @@ body.dark {
     background-color: $dark-mode;
     border-right-color: $dark-mode-light;
     border-left-color: $dark-mode-light;
-
+    border-top-color: $dark-mode-light;
+    border-bottom-color: $dark-mode-light;
     ul {
       li {
         & > a {
@@ -102,10 +103,20 @@ body.dark {
         }
       }
 
+      .sidebar-chat {
+        order: 2;
+        border-top: 1px solid $style-color;
+        border-bottom: 1px solid $style-color;
+        border-bottom-color: $dark-mode-light;
+        border-top-color: $dark-mode-light;
+      }
+      
       .chat {
         border-right-color: $dark-mode-light;
         //border-right-color: transparent;
         border-left-color: $dark-mode-light;
+        border-bottom-color: $dark-mode-light;
+        border-top-color: $dark-mode-light;
 
         .chat-header {
           border-bottom-color: $dark-mode-light;
