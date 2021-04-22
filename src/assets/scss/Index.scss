@@ -36,7 +36,7 @@
         background: white;
         border-radius: 5px;
         overflow: hidden;
-        width: 450px;
+        width: 350px;
         // width: 350px;
         display: flex;
         flex-direction: column;
@@ -240,6 +240,12 @@
       order: 2;
       border-top: 1px solid $style-color;
       border-bottom: 1px solid $style-color;
+    }
+
+    .sidebar-profile {
+      border-top: 1px solid $style-color;
+      border-bottom: 1px solid $style-color;
+      //width: 350px;
     }
 
     .chat {
@@ -666,9 +672,9 @@
   }
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1500px) {
   .themed-container {
-    max-width: 1400px;
+    max-width: 1500px;
     padding-right: 0px;
     padding-left: 0px;
   }
@@ -740,7 +746,7 @@
   }
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1500px) {
   .principal-view {
       max-width: 80%;
       margin-top: 2em;

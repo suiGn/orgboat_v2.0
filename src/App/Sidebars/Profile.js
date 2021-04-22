@@ -206,7 +206,7 @@ function Profile(props) {
   }
 
   return (
-    <div className={`sidebar-group ${openProfile ? "mobile-open" : ""}`}>
+    <div className={`sidebar-group ${openProfile ? "mobile-open" : ""} sidebar-profile`}>
       <div className={openProfile ? "sidebar active" : "sidebar"}>
         <header>
           <span>Profile</span>
